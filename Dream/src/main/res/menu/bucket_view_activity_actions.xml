@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:myapp="http://schemas.android.com/apk/res-auto"
+    >
+    <item android:id="@+id/bucket_view_menu_save"
+        android:title="@string/save"
+        android:icon="@drawable/glyphicons_444_floppy_saved"
+        myapp:showAsAction="ifRoom"
+        />
+    <item android:id="@+id/bucket_view_menu_cancel"
+        android:title="@string/cancel"
+        android:icon="@drawable/glyphicons_445_floppy_remove"
+        myapp:showAsAction="ifRoom"
+        />
+
+</menu>

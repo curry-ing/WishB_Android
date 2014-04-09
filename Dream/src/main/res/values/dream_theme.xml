@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="DreamTheme">
+        <attr name="dreamDdaySelectView" format="reference"></attr>
+    </declare-styleable>
+
+    <style name="DreamAppTheme" parent="LoginFormContainer">
+
+    </style>
+
+    <style name="BucketInputDdaySelectButton">
+        <item name="android:layout_weight">1</item>
+    </style>
+
+</resources>

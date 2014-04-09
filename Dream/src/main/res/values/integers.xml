@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources><integer name="bucket_item_progress_max_value">100</integer><integer name="bucket_item_progress_min_value">0</integer></resources>

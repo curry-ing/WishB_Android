@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="btn_pressed">#222</color>
+    <color name="btn_selected">#666</color>
+    <color name="btn_nomal">#aaa</color>
+    <color name="not_open">#00cccc</color>
+    <color name="complete">#CCFFDD</color>
+    <color name="seal">#00FF00</color>
+</resources>

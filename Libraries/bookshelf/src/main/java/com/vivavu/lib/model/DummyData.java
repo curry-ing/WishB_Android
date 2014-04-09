@@ -1,0 +1,25 @@
+package com.vivavu.lib.model;
+
+/**
+ * Created by yuja on 14. 2. 26.
+ */
+public class DummyData {
+    private int id;
+    private String title;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+}

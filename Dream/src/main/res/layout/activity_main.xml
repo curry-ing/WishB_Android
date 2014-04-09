@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.vivavu.dream.activity.main.MainActivity"
+    tools:ignore="MergeRootFrame"
+>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <FrameLayout
+            android:id="@+id/content_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+        </FrameLayout>
+        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:text="+"
+            android:id="@+id/btn_add_bucket"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true" />
+        </RelativeLayout>
+
+
+    <fragment
+        android:id="@+id/main_left_menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:name="com.vivavu.dream.fragment.main.LeftMenuDrawerFragment"
+        tools:layout="@layout/fragment_main_left_menu"></fragment>
+
+</android.support.v4.widget.DrawerLayout>

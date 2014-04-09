@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:myapp="http://schemas.android.com/apk/res-auto"
+    >
+    <item android:id="@+id/menu_edit"
+        android:title="@string/menu_edit"
+        android:icon="@drawable/glyphicons_030_pencil"
+        myapp:showAsAction="always"
+        />
+    <item android:id="@+id/menu_share"
+            android:title="@string/menu_share"
+            android:icon="@drawable/glyphicons_308_share_alt"
+            myapp:showAsAction="ifRoom|withText"
+            />
+    <item android:id="@+id/menu_remove"
+            android:title="@string/menu_remove"
+            android:icon="@drawable/glyphicons_016_bin"
+            myapp:showAsAction="ifRoom|withText"
+            />
+
+</menu>

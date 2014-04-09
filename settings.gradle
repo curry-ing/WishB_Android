@@ -1,0 +1,5 @@
+include ':Libraries:facebook',':Libraries:viewpagerindicator', ':Dream', ':Libraries:bookshelf'
+//facebook sdk 등 라이브러리
+//include 'FacebookSDK'
+//project(':FacebookSDK').projectDir = new File('Libraries/FacebookSDK')
+

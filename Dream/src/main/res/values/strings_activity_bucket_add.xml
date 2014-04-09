@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="txt_btn_range_1">10대</string>
+    <string name="txt_btn_range_2">20대</string>
+    <string name="txt_btn_range_3">30대</string>
+    <string name="txt_btn_range_4">40대</string>
+    <string name="txt_btn_range_5">50대</string>
+    <string name="txt_btn_range_6">60대</string>
+    <string name="txt_btn_range_in_my_life">in my life</string>
+    <string name="txt_btn_range_custom">custom</string><string name="bucket_custom_date_set">Custom Date Set</string>
+
+</resources>
