@@ -107,6 +107,13 @@
                         android:background="@drawable/camera_blue"
                         android:clickable="true"
                         android:enabled="true" />
+                    <Button
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:id="@+id/btn_bucket_option_del"
+                        android:background="@drawable/trash_recyclebin"
+                        android:clickable="true"
+                        android:enabled="true" />
                     </LinearLayout>
                 </LinearLayout>
             <LinearLayout

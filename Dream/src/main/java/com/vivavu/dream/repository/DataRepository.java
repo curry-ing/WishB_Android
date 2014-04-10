@@ -148,6 +148,13 @@ public class DataRepository {
         }
     }
 
+    public static void deleteBucket(Bucket bucket)
+    {
+        if (bucket == null && bucket.getId() != null) {
+            getDatabaseHelper().getBucketRuntimeDao().delete(bucket);
+        }
+    }
+
     public static void deleteAllBuckets(){
         DeleteBuilder<Bucket,Integer> deleteBuilder = getDatabaseHelper().getBucketRuntimeDao().deleteBuilder();
         try {

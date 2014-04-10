@@ -48,6 +48,7 @@ public class TimelineActivity extends BaseActionBarActivity {
     private static final int OFF_SCREEN_PAGE_LIMIT = 1;
     public static final int REQUEST_CALENDAR = 1;
     public static final int REQUEST_ADD_POST = 2;
+    private static final int REQUEST_MOD_BUCKET = 3;
 
 
     @InjectView(R.id.btn_timeline_title)
@@ -137,6 +138,7 @@ public class TimelineActivity extends BaseActionBarActivity {
     }
 
     private void bindData(Bucket bucket) {
+        mBtnTimelineTitle.setText(bucket.getTitle());
         Date start = bucket.getRegDate();
         Date current = new Date();
         Date end = bucket.getDeadline();
@@ -150,6 +152,14 @@ public class TimelineActivity extends BaseActionBarActivity {
         }
     }
     private void initEvent() {
+        mBtnTimelineTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TimelineActivity.this, BucketAddActivity.class);
+                intent.putExtra(BucketAddActivity.RESULT_EXTRA_BUCKET_ID, (Integer) bucket.getId());
+                startActivityForResult(intent, REQUEST_MOD_BUCKET);
+            }
+        });
         mBtnAddTimeline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -193,6 +203,15 @@ public class TimelineActivity extends BaseActionBarActivity {
                 }
                 break;
             case REQUEST_ADD_POST:
+                break;
+            case REQUEST_MOD_BUCKET:
+                if(resultCode == RESULT_OK) {
+                    Bucket result = (Bucket) data.getSerializableExtra(BucketAddActivity.RESULT_EXTRA_BUCKET);
+                    bindData(result);
+                } else if (requestCode == RESULT_USER_DATA_DELETED) {
+                    setResult(RESULT_OK);
+                    finish();
+                }
                 break;
         }
     }

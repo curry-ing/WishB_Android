@@ -181,6 +181,29 @@ public class BucketConnector {
         return result;
     }
 
+    public ResponseBodyWrapped<Bucket> deleteBucket(Bucket bucket){
+        RestTemplate restTemplate = RestTemplateFactory.getInstance();
+        HttpHeaders requestHeaders = getBasicAuthHeader(getContext());
+        HttpEntity request = new HttpEntity<String>(requestHeaders);
+        ResponseEntity<String> resultString = null;
+
+        try {
+            resultString = restTemplate.exchange(Constants.apiBucketInfo, HttpMethod.DELETE, request, String.class, bucket.getId());
+        } catch (RestClientException e) {
+            Log.e("dream", e.toString());
+        }
+
+        ResponseBodyWrapped<Bucket> result = new ResponseBodyWrapped<Bucket>("error", String.valueOf(resultString.getStatusCode()), new Bucket());
+
+        if(RestTemplateUtils.isAvailableParseToJson(resultString)){
+            Gson gson = JsonFactory.getInstance();
+            Type type = new TypeToken<ResponseBodyWrapped<List<Bucket>>>(){}.getType();
+            result = gson.fromJson((String) resultString.getBody(), type);
+        }
+
+        return result;
+    }
+
     public ResponseBodyWrapped<List<Today>> getTodayList(String lastTodayDate){
         RestTemplate restTemplate = RestTemplateFactory.getInstance();
         HttpHeaders requestHeaders = getBasicAuthHeader(getContext());

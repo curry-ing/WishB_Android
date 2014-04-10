@@ -30,6 +30,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.vivavu.dream.R;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.Code;
@@ -45,7 +47,6 @@ import com.vivavu.dream.repository.BucketConnector;
 import com.vivavu.dream.repository.DataRepository;
 import com.vivavu.dream.repository.task.CustomAsyncTask;
 import com.vivavu.dream.util.DateUtils;
-import com.vivavu.dream.util.FileUtils;
 import com.vivavu.dream.util.ImageUtil;
 import com.vivavu.dream.util.ValidationUtils;
 
@@ -62,6 +63,9 @@ public class BucketAddActivity extends BaseActionBarActivity {
     private static final int SEND_DATA_START = 0;
     private static final int SEND_DATA_END = 1;
     private static final int SEND_DATA_ERROR = 2;
+    private static final int SEND_DATA_DELETE = 3;
+    public static final String RESULT_EXTRA_BUCKET = "bucket";
+    public static final String RESULT_EXTRA_BUCKET_ID = "bucketId";
     @InjectView(R.id.bucket_input_title)
     EditText mBucketInputTitle;
     @InjectView(R.id.btn_input_dday)
@@ -87,6 +91,8 @@ public class BucketAddActivity extends BaseActionBarActivity {
     LinearLayout mOptionContents;
     @InjectView(R.id.bucket_add_image_container)
     LinearLayout mBucketAddImageContainer;
+    @InjectView(R.id.btn_bucket_option_del)
+    Button mBtnBucketOptionDel;
 
     private LayoutInflater layoutInflater;
     private Bucket bucket = null;
@@ -108,12 +114,24 @@ public class BucketAddActivity extends BaseActionBarActivity {
                     }
                     Toast.makeText(BucketAddActivity.this, modString + "성공", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent();
-                    intent.putExtra("bucketId", (Integer) bucket.getId());
+                    intent.putExtra(RESULT_EXTRA_BUCKET_ID, (Integer) bucket.getId());
+                    intent.putExtra(RESULT_EXTRA_BUCKET, bucket);
                     setResult(RESULT_OK, intent);
                     finish();
                     break;
                 case SEND_DATA_ERROR:
+                    if(progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                    }
                     Toast.makeText(BucketAddActivity.this, modString + "실패하였습니다. 다시 시도해주세요.", Toast.LENGTH_LONG).show();
+                    break;
+                case SEND_DATA_DELETE:
+                    if(progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                    }
+                    Toast.makeText(BucketAddActivity.this, modString + "버킷을 삭제하였습니다.", Toast.LENGTH_LONG).show();
+                    setResult(RESULT_USER_DATA_DELETED);
+                    finish();
                     break;
             }
         }
@@ -122,6 +140,7 @@ public class BucketAddActivity extends BaseActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bucket_input_template);
+        setResult(RESULT_CANCELED);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -130,7 +149,7 @@ public class BucketAddActivity extends BaseActionBarActivity {
 
         Intent data = getIntent();
 
-        int bucketId = data.getIntExtra("bucketId", -1);
+        int bucketId = data.getIntExtra(RESULT_EXTRA_BUCKET_ID, -1);
         bucket = DataRepository.getBucket(bucketId);
         int code;
         if (bucketId > 0) {
@@ -289,16 +308,26 @@ public class BucketAddActivity extends BaseActionBarActivity {
         mBtnBucketOptionPublic.setOnClickListener(this);
         mBtnBucketOptionPic.setOnClickListener(this);
         mBtnBucketOptionGallery.setOnClickListener(this);
+
+        mBtnBucketOptionDel.setOnClickListener(this);
     }
 
 
     private void bindData() {
         mBucketInputTitle.setText(bucket.getTitle());
 
-        if(bucket.getCvrImgUrl() != null && mIvCardImage.getDrawable()== null) {
-            ImageDownloadTask imageDownloadTask = new ImageDownloadTask();
-            imageDownloadTask.execute(bucket.getCvrImgUrl());
-        }
+        ImageLoader.getInstance().displayImage(bucket.getCvrImgUrl(), mIvCardImage, new SimpleImageLoadingListener(){
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                super.onLoadingComplete(imageUri, view, loadedImage);
+                // 이미지가 없을 경우에는 imageview 자체를 안보여줌
+                if(loadedImage != null) {
+                    view.setVisibility(View.VISIBLE);
+                }else {
+                    view.setVisibility(View.GONE);
+                }
+            }
+        });
 
         if (bucket.getDeadline() != null) {
             mTextInputDday.setText( DateUtils.getDateString(bucket.getDeadline(), "yyyy-MM-dd"));
@@ -384,7 +413,33 @@ public class BucketAddActivity extends BaseActionBarActivity {
             doTakePhotoAction();
         } else if( view == mBtnBucketOptionGallery ) {
             doTakeAlbumAction();
+        } else if (view == mBtnBucketOptionDel){
+            doDelte();
         }
+    }
+
+    private void doDelte() {
+
+        AlertDialog.Builder alertConfirm = new AlertDialog.Builder(this);
+        alertConfirm.setTitle("삭제확인");
+        alertConfirm.setMessage("버킷을 삭제하시겠습니까?").setCancelable(false).setPositiveButton("예",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        BucketDeleteTask bucketDeleteTask = new BucketDeleteTask();
+                        bucketDeleteTask.execute(bucket);
+                    }
+                }
+        ).setNegativeButton("아니오",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        return;
+                    }
+                }
+        );
+        AlertDialog alert = alertConfirm.create();
+        alert.show();
     }
 
     public void goOptionRepeat() {
@@ -523,6 +578,33 @@ public class BucketAddActivity extends BaseActionBarActivity {
         }
     }
 
+    public class BucketDeleteTask extends CustomAsyncTask<Bucket, Void, ResponseBodyWrapped<Bucket>>{
+
+        @Override
+        protected ResponseBodyWrapped<Bucket> doInBackground(Bucket... params) {
+            handler.sendEmptyMessage(SEND_DATA_START);
+            BucketConnector bucketConnector = new BucketConnector();
+            ResponseBodyWrapped<Bucket> responseBodyWrapped = new ResponseBodyWrapped<Bucket>();
+
+            if(params != null && params.length > 0){
+                responseBodyWrapped = bucketConnector.deleteBucket(bucket);
+            }
+
+            return responseBodyWrapped;
+        }
+
+        @Override
+        protected void onPostExecute(ResponseBodyWrapped<Bucket> bucketWrappedResponseBodyWrapped) {
+            if(bucketWrappedResponseBodyWrapped.isSuccess()){
+                DataRepository.deleteBucket(bucket);
+                handler.sendEmptyMessage(SEND_DATA_DELETE);
+            }else {
+                handler.sendEmptyMessage(SEND_DATA_ERROR);
+            }
+        }
+    }
+
+
     @Override
     public void onBackPressed() {
         confirm();
@@ -553,30 +635,6 @@ public class BucketAddActivity extends BaseActionBarActivity {
             alert.show();
         } else {
             finish();
-        }
-    }
-    public class ImageDownloadTask extends CustomAsyncTask<String, Void, Bitmap>{
-
-        @Override
-        protected Bitmap doInBackground(String... params) {
-            try {
-                File downloadedFileName = FileUtils.getDownloadFromUrl(params[0]);
-                Bitmap bitmap = ImageUtil.getBitmap(downloadedFileName, mIvCardImage.getWidth(), mIvCardImage.getHeight());
-                return bitmap;
-            } catch (Exception e) {
-                Log.e("dream", e.getMessage());
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            super.onPostExecute(bitmap);
-            if (bitmap != null) {
-                //Drawable drawable = new BitmapDrawable( getResources(), bitmap );
-                mIvCardImage.setImageBitmap(bitmap);
-            }
         }
     }
 }

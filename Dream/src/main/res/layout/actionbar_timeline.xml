@@ -18,5 +18,6 @@
         android:layout_marginLeft="20dp"
         android:text="@string/complete"
         android:id="@+id/btn_bucket_complete"
+        android:visibility="gone"
         />
 </LinearLayout>

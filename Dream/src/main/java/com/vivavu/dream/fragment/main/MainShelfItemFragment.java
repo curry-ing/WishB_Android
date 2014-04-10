@@ -1,10 +1,8 @@
 package com.vivavu.dream.fragment.main;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,14 +18,10 @@ import com.vivavu.dream.activity.bucket.timeline.TimelineItemEditActivity;
 import com.vivavu.dream.fragment.CustomBaseFragment;
 import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.model.bucket.timeline.Post;
-import com.vivavu.dream.repository.task.CustomAsyncTask;
 import com.vivavu.dream.util.AndroidUtils;
 import com.vivavu.dream.util.DateUtils;
-import com.vivavu.dream.util.FileUtils;
-import com.vivavu.dream.util.ImageUtil;
 import com.vivavu.dream.view.CustomPopupWindow;
 
-import java.io.File;
 import java.util.Date;
 
 import butterknife.ButterKnife;
@@ -76,15 +70,6 @@ public class MainShelfItemFragment extends CustomBaseFragment{
         viewGroup.setBackgroundColor(Color.argb(127, 0, 0, 255));
         init();
         return viewGroup;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if(bucket.getCvrImgUrl() != null) {
-            /*ImageDownloadTask imageDownloadTask = new ImageDownloadTask();
-            imageDownloadTask.execute(bucket.getCvrImgUrl());*/
-        }
     }
 
     public void init() {
@@ -174,33 +159,6 @@ public class MainShelfItemFragment extends CustomBaseFragment{
 
         PopupWindowViewHolder(View view) {
             ButterKnife.inject(this, view);
-        }
-    }
-    public class ImageDownloadTask extends CustomAsyncTask<String, Void, Bitmap>{
-
-        @Override
-        protected Bitmap doInBackground(String... params) {
-            try {
-                File downloadedFileName = FileUtils.getDownloadFromUrl(params[0]);
-                Bitmap bitmap = ImageUtil.getBitmap(downloadedFileName, (int) getResources().getDimension(R.dimen.book_width_dp), (int) getResources().getDimension(R.dimen.book_height_dp));
-                return bitmap;
-            } catch (Exception e) {
-                Log.e("dream", e.getMessage());
-            }
-
-            return null;
-
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            super.onPostExecute(bitmap);
-            if (bitmap != null) {
-                //Drawable drawable = new BitmapDrawable( getResources(), bitmap );
-                if(mBookCoverImage.getDrawable() == null) {
-                    mBookCoverImage.setImageBitmap(bitmap);
-                }
-            }
         }
     }
 }

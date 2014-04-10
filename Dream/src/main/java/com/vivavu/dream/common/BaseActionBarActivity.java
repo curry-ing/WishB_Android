@@ -31,6 +31,7 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
     protected NetworkChangeReceiver networkChangeReceiver;
     protected IntentFilter intentFilterChange;
     protected IntentFilter intentFilterWifi;
+    public static final int RESULT_USER_DATA_DELETED = RESULT_FIRST_USER + 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -99,7 +99,7 @@ public class MainActivity extends BaseActionBarActivity {
 
         switch (requestCode) {
             case Code.ACT_ADD_BUCKET:
-                int bucketId = data.getIntExtra("bucketId", -1);
+                int bucketId = data.getIntExtra(BucketAddActivity.RESULT_EXTRA_BUCKET_ID, -1);
                 if (bucketId > 0) {
                     goBucketView(bucketId);
                 }
