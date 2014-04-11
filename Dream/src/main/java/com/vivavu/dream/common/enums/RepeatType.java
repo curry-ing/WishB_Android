@@ -4,7 +4,7 @@ package com.vivavu.dream.common.enums;
  * Created by yuja on 14. 1. 24.
  */
 public enum RepeatType {
-    NONE("NONE", "Nothing"), WKRP("WRKP","every Week"), WEEK("WEEK","in a WEEK"), MNTH("MNTH","in a Month");
+    NONE("NONE", "Nothing"), WKRP("WKRP","every Week"), WEEK("WEEK","in a WEEK"), MNTH("MNTH","in a Month");
 
     private String code;
     private String value;
