@@ -124,5 +124,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         super.close();
         bucketDao = null;
         bucketRuntimeDao = null;
+        todayDao = null;
+        todayRuntimeDao= null;
+        todayGroupDao = null;
+        todayGroupRuntimeDao = null;
     }
 }

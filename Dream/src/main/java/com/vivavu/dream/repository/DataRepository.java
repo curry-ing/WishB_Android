@@ -131,6 +131,7 @@ public class DataRepository {
     public static DatabaseHelper getDatabaseHelper() {
         if(databaseHelper == null){
             databaseHelper = new DatabaseHelper(getContext());
+            deleteBucketsNotEqualUserId(getContext().getUser().getId());
         }
         return databaseHelper;
     }
@@ -158,6 +159,17 @@ public class DataRepository {
     public static void deleteAllBuckets(){
         DeleteBuilder<Bucket,Integer> deleteBuilder = getDatabaseHelper().getBucketRuntimeDao().deleteBuilder();
         try {
+            deleteBuilder.delete();
+        } catch (SQLException e) {
+            Log.e("dream", e.getMessage());
+        }
+    }
+
+    public static void deleteBucketsNotEqualUserId(int userId){
+        DeleteBuilder<Bucket,Integer> deleteBuilder = getDatabaseHelper().getBucketRuntimeDao().deleteBuilder();
+        try {
+            Where<Bucket, Integer> where = deleteBuilder.where();
+            where.ne("userId", userId);
             deleteBuilder.delete();
         } catch (SQLException e) {
             Log.e("dream", e.getMessage());
