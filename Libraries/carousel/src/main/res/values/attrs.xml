@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<declare-styleable name="Carousel">
+		<attr name="android:gravity" />	
+		<attr name="android:animationDuration" />
+		<attr name="UseReflection" format="boolean"/>
+		<attr name="Items" format="integer"/>
+		<attr name="SelectedItem" format="integer"/>
+		<attr name="maxTheta" format="float"/>
+		<attr name="minQuantity" format="integer"/>
+		<attr name="maxQuantity" format="integer"/>
+		<attr name="Names" format="string" />
+	</declare-styleable>
+    <declare-styleable name="Circular">
+        <attr name="android:gravity" />
+        <attr name="android:animationDuration" />
+        <attr name="circleRadius" format="dimension"/>
+        <attr name="displaySubItemCount" format="integer"/>
+        <attr name="mainItemRadius" format="dimension"/>
+        <attr name="subItemRadius" format="dimension"/>
+
+    </declare-styleable>
+    <!--<declare-styleable name="CircularList">
+        <attr name="android:gravity" />
+        <attr name="android:animationDuration" />
+        <attr name="circleRadius" format="dimension"/>
+        <attr name="displaySubItemCount" format="integer"/>
+        <attr name="mainItemRadius" format="dimension"/>
+        <attr name="subItemRadius" format="dimension"/>
+
+    </declare-styleable>-->
+</resources>

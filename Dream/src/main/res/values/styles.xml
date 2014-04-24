@@ -3,9 +3,12 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light">
-        <!-- Customize your theme here. -->
+            <item name="android:actionBarTabStyle">@style/ActionBarTabStyle</item>
+            <item name="android:actionBarSize">80dip</item>
     </style>
-
+    <style name="ActionBarTabStyle" parent="android:style/Widget.Holo.ActionBar.TabView">
+        <item name="android:minHeight">40dip</item>
+    </style>
     <style name="LoginFormContainer">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>

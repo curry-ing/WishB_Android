@@ -17,6 +17,7 @@ import com.vivavu.dream.fragment.main.MainBucketListFragment;
 import com.vivavu.dream.util.AndroidUtils;
 import com.vivavu.dream.view.ButtonIncludeCount;
 import com.vivavu.dream.view.CustomPopupWindow;
+import com.vivavu.lib.view.circular.CircularViewTestActivity;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -113,7 +114,8 @@ public class MainActivity extends BaseActionBarActivity {
         super.onClick(view);
         switch (view.getId()) {
             case R.id.btn_add_bucket:
-                goAddBucket();
+                //goAddBucket();
+                goCircleBucketList();
                 break;
         }
     }
@@ -125,6 +127,13 @@ public class MainActivity extends BaseActionBarActivity {
         startActivity(intent);
     }
 
+    private void goCircleBucketList(){
+        Intent intent;
+        intent = new Intent();
+        //intent.setClass(this, CircleBucketListActivity.class);
+        intent.setClass(this, CircularViewTestActivity.class);
+        startActivity(intent);
+    }
     @Override
     protected void onStop() {
         super.onStop();

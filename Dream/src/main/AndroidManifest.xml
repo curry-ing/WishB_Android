@@ -4,67 +4,90 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="18"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-feature android:name="android.hardware.camera"></uses-feature>
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-feature android:name="android.hardware.camera" />
+
     <application
         android:name="com.vivavu.dream.common.DreamApp"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/app_id"></meta-data>
-        <activity android:name="com.facebook.LoginActivity" android:screenOrientation="portrait"></activity>
-        <activity android:name="com.vivavu.dream.activity.bucket.timeline.TimelineCalendarActivity" android:screenOrientation="portrait"></activity>
-        <activity android:name="com.vivavu.dream.activity.bucket.timeline.TimelineItemEditActivity" android:screenOrientation="portrait"></activity>
-        <activity android:name="com.vivavu.dream.activity.bucket.timeline.TimelineItemViewActivity" android:screenOrientation="portrait"></activity>
-        <activity android:name="com.vivavu.dream.activity.bucket.TimelineActivity" android:screenOrientation="portrait"></activity>
-        <activity android:name=".activity.login.ResetPasswordActivity" android:screenOrientation="portrait" android:label="Reset Password"></activity>
-        <activity android:name=".activity.login.UserAgreementActivity" android:screenOrientation="portrait"></activity>
-        <activity android:name=".activity.login.PrivacyActivity" android:screenOrientation="portrait"></activity>
-        <activity android:name=".activity.main.TodayCalendarActivity"
-            android:screenOrientation="portrait"
-            ></activity>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/app_id" />
+
+        <activity
+            android:name="com.facebook.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.vivavu.dream.activity.bucket.timeline.TimelineCalendarActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.vivavu.dream.activity.bucket.timeline.TimelineItemEditActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.vivavu.dream.activity.bucket.timeline.TimelineItemViewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.vivavu.dream.activity.bucket.TimelineActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.vivavu.dream.activity.login.ResetPasswordActivity"
+            android:label="Reset Password"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.vivavu.dream.activity.login.UserAgreementActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.vivavu.dream.activity.login.PrivacyActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.vivavu.dream.activity.main.TodayCalendarActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.vivavu.dream.activity.login.UserRegisterActivity"
-            android:screenOrientation="portrait"
-            android:label="register" >
+            android:label="register"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.vivavu.dream.activity.login.LoginActivity"
-            android:screenOrientation="portrait"
             android:label="@string/title_activity_login"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
-        <activity android:name="com.vivavu.dream.activity.bucket.BucketOptionActivity"
-            android:screenOrientation="portrait"
-            ></activity>
+        <activity
+            android:name="com.vivavu.dream.activity.bucket.BucketOptionActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.vivavu.dream.activity.bucket.BucketViewActivity"
-            android:screenOrientation="portrait"
             android:label="View Bucket"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" >
         </activity>
         <activity
             android:name="com.vivavu.dream.activity.bucket.BucketAddActivity"
-            android:screenOrientation="portrait"
-            android:label="Add Bucket" >
+            android:label="Add Bucket"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.vivavu.dream.activity.main.TodayActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_main">
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.vivavu.dream.activity.main.MainActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_main">
-
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.vivavu.dream.activity.StartActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_main" >
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -73,8 +96,12 @@
         </activity>
         <activity
             android:name="com.vivavu.dream.activity.intro.IntroActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_intro" >
+            android:label="@string/title_activity_intro"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.vivavu.dream.activity.bucket.CircleBucketListActivity"
+            android:label="@string/title_activity_circle_bucket_list" >
         </activity>
     </application>
 

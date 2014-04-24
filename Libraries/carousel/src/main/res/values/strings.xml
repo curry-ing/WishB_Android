@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">CarouselDemo</string>
+    <string name="title_activity_circular_view_test">CircularViewTestActivity</string>
+    <string name="hello_world">Hello world!</string>
+
+</resources>
