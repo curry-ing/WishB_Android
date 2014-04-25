@@ -1,8 +1,6 @@
 package com.vivavu.dream.fragment.main;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,26 +8,17 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.Toast;
 
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.vivavu.dream.R;
-import com.vivavu.dream.activity.main.TodayCalendarActivity;
-import com.vivavu.dream.adapter.bucket.BucketAdapter;
 import com.vivavu.dream.adapter.bucket.BucketAdapter2;
-import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.fragment.CustomBaseFragment;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.model.bucket.BucketGroup;
 import com.vivavu.dream.repository.BucketConnector;
 import com.vivavu.dream.repository.DataRepository;
-import com.vivavu.dream.util.NetworkUtil;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.ButterKnife;

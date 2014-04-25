@@ -10,7 +10,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/shelf_title"
-            android:text="@string/empty_text"
+            android:text=""
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
             />
@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/shelf_roll"
-            android:text="@string/shelf_roll"
+            android:text=""
             android:layout_gravity="right"
             android:gravity="center_vertical"
             />

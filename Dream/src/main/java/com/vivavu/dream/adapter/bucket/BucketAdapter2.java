@@ -13,6 +13,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.vivavu.dream.R;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.drawable.RoundedAvatarDrawable;
@@ -21,8 +24,8 @@ import com.vivavu.dream.model.bucket.BucketGroup;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Calendar;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -104,7 +107,7 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
             for (int i=0; i<cnt; i++){
                 if(bucketGroup.getBukets().get(i).getCvrImgUrl() != null) {
                     URL url = new URL(bucketGroup.getBukets().get(i).getCvrImgUrl());
-                    mainImages.add(BitmapFactory.decodeStream(url.openConnection().getInputStream()));
+                    mainImages.add(ImageLoader.getInstance().loadImageSync(bucketGroup.getBukets().get(i).getCvrImgUrl(), new ImageSize(540,540)));
                 }
             }
         }
