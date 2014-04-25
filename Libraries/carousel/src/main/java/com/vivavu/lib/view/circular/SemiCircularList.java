@@ -2,8 +2,12 @@ package com.vivavu.lib.view.circular;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Camera;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -15,6 +19,7 @@ import android.widget.AdapterView;
 
 import com.vivavu.lib.R;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
@@ -29,10 +34,14 @@ public class SemiCircularList extends AdapterView {
     /* 어댑터 */
     private CircularAdapter mAdapter = null;
 
+    /* 리스너 */
+    private OnMainItemChangedListener onMainItemChangedListener;
+
     /* 화면 갱신을 위한 파라미터 */
     private boolean isDrawing = false;				// 화면 drawing 중에 touch 업데이트로 onLayout() 중복 호출을 방지
     private int mFirstItemPosition = 0;					// 화면에 보이는 첫 아이템의 index
     private int mLastItemPosition = 0;					// 화면에 보이는 마지막 아이템의 index
+    private int mMainItemPosition = 0;  //메인 아이템의 index
 
     /* 터치 컨트롤 */
     private double mStartX = 0;							// 터치 이벤트 시작된 기준 좌표 X
@@ -49,10 +58,12 @@ public class SemiCircularList extends AdapterView {
     private int displaySubItemCount;
     private double mMovedRadian;
     private double degree;
-    private double offsetDegree = 0.0;
+    private double offsetDegree = 90.0;
     private double mChangeItemRadianThreshold;
     private int roundedCenterX;
     private int roundedCenterY;
+    private int circleBackground;
+    private HashMap<Integer, Double> mappingTable;
 
     public SemiCircularList(Context context) {
         this(context, null);
@@ -64,14 +75,26 @@ public class SemiCircularList extends AdapterView {
 
     public SemiCircularList(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-
+        //setStaticTransformationsEnabled(true);
         // Retrieve settings
         TypedArray arr = getContext().obtainStyledAttributes(attrs, R.styleable.Circular);
         circleRadius = arr.getDimensionPixelSize(R.styleable.Circular_circleRadius, 250);
         mainItemRadius = arr.getDimensionPixelSize(R.styleable.Circular_mainItemRadius, 120);
         subItemRadius = arr.getDimensionPixelSize(R.styleable.Circular_subItemRadius, mainItemRadius / 2);
         displaySubItemCount = arr.getInteger(R.styleable.Circular_displaySubItemCount, 6);
+
+        circleBackground = arr.getResourceId(R.styleable.Circular_circleBackground, -1);
+        degree = 360.0 / displaySubItemCount;
+        mChangeItemRadianThreshold = Math.toRadians(degree);
         Log.v(TAG, String.format("circleRadius:%d, mainItemRadius:%d, subItemRadius:%d, displaySubItemCount:%d", circleRadius, mainItemRadius, subItemRadius, displaySubItemCount));
+
+        mappingTable = new HashMap<Integer, Double>();
+        for(int index = 0; index < displaySubItemCount; index++){
+            double angleDeg = adjustDegree(index * degree + offsetDegree);
+            double angleRad = adjustRadian(Math.toRadians(angleDeg ));//Math함수에서는 radian을 기준으로 입력을 받아서 60분법에 의한 각도를 변환
+            mappingTable.put(index, angleRad);
+        }
+
     }
 
     @Override
@@ -86,8 +109,6 @@ public class SemiCircularList extends AdapterView {
             circleRadius = Math.min(viewWidth - (2 * subItemRadius), viewHeight - (mainItemRadius + subItemRadius)) / 2;
         }
 
-        degree = 360.0 / displaySubItemCount;
-        mChangeItemRadianThreshold = Math.toRadians(degree);
         roundedCenterX = viewWidth / 2;
         roundedCenterY = circleRadius + subItemRadius;
     }
@@ -264,7 +285,7 @@ public class SemiCircularList extends AdapterView {
     private void addViewAndMeasure(View child, int direction) {		// child view를 리스트에 추가하고 Measuring 수행
         LayoutParams params = child.getLayoutParams();
         if (params == null) {
-            params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+            params = new ViewGroup.LayoutParams(subItemRadius*2, subItemRadius*2);
         }
         int index = 0;
         if(direction == ADD_VIEW_AT_FRONT) {
@@ -290,72 +311,97 @@ public class SemiCircularList extends AdapterView {
     private void layoutItems() {
         for (int index = 0; index < getChildCount(); index++) {
             CircularItemContainer child = getChildAt(index);
-            moveToRadian(child, mMovedRadian);
+            moveByDelta(child, mMovedRadian);
         }
     }
 
     private void initChildLayout(CircularItemContainer child, int index){
-        ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(subItemRadius, subItemRadius);
+        ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(subItemRadius*2, subItemRadius*2);
         child.setLayoutParams(lp);
-
-        // Calculate the angle of the current view. Adjust by 90 degrees to
-        // get View 0 at the top. We need the angle in degrees and radians.
-
-        double angleDeg = adjustDegree(index * degree + offsetDegree);
-        double angleRad = adjustRadian(Math.toRadians(angleDeg ));//Math함수에서는 radian을 기준으로 입력을 받아서 60분법에 의한 각도를 변환
-
-        // Calculate the position of the view, offset from center (300 px from
-        // center). Again, this should be done in a display size independent way.
-        double centerX = roundedCenterX + circleRadius * (float)Math.cos(angleRad );
-        double centerY = roundedCenterY + circleRadius * (float)Math.sin(angleRad );
-        child.setCenterX(centerX);
-        child.setCenterY(centerY);
-        child.setAngleRadian(angleRad);
-        child.layout(subItemRadius);
-
+        moveToIndex(child, index);
     }
 
     private void scrollToSlot(){
         if(getChildCount() > 0){
-            //기준각(270 도일경우)에서 가장 가까운 각과 좌우 방향을 구하여 이동량을 계산한다.
-            double angleRadian = Math.toRadians(360.0);//기준 각과의 차이는 0 < 차이 < 360 이기 때문에
-            double centerRadian = Math.toRadians(offsetDegree);//기준각
-            int direction = -1;
-            for(int index = 0; index < getChildCount(); index++){
-                CircularItemContainer child = getChildAt(index);
-                // 기준각과 아이템과의 사이각
-                double tempRadian = Math.abs(centerRadian - child.getAngleRadian()); // 끼인각(무조건 양의 각으로만 나옮, 방향은 다시 조정
-                if( tempRadian > Math.toRadians(180.0)){
-                    //기준점에 도달하지 못한 부분이므로 양의방향으로 이동시킴
-                    tempRadian = Math.toRadians(360.0) - tempRadian;
-                } else {
-                    tempRadian *= -1;
-                }
-
-                if(Math.abs(angleRadian) > Math.abs(tempRadian)){
-                    angleRadian = tempRadian;
-                }
-
-                Log.v(TAG, String.format("scrollToSlot: index:%d, child.getAngleRadian():%f, angleRadian:%f, d:%f", index, child.getAngleRadian(), angleRadian, mChangeItemRadianThreshold));
-            }
-
-            double delta = angleRadian;
-
             for (int index = 0; index < getChildCount(); index++){
-                moveToRadian(getChildAt(index), delta);
+                CircularItemContainer child = getChildAt(index);
+                int childPosition = getIndexFromRadian(child.getAngleRadian());
+                moveToIndex(child, childPosition);
             }
         }
     }
 
-    private void moveToRadian(CircularItemContainer child, double delta) {
+    private Double getStdRadian(double angleRad){
+        return mappingTable.get(getIndexFromRadian(angleRad));
+    }
 
+    private Double getRadianFromIndex(int index){
+        return mappingTable.get(index%displaySubItemCount);
+    }
+
+    private int getIndexFromRadian(double angleRad) {
+        //초기에 index 0 인 아이템을 할당한 곳은 offset 만큼 더한 곳임. 인덱스를 역으로 계산할려면 그만큼 빼줘야함...
+        /*double angleDeg = adjustDegree(index * degree + offsetDegree);
+        double angleRad = adjustRadian(Math.toRadians(angleDeg ));//Math함수에서는 radian을 기준으로 입력을 받아서 60분법에 의한 각도를 변환*/
+
+        int index = ((int) Math.round(adjustRadian(angleRad - Math.toRadians(offsetDegree)) / mChangeItemRadianThreshold)) % displaySubItemCount;
+        return index;
+    }
+
+    private void inPosition(CircularItemContainer child){
+        int index = child.getIndex();
+        moveToIndex(child, index);
+    }
+
+    private void moveToIndex(CircularItemContainer child, int index) {
+        double angleRad = getRadianFromIndex(index);
+        moveTo(child, angleRad);
+    }
+
+    private void moveByDelta(CircularItemContainer child, double delta) {
         double angleRad = adjustRadian(child.getAngleRadian() + delta);
-        double childCenterX = roundedCenterX + circleRadius * (float)Math.cos( adjustRadian(angleRad));
-        double childCenterY = roundedCenterY + circleRadius * (float)Math.sin(adjustRadian(angleRad));
+        moveTo(child, angleRad);
+    }
+
+    private void moveTo(CircularItemContainer child, double angleRad) {
+        int index = getIndexFromRadian(angleRad);
+        double childCenterX = roundedCenterX + circleRadius * (float)Math.cos( angleRad);
+        double childCenterY = roundedCenterY + circleRadius * (float)Math.sin( angleRad);
+        //child.setIndex(index);
         child.setCenterX(childCenterX);
         child.setCenterY(childCenterY);
         child.setAngleRadian(angleRad);
         child.layout(subItemRadius);
+    }
+
+    private int calcQuadrant(Double radian){
+        double x = Math.cos(radian);
+        double y = Math.sin(radian);
+
+        if(x > 0 && y >= 0){ //0 <= r < 90
+            return 1;
+        } else if (x <= 0 && y > 0){//90 <= r < 180
+            return 2;
+        } else if( x < 0 && y <= 0){//180 <= r < 270
+            return 3;
+        } else { //if( x >= 0 && y < 0){//270 <= r < 0
+            return 4;
+        }
+    }
+
+    private int calcSector(Double radian){
+        double x = Math.cos(radian);
+        double y = Math.sin(radian);
+
+        if(x > 0 && y >= 0){ //0 <= r < 90
+            return 1;
+        } else if (x <= 0 && y > 0){//90 <= r < 180
+            return 1;
+        } else if( x < 0 && y <= 0){//180 <= r < 270
+            return -1;
+        } else { //if( x >= 0 && y < 0){//270 <= r < 0
+            return -1;
+        }
     }
 
     private double adjustDegree(double degree){
@@ -466,6 +512,8 @@ public class SemiCircularList extends AdapterView {
      */
     @Override
     protected boolean getChildStaticTransformation(View child, Transformation transformation) {
+        CircularItemContainer view = (CircularItemContainer) child;
+        //Log.v(TAG, String.format("child view #%d", view.getIndex()));
         Camera mCamera = new Camera();
         transformation.clear();
         transformation.setTransformationType(Transformation.TYPE_MATRIX);
@@ -494,4 +542,89 @@ public class SemiCircularList extends AdapterView {
         child.invalidate();
         return true;
     }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
+        if(circleBackground >= 0) {
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), circleBackground);
+            Bitmap sb = Bitmap.createScaledBitmap(bitmap, circleRadius*2, circleRadius*2, false);
+            canvas.drawBitmap(sb, roundedCenterX - circleRadius, roundedCenterY -circleRadius, null);
+        }
+    }
+
+    @Override
+    protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+        final Bitmap bitmap = child.getDrawingCache();
+
+        if(! (child instanceof CircularItemContainer) && bitmap == null) {
+            return super.drawChild(canvas, child, drawingTime);
+        }
+        CircularItemContainer view = (CircularItemContainer) child;
+
+        // 계산에 필요한 파라미터 생성
+        // 계산에 필요한 파라미터 생성
+        final int top = child.getTop();
+        final int left = child.getLeft();
+        int centerX = child.getWidth()/2;
+        int centerY = child.getHeight()/2;
+
+        // 속도가 빠를 수도록 scale 값이 작아지도록  설정. scale factor 를 통해 조절 가능
+        // scale factor 가 작을수록 이미지 축소량이 작아짐
+
+        float scale = 1.0f;
+        if( getIndexFromRadian(view.getAngleRadian()) < 1){
+            scale = 2.0f;
+        }
+        // Matrix 인스턴스 생성. 이미 생성되어 있다면 reset
+        Matrix mMatrix = null;
+        if (mMatrix == null) {
+            mMatrix = new Matrix();
+        } else {
+            mMatrix.reset();
+        }
+
+        // Matrix를 이용한 이미지 변환 커맨드 설정
+        mMatrix.preTranslate(-centerX, -centerY); 	// 이미지의 중심을 0,0으로 변경
+        mMatrix.postScale(scale, scale);		// 이미지 사이즈 변경
+        mMatrix.postTranslate(left + (centerX), top + (centerY));	// 아이템의 원래 위치로 이동
+        //mMatrix.postTranslate((float)view.getCenterX() + (centerX/scale), (float)view.getCenterY() + (centerY/scale));	// 아이템의 원래 위치로 이동
+
+        // Paint 설정
+        Paint mPaint = null;
+        if (mPaint == null) {
+            mPaint = new Paint();
+            mPaint.setAntiAlias(true);
+            mPaint.setFilterBitmap(true);
+            mPaint.setAlpha(0xFF);
+        }
+
+        // Matrix 에 따라 이미지를 캔버스에 그림.
+        canvas.drawBitmap(bitmap, mMatrix, mPaint);
+
+        return false;
+    }
+
+    @Override
+    protected int getChildDrawingOrder(int childCount, int i) {
+        CircularItemContainer child = getChildAt(i);
+
+        return super.getChildDrawingOrder(childCount, i);
+
+    }
+
+    public interface OnMainItemChangedListener{
+        public void onMainItemChanged(int position);
+    }
+
+    public OnMainItemChangedListener getOnMainItemChangedListener() {
+        return onMainItemChangedListener;
+    }
+
+    public void setOnMainItemChangedListener(OnMainItemChangedListener onMainItemChangedListener) {
+        this.onMainItemChangedListener = onMainItemChangedListener;
+    }
+
+
 }

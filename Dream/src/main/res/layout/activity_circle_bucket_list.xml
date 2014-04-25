@@ -1,39 +1,54 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:pj="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="${packageName}.${activityClass}">
-    <!--<com.vivavu.lib.carousel.Carousel
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/carousel"
-        pj:UseReflection="true"
-        pj:Items="@array/entries"
-        pj:Names="@array/names"
-        pj:SelectedItem="0"
-        android:animationDuration="200"
-        />-->
-    <com.vivavu.lib.view.circular.Circular
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="horizontal"
-        android:layout_weight="1"
-        pj:circleRadius="150dp"
-        pj:displaySubItemCount="6"
-        pj:mainItemRadius="80dp"
-        pj:subItemRadius="70dp"
-        >
-
-        </com.vivavu.lib.view.circular.Circular>
+    tools:context="${packageName}.${activityClass}"
+    android:background="@drawable/background_gradient"
+    >
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp">
-        <Button
+        android:layout_height="match_parent"
+        >
+        <com.vivavu.lib.view.circular.SemiCircularList
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="aaaaa"
-            />
+            android:id="@+id/layout_card"
+            android:scrollbars="horizontal"
+            android:layout_weight="1"
+            android:background="@drawable/sub_view_base_circle_border"
+            pj:circleRadius="120dp"
+            pj:displaySubItemCount="8"
+            pj:mainItemRadius="110dp"
+            pj:subItemRadius="45dp"
+            pj:circleBackground="@drawable/sub_view_base_circle_border"
+            >
+
+        </com.vivavu.lib.view.circular.SemiCircularList>
         </LinearLayout>
-</LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="120dp"
+        android:id="@+id/txt_indicator"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="400dp"
+        android:text="  "
+        android:drawableBottom="@drawable/sub_view_title_underline"
+        />
+    <Button
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/btn_add"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"
+        />
+</RelativeLayout>

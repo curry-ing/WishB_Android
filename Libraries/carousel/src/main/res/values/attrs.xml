@@ -18,7 +18,7 @@
         <attr name="displaySubItemCount" format="integer"/>
         <attr name="mainItemRadius" format="dimension"/>
         <attr name="subItemRadius" format="dimension"/>
-
+        <attr name="circleBackground" format="reference"/>
     </declare-styleable>
     <!--<declare-styleable name="CircularList">
         <attr name="android:gravity" />

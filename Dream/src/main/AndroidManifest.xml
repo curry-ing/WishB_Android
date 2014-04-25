@@ -100,8 +100,7 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.vivavu.dream.activity.bucket.CircleBucketListActivity"
-            android:label="@string/title_activity_circle_bucket_list" >
+            android:name="com.vivavu.dream.activity.bucket.CircleBucketListActivity">
         </activity>
     </application>
 

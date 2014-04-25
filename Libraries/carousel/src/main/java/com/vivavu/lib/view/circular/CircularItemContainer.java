@@ -60,4 +60,22 @@ public class CircularItemContainer extends FrameLayout {
     public void layout(int r){
         layout((int)centerX - r, (int)centerY - r, (int)centerX + r, (int)centerY + r);
     }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int itemWidth = getWidth();
+        int itemHeight = getHeight();
+        measureChildren(MeasureSpec.EXACTLY | itemWidth, MeasureSpec.EXACTLY | itemHeight);
+    }
+
+    @Override
+    public String toString() {
+        return "CircularItemContainer{" +
+                "index=" + index +
+                ", centerX=" + centerX +
+                ", centerY=" + centerY +
+                ", angleRadian=" + angleRadian +
+                '}';
+    }
 }

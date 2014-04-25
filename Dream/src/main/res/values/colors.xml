@@ -6,4 +6,7 @@
     <color name="not_open">#00cccc</color>
     <color name="complete">#CCFFDD</color>
     <color name="seal">#00FF00</color>
+    <!-- 디자인 -->
+    <color name="mint">#67c9bb</color>
+    <color name="orange">#fa9261</color>
 </resources>

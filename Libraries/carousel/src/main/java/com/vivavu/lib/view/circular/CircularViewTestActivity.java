@@ -9,6 +9,7 @@ import android.view.Menu;
 import com.vivavu.lib.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CircularViewTestActivity extends Activity {
 
@@ -31,9 +32,19 @@ public class CircularViewTestActivity extends Activity {
             itemList.add(temp);
         }
 
-        CircularAdapter circularAdapter = new CircularAdapter(mContext, itemList);
+        CircularAdapter circularAdapter = new CircleAdapter(mContext, itemList);
         listview.setAdapter(circularAdapter);
 
+    }
+
+    public static List getDummyData(){
+        ArrayList<DummyData> itemList = new ArrayList<DummyData>();
+        for(int i=0; i<8; i++) {
+            DummyData temp = new DummyData("#" + Integer.toString(i), "Card description. Test card number #" + Integer.toString(i),
+                    Color.rgb(128 + i * 2, 64 + i * 2, 64 + i * 2) );
+            itemList.add(temp);
+        }
+        return itemList;
     }
 
     @Override
@@ -42,7 +53,7 @@ public class CircularViewTestActivity extends Activity {
     }
 
 
-    public class DummyData {
+    public static class DummyData {
         public String mName = null;
         public String mDesc = null;
         public int mBGColor = 0;
