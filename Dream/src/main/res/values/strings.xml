@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_id">214219172094153</string>
     <string name="app_name">DreamProject</string>
     <string name="title_activity_main">MainActivity</string>
@@ -86,8 +85,5 @@
     <string name="menu_share">공유</string>
     <string name="menu_remove">삭제</string>
     <string name="menu_save">저장</string>
-    <string name="shelf_roll">접기</string>
-    <string name="empty_text">공백</string>
-    <string name="title_activity_circle_bucket_list">CircleBucketListActivity</string>
 
 </resources>

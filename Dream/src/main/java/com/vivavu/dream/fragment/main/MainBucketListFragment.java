@@ -90,6 +90,8 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Thread thread = new Thread(new NetworkThread());
+        thread.start();
         final View rootView = inflater.inflate(R.layout.main_row, container, false);
         ButterKnife.inject(this, rootView);
 
