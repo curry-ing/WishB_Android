@@ -2,6 +2,8 @@ package com.vivavu.dream.model.user;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -98,6 +100,15 @@ public class User{
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public int getUserAge() {
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+        SimpleDateFormat CurYearFormat = new SimpleDateFormat("yyyy");
+        String strCurYear = CurYearFormat.format(date);
+
+        return Integer.parseInt(strCurYear) - Integer.parseInt(birthday.substring(0,4)) + 1;
     }
 
     @Override

@@ -78,8 +78,7 @@ public class MainTodayDailyFragment extends CustomBaseFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_shelf_daily_list, container, false);
         ButterKnife.inject(this, rootView);
 
