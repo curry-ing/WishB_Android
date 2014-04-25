@@ -37,6 +37,10 @@ public class BucketGroup implements Comparable<BucketGroup> {
         return range + "대";
     }
 
+    public int getCount(){
+        return bukets.size();
+    }
+
     public void setRange(String range) {
         this.range = range;
     }

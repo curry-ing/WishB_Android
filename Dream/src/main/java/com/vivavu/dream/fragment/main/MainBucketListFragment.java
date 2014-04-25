@@ -1,9 +1,12 @@
 package com.vivavu.dream.fragment.main;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +16,9 @@ import android.widget.Toast;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.vivavu.dream.R;
+import com.vivavu.dream.activity.main.TodayCalendarActivity;
 import com.vivavu.dream.adapter.bucket.BucketAdapter;
+import com.vivavu.dream.adapter.bucket.BucketAdapter2;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.fragment.CustomBaseFragment;
 import com.vivavu.dream.model.ResponseBodyWrapped;
@@ -24,6 +29,7 @@ import com.vivavu.dream.repository.DataRepository;
 import com.vivavu.dream.util.NetworkUtil;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -32,15 +38,21 @@ import butterknife.InjectView;
 /**
  * Created by yuja on 14. 2. 27.
  */
-public class MainBucketListFragment extends CustomBaseFragment implements PullToRefreshListView.OnRefreshListener<ListView> {
+public class MainBucketListFragment extends CustomBaseFragment { //} implements PullToRefreshListView.OnRefreshListener<ListView> {
     static public String TAG = "com.vivavu.dream.fragment.main.MainBucketListFragment";
+    static public final int REQUEST_CODE_CHANGE_DAY = 0;
     static public final int SEND_REFRESH_START = 0;
     static public final int SEND_REFRESH_STOP = 1;
     static public final int SEND_BUKET_LIST_UPDATE = 2;
     private static final int SEND_NETWORK_DATA = 3;
+    static public final int OFF_SCREEN_PAGE_LIMIT = 5;
 
-    @InjectView(R.id.list)
-    protected PullToRefreshListView mList;
+    @InjectView(R.id.main_pager)
+    ViewPager mMainPager;
+
+    private List<BucketGroup> bucketGroupList;
+//    private BucketAdapter bucketAdapter;
+    private BucketAdapter2 bucketAdapter2;
     private ProgressDialog progressDialog;
 
     protected final Handler handler = new Handler() {
@@ -49,17 +61,12 @@ public class MainBucketListFragment extends CustomBaseFragment implements PullTo
             switch (msg.what){
                 case SEND_REFRESH_START:
                     progressDialog.show();
-                    mList.setRefreshing();
                     break;
                 case SEND_REFRESH_STOP:
-                    updateContents();
-                    mList.onRefreshComplete();
+                    updateContents((List<BucketGroup>) msg.obj);
                     break;
                 case SEND_BUKET_LIST_UPDATE:
-                    bucketGroupList.clear();
-                    bucketGroupList.addAll((List<BucketGroup>) msg.obj);
-                    updateContents();
-                    mList.onRefreshComplete();
+                    updateContents((List<BucketGroup>) msg.obj);
                     progressDialog.dismiss();
                     break;
                 case SEND_NETWORK_DATA:
@@ -68,43 +75,37 @@ public class MainBucketListFragment extends CustomBaseFragment implements PullTo
         }
     };
 
-    private List<BucketGroup> bucketGroupList;
-    private BucketAdapter bucketAdapter;
     public MainBucketListFragment() {
         bucketGroupList = new ArrayList<BucketGroup>();
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public MainBucketListFragment(List<BucketGroup> bucketGroupList) {
+        this.bucketGroupList = bucketGroupList;
     }
+
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_shelf_list, container, false);
+        final View rootView = inflater.inflate(R.layout.main_row, container, false);
         ButterKnife.inject(this, rootView);
-        mList.setOnRefreshListener(this);
-        /*mList.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                // Pause fetcher to ensure smoother scrolling when flinging
-                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
-                    // Before Honeycomb pause image loading on scroll to help with performance
-                    if (!Utils.hasHoneycomb()) {
-                    }
-                } else {
-                }
-            }
 
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
-            }
-        });*/
-        //updateContents();
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage("진행중");
+
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        bucketAdapter2 = new BucketAdapter2(this, bucketGroupList);
+        mMainPager.setAdapter(bucketAdapter2);
+        mMainPager.setOffscreenPageLimit(OFF_SCREEN_PAGE_LIMIT);
+
     }
 
     @Override
@@ -114,36 +115,34 @@ public class MainBucketListFragment extends CustomBaseFragment implements PullTo
         thread.start();
     }
 
-    public void updateContents(){
-        if(bucketAdapter == null){
-            bucketAdapter = new BucketAdapter(getActivity(), R.layout.shelf_row, bucketGroupList);
-            bucketAdapter.setParentFragment(this);
-            mList.setAdapter(bucketAdapter);
+    public void updateContents(List<BucketGroup> obj){
+        bucketGroupList.clear();
+        bucketGroupList.addAll(obj);
+        if(bucketAdapter2 == null) {
+            bucketAdapter2 = new BucketAdapter2(this, bucketGroupList);
         }
-        bucketAdapter.refreshDataSet(bucketGroupList);
-        mList.invalidate();
+        bucketAdapter2.setBucketGroupList(bucketGroupList);
+        bucketAdapter2.notifyDataSetChanged();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if(bucketAdapter != null) {
-            bucketAdapter.notifyDataSetChanged();
+        if(bucketAdapter2 != null) {
+            bucketAdapter2.notifyDataSetChanged();
         }
-        /*Thread thread = new Thread(new DataThread());
-        thread.start();*/
     }
 
-    @Override
-    public void onRefresh(final PullToRefreshBase<ListView> listViewPullToRefreshBase) {
-        if(NetworkUtil.isAvaliableNetworkAccess(DreamApp.getInstance())) {
-            Thread thread = new Thread(new NetworkThread());
-            thread.start();
-        }else {
-            Toast.makeText(getActivity(), getText(R.string.no_network_connection_toast), Toast.LENGTH_SHORT).show();
-            mList.onRefreshComplete();
-        }
-    }
+//    @Override
+//    public void onRefresh(final PullToRefreshBase<ListView> listViewPullToRefreshBase) {
+//        if(NetworkUtil.isAvaliableNetworkAccess(DreamApp.getInstance())) {
+//            Thread thread = new Thread(new NetworkThread());
+//            thread.start();
+//        }else {
+//            Toast.makeText(getActivity(), getText(R.string.no_network_connection_toast), Toast.LENGTH_SHORT).show();
+//            mList.onRefreshComplete();
+//        }
+//    }
 
 
     public class NetworkThread implements Runnable{
@@ -168,4 +167,20 @@ public class MainBucketListFragment extends CustomBaseFragment implements PullTo
             handler.sendMessage(message);
         }
     }
+
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        switch (requestCode){
+//            case REQUEST_CODE_CHANGE_DAY:
+//                if(resultCode == Activity.RESULT_OK){
+//                    Date selectedDate = (Date) data.getSerializableExtra(TodayCalendarActivity.selectedDateExtraName);
+//                    Integer selectedIndex =  data.getIntExtra(TodayCalendarActivity.selectedDateIndexExtraName, 0);
+//                    if(selectedDate != null){
+//                        mMainPager.setCurrentItem(selectedIndex);
+//                    }
+//                    return;
+//                }
+//        }
+//    }
 }
