@@ -65,6 +65,10 @@ public class SemiCircularList extends AdapterView {
     private int circleBackground;
     private HashMap<Integer, Double> mappingTable;
 
+    /* sub 원들의 최대, 최소 크기 비율 factor*/
+    private float MAX_SUB_SIZE_SCALE_FACTOR = 1.0f;
+    private float MIN_SUB_SIZE_SCALE_FACTOR = 0.5f;
+
     public SemiCircularList(Context context) {
         this(context, null);
     }
@@ -84,17 +88,27 @@ public class SemiCircularList extends AdapterView {
         displaySubItemCount = arr.getInteger(R.styleable.Circular_displaySubItemCount, 6);
 
         circleBackground = arr.getResourceId(R.styleable.Circular_circleBackground, -1);
-        degree = 360.0 / displaySubItemCount;
+        degree = 180.0 / (displaySubItemCount-2);
         mChangeItemRadianThreshold = Math.toRadians(degree);
         Log.v(TAG, String.format("circleRadius:%d, mainItemRadius:%d, subItemRadius:%d, displaySubItemCount:%d", circleRadius, mainItemRadius, subItemRadius, displaySubItemCount));
 
         mappingTable = new HashMap<Integer, Double>();
         for(int index = 0; index < displaySubItemCount; index++){
-            double angleDeg = adjustDegree(index * degree + offsetDegree);
-            double angleRad = adjustRadian(Math.toRadians(angleDeg ));//Math함수에서는 radian을 기준으로 입력을 받아서 60분법에 의한 각도를 변환
+            double angleDeg = 0.0;
+            double angleRad = 0.0;
+            if(index == 0){
+                angleDeg = adjustDegree(offsetDegree);
+                angleRad = adjustRadian(Math.toRadians(angleDeg ));//Math함수에서는 radian을 기준으로 입력을 받아서 60분법에 의한 각도를 변환
+            } else {
+                angleDeg = adjustDegree((index-1 ) * degree + (offsetDegree + 90.0));
+                angleRad = adjustRadian(Math.toRadians(angleDeg));//Math함수에서는 radian을 기준으로 입력을 받아서 60분법에 의한 각도를 변환
+            }
             mappingTable.put(index, angleRad);
         }
-
+        //ondraw를 호출하기 위한 방안
+        if(getBackground() == null) {
+            setBackgroundColor(0xffffffff);
+        }
     }
 
     @Override
@@ -343,9 +357,12 @@ public class SemiCircularList extends AdapterView {
         //초기에 index 0 인 아이템을 할당한 곳은 offset 만큼 더한 곳임. 인덱스를 역으로 계산할려면 그만큼 빼줘야함...
         /*double angleDeg = adjustDegree(index * degree + offsetDegree);
         double angleRad = adjustRadian(Math.toRadians(angleDeg ));//Math함수에서는 radian을 기준으로 입력을 받아서 60분법에 의한 각도를 변환*/
-
-        int index = ((int) Math.round(adjustRadian(angleRad - Math.toRadians(offsetDegree)) / mChangeItemRadianThreshold)) % displaySubItemCount;
-        return index;
+        if(calcSector(angleRad) > 0){
+            return 0;
+        } else {
+            int index = ((int) Math.round(adjustRadian(angleRad - Math.toRadians(offsetDegree+90.0)) / mChangeItemRadianThreshold)) % (displaySubItemCount-1);
+            return index;
+        }
     }
 
     private void inPosition(CircularItemContainer child){
@@ -364,14 +381,22 @@ public class SemiCircularList extends AdapterView {
     }
 
     private void moveTo(CircularItemContainer child, double angleRad) {
-        int index = getIndexFromRadian(angleRad);
-        double childCenterX = roundedCenterX + circleRadius * (float)Math.cos( angleRad);
-        double childCenterY = roundedCenterY + circleRadius * (float)Math.sin( angleRad);
-        //child.setIndex(index);
+        double childCenterX = calcChildCenterX(angleRad);
+        double childCenterY = calcChildCenterY(angleRad);
+
         child.setCenterX(childCenterX);
         child.setCenterY(childCenterY);
         child.setAngleRadian(angleRad);
         child.layout(subItemRadius);
+    }
+
+    private double calcChildCenterX(double angleRad){
+
+        return roundedCenterX + circleRadius * (float)Math.cos( angleRad);
+    }
+
+    private double calcChildCenterY(double angleRad){
+        return roundedCenterY + circleRadius * (float)Math.sin( angleRad);
     }
 
     private int calcQuadrant(Double radian){
@@ -574,8 +599,39 @@ public class SemiCircularList extends AdapterView {
         // scale factor 가 작을수록 이미지 축소량이 작아짐
 
         float scale = 1.0f;
-        if( getIndexFromRadian(view.getAngleRadian()) < 1){
-            scale = 2.0f;
+        switch (getIndexFromRadian(view.getAngleRadian())){
+            case 0:
+                scale = 2.0f;
+                break;
+            case 1:
+                scale = 1.0f;
+                break;
+            case 2:
+                scale = 0.8f;
+                break;
+            case 3:
+                scale = 0.6f;
+                break;
+            case 4:
+                scale = 0.5f;
+                break;
+            case 5:
+                scale = 0.6f;
+                break;
+            case 6:
+                scale = 0.8f;
+                break;
+            case 7:
+                scale = 1.0f;
+                break;
+            default:
+                scale = 1.0f;
+                break;
+        }
+
+        // main 서클이 아닐 경우
+        if(getIndexFromRadian(view.getAngleRadian()) > 0){
+
         }
         // Matrix 인스턴스 생성. 이미 생성되어 있다면 reset
         Matrix mMatrix = null;

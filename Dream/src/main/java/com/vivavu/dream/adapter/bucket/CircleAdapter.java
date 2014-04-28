@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -17,6 +16,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by yuja on 2014-04-24.
@@ -58,11 +58,13 @@ public class CircleAdapter extends CircularAdapter<Bucket> {
     class ButterknifeViewHolder {
         @InjectView(R.id.txt)
         TextView mTxt;
-        @InjectView(R.id.img_bucket)
+        /*@InjectView(R.id.img_bucket)
         ImageView mImgBucket;
         @InjectView(R.id.img_mask)
-        ImageView mImgMask;
+        ImageView mImgMask;*/
 
+        @InjectView(R.id.img_bucket)
+        CircleImageView mImgBucket;
         ButterknifeViewHolder(View view) {
             ButterKnife.inject(this, view);
         }

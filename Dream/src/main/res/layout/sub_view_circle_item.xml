@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/txt"
-        />
-    <ImageView
+    <!--<ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/img_bucket"
@@ -20,5 +15,20 @@
         android:layout_height="match_parent"
         android:id="@+id/img_mask"
         android:background="@drawable/sub_view_default_circle_trans"
+        />-->
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/img_bucket"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:border_width="2dp"
+        app:border_color="#FF000000"
+    ></de.hdodenhof.circleimageview.CircleImageView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txt"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
         />
-</FrameLayout>
+</RelativeLayout>

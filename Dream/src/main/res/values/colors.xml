@@ -9,4 +9,5 @@
     <!-- 디자인 -->
     <color name="mint">#67c9bb</color>
     <color name="orange">#fa9261</color>
+    <color name="transparent">#ffffffff</color>
 </resources>
