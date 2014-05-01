@@ -31,16 +31,22 @@ public class CircleAdapter extends CircularAdapter<Bucket> {
 
         CircularItemContainer circularItemContainer = new CircularItemContainer(mContext);
         circularItemContainer.setIndex(position);
-        circularItemContainer.setBackgroundResource(R.drawable.sub_view_default_cricle);
+        circularItemContainer.setBackgroundResource(R.drawable.sub_view_default_circle);
 
         View v = null;
-        Bucket data = mList.get(position);
+        Bucket data = null;
+        if(position < mList.size()){
+            data = mList.get(position);
+        }else{
+            data = new Bucket();
+        }
+
         if (v == null)
         {
             LayoutInflater li = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = li.inflate(R.layout.sub_view_circle_item, null);
             ButterknifeViewHolder viewHolder = new ButterknifeViewHolder(v);
-            viewHolder.mTxt.setText(data.getTitle());
+            viewHolder.mTxt.setText(position + " " + data.getTitle());
             ImageLoader.getInstance().displayImage(data.getCvrImgUrl(), viewHolder.mImgBucket);
 
         }

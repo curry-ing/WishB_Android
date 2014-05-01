@@ -41,7 +41,7 @@ public class SemiCircularList extends AdapterView {
     private boolean isDrawing = false;				// 화면 drawing 중에 touch 업데이트로 onLayout() 중복 호출을 방지
     private int mFirstItemPosition = 0;					// 화면에 보이는 첫 아이템의 index
     private int mLastItemPosition = 0;					// 화면에 보이는 마지막 아이템의 index
-    private int mMainItemPosition = 0;  //메인 아이템의 index
+    private int mMainItemPosition = -1;  //메인 아이템의 index
 
     /* 터치 컨트롤 */
     private double mStartX = 0;							// 터치 이벤트 시작된 기준 좌표 X
@@ -88,27 +88,19 @@ public class SemiCircularList extends AdapterView {
         displaySubItemCount = arr.getInteger(R.styleable.Circular_displaySubItemCount, 6);
 
         circleBackground = arr.getResourceId(R.styleable.Circular_circleBackground, -1);
-        degree = 180.0 / (displaySubItemCount-2);
+        degree = 360.0 / displaySubItemCount;
         mChangeItemRadianThreshold = Math.toRadians(degree);
         Log.v(TAG, String.format("circleRadius:%d, mainItemRadius:%d, subItemRadius:%d, displaySubItemCount:%d", circleRadius, mainItemRadius, subItemRadius, displaySubItemCount));
 
         mappingTable = new HashMap<Integer, Double>();
         for(int index = 0; index < displaySubItemCount; index++){
-            double angleDeg = 0.0;
-            double angleRad = 0.0;
-            if(index == 0){
-                angleDeg = adjustDegree(offsetDegree);
-                angleRad = adjustRadian(Math.toRadians(angleDeg ));//Math함수에서는 radian을 기준으로 입력을 받아서 60분법에 의한 각도를 변환
-            } else {
-                angleDeg = adjustDegree((index-1 ) * degree + (offsetDegree + 90.0));
-                angleRad = adjustRadian(Math.toRadians(angleDeg));//Math함수에서는 radian을 기준으로 입력을 받아서 60분법에 의한 각도를 변환
-            }
+            double angleDeg = adjustDegree(index * degree + offsetDegree);
+            double angleRad = adjustRadian(Math.toRadians(angleDeg ));//Math함수에서는 radian을 기준으로 입력을 받아서 60분법에 의한 각도를 변환
             mappingTable.put(index, angleRad);
         }
         //ondraw를 호출하기 위한 방안
-        if(getBackground() == null) {
-            setBackgroundColor(0xffffffff);
-        }
+        setWillNotDraw(false);
+
     }
 
     @Override
@@ -167,120 +159,115 @@ public class SemiCircularList extends AdapterView {
 
         redrawLayout();
 
+        fireEvent();
         invalidate();								// 화면 업데이트
 
         isDrawing = false;					// drawing flag 해제
+    }
+
+    private void fireEvent() {
+
+        for (int index = 0; index < getChildCount(); index++) {
+            CircularItemContainer child = getChildAt(index);
+            int childPosition = getIndexFromRadian(child.getAngleRadian());
+            if(childPosition == 0 && mMainItemPosition != child.getIndex() ){
+                mMainItemPosition = child.getIndex();
+                // main item이 변경될 경우 발생시킴
+                if(getOnMainItemChangedListener() != null){
+                    getOnMainItemChangedListener().onMainItemChanged(index, child);
+                }
+                break;
+            }
+        }
     }
 
     /**
      * 화면에 표시될 item을 추가/삭제, item의 위치를 설정하는 메인 루틴
      */
     private void redrawLayout() {
-        int count = getMovedItemCount();
-        if (getChildCount() == 0)			// 아이템이 없는 경우 변수 초기화
-        {
-            mFirstItemPosition = 0;
-            mLastItemPosition = 0;
-        }
-        else {										// 아이템이 있는 경우 이동한 화면에서 보이지 않는 아이템 삭제부터
-            //removeNonVisibleViews(count);
+        if (getChildCount() == 0) {		// 아이템이 없는 경우 변수 초기화
+            mFirstItemPosition = -1;
+            mLastItemPosition = -1;
+            mMainItemPosition = -1;
         }
 
-        //insertListItems(count);						// 이동한 화면에 필요한 아이템을 채움
-        insertListItems(0);						// 이동한 화면에 필요한 아이템을 채움
+        updateCircular();// 이동한 화면에 필요한 아이템을 채움
         layoutItems();							// 자식 뷰들의 화면 내 위치를 재설정 (child.layout() 으로 조정)
     }
 
-    private int getMovedItemCount(){
+    private void updateCircular(){
+        if(getChildCount() > 0){
+            CircularItemContainer firstChild = getChildAt(0);
+            CircularItemContainer lastChild = getChildAt(getChildCount()-1);
+            int threshold = getAdapter().getCount();
+            if(adjustRadian(firstChild.getAngleRadian()) > adjustRadian(Math.toRadians(offsetDegree + 180.0))){
+                //시계방향으로 회전할 경우 0의 위치한 자식 뷰를 삭제하고 꼬리부분에 새로운 뷰를 추가해준다.
+                double angleRadian = firstChild.getAngleRadian();
+                //1. 삭제
+                removeViewInLayout(firstChild);
+                mViewCache.addLast(firstChild);			// 삭제한 아이템은 캐시에 저장
+                mFirstItemPosition = adjustCircularPosition(++mFirstItemPosition, threshold);
 
-        int movedItemCount = (int) (mMovedRadian / mChangeItemRadianThreshold);
-        Log.v(TAG, String.format("getMovedItemCount by Radian : %d", movedItemCount));
-        //return direction * movedItemCount;
-        return movedItemCount;
-    }
-    /**
-     * 새롭게 설정된 리스트 영역에서 보이지 않는 아이템 삭제
-     * @param movedItemCount
-     */
-    private void removeNonVisibleViews(int movedItemCount) {
-        int childCount = getChildCount();
-        //int threshold = Math.min(displaySubItemCount, mAdapter.getCount());
-        int threshold = mAdapter.getCount();
-        if(movedItemCount > 0 && childCount > 1) {		// 위로 드래그, 화면 위에서 부터 가려지는 아이템을 삭제
-            CircularItemContainer child = getChildAt(0);
-            for(int index = 1; index <= movedItemCount; index++){
-                removeViewInLayout(child);
-                childCount--;
-                mViewCache.addLast(child);			// 삭제한 아이템은 캐시에 저장
-                mFirstItemPosition = ++mFirstItemPosition % threshold;
-
-                if(childCount > 1) {
-                    child = getChildAt(0);
-                } else {
-                    child = null;
-                }
-            }
-        } else if(movedItemCount < 0 && childCount > 1) {	// 아래로 드래그, 화면 아래에서 부터 가려지는 아이템을 삭제
-            // direction을 따로 구해야할까???
-            CircularItemContainer child = getChildAt(childCount - 1);
-            int absMovedItemCount = Math.abs(movedItemCount);
-            for(int index = 1; index <= absMovedItemCount; index++){
-                removeViewInLayout(child);
-                childCount--;
-                mViewCache.addLast(child);			// 삭제한 아이템은 캐시에 저장
-                mFirstItemPosition = ((--mFirstItemPosition > -1 ? mFirstItemPosition : mFirstItemPosition + threshold)) % threshold;
-
-                if(childCount > 1) {
-                    child = getChildAt(childCount - 1);
-                } else {
-                    child = null;
-                }
-            }
-        }
-    }
-
-    /**
-     * 새롭게 설정된 리스트 영역에 필요한 아이템을 채움
-     * @param movedItemCount
-     */
-    private void insertListItems(int movedItemCount) {
-        int childCount = getChildCount();
-        //int threshold = Math.min(displaySubItemCount, mAdapter.getCount());
-        int threshold = mAdapter.getCount();
-        if( movedItemCount > 0 && childCount > 0 ) {
-            // 위로 드래그, 화면이 아래로 내려옴. 아래쪽에 신규 아이템을 채움.
-            // 기존것은 화면의 사이즈만으로 이동하지만 원형 리스트의 경우는 일정 이동량을 아이템 이동량으로 변환해야함
-            // 이동량을 정의하고 이동량의 변화에 따라 일정 이동량에 따라 아이템의 이동을 결정하는 알고리즘이 필요하다.
-            CircularItemContainer child = getChildAt(getChildCount() - 1);
-            while( movedItemCount > 0 ) {
-                mLastItemPosition = ++mLastItemPosition % threshold;
-                child = mAdapter.getView(mLastItemPosition, getCachedView(), this);
+                //2. 추가
+                mLastItemPosition = adjustCircularPosition(++mLastItemPosition, threshold);
+                CircularItemContainer child = mAdapter.getView(mLastItemPosition, getCachedView(), this);
+                //3. 화면 배치를 위한 각도 저장(직전의 것의 기존위치로 대체)
+                child.setAngleRadian(angleRadian);
+                initChildLayout(child, angleRadian);
                 addViewAndMeasure(child, ADD_VIEW_AT_REAR);
-                movedItemCount--;
+
+            }else if(adjustRadian(lastChild.getAngleRadian()) < adjustRadian(Math.toRadians(offsetDegree + 180.0))){
+                //시계방향으로 회전할 경우 getChildCount()-1의 위치한 자식 뷰를 삭제하고 맨 앞에 새로운 뷰를 추가해준다.
+                double angleRadian = lastChild.getAngleRadian();
+                //1. 삭제
+                removeViewInLayout(lastChild);
+                mViewCache.addLast(lastChild);			// 삭제한 아이템은 캐시에 저장
+                mFirstItemPosition = adjustCircularPosition(--mFirstItemPosition, threshold);
+
+                //2. 추가
+                mLastItemPosition = adjustCircularPosition(--mLastItemPosition, threshold);
+                CircularItemContainer child = mAdapter.getView(mFirstItemPosition, getCachedView(), this);
+                //3. 화면 배치를 위한 각도 저장(직전의 것의 기존위치로 대체)
+                child.setAngleRadian(angleRadian);
+                initChildLayout(child, angleRadian);
+                addViewAndMeasure(child, ADD_VIEW_AT_FRONT);
+
+            } else{
+                // 아직 임계값 이상으로 변경이 없을 경우에는 다른 작업을 하지 않는다.
             }
 
-        } else if( movedItemCount < 0 && childCount > 0 ) {	// 아래로 드래그, 화면이 위로 올라감. 위에 신규 아이템을 채움.
-            CircularItemContainer child = null;
-            while( movedItemCount < 0 ) {
-                mLastItemPosition = ((--mLastItemPosition > -1 ? mLastItemPosition : mLastItemPosition + threshold)) % threshold;
-                child = mAdapter.getView(mFirstItemPosition, getCachedView(), this);
-                addViewAndMeasure(child, ADD_VIEW_AT_FRONT);
-                movedItemCount++;
-            }
         } else {
             //초기에 입력하는 아이템 수에 따라서 원형에 보여주는 아이템 수가 결정된다.
-            if(childCount < 1) {		// 리스트 초기화, 가장 상위의 화면을 구성
-                CircularItemContainer child = null;
-                int index = 0;
-                while( index < Math.min(displaySubItemCount, mAdapter.getCount()) ) {
-                    child = mAdapter.getView(index, getCachedView(), this);
-                    initChildLayout(child, index);
-                    addViewAndMeasure(child, ADD_VIEW_AT_REAR);
-                    mLastItemPosition = index;
-                    index++;
-                }
+            // 리스트 초기화, 가장 상위의 화면을 구성
+            CircularItemContainer child = null;
+            int index = 0;
+            int min = Math.min(displaySubItemCount, mAdapter.getCount());
+            int center = (int)Math.ceil(displaySubItemCount / 2);
+            mFirstItemPosition = adjustCircularPosition(index-center, mAdapter.getCount());
+            mLastItemPosition = mFirstItemPosition - 1;
+
+            while( index < min ) {
+                int position = adjustCircularPosition(center - index, displaySubItemCount);
+
+                //index-center의 순서가 바뀌면 표출 순서도 바뀜
+                // 0번째것을 가운데로 표출하기위해 트릭을 사용함
+                mLastItemPosition = adjustCircularPosition(++mLastItemPosition, mAdapter.getCount());
+                child = mAdapter.getView(mLastItemPosition, getCachedView(), this);
+                initChildLayout(child, position);
+                addViewAndMeasure(child, ADD_VIEW_AT_REAR);
+
+                index++;
             }
+            Log.v(TAG, String.format("mFirstItemPosition:%d, mLastItemPosition:%d", mFirstItemPosition, mLastItemPosition));
         }
+    }
+
+    protected int adjustCircularPosition(int position, int size){
+        while(position < 0){
+            position += size;
+        }
+
+        return position % size;
     }
 
     private View getCachedView() {			// 캐시에서 아이템을 하나씩 가져옴. getView()를 호출할 때 convertView 파라미터로 사용.
@@ -335,6 +322,12 @@ public class SemiCircularList extends AdapterView {
         moveToIndex(child, index);
     }
 
+    private void initChildLayout(CircularItemContainer child, double angleRadian){
+        ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(subItemRadius*2, subItemRadius*2);
+        child.setLayoutParams(lp);
+        moveTo(child, angleRadian);
+    }
+
     private void scrollToSlot(){
         if(getChildCount() > 0){
             for (int index = 0; index < getChildCount(); index++){
@@ -357,12 +350,9 @@ public class SemiCircularList extends AdapterView {
         //초기에 index 0 인 아이템을 할당한 곳은 offset 만큼 더한 곳임. 인덱스를 역으로 계산할려면 그만큼 빼줘야함...
         /*double angleDeg = adjustDegree(index * degree + offsetDegree);
         double angleRad = adjustRadian(Math.toRadians(angleDeg ));//Math함수에서는 radian을 기준으로 입력을 받아서 60분법에 의한 각도를 변환*/
-        if(calcSector(angleRad) > 0){
-            return 0;
-        } else {
-            int index = ((int) Math.round(adjustRadian(angleRad - Math.toRadians(offsetDegree+90.0)) / mChangeItemRadianThreshold)) % (displaySubItemCount-1);
-            return index;
-        }
+
+        int index = ((int) Math.round(adjustRadian(angleRad - Math.toRadians(offsetDegree)) / mChangeItemRadianThreshold)) % displaySubItemCount;
+        return index;
     }
 
     private void inPosition(CircularItemContainer child){
@@ -430,23 +420,24 @@ public class SemiCircularList extends AdapterView {
     }
 
     private double adjustDegree(double degree){
-        if( degree < 0.0 ){
-            return degree + 360.0;
-        } else if( degree >= 360.0){
-            return degree - 360.0;
-        } else {
-            return degree;
+        while(degree < 0){
+            degree += 360.0;
         }
+        while(degree >= 360.0){
+            degree -= 360.0;
+        }
+
+        return degree;
     }
 
     private double adjustRadian(double radian){
-        if( radian < 0.0 ){
-            return radian + Math.toRadians(360.0);
-        } else if( radian >= Math.toRadians(360.0)){
-            return radian - Math.toRadians(360.0);
-        } else {
-            return radian;
+        while(radian < 0){
+            radian += Math.toRadians(360.0);
         }
+        while(radian >= Math.toRadians(360.0)){
+            radian -= Math.toRadians(360.0);
+        }
+        return radian;
     }
 
     private double getRadian(double pointX, double pointY, double centerX, double centerY){
@@ -578,6 +569,27 @@ public class SemiCircularList extends AdapterView {
             canvas.drawBitmap(sb, roundedCenterX - circleRadius, roundedCenterY -circleRadius, null);
         }
     }
+    protected double convertDisplayRadian(double radian){
+        double factor = 1.0;
+        double temp = Math.abs(adjustRadian(radian) - adjustRadian(0.0 + Math.toRadians(offsetDegree)));
+        if( temp <= Math.toRadians(degree)){
+            // 중심의 경우 각을 확대시킨다.
+            factor = 180.0/(2*degree);
+            if(radian > Math.toRadians(180.0)){
+                factor *= -1;
+            }
+            return adjustRadian((radian - Math.toRadians(offsetDegree)) * factor + Math.toRadians(offsetDegree) );
+        } else {
+            // 중심 외의 부분의 경우 각을 축소시킨다.
+            factor = 180.0/(360.0-2*degree);
+
+            //return adjustRadian((radian - Math.toRadians(180))*factor + Math.toRadians(180.0))  + Math.toRadians(offsetDegree);
+            //return adjustRadian((radian - Math.toRadians(offsetDegree))*factor+Math.toRadians(offsetDegree));
+            //return radian;
+            double v = factor*adjustRadian(radian - Math.toRadians(degree)  - Math.toRadians(offsetDegree) ) + Math.toRadians(90.0)+ Math.toRadians(offsetDegree);
+            return adjustRadian(v);
+        }
+    }
 
     @Override
     protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
@@ -589,50 +601,27 @@ public class SemiCircularList extends AdapterView {
         CircularItemContainer view = (CircularItemContainer) child;
 
         // 계산에 필요한 파라미터 생성
-        // 계산에 필요한 파라미터 생성
-        final int top = child.getTop();
-        final int left = child.getLeft();
+        double convertRadian = convertDisplayRadian(view.getAngleRadian());
+        final int top = (int) calcChildCenterY(convertRadian) - subItemRadius;
+        final int left = (int) calcChildCenterX(convertRadian) - subItemRadius;
+
         int centerX = child.getWidth()/2;
         int centerY = child.getHeight()/2;
 
         // 속도가 빠를 수도록 scale 값이 작아지도록  설정. scale factor 를 통해 조절 가능
         // scale factor 가 작을수록 이미지 축소량이 작아짐
-
+        final int minRadius = subItemRadius / 2;
+        final int middleRadius = subItemRadius;
+        final int maxRadius = mainItemRadius;
+        double scaleFactor = 1.0f;
         float scale = 1.0f;
-        switch (getIndexFromRadian(view.getAngleRadian())){
-            case 0:
-                scale = 2.0f;
-                break;
-            case 1:
-                scale = 1.0f;
-                break;
-            case 2:
-                scale = 0.8f;
-                break;
-            case 3:
-                scale = 0.6f;
-                break;
-            case 4:
-                scale = 0.5f;
-                break;
-            case 5:
-                scale = 0.6f;
-                break;
-            case 6:
-                scale = 0.8f;
-                break;
-            case 7:
-                scale = 1.0f;
-                break;
-            default:
-                scale = 1.0f;
-                break;
+        if(calcSector(convertRadian) > 0){
+            scaleFactor = (maxRadius-middleRadius)/(Math.sin(Math.toRadians(90.0))-Math.sin(0.0));
+        } else {
+            scaleFactor = (middleRadius-minRadius)/(Math.sin(0.0)-Math.sin(Math.toRadians(270.0)));
         }
+        scale = (float) ((scaleFactor * Math.sin(convertRadian) + middleRadius) /middleRadius);
 
-        // main 서클이 아닐 경우
-        if(getIndexFromRadian(view.getAngleRadian()) > 0){
-
-        }
         // Matrix 인스턴스 생성. 이미 생성되어 있다면 reset
         Matrix mMatrix = null;
         if (mMatrix == null) {
@@ -671,7 +660,7 @@ public class SemiCircularList extends AdapterView {
     }
 
     public interface OnMainItemChangedListener{
-        public void onMainItemChanged(int position);
+        public void onMainItemChanged(int position, View view);
     }
 
     public OnMainItemChangedListener getOnMainItemChangedListener() {

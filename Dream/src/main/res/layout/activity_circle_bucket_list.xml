@@ -20,7 +20,7 @@
             pj:circleRadius="120dp"
             pj:displaySubItemCount="7"
             pj:mainItemRadius="110dp"
-            pj:subItemRadius="45dp"
+            pj:subItemRadius="55dp"
             pj:circleBackground="@drawable/sub_view_base_circle_border"
             >
 
@@ -36,6 +36,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/title"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="400dp"
         android:text="  "
@@ -47,7 +48,8 @@
         android:id="@+id/btn_add"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:background="@drawable/btn_add"
         android:layout_marginRight="15dp"
-        android:layout_marginBottom="15dp"
-        />
+        android:layout_marginBottom="15dp"/>
+
 </RelativeLayout>

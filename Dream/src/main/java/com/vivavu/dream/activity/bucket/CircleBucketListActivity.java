@@ -3,6 +3,8 @@ package com.vivavu.dream.activity.bucket;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.view.View;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -10,9 +12,11 @@ import com.vivavu.dream.R;
 import com.vivavu.dream.adapter.bucket.CircleAdapter;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.DreamApp;
+import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.model.bucket.BucketGroup;
 import com.vivavu.dream.repository.DataRepository;
 import com.vivavu.lib.view.circular.CircularAdapter;
+import com.vivavu.lib.view.circular.CircularItemContainer;
 import com.vivavu.lib.view.circular.SemiCircularList;
 
 import java.util.List;
@@ -27,6 +31,8 @@ public class CircleBucketListActivity extends BaseActionBarActivity {
     SemiCircularList mLayoutCard;
     @InjectView(R.id.btn_add)
     Button mBtnAdd;
+    @InjectView(R.id.title)
+    TextView mTitle;
     private Context mContext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +54,25 @@ public class CircleBucketListActivity extends BaseActionBarActivity {
         List<BucketGroup> bucketGroup = DataRepository.listBucketGroup();
         //List itemList = CircularViewTestActivity.getDummyData();
 
-        CircularAdapter circularAdapter = new CircleAdapter(mContext, bucketGroup.get(0).getBukets());
+        CircularAdapter circularAdapter;
+        circularAdapter = new CircleAdapter(mContext, bucketGroup.get(0).getBukets());
         mLayoutCard.setAdapter(circularAdapter);
         if(bucketGroup.get(0).getBukets().size() > 0) {
             mTxtIndicator.setText(String.format("%d Lists", bucketGroup.get(0).getBukets().size()));
         } else {
             mTxtIndicator.setText(String.format("Add Lists"));
         }
+        mLayoutCard.setOnMainItemChangedListener(new SemiCircularList.OnMainItemChangedListener() {
+            @Override
+            public void onMainItemChanged(int position, View view) {
+                if(view instanceof CircularItemContainer) {
+                    int index = ((CircularItemContainer) view).getIndex();
+                    Adapter adapter = mLayoutCard.getAdapter();
+                    Bucket item = (Bucket) adapter.getItem(index);
+                    mTitle.setText(index + "   " + item.getTitle());
+                }
+            }
+        });
 
     }
 }
