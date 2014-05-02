@@ -29,6 +29,16 @@ public class User{
     private String uri;
     @SerializedName("username")
     private String username;
+    @SerializedName("title_life")
+    private String title_life;
+
+    public String getTitle_life() {
+        return title_life;
+    }
+
+    public void setTitle_life(String title_life) {
+        this.title_life = title_life;
+    }
 
     public String getAboutMe() {
         return aboutMe;
