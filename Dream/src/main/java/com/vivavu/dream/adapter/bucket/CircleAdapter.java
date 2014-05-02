@@ -1,14 +1,13 @@
 package com.vivavu.dream.adapter.bucket;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vivavu.dream.R;
 import com.vivavu.dream.model.bucket.Bucket;
+import com.vivavu.dream.view.CircleBucketImageView;
 import com.vivavu.lib.view.circular.CircularAdapter;
 import com.vivavu.lib.view.circular.CircularItemContainer;
 
@@ -38,27 +37,14 @@ public class CircleAdapter extends CircularAdapter<Bucket> {
     @Override
     public CircularItemContainer getView(int position, View convertView, ViewGroup parent) {
 
-        CircularItemContainer circularItemContainer = new CircularItemContainer(mContext);
+        Bucket data = getItem(position);
+
+        CircleBucketImageView circularItemContainer = new CircleBucketImageView(mContext);
         circularItemContainer.setIndex(position);
         circularItemContainer.setBackgroundResource(R.drawable.sub_view_default_circle);
 
-        View v = null;
-        Bucket data = getItem(position);
-
-        if (v == null)
-        {
-            LayoutInflater li = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = li.inflate(R.layout.sub_view_circle_item, null);
-            final ButterknifeViewHolder viewHolder = new ButterknifeViewHolder(v);
-
-            viewHolder.mTxt.setText(position + " " + data.getTitle());
-
-            //ImageLoader.getInstance().loadImage();
-            ImageLoader.getInstance().displayImage(data.getCvrImgUrl(), viewHolder.mImgBucket);
-
-        }
-
-        circularItemContainer.addView(v);
+        circularItemContainer.setBucket(data);
+        circularItemContainer.update();
 
         return circularItemContainer;
     }
