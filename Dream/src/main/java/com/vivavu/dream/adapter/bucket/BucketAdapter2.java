@@ -185,7 +185,7 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
             public void onClick(View v){
                 Intent intent;
                 intent = new Intent();
-                intent.putExtra("groupIndex", pos);
+                intent.putExtra("groupRange", getBucketGroupList().get(pos).getRange());
                 intent.setClass(context, CircleBucketListActivity.class);
                 fragment.startActivity(intent);
             }

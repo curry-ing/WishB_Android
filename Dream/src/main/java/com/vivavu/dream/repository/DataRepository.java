@@ -176,6 +176,24 @@ public class DataRepository {
         }
     }
 
+    public static List<Bucket> listBucketByRange(String range){
+        List<Bucket> list = null;
+        try {
+            QueryBuilder<Bucket, Integer> qb2 = getDatabaseHelper().getBucketRuntimeDao().queryBuilder();
+            Where where = qb2.where();
+            if (range == null) {
+                where.isNull("range");
+            } else {
+                where.eq("range", range);
+            }
+            qb2.orderBy("deadline", true);
+            list = qb2.query();
+        }  catch (SQLException e) {
+            Log.e("dream", e.getMessage());
+        }
+
+        return list;
+    }
     public static List<BucketGroup> listBucketGroup(){
         QueryBuilder<Bucket, Integer> qb = getDatabaseHelper().getBucketRuntimeDao().queryBuilder();
         qb.groupBy("range");
@@ -188,16 +206,7 @@ public class DataRepository {
             bucketGroups = makeShelfList(rangeList);
 
             for(BucketGroup range : bucketGroups){
-                QueryBuilder<Bucket, Integer> qb2 = getDatabaseHelper().getBucketRuntimeDao().queryBuilder();
-                Where where = qb2.where();
-                if(range.getRange() == null){
-                    where.isNull("range");
-                }else{
-                    where.eq("range", range.getRange());
-                }
-                qb2.orderBy("deadline", true);
-
-                List<Bucket> list = qb2.query();
+                List<Bucket> list = listBucketByRange(range.getRange());
                 range.setBukets(list);
             }
         } catch (SQLException e) {

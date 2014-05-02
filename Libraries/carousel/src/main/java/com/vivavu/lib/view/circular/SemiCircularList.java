@@ -3,7 +3,6 @@ package com.vivavu.lib.view.circular;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Camera;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -248,7 +247,7 @@ public class SemiCircularList extends AdapterView {
             mFirstItemPosition = adjustCircularPosition(index-center, threshold);
             mLastItemPosition = mFirstItemPosition - 1;
 
-            while( index < threshold ) {
+            while( index < displaySubItemCount ) {
                 int position = adjustCircularPosition(center - index, displaySubItemCount);
 
                 //index-center의 순서가 바뀌면 표출 순서도 바뀜
@@ -566,9 +565,9 @@ public class SemiCircularList extends AdapterView {
         super.onDraw(canvas);
 
         if(circleBackground >= 0) {
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), circleBackground);
+            /*Bitmap bitmap = BitmapFactory.decodeResource(getResources(), circleBackground);
             Bitmap sb = Bitmap.createScaledBitmap(bitmap, circleRadius*2, circleRadius*2, false);
-            canvas.drawBitmap(sb, roundedCenterX - circleRadius, roundedCenterY -circleRadius, null);
+            canvas.drawBitmap(sb, roundedCenterX - circleRadius, roundedCenterY -circleRadius, null);*/
         }
     }
     protected double convertDisplayRadian(double radian){
@@ -597,7 +596,7 @@ public class SemiCircularList extends AdapterView {
     protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
         final Bitmap bitmap = child.getDrawingCache();
 
-        if(! (child instanceof CircularItemContainer) && bitmap == null) {
+        if(! (child instanceof CircularItemContainer) || bitmap == null) {
             return super.drawChild(canvas, child, drawingTime);
         }
         CircularItemContainer view = (CircularItemContainer) child;
