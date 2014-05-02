@@ -88,6 +88,8 @@ public class SemiCircularList extends AdapterView {
         displaySubItemCount = arr.getInteger(R.styleable.Circular_displaySubItemCount, 6);
 
         circleBackground = arr.getResourceId(R.styleable.Circular_circleBackground, -1);
+        arr.recycle();
+
         degree = 360.0 / displaySubItemCount;
         mChangeItemRadianThreshold = Math.toRadians(degree);
         Log.v(TAG, String.format("circleRadius:%d, mainItemRadius:%d, subItemRadius:%d, displaySubItemCount:%d", circleRadius, mainItemRadius, subItemRadius, displaySubItemCount));
@@ -199,7 +201,7 @@ public class SemiCircularList extends AdapterView {
         if(getChildCount() > 0){
             CircularItemContainer firstChild = getChildAt(0);
             CircularItemContainer lastChild = getChildAt(getChildCount()-1);
-            int threshold = getAdapter().getCount();
+            int threshold = Math.max(displaySubItemCount, getAdapter().getCount());
             if(adjustRadian(firstChild.getAngleRadian()) > adjustRadian(Math.toRadians(offsetDegree + 180.0))){
                 //시계방향으로 회전할 경우 0의 위치한 자식 뷰를 삭제하고 꼬리부분에 새로운 뷰를 추가해준다.
                 double angleRadian = firstChild.getAngleRadian();
@@ -241,17 +243,17 @@ public class SemiCircularList extends AdapterView {
             // 리스트 초기화, 가장 상위의 화면을 구성
             CircularItemContainer child = null;
             int index = 0;
-            int min = Math.min(displaySubItemCount, mAdapter.getCount());
+            int threshold = Math.max(displaySubItemCount, getAdapter().getCount());
             int center = (int)Math.ceil(displaySubItemCount / 2);
-            mFirstItemPosition = adjustCircularPosition(index-center, mAdapter.getCount());
+            mFirstItemPosition = adjustCircularPosition(index-center, threshold);
             mLastItemPosition = mFirstItemPosition - 1;
 
-            while( index < min ) {
+            while( index < threshold ) {
                 int position = adjustCircularPosition(center - index, displaySubItemCount);
 
                 //index-center의 순서가 바뀌면 표출 순서도 바뀜
                 // 0번째것을 가운데로 표출하기위해 트릭을 사용함
-                mLastItemPosition = adjustCircularPosition(++mLastItemPosition, mAdapter.getCount());
+                mLastItemPosition = adjustCircularPosition(++mLastItemPosition, threshold);
                 child = mAdapter.getView(mLastItemPosition, getCachedView(), this);
                 initChildLayout(child, position);
                 addViewAndMeasure(child, ADD_VIEW_AT_REAR);

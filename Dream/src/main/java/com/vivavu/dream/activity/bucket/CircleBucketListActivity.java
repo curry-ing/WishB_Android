@@ -1,6 +1,7 @@
 package com.vivavu.dream.activity.bucket;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.View;
@@ -51,14 +52,17 @@ public class CircleBucketListActivity extends BaseActionBarActivity {
 
         mContext = DreamApp.getInstance();
 
+        Intent data = getIntent();
+        int groupIndex = data.getIntExtra("groupIndex", 0);
+
         List<BucketGroup> bucketGroup = DataRepository.listBucketGroup();
         //List itemList = CircularViewTestActivity.getDummyData();
 
         CircularAdapter circularAdapter;
-        circularAdapter = new CircleAdapter(mContext, bucketGroup.get(0).getBukets());
+        circularAdapter = new CircleAdapter(mContext, bucketGroup.get(groupIndex).getBukets());
         mLayoutCard.setAdapter(circularAdapter);
-        if(bucketGroup.get(0).getBukets().size() > 0) {
-            mTxtIndicator.setText(String.format("%d Lists", bucketGroup.get(0).getBukets().size()));
+        if(bucketGroup.get(groupIndex).getBukets().size() > 0) {
+            mTxtIndicator.setText(String.format("%d Lists", bucketGroup.get(groupIndex).getBukets().size()));
         } else {
             mTxtIndicator.setText(String.format("Add Lists"));
         }

@@ -83,6 +83,10 @@ public class Bucket implements Serializable{
 
     }
 
+    public Bucket(String title) {
+        this.title = title;
+    }
+
     public Bucket(String title, Date deadline) {
         this.deadline = deadline;
         this.title = title;

@@ -27,6 +27,15 @@ public class CircleAdapter extends CircularAdapter<Bucket> {
     }
 
     @Override
+    public Bucket getItem(int position) {
+        if(position >= getCount()){
+            return new Bucket("");
+        }
+
+        return super.getItem(position);
+    }
+
+    @Override
     public CircularItemContainer getView(int position, View convertView, ViewGroup parent) {
 
         CircularItemContainer circularItemContainer = new CircularItemContainer(mContext);
@@ -34,23 +43,23 @@ public class CircleAdapter extends CircularAdapter<Bucket> {
         circularItemContainer.setBackgroundResource(R.drawable.sub_view_default_circle);
 
         View v = null;
-        Bucket data = null;
-        if(position < mList.size()){
-            data = mList.get(position);
-        }else{
-            data = new Bucket();
-        }
+        Bucket data = getItem(position);
 
         if (v == null)
         {
             LayoutInflater li = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = li.inflate(R.layout.sub_view_circle_item, null);
-            ButterknifeViewHolder viewHolder = new ButterknifeViewHolder(v);
+            final ButterknifeViewHolder viewHolder = new ButterknifeViewHolder(v);
+
             viewHolder.mTxt.setText(position + " " + data.getTitle());
+
+            //ImageLoader.getInstance().loadImage();
             ImageLoader.getInstance().displayImage(data.getCvrImgUrl(), viewHolder.mImgBucket);
 
         }
+
         circularItemContainer.addView(v);
+
         return circularItemContainer;
     }
 /**
