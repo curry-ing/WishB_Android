@@ -9,6 +9,8 @@ import android.graphics.drawable.Drawable;
 public class RoundedAvatarDrawable extends Drawable {
     private final Bitmap mBitmap;
     private final Paint mPaint;
+    private final Paint mPaint2;
+    private final Paint mPaint3;
     private final RectF mRectF;
     private final int mBitmapWidth;
     private final int mBitmapHeight;
@@ -19,13 +21,19 @@ public class RoundedAvatarDrawable extends Drawable {
         mBitmap = bitmap;
         mRectF = new RectF();
         mPaint = new Paint();
+        mPaint2 = new Paint();
+        mPaint3 = new Paint();
         imgNum = num;
         imgCnt = cnt;
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);
+        mPaint2.setAntiAlias(true);
+        mPaint2.setDither(true);
+        mPaint3.setAntiAlias(true);
+        mPaint3.setDither(true);
+        mPaint3.setColor(Color.TRANSPARENT);
         if(mBitmap==null){
-            mPaint.setColor(Color.rgb(103,201,187));
-//            mPaint.setShadowLayer(5.5f, 6.0f, 6.0f, 0x80000000);
+            mPaint.setColor(Color.rgb(103, 201, 187));
 
             mBitmapWidth = 290;
             mBitmapHeight = 290;
@@ -33,6 +41,8 @@ public class RoundedAvatarDrawable extends Drawable {
             final BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
             mPaint.setShader(shader);
 
+            mPaint2.setColor(Color.WHITE);
+            mPaint2.setStrokeWidth(5.0f);
             mBitmapWidth = mBitmap.getWidth();
             mBitmapHeight = mBitmap.getHeight();
         }
@@ -41,6 +51,8 @@ public class RoundedAvatarDrawable extends Drawable {
     @Override
     public void draw(Canvas canvas){
 //        canvas.drawOval(mRectF, mPaint2);
+        int cWidth = canvas.getWidth();
+        int cHeight = canvas.getHeight();
         if(mBitmap==null) {
             canvas.drawArc(mRectF, imgCnt, imgNum, true, mPaint);
             mPaint.setColor(Color.WHITE);
@@ -54,6 +66,7 @@ public class RoundedAvatarDrawable extends Drawable {
                 } else if (imgNum == 2) {
                     canvas.drawArc(mRectF, 180, 180, true, mPaint);
                 }
+                canvas.drawLine(0,cHeight/2,cWidth,cHeight/2,mPaint2);
             } else if (imgCnt == 3) {
                 if (imgNum == 1) {
                     canvas.drawArc(mRectF, 0, 120, true, mPaint);
@@ -61,6 +74,14 @@ public class RoundedAvatarDrawable extends Drawable {
                     canvas.drawArc(mRectF, 120, 120, true, mPaint);
                 } else if (imgNum == 3) {
                     canvas.drawArc(mRectF, 240, 120, true, mPaint);
+                }
+                for (int i=0; i<imgCnt; i++){
+                    double Rad = Math.toRadians(360/imgCnt * i);
+
+                    int x = (int) (cWidth/2 + cWidth/2 * Math.cos(Rad));
+                    int y = (int) (cWidth/2 + cWidth/2 * Math.sin(Rad));
+
+                    canvas.drawLine(cWidth/2, cHeight/2, x, y, mPaint2);
                 }
             } else if (imgCnt == 4) {
                 if (imgNum == 1) {
@@ -83,6 +104,14 @@ public class RoundedAvatarDrawable extends Drawable {
                     canvas.drawArc(mRectF, 216, 72, true, mPaint);
                 } else if (imgNum == 5) {
                     canvas.drawArc(mRectF, 288, 72, true, mPaint);
+                }
+                for (int i=0; i<imgCnt; i++){
+                    double Rad = Math.toRadians(360/imgCnt * i);
+
+                    int x = (int) (cWidth/2 + cWidth/2 * Math.cos(Rad));
+                    int y = (int) (cWidth/2 + cWidth/2 * Math.sin(Rad));
+
+                    canvas.drawLine(cWidth/2, cHeight/2, x, y, mPaint2);
                 }
             } else if (imgCnt == 6) {
                 if (imgNum == 1) {
@@ -162,12 +191,14 @@ public class RoundedAvatarDrawable extends Drawable {
 
     @Override
     public int getIntrinsicWidth() {
-        return mBitmapWidth;
+//        return mBitmapWidth;
+        return 300;
     }
 
     @Override
     public int getIntrinsicHeight(){
-        return mBitmapHeight;
+//        return mBitmapHeight;
+        return 300;
     }
 
     public void setAntiAlias(boolean aa){
@@ -189,5 +220,17 @@ public class RoundedAvatarDrawable extends Drawable {
 
     public Bitmap getBitmap(){
         return mBitmap;
+    }
+
+    public Bitmap combineImages(Bitmap bitmap){
+        Bitmap cs = null;
+
+        cs = Bitmap.createBitmap(300, 300, Bitmap.Config.ARGB_8888);
+
+        Canvas c = new Canvas(cs);
+
+        c.drawBitmap(bitmap, 0f, 0f, null);
+
+        return cs;
     }
 }

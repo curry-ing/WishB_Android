@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.vivavu.dream.R;
 import com.vivavu.dream.adapter.bucket.BucketAdapter2;
+import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.fragment.CustomBaseFragment;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.bucket.Bucket;
@@ -40,7 +41,6 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
     ViewPager mMainPager;
 
     private List<BucketGroup> bucketGroupList;
-//    private BucketAdapter bucketAdapter;
     private BucketAdapter2 bucketAdapter2;
     private ProgressDialog progressDialog;
 
@@ -96,14 +96,14 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
         bucketAdapter2 = new BucketAdapter2(this, bucketGroupList);
         mMainPager.setAdapter(bucketAdapter2);
         mMainPager.setOffscreenPageLimit(OFF_SCREEN_PAGE_LIMIT);
-
+        mMainPager.setCurrentItem(DreamApp.getInstance().getUser().getUserAge()/10);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Thread thread = new Thread(new DataThread());
-        thread.start();
+//        Thread thread = new Thread(new DataThread());
+//        thread.start();
     }
 
     public void updateContents(List<BucketGroup> obj){
@@ -114,6 +114,7 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
         }
         bucketAdapter2.setBucketGroupList(bucketGroupList);
         bucketAdapter2.notifyDataSetChanged();
+        mMainPager.setCurrentItem(DreamApp.getInstance().getUser().getUserAge()/10);
     }
 
     @Override

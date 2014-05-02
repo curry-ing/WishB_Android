@@ -7,7 +7,11 @@
     <android.support.v4.view.ViewPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/main_pager">
+        android:id="@+id/main_pager"
+        android:clipToPadding="false"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:background="@drawable/mainview_bg">
 
     </android.support.v4.view.ViewPager>
 
