@@ -1,16 +1,23 @@
 package com.vivavu.dream.adapter.bucket;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
+import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -44,6 +51,9 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
     private String userBirth;
 
     static public final int PROGRESS_BAR_BASELINE = 270;
+    public static final String TAG = "DialogActivity";
+    public static final int DLG_EXAMPLE1 = 0;
+    public static final int TEXT_ID = 0;
 
     public BucketAdapter2 (Fragment fragment, List<BucketGroup> bucketGroupList) {
         this.context = fragment.getActivity();
@@ -96,17 +106,27 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    public void init(ButterknifeViewHolder holder, BucketGroup bucketGroup, int pos) throws IOException {
+    public void init(final ButterknifeViewHolder holder, BucketGroup bucketGroup, final int pos) throws IOException {
         this.mainImages = new ArrayList<Bitmap>();
 
-        holder.mBtnDecade.setText(bucketGroup.getRangeText());
-        holder.mBtnDecade.setOnClickListener(this);
+        String aa = DreamApp.getInstance().getUser().getTitle_life();
+        if (aa != null) {
+            holder.mBtnDecade.setText(DreamApp.getInstance().getUser().getTitle_life());
+        } else {
+            holder.mBtnDecade.setText(bucketGroup.getRangeText());
+        }
+        holder.mBtnDecade.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                createExampleDialog(holder, pos);
+            }
+        });
         int cnt = bucketGroup.getCount();
         if (cnt > 0) {
-            holder.mBktCount.setVisibility(View.VISIBLE);
+//            holder.mBktCount.setVisibility(View.VISIBLE);
             for (int i=0; i<cnt; i++){
                 if(bucketGroup.getBukets().get(i).getCvrImgUrl() != null) {
-                    URL url = new URL(bucketGroup.getBukets().get(i).getCvrImgUrl());
+//                    URL url = new URL(bucketGroup.getBukets().get(i).getCvrImgUrl());
                     mainImages.add(ImageLoader.getInstance().loadImageSync(bucketGroup.getBukets().get(i).getCvrImgUrl(), new ImageSize(540,540)));
                 }
             }
@@ -114,7 +134,7 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
         if(mainImages.size()==0){
             mainImages.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.up_logo));
         }
-        holder.mBktCount.setText(String.valueOf(cnt));
+//        holder.mBktCount.setText(String.valueOf(cnt)+'개');
         for (int j=0; j<mainImages.size(); j++){
             switch (j){
                 case 0:
@@ -160,8 +180,19 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
         } else {
             int imsi = (int) ((float) DreamApp.getInstance().getUser().getUserAge() / 100 * 360);
             holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, imsi, PROGRESS_BAR_BASELINE));
-            holder.mPeriod.setText(String.valueOf(DreamApp.getInstance().getUser().getUserAge()) + " 짤 임미다!!");
+            holder.mPeriod.setText(DreamApp.getInstance().getUser().getBirthday().substring(0,4) + " ~");
         }
+        holder.mMainImage8.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                AlertDialog.Builder ab = new AlertDialog.Builder(context);
+                ab.setMessage( Html.fromHtml("<b><font color=#ff00ff> HTML View</font></b><br>Android.com"));
+                ab.setPositiveButton(android.R.string.ok, null);
+                ab.setTitle( "Basic Alert Dialog" );
+                ab.show();
+            }
+
+        });
     }
 
     public List<BucketGroup> getBucketGroupList() {
@@ -176,6 +207,51 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
     public void onClick(View v){
 
     }
+
+    private void createExampleDialog(final ButterknifeViewHolder holder, int pos){
+        final InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        if (!(pos == 0)) {
+            builder.setTitle("당신의 " + pos * 10 + "대");
+            builder.setMessage("어떤 10년을 보내고 싶으세요?");
+        } else {
+            builder.setTitle("꿈틀");
+            builder.setMessage("당신의 인생을 꾸며보세요");
+        }
+
+        final EditText input = new EditText(context);
+        input.setId(TEXT_ID);
+        builder.setView(input);
+        input.setText(holder.mBtnDecade.getText());
+        input.selectAll();
+//        input.setSelection(holder.mBtnDecade.getText().length());
+
+        builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                String value = input.getText().toString();
+                holder.mBtnDecade.setText(value);
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
+
+                return;
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
+                return;
+            }
+        });
+
+        AlertDialog ad = builder.create();
+        ad.show();
+
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+    }
+
+
 
     class ButterknifeViewHolder {
         @InjectView(R.id.btn_decade)
