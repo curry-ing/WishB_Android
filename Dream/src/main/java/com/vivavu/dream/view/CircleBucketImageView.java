@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -15,7 +16,6 @@ import com.vivavu.lib.view.circular.CircularItemContainer;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by yuja on 2014-05-02.
@@ -25,13 +25,9 @@ public class CircleBucketImageView extends CircularItemContainer {
     protected boolean isMainItem = false;
 
     @InjectView(R.id.img_bucket)
-    CircleImageView mImgBucket;
+    TextImageView mImgBucket;
     @InjectView(R.id.txt)
     TextView mTxt;
-    @InjectView(R.id.empty_image_view)
-    TextView mEmptyImageView;
-    @InjectView(R.id.empty_image_text)
-    TextView mEmptyImageText;
 
     public CircleBucketImageView(Context context) {
         this(context, null);
@@ -53,11 +49,22 @@ public class CircleBucketImageView extends CircularItemContainer {
     }
 
     public void update(){
+        /*ImageSize imageSize = new ImageSize(getWidth(), getHeight());
+        ImageLoader.getInstance().loadImage("drawable://" + R.drawable.sub_view_circle_big_trans, imageSize, new SimpleImageLoadingListener(){
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                if(loadedImage != null){
+                    mImgBucket.setFrontImage(loadedImage);
+                }
+            }
+        });*/
+
         if(bucket != null) {
             mTxt.setText(bucket.getTitle());
+            mImgBucket.setText(bucket.getTitle());
+            //mImgBucket.setForegroundResource(R.drawable.sub_view_circle_trans);
             if(bucket.getCvrImgUrl() != null) {
-                mEmptyImageView.setVisibility(GONE);
-                mEmptyImageView.setVisibility(GONE);
+                //mTxt.setVisibility(VISIBLE);
                 DisplayImageOptions options = new DisplayImageOptions.Builder()
                         .showImageOnLoading(R.drawable.no_image)
                         .showImageOnFail(R.drawable.no_image)
@@ -65,13 +72,6 @@ public class CircleBucketImageView extends CircularItemContainer {
                         .cacheOnDisc(true)
                         .build();
                 ImageLoader.getInstance().displayImage(bucket.getCvrImgUrl(), mImgBucket, options);
-            }else{
-                mEmptyImageView.setVisibility(VISIBLE);
-                if(isMainItem){
-                    mEmptyImageText.setVisibility(VISIBLE);
-                }else{
-                    mEmptyImageView.setVisibility(GONE);
-                }
             }
         }
     }
@@ -92,7 +92,7 @@ public class CircleBucketImageView extends CircularItemContainer {
         this.bucket = bucket;
     }
 
-    public CircleImageView getImgBucket() {
+    public ImageView getImgBucket() {
         return mImgBucket;
     }
 

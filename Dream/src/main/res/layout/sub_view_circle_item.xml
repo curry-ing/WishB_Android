@@ -2,44 +2,21 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="5dp"
+    android:background="@drawable/sub_view_default_circle"
+    >
 
-    <!--<ImageView
+    <com.vivavu.dream.view.TextImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/img_bucket"
-
         />
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/img_mask"
         android:background="@drawable/sub_view_default_circle_trans"
-        />-->
-    <de.hdodenhof.circleimageview.CircleImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/img_bucket"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/sub_view_default_circle"
-        android:padding="5dp"
-        app:border_width="2dp"
-        app:border_color="#FFFFFFFF"
-    ></de.hdodenhof.circleimageview.CircleImageView>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/sub_view_empty_image"
-        android:id="@+id/empty_image_view"
-        android:layout_centerInParent="true"
-        ></TextView>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/empty_image_text"
-        android:layout_alignBottom="@id/empty_image_view"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/sub_view_empty_text"
         />
     <TextView
         android:layout_width="wrap_content"
@@ -49,6 +26,7 @@
         android:ellipsize="end"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:visibility="gone"
         />
 
 </RelativeLayout>

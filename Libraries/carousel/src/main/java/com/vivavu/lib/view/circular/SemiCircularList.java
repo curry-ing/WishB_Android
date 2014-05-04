@@ -56,6 +56,7 @@ public class SemiCircularList extends AdapterView {
     private int circleRadius;
     private int displaySubItemCount;
     private double mMovedRadian;
+    private double touchSensFactor = 1.5;
     private double degree;
     private double offsetDegree = 90.0;
     private double mChangeItemRadianThreshold;
@@ -513,7 +514,7 @@ public class SemiCircularList extends AdapterView {
     private void calcMovement(MotionEvent event){
         double startRad = getRadian(mStartX, mStartY, roundedCenterX, roundedCenterY);
         double endRad = getRadian(event.getX(), event.getY(), roundedCenterX, roundedCenterY);
-        mMovedRadian = endRad - startRad;
+        mMovedRadian = touchSensFactor*(endRad - startRad);
         Log.v(TAG, String.format("mMovedRadian : %f , %f , startRad:%f, endRad:%f", mMovedRadian, Math.toDegrees(mMovedRadian), startRad, endRad));
         mStartX = event.getX();		// 요청을 처리했으므로 터치 시작점 재설정
         mStartY = event.getY();
