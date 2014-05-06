@@ -12,6 +12,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vivavu.dream.R;
 import com.vivavu.dream.model.bucket.Bucket;
+import com.vivavu.dream.util.DateUtils;
 import com.vivavu.lib.view.circular.CircularItemContainer;
 
 import butterknife.ButterKnife;
@@ -22,7 +23,6 @@ import butterknife.InjectView;
  */
 public class CircleBucketImageView extends CircularItemContainer {
     protected Bucket bucket;
-    protected boolean isMainItem = false;
 
     @InjectView(R.id.img_bucket)
     TextImageView mImgBucket;
@@ -62,6 +62,9 @@ public class CircleBucketImageView extends CircularItemContainer {
         if(bucket != null) {
             mTxt.setText(bucket.getTitle());
             mImgBucket.setText(bucket.getTitle());
+            if(bucket.getRegDate() != null && bucket.getDeadline()!= null) {
+                mImgBucket.setPercent(DateUtils.getProgress(bucket.getRegDate(), bucket.getDeadline()));
+            }
             //mImgBucket.setForegroundResource(R.drawable.sub_view_circle_trans);
             if(bucket.getCvrImgUrl() != null) {
                 //mTxt.setVisibility(VISIBLE);
@@ -100,11 +103,12 @@ public class CircleBucketImageView extends CircularItemContainer {
         return mTxt;
     }
 
-    public boolean isMainItem() {
-        return isMainItem;
-    }
-
+    @Override
     public void setMainItem(boolean isMainItem) {
-        this.isMainItem = isMainItem;
+        /*if(isMainItem() != isMainItem) {*/
+            super.setMainItem(isMainItem());
+            mImgBucket.setMain(isMainItem);
+        /*}*/
+            mImgBucket.invalidate();
     }
 }

@@ -15,8 +15,8 @@ import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.repository.DataRepository;
+import com.vivavu.dream.view.CircleBucketImageView;
 import com.vivavu.lib.view.circular.CircularAdapter;
-import com.vivavu.lib.view.circular.CircularItemContainer;
 import com.vivavu.lib.view.circular.SemiCircularList;
 
 import java.util.List;
@@ -68,8 +68,8 @@ public class CircleBucketListActivity extends BaseActionBarActivity {
         mLayoutCard.setOnMainItemChangedListener(new SemiCircularList.OnMainItemChangedListener() {
             @Override
             public void onMainItemChanged(int position, View view) {
-                if(view instanceof CircularItemContainer) {
-                    int index = ((CircularItemContainer) view).getIndex();
+                if(view instanceof CircleBucketImageView) {
+                    int index = ((CircleBucketImageView) view).getIndex();
                     Adapter adapter = mLayoutCard.getAdapter();
                     Bucket item = (Bucket) adapter.getItem(index);
                     mTitle.setText(index + "   " + item.getTitle());

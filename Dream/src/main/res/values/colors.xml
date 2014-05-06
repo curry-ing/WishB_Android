@@ -7,6 +7,9 @@
     <color name="complete">#CCFFDD</color>
     <color name="seal">#00FF00</color>
     <!-- 디자인 -->
+    <color name="white">#ffffffff</color>
+    <color name="black">#ff000000</color>
+    <color name="darkgray">#666</color>
     <color name="mint">#67c9bb</color>
     <color name="orange">#fa9261</color>
     <color name="transparent">#ffffffff</color>

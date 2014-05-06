@@ -103,6 +103,8 @@ public class SemiCircularList extends AdapterView {
         //ondraw를 호출하기 위한 방안
         setWillNotDraw(false);
 
+        // 자식 그리는 순서 커스터마이징
+        setChildrenDrawingOrderEnabled(true);
     }
 
     @Override
@@ -178,8 +180,8 @@ public class SemiCircularList extends AdapterView {
                 if(getOnMainItemChangedListener() != null){
                     getOnMainItemChangedListener().onMainItemChanged(index, child);
                 }
-                break;
             }
+            child.setMainItem(childPosition == 0);
         }
     }
 
@@ -655,10 +657,11 @@ public class SemiCircularList extends AdapterView {
 
     @Override
     protected int getChildDrawingOrder(int childCount, int i) {
-        CircularItemContainer child = getChildAt(i);
-
-        return super.getChildDrawingOrder(childCount, i);
-
+        if(i <= childCount / 2){
+            return  (i * 2);
+        } else {
+            return  (childCount - 2*( i- childCount/2 ));
+        }
     }
 
     public interface OnMainItemChangedListener{

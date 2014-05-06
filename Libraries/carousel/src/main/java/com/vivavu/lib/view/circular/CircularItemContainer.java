@@ -12,6 +12,7 @@ public class CircularItemContainer extends FrameLayout {
     protected double centerX;
     protected double centerY;
     protected double angleRadian;
+    protected boolean isMainItem = false;
 
     public CircularItemContainer(Context context) {
         super(context);
@@ -78,4 +79,13 @@ public class CircularItemContainer extends FrameLayout {
                 ", angleRadian=" + angleRadian +
                 '}';
     }
+
+    public boolean isMainItem() {
+        return isMainItem;
+    }
+
+    public void setMainItem(boolean isMainItem) {
+        this.isMainItem = isMainItem;
+    }
+
 }
