@@ -12,6 +12,7 @@
         android:layout_height="match_parent"
         android:id="@+id/img_bucket"
         android:background="@drawable/sub_view_default_circle"
+        app:foregroundResId="@drawable/sub_view_default_circle_trans"
         app:ellipsize="..."
         app:textSize="10sp"
         app:textColor="@color/white"
@@ -26,6 +27,7 @@
         android:layout_height="match_parent"
         android:layout_margin="4dp"
         android:background="@drawable/sub_view_default_circle_trans"
+        android:visibility="gone"
         />
     <TextView
         android:layout_width="wrap_content"

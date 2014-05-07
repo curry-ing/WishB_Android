@@ -32,6 +32,7 @@ public class TextImageView extends BaseImageView {
     protected boolean isMain = false;
     protected float percent = 0;
     protected int padding=10;
+    protected int foregroundResId;
 
     protected Drawable foregroundDrawable;
 
@@ -54,6 +55,10 @@ public class TextImageView extends BaseImageView {
         shadowDy = arr.getFloat(R.styleable.TextImageView_shadowDy, 1.0f);
         shadowRadius = arr.getFloat(R.styleable.TextImageView_shadowRadius, 1.0f);
         ellipsize = arr.getString(R.styleable.TextImageView_ellipsize);
+        foregroundResId = arr.getResourceId(R.styleable.TextImageView_foregroundResId, -1);
+        if(foregroundResId > 0) {
+            setForegroundResource(foregroundResId);
+        }
         if(ellipsize == null){
             ellipsize = "";
         }
@@ -105,7 +110,7 @@ public class TextImageView extends BaseImageView {
     protected void drawForeground(Canvas canvas) {
         final Drawable foreground = getForegroundDrawable();
         if (foreground != null) {
-            foreground.setBounds(0, 0, getWidth(), getHeight());
+            foreground.setBounds(padding, padding, getWidth()-padding, getHeight()-padding);
 
             final int scrollX = getScrollX();
             final int scrollY = getScrollY();

@@ -9,5 +9,6 @@
         <attr name="shadowDy" format="float"></attr>
         <attr name="shadowRadius" format="float"></attr>
         <attr name="ellipsize" format="string"></attr>
+        <attr name="foregroundResId" format="reference"></attr>
     </declare-styleable>
 </resources>

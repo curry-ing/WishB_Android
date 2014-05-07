@@ -3,12 +3,14 @@ package com.vivavu.lib.view.circular;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Camera;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +26,7 @@ import java.util.LinkedList;
 /**
  * Created by yuja on 2014-04-23.
  */
-public class SemiCircularList extends AdapterView {
+public class SemiCircularList extends AdapterView implements GestureDetector.OnGestureListener {
     public static final String TAG = SemiCircularList.class.getSimpleName();
     /* 상수 */
     private static final int ADD_VIEW_AT_FRONT = 1;				// view를 현재 리스트 화면 최상위에 추가
@@ -43,6 +45,7 @@ public class SemiCircularList extends AdapterView {
     private int mMainItemPosition = -1;  //메인 아이템의 index
 
     /* 터치 컨트롤 */
+    protected GestureDetector mGestureDetector;
     private double mStartX = 0;							// 터치 이벤트 시작된 기준 좌표 X
     private double mStartY = 0;							// 터치 이벤트 시작된 기준 좌표 Y
     private boolean isProcessed = false;				// 특정 event 처리 후 ACTION_UP 까지 다른 이벤트 처리가 필요 없을 때 설정하는 flag
@@ -105,6 +108,8 @@ public class SemiCircularList extends AdapterView {
 
         // 자식 그리는 순서 커스터마이징
         setChildrenDrawingOrderEnabled(true);
+
+        mGestureDetector = new GestureDetector(getContext(), this);
     }
 
     @Override
@@ -314,9 +319,13 @@ public class SemiCircularList extends AdapterView {
      * 시작은
      */
     private void layoutItems() {
+        layoutItems(mMovedRadian);
+    }
+
+    private void layoutItems(double delta){
         for (int index = 0; index < getChildCount(); index++) {
             CircularItemContainer child = getChildAt(index);
-            moveByDelta(child, mMovedRadian);
+            moveByDelta(child, delta);
         }
     }
 
@@ -451,43 +460,30 @@ public class SemiCircularList extends AdapterView {
 
     /****************************************************
      * 터치 이벤트 리스너
-     ***************************************************/
+     ***************************************************//*
+    /**
+     * Implemented to handle touch screen motion events.
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (getChildCount() == 0) {
-            return false;
-        }
 
-        processTouch(event);			// 터치 동작을 분석 후 드래그 동작 수행
-        return true;
-    }
+        // Give everything to the gesture detector
+        boolean retValue = mGestureDetector.onTouchEvent(event);
 
-    /**
-     * Child view에서 터치 이벤트를 사용하더라도 리스트에서 터치 이벤트를 계속 사용할 수 있도록 함.
-     */
-    @Override
-    public boolean onInterceptTouchEvent(final MotionEvent event) {
-        processTouch(event);			// 터치 동작을 분석 후 드래그 동작 수행
-        return false;
-    }
-
-    /**
-     * 터치 이벤트를 처리하는 메인 루틴
-     */
-    private void processTouch(MotionEvent event)
-    {
-        if(event.getAction()==MotionEvent.ACTION_DOWN) {
-            startTouch(event);
-        }
-        else if(event.getAction()==MotionEvent.ACTION_MOVE && !isProcessed) {
-            scrollList(event);
-        }
-        else if(event.getAction()==MotionEvent.ACTION_UP && !isProcessed) {
+        int action = event.getAction();
+        if (action == MotionEvent.ACTION_UP) {
+            // Helper method for lifted finger
+            //onUp();
             calcMovement(event);
             endTouch(event);
             scrollToSlot();
+        } else if (action == MotionEvent.ACTION_CANCEL) {
+            //onCancel();
         }
+
+        return retValue;
     }
+
     /**
      * 터치 이벤트 시작 루틴
      */
@@ -568,9 +564,9 @@ public class SemiCircularList extends AdapterView {
         super.onDraw(canvas);
 
         if(circleBackground >= 0) {
-            /*Bitmap bitmap = BitmapFactory.decodeResource(getResources(), circleBackground);
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), circleBackground);
             Bitmap sb = Bitmap.createScaledBitmap(bitmap, circleRadius*2, circleRadius*2, false);
-            canvas.drawBitmap(sb, roundedCenterX - circleRadius, roundedCenterY -circleRadius, null);*/
+            canvas.drawBitmap(sb, roundedCenterX - circleRadius, roundedCenterY -circleRadius, null);
         }
     }
     protected double convertDisplayRadian(double radian){
@@ -663,6 +659,85 @@ public class SemiCircularList extends AdapterView {
             return  (childCount - 2*( i- childCount/2 ));
         }
     }
+
+    /* GestureDetector를 이용하기 위한 함수 목록 시작*/
+
+    /**
+     * 손대면 무조건 발생
+     * @param e
+     * @return
+     */
+    @Override
+    public boolean onDown(MotionEvent e) {
+        startTouch(e);
+        return true;
+    }
+
+    /**
+     * 살짝 터치
+     * @param e
+     */
+    @Override
+    public void onShowPress(MotionEvent e) {
+
+    }
+
+    /**
+     * longPress 발생 보다 짧은 시간에 띄었을 경우
+     * @param e
+     * @return
+     */
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return false;
+    }
+
+    /**
+     * 스크롤 시에 발생
+     * @param e1 처음 터치가 발생한 위치
+     * @param e2 현재 터치 지점
+     * @param distanceX 처음과 현재의 x좌표 거리
+     * @param distanceY 처음과 현재의 y좌표 거리
+     * @return true일 경우 이벤트 소모
+     */
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        getParent().requestDisallowInterceptTouchEvent(true);
+
+        scrollList(e2);
+
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+
+    }
+
+    /**
+     * 손가락을 슬며시 튕기는 동작
+     * @param e1 처음 터치한 지점
+     * @param e2 마지막 터치 종료 지점
+     * @param velocityX x축 가속도
+     * @param velocityY y축 가속도
+     * @return
+     */
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        //손가락을 튕기면 한 아이템씩 이동하는 것으로 변경
+        double startRad = getRadian(e1.getX(), e1.getY(), roundedCenterX, roundedCenterY);
+        double endRad = getRadian(e2.getX(), e2.getY(), roundedCenterX, roundedCenterY);
+        double delta = (endRad - startRad);
+        if(delta > 0){
+            layoutItems(mChangeItemRadianThreshold);
+        } else {
+            layoutItems(-1*mChangeItemRadianThreshold);
+        }
+
+        return false;
+    }
+
+    /* GestureDetector를 이용하기 위한 함수 목록 끝*/
 
     public interface OnMainItemChangedListener{
         public void onMainItemChanged(int position, View view);
