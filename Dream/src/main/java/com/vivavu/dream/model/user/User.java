@@ -1,36 +1,115 @@
 package com.vivavu.dream.model.user;
 
 import com.google.gson.annotations.SerializedName;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.io.File;
+import java.io.Serializable;
 
 /**
  * Created by yuja on 14. 1. 7.
  */
 public class User{
-    @SerializedName("about_me")
-    private String aboutMe;
-    @SerializedName("birthday")
-    private String birthday;
-    @SerializedName("email")
-    private String email;
     @SerializedName("id")
     private Integer id;
+
+    @SerializedName("email")
+    private String email;
+
+    @SerializedName("about_me")
+    private String aboutMe;
+
+    @SerializedName("birthday")
+    private String birthday;
+
     @SerializedName("is_following")
     private Boolean isFollowing;
 
     @SerializedName("last_seen")
     private Date lastSeen;
+
     @SerializedName("pic")
     private String pic;
+
     @SerializedName("uri")
     private String uri;
+
     @SerializedName("username")
     private String username;
+
     @SerializedName("title_life")
     private String title_life;
+
+    @SerializedName("title_10")
+    private String title_10;
+
+    @SerializedName("title_20")
+    private String title_20;
+
+    @SerializedName("title_30")
+    private String title_30;
+
+    @SerializedName("title_40")
+    private String title_40;
+
+    @SerializedName("title_50")
+    private String title_50;
+
+    @SerializedName("title_60")
+    private String title_60;
+
+
+    public String getTitle_60() {
+        return title_60;
+    }
+
+    public void setTitle_60(String title_60) {
+        this.title_60 = title_60;
+    }
+
+    public String getTitle_10() {
+        return title_10;
+    }
+
+    public void setTitle_10(String title_10) {
+        this.title_10 = title_10;
+    }
+
+    public String getTitle_20() {
+        return title_20;
+    }
+
+    public void setTitle_20(String title_20) {
+        this.title_20 = title_20;
+    }
+
+    public String getTitle_30() {
+        return title_30;
+    }
+
+    public void setTitle_30(String title_30) {
+        this.title_30 = title_30;
+    }
+
+    public String getTitle_40() {
+        return title_40;
+    }
+
+    public void setTitle_40(String title_40) {
+        this.title_40 = title_40;
+    }
+
+    public String getTitle_50() {
+        return title_50;
+    }
+
+    public void setTitle_50(String title_50) {
+        this.title_50 = title_50;
+    }
 
     public String getTitle_life() {
         return title_life;

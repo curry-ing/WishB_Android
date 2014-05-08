@@ -4,12 +4,13 @@ import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +23,9 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.vivavu.dream.R;
-import com.vivavu.dream.activity.bucket.CircleBucketListActivity;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.drawable.RoundedAvatarDrawable;
+import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.bucket.BucketGroup;
 
 import java.io.IOException;
@@ -34,6 +35,9 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.vivavu.dream.model.user.User;
+import com.vivavu.dream.repository.connector.UserInfoConnector;
+import com.vivavu.dream.repository.task.CustomAsyncTask;
 
 /**
  * Created by masunghoon on 4/20/14.
@@ -45,13 +49,16 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
     private LayoutInflater mInflater;
     private List<BucketGroup> bucketGroupList;
     private List<Bitmap> mainImages;
+//    private User user = null;
 
     private String userBirth;
+    private String title;
 
     static public final int PROGRESS_BAR_BASELINE = 270;
     public static final String TAG = "DialogActivity";
     public static final int DLG_EXAMPLE1 = 0;
     public static final int TEXT_ID = 0;
+
 
     public BucketAdapter2 (Fragment fragment, List<BucketGroup> bucketGroupList) {
         this.context = fragment.getActivity();
@@ -107,24 +114,50 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
     public void init(final ButterknifeViewHolder holder, BucketGroup bucketGroup, final int pos) throws IOException {
         this.mainImages = new ArrayList<Bitmap>();
 
-        String aa = DreamApp.getInstance().getUser().getTitle_life();
-        if (aa != null) {
-            holder.mBtnDecade.setText(DreamApp.getInstance().getUser().getTitle_life());
+        /* SET MAIN TITLE */
+        switch (pos){
+            case 0:
+                title = DreamApp.getInstance().getUser().getTitle_life();
+                break;
+            case 1:
+                title = DreamApp.getInstance().getUser().getTitle_10();
+                break;
+            case 2:
+                title = DreamApp.getInstance().getUser().getTitle_20();
+                break;
+            case 3:
+                title = DreamApp.getInstance().getUser().getTitle_30();
+                break;
+            case 4:
+                title = DreamApp.getInstance().getUser().getTitle_40();
+                break;
+            case 5:
+                title = DreamApp.getInstance().getUser().getTitle_50();
+                break;
+            case 6:
+                title = DreamApp.getInstance().getUser().getTitle_60();
+                break;
+        }
+        if (title != null) {
+            holder.mBtnDecade.setText(title);
         } else {
             holder.mBtnDecade.setText(bucketGroup.getRangeText());
         }
+
         holder.mBtnDecade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
                 createExampleDialog(holder, pos);
             }
         });
+
+
+        /* SET MAIN IMAGES */
         int cnt = bucketGroup.getCount();
         if (cnt > 0) {
 //            holder.mBktCount.setVisibility(View.VISIBLE);
             for (int i=0; i<cnt; i++){
                 if(bucketGroup.getBukets().get(i).getCvrImgUrl() != null) {
-//                    URL url = new URL(bucketGroup.getBukets().get(i).getCvrImgUrl());
                     mainImages.add(ImageLoader.getInstance().loadImageSync(bucketGroup.getBukets().get(i).getCvrImgUrl(), new ImageSize(540,540)));
                 }
             }
@@ -136,7 +169,7 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
         for (int j=0; j<mainImages.size(); j++){
             switch (j){
                 case 0:
-                    holder.mMainImage1.setBackground(new RoundedAvatarDrawable(mainImages.get(j), j+1, mainImages.size()));
+                    holder.mMainImage1.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size()));
                     break;
                 case 1:
                     holder.mMainImage2.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size()));
@@ -161,7 +194,11 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
                     break;
             }
         }
+
+
+        /* SET PROGRESS BAR */
         if(pos>0){
+            holder.mMainProgress.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
             Calendar cal = java.util.Calendar.getInstance();
             int startY = Integer.parseInt(DreamApp.getInstance().getUser().getBirthday().substring(0,4))+(pos*10) - 1;
             int endY = Integer.parseInt(DreamApp.getInstance().getUser().getBirthday().substring(0,4))+((pos+1)*10-1) - 1;
@@ -180,14 +217,16 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
             holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, imsi, PROGRESS_BAR_BASELINE));
             holder.mPeriod.setText(DreamApp.getInstance().getUser().getBirthday().substring(0,4) + " ~");
         }
+
+        /* SET ON CLICK LISTENER */
         holder.mMainImage8.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
-                Intent intent;
-                intent = new Intent();
-                intent.putExtra("groupRange", getBucketGroupList().get(pos).getRange());
-                intent.setClass(context, CircleBucketListActivity.class);
-                fragment.startActivity(intent);
+                AlertDialog.Builder ab = new AlertDialog.Builder(context);
+                ab.setMessage( Html.fromHtml("<b><font color=#ff00ff> HTML View</font></b><br>Android.com"));
+                ab.setPositiveButton(android.R.string.ok, null);
+                ab.setTitle( "Basic Alert Dialog" );
+                ab.show();
             }
 
         });
@@ -206,7 +245,7 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
 
     }
 
-    private void createExampleDialog(final ButterknifeViewHolder holder, int pos){
+    private void createExampleDialog(final ButterknifeViewHolder holder, final int pos){
         final InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         if (!(pos == 0)) {
@@ -227,10 +266,10 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
         builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                String value = input.getText().toString();
-                holder.mBtnDecade.setText(value);
-                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
-
+                String titleValue = input.getText().toString();
+                holder.mBtnDecade.setText(titleValue);
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);  //Hide soft keyboard
+                saveUser(titleValue, pos);
                 return;
             }
         });
@@ -238,7 +277,7 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);   //Hide soft keyboard
                 return;
             }
         });
@@ -247,6 +286,49 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
         ad.show();
 
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+    }
+
+    public void saveUser(String title, int pos){
+        UserInfoModify userInfoModify = new UserInfoModify();
+        User user = new User();
+        switch(pos){
+            case 0:
+                user.setTitle_life(title);
+                break;
+            case 1:
+                user.setTitle_10(title);
+                break;
+            case 2:
+                user.setTitle_20(title);
+                break;
+            case 3:
+                user.setTitle_30(title);
+                break;
+            case 4:
+                user.setTitle_40(title);
+                break;
+            case 5:
+                user.setTitle_50(title);
+                break;
+            case 6:
+                user.setTitle_60(title);
+                break;
+        }
+        userInfoModify.execute(user);
+    }
+
+    public class UserInfoModify extends AsyncTask<User, Void, ResponseBodyWrapped<User>> {
+        @Override
+        protected ResponseBodyWrapped<User> doInBackground(User... params){
+            UserInfoConnector userInfoConnector = new UserInfoConnector();
+            ResponseBodyWrapped<User> responseBodyWrapped = new ResponseBodyWrapped<User>();
+
+            if(params != null && params.length > 0){
+                responseBodyWrapped = userInfoConnector.put(params[0]);
+            }
+
+            return responseBodyWrapped;
+        }
     }
 
 

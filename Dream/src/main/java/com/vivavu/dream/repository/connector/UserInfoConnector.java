@@ -1,5 +1,6 @@
 package com.vivavu.dream.repository.connector;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -12,18 +13,22 @@ import com.vivavu.dream.model.BaseInfo;
 import com.vivavu.dream.model.LoginInfo;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.SecureToken;
+import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.model.user.User;
 import com.vivavu.dream.repository.Connector;
+import com.vivavu.dream.util.DateUtils;
+import com.vivavu.dream.util.ImageUtil;
+import com.vivavu.dream.util.JsonFactory;
 import com.vivavu.dream.util.RestTemplateUtils;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Type;
 
 /**
@@ -38,8 +43,31 @@ public class UserInfoConnector extends Connector<User> {
     }
 
     @Override
-    public ResponseBodyWrapped<User> put(User data) {
-        return null;
+    public ResponseBodyWrapped<User> put(User user) {
+        RestTemplate restTemplate = RestTemplateFactory.getInstance();
+        HttpHeaders requestHeaders = getBasicAuthHeader(DreamApp.getInstance());
+
+        final MultiValueMap<String, Object> requestUser = convertUserToMap(user);
+
+        requestHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        HttpEntity request = new HttpEntity<MultiValueMap<String, Object>>(requestUser, requestHeaders);
+
+        ResponseEntity<String> resultString = null;
+        try {
+            resultString = restTemplate.exchange(Constants.apiUserInfo, HttpMethod.PUT, request, String.class, DreamApp.getInstance().getUser().getId());
+        } catch (RestClientException e){
+            Log.e("DreamProj.",e.toString());
+        }
+
+        ResponseBodyWrapped<User> result = new ResponseBodyWrapped<User>("error", String.valueOf(resultString.getStatusCode()), new User());
+
+        if(RestTemplateUtils.isAvailableParseToJson(resultString)){
+            Gson gson = JsonFactory.getInstance();
+            Type type = new TypeToken<ResponseBodyWrapped<Bucket>>(){}.getType();
+            result = gson.fromJson((String) resultString.getBody(), type);
+        }
+
+        return result;
     }
 
     @Override
@@ -142,5 +170,34 @@ public class UserInfoConnector extends Connector<User> {
         }
 
         return new ResponseBodyWrapped<LoginInfo>();
+    }
+
+    public MultiValueMap convertUserToMap(final User user){
+        MultiValueMap<String, Object> requestUser = new LinkedMultiValueMap<String, Object>();
+
+        if (user.getTitle_life() != null) {
+            requestUser.add("title_life", user.getTitle_life());
+        }
+        if (user.getTitle_10() != null) {
+            requestUser.add("title_10", user.getTitle_10());
+        }
+        if (user.getTitle_20() != null) {
+            requestUser.add("title_20", user.getTitle_20());
+        }
+        if (user.getTitle_30() != null) {
+            requestUser.add("title_30", user.getTitle_30());
+        }
+        if (user.getTitle_40() != null) {
+            requestUser.add("title_40", user.getTitle_40());
+        }
+        if (user.getTitle_50() != null) {
+            requestUser.add("title_50", user.getTitle_50());
+        }
+        if (user.getTitle_60() != null) {
+            requestUser.add("title_60", user.getTitle_60());
+        }
+
+
+        return requestUser;
     }
 }

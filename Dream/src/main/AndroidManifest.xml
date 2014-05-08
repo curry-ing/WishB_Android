@@ -77,11 +77,13 @@
         <activity
             android:name="com.vivavu.dream.activity.main.TodayActivity"
             android:label="@string/title_activity_main"
+            android:hardwareAccelerated="false"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.vivavu.dream.activity.main.MainActivity"
             android:label="@string/title_activity_main"
+            android:hardwareAccelerated="false"
             android:screenOrientation="portrait" >
         </activity>
         <activity
