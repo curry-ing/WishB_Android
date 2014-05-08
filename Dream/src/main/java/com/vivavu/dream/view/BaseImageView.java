@@ -116,5 +116,11 @@ public abstract class BaseImageView extends ImageView {
         }
     }
 
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        Log.v(TAG, String.format("onSizeChanged : %d, %d, %d, %d", w, h, getWidth(), getHeight()));
+    }
+
     public abstract Bitmap getBitmap();
 }

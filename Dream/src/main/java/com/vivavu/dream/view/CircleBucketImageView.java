@@ -1,8 +1,10 @@
 package com.vivavu.dream.view;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.vivavu.dream.R;
 import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.util.DateUtils;
@@ -22,6 +25,7 @@ import butterknife.InjectView;
  * Created by yuja on 2014-05-02.
  */
 public class CircleBucketImageView extends CircularItemContainer {
+    public static final String TAG = CircleBucketImageView.class.getSimpleName();
     protected Bucket bucket;
 
     @InjectView(R.id.img_bucket)
@@ -69,12 +73,17 @@ public class CircleBucketImageView extends CircularItemContainer {
             if(bucket.getCvrImgUrl() != null) {
                 //mTxt.setVisibility(VISIBLE);
                 DisplayImageOptions options = new DisplayImageOptions.Builder()
-                        .showImageOnLoading(R.drawable.no_image)
-                        .showImageOnFail(R.drawable.no_image)
                         .cacheInMemory(true)
                         .cacheOnDisc(true)
                         .build();
-                ImageLoader.getInstance().displayImage(bucket.getCvrImgUrl(), mImgBucket, options);
+                ImageLoader.getInstance().displayImage(bucket.getCvrImgUrl(), mImgBucket, options, new SimpleImageLoadingListener(){
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                        if(loadedImage != null){
+                            invalidate();
+                        }
+                    }
+                });
             }
         }
     }
@@ -105,10 +114,18 @@ public class CircleBucketImageView extends CircularItemContainer {
 
     @Override
     public void setMainItem(boolean isMainItem) {
-        /*if(isMainItem() != isMainItem) {*/
-            super.setMainItem(isMainItem());
-            mImgBucket.setMain(isMainItem);
-        /*}*/
-            mImgBucket.invalidate();
+        super.setMainItem(isMainItem());
+        mImgBucket.setMain(isMainItem);
+        invalidate();
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        measureChildren(MeasureSpec.EXACTLY | w, MeasureSpec.EXACTLY | h);
+        update();
+        mImgBucket.buildDrawingCache();
+        //invalidate();
+        Log.v(TAG, String.format("onSizeChanged index-%d : %d, %d, %d, %d", getIndex(), w, h, oldw, oldh));
     }
 }

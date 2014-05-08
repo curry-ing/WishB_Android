@@ -12,6 +12,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import com.vivavu.dream.R;
 
@@ -231,6 +232,7 @@ public class TextImageView extends BaseImageView {
         pnt.setStyle(Paint.Style.FILL);
         pnt.setColor(Color.BLACK);
         canvas.drawOval(new RectF(0.0f+padding, 0.0f+padding, width-padding, height-padding), pnt);
+        Log.v(TAG, String.format("getBitmap : %d, %d", width, height));
 
         return bitmapOut;
     }
