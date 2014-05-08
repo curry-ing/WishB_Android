@@ -52,7 +52,7 @@ public class FacebookLoginFragment extends CustomBaseFragment {
         final View rootView = inflater.inflate(R.layout.include_facebook_login, container, false);
         ButterKnife.inject(this, rootView);
         List<String> readPermissions = new ArrayList<String>();
-        readPermissions.add("basic_info");
+        readPermissions.add("public_profile");
         readPermissions.add("email");
         readPermissions.add("user_birthday");
 

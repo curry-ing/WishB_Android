@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_id">214219172094153</string>
+    <!--<string name="app_id">214219172094153</string>-->
+    <!--<string name="app_id">268430496627035</string>-->
+    <string name="app_id">453419611460252</string>
     <string name="app_name">DreamProject</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="main_menu_add_bucket">추가</string>
