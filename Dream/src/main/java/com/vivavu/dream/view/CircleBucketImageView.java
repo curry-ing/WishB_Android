@@ -84,7 +84,7 @@ public class CircleBucketImageView extends CircularItemContainer {
                                 if(loadedImage != null ){
                                     mImgBucket.setImageBitmap(loadedImage);
                                 }
-                                invalidate();
+                                mImgBucket.invalidate();
                             }
                         }
                 );
@@ -120,9 +120,9 @@ public class CircleBucketImageView extends CircularItemContainer {
     @Override
     public void setMainItem(boolean isMainItem) {
         if(isMainItem() != isMainItem) {
-            super.setMainItem(isMainItem());
+            super.setMainItem(isMainItem);
             mImgBucket.setMain(isMainItem);
-            invalidate();
+            mImgBucket.invalidate();
         }
     }
 

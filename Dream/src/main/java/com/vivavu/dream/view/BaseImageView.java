@@ -92,18 +92,18 @@ public abstract class BaseImageView extends ImageView {
                     Drawable drawable = getDrawable();
                     if (drawable != null) {
                         // Allocation onDraw but it's ok because it will not always be called.
-                        Log.v(TAG, String.format("onDraw width:%d, height:%d", getWidth(), getHeight()));
                         bitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
                         Canvas bitmapCanvas = new Canvas(bitmap);
-                        Log.v(TAG, String.format("size:%s", drawable.getBounds().toString()));
                         drawable.setBounds(0, 0, getWidth(), getHeight());
                         drawable.draw(bitmapCanvas);
-                        Log.v(TAG, String.format("size:%s", drawable.getBounds().toString()));
+                        Log.v(TAG, String.format("bitmap size:%d, %d", bitmap.getWidth(), bitmap.getHeight()));
+                        Log.v(TAG, String.format("canvas size:%d, %d", bitmapCanvas.getWidth(), bitmapCanvas.getHeight()));
+                        Log.v(TAG, String.format("drawable size:%s", drawable.getBounds().toString()));
                         // If mask is already set, skip and use cached mask.
                         if (mMaskBitmap == null || mMaskBitmap.isRecycled()) {
                             mMaskBitmap = getBitmap();
                         }
-
+                        Log.v(TAG, String.format("mMaskBitmap size:%d, %d", mMaskBitmap.getWidth(), mMaskBitmap.getHeight()));
                         // Draw Bitmap.
                         mPaint.reset();
                         mPaint.setAntiAlias(true);

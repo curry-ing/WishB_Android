@@ -42,6 +42,7 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
 
     /* 화면 갱신을 위한 파라미터 */
     private boolean isDrawing = false;				// 화면 drawing 중에 touch 업데이트로 onLayout() 중복 호출을 방지
+    private boolean isDrag = false;
     private int mFirstItemPosition = 0;					// 화면에 보이는 첫 아이템의 index
     private int mLastItemPosition = 0;					// 화면에 보이는 마지막 아이템의 index
     private int mMainItemPosition = -1;  //메인 아이템의 index
@@ -507,6 +508,7 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
         // 터치 시작점 저장
         mStartX = event.getX();
         mStartY = event.getY();
+        isDrag = true;
         isProcessed = false;
     }
 
@@ -524,6 +526,7 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
     private void endTouch(MotionEvent event) {
         calcMovement(event);
         scrollToSlot();
+        isDrag = false;
     }
 
     private void calcMovement(MotionEvent event){
@@ -621,18 +624,20 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
 
     @Override
     protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
-        final Bitmap bitmap = getChildDrawingCache(child);
 
-        if(! (child instanceof CircularItemContainer) || bitmap == null) {
+        if(! (child instanceof CircularItemContainer) ) {
             return super.drawChild(canvas, child, drawingTime);
         }
         CircularItemContainer view = (CircularItemContainer) child;
 
-        if(view.getAngleRadian() == Math.toRadians(offsetDegree)){
+        if(!isDrag && view.getAngleRadian() == Math.toRadians(offsetDegree)){
             view.setMainItem(true);
             return super.drawChild(canvas, child, drawingTime);
         }
         view.setMainItem(false);
+
+        final Bitmap bitmap = getChildDrawingCache(child);
+
         // 계산에 필요한 파라미터 생성
         double convertRadian = convertDisplayRadian(view.getAngleRadian());
         final int top = (int) calcChildCenterY(convertRadian) - view.getHeight()/2;
