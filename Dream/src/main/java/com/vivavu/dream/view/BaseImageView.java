@@ -96,14 +96,10 @@ public abstract class BaseImageView extends ImageView {
                         Canvas bitmapCanvas = new Canvas(bitmap);
                         drawable.setBounds(0, 0, getWidth(), getHeight());
                         drawable.draw(bitmapCanvas);
-                        Log.v(TAG, String.format("bitmap size:%d, %d", bitmap.getWidth(), bitmap.getHeight()));
-                        Log.v(TAG, String.format("canvas size:%d, %d", bitmapCanvas.getWidth(), bitmapCanvas.getHeight()));
-                        Log.v(TAG, String.format("drawable size:%s", drawable.getBounds().toString()));
                         // If mask is already set, skip and use cached mask.
                         if (mMaskBitmap == null || mMaskBitmap.isRecycled()) {
                             mMaskBitmap = getBitmap();
                         }
-                        Log.v(TAG, String.format("mMaskBitmap size:%d, %d", mMaskBitmap.getWidth(), mMaskBitmap.getHeight()));
                         // Draw Bitmap.
                         mPaint.reset();
                         mPaint.setAntiAlias(true);

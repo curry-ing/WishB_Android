@@ -16,6 +16,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.view.animation.Transformation;
 import android.widget.Adapter;
 import android.widget.AdapterView;
@@ -53,6 +54,8 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
     private double mStartY = 0;							// 터치 이벤트 시작된 기준 좌표 Y
     private boolean isProcessed = false;				// 특정 event 처리 후 ACTION_UP 까지 다른 이벤트 처리가 필요 없을 때 설정하는 flag
 
+    /* 애니매이션*/
+    protected AnimationRunable animationRunable = new AnimationRunable();
     /* 사용 후 제거되는 view를 저장하는 cache */
     private final LinkedList<View> mViewCache = new LinkedList<View>();		// 삭제한 뷰를 저장하는 캐시. getView() 를 호출할 때 convertView 파라미터로 사용
 
@@ -62,7 +65,7 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
     private int circleRadius;
     private int displaySubItemCount;
     private double mMovedRadian;
-    private double touchSensFactor = 1.5;
+    private double touchSensFactor = 1.2;
     private double degree;
     private double offsetDegree = 90.0;
     private double mChangeItemRadianThreshold;
@@ -364,6 +367,7 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
                 moveToIndex(child, childPosition);
             }
         }
+        invalidate();
     }
 
     private Double getStdRadian(double angleRad){
@@ -412,6 +416,7 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
             child.layout(subItemRadius);
             measure(child);
         }
+        invalidate();//잔상 제거용
     }
 
     private double calcChildCenterX(double angleRad){
@@ -525,7 +530,15 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
      */
     private void endTouch(MotionEvent event) {
         calcMovement(event);
-        scrollToSlot();
+        Log.v(TAG, "endTouch");
+        if(animationRunable.isFinished() && getChildCount() > 0){
+            CircularItemContainer child = getChildAt(0);
+            int index = getIndexFromRadian(child.getAngleRadian());
+            double angle = getRadianFromIndex(index);
+            double delta = child.getAngleRadian() - angle;
+            animationRunable.startAnimationUsingAngle(delta);
+        }
+
         isDrag = false;
     }
 
@@ -533,7 +546,6 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
         double startRad = getRadian(mStartX, mStartY, roundedCenterX, roundedCenterY);
         double endRad = getRadian(event.getX(), event.getY(), roundedCenterX, roundedCenterY);
         mMovedRadian = touchSensFactor*(endRad - startRad);
-        Log.v(TAG, String.format("mMovedRadian : %f , %f , startRad:%f, endRad:%f", mMovedRadian, Math.toDegrees(mMovedRadian), startRad, endRad));
         mStartX = event.getX();		// 요청을 처리했으므로 터치 시작점 재설정
         mStartY = event.getY();
     }
@@ -705,6 +717,7 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
      */
     @Override
     public boolean onDown(MotionEvent e) {
+        animationRunable.stop(false);
         startTouch(e);
         return true;
     }
@@ -764,10 +777,12 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
         double startRad = getRadian(e1.getX(), e1.getY(), roundedCenterX, roundedCenterY);
         double endRad = getRadian(e2.getX(), e2.getY(), roundedCenterX, roundedCenterY);
         double delta = (endRad - startRad);
+        Log.v(TAG, "onFling");
         if(delta > 0){
-            layoutItems(mChangeItemRadianThreshold);
+            animationRunable.startAnimationUsingAngle(mChangeItemRadianThreshold-delta);
+
         } else {
-            layoutItems(-1*mChangeItemRadianThreshold);
+            animationRunable.startAnimationUsingAngle(-mChangeItemRadianThreshold + delta);
         }
 
         return false;
@@ -787,5 +802,110 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
         this.onMainItemChangedListener = onMainItemChangedListener;
     }
 
+    private class AnimationRunable implements Runnable{
+        protected long mStartTime;
+        private double mDeltaAngle;
+        protected double mMoveAngle;
+
+        private boolean mFinished;
+        private int mDuration;
+
+        public void startAnimationUsingAngle(double deltaAngle){
+            if(deltaAngle == 0.0){
+                return;
+            }
+            startCommon();
+            mFinished = false;
+            mDeltaAngle = deltaAngle;
+            Log.v(AnimationRunable.class.getSimpleName(), String.format("startAnima delta:%f", deltaAngle));
+            mDuration = 1000;
+            mStartTime = AnimationUtils.currentAnimationTimeMillis();
+
+            post(this);
+        }
+
+        private void endFling(boolean scrollIntoSlots) {
+
+            if (scrollIntoSlots) {
+                scrollToSlot();
+            }
+        }
+
+        @Override
+        public void run() {
+            if(getChildCount() == 0){
+                endFling(true);
+                return;
+            }
+
+            final double angle;
+            boolean more;
+            synchronized(this){
+                more = computeAngleOffset();
+                angle = mMoveAngle;
+                mDeltaAngle -= angle;
+            }
+
+            //////// Shoud be reworked
+            layoutItems(angle);
+
+            if (more ) {
+                post(this);
+            } else {
+                endFling(true);
+            }
+        }
+
+        private void startCommon() {
+            // Remove any pending flings
+            removeCallbacks(this);
+        }
+
+        /**
+         * Returns the time elapsed since the beginning of the scrolling.
+         *
+         * @return The elapsed time in milliseconds.
+         */
+        public int timePassed() {
+            return (int)(AnimationUtils.currentAnimationTimeMillis() - mStartTime);
+        }
+
+        /**
+         * Call this when you want to know the new location.  If it returns true,
+         * the animation is not yet finished.  loc will be altered to provide the
+         * new location.
+         */
+        public boolean computeAngleOffset()
+        {
+            if (mFinished) {
+                return false;
+            }
+
+            long systemClock = AnimationUtils.currentAnimationTimeMillis();
+            long timePassed = systemClock - mStartTime;
+
+            if (timePassed < mDuration) {
+                double sc = (double)timePassed / mDuration;
+
+                mMoveAngle = mDeltaAngle * sc;
+                Log.v(TAG, String.format("AnimationRunable mMoveAngle:%f", mMoveAngle));
+                if(Math.abs(mMoveAngle) > Math.toRadians(0.0)){
+                    return true;
+                }
+            }
+
+            mFinished = true;
+            return false;
+        }
+
+        public void stop(boolean scrollIntoSlots) {
+            removeCallbacks(this);
+            endFling(scrollIntoSlots);
+        }
+
+        public boolean isFinished() {
+            return mFinished;
+        }
+    }
 
 }
