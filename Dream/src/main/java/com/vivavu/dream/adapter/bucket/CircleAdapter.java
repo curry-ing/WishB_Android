@@ -44,7 +44,7 @@ public class CircleAdapter extends CircularAdapter<Bucket> {
         circularItemContainer.setBackgroundResource(R.drawable.sub_view_default_circle);
 
         circularItemContainer.setBucket(data);
-        circularItemContainer.update();
+        //circularItemContainer.update();
 
         return circularItemContainer;
     }

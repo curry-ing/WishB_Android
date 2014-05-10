@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.vivavu.dream.R;
 import com.vivavu.dream.model.bucket.Bucket;
@@ -47,8 +48,6 @@ public class CircleBucketImageView extends CircularItemContainer {
         View v = li.inflate(R.layout.sub_view_circle_item, null);
         ButterKnife.inject(this, v);
 
-        update();
-
         addView(v);
     }
 
@@ -76,14 +75,20 @@ public class CircleBucketImageView extends CircularItemContainer {
                         .cacheInMemory(true)
                         .cacheOnDisc(true)
                         .build();
-                ImageLoader.getInstance().displayImage(bucket.getCvrImgUrl(), mImgBucket, options, new SimpleImageLoadingListener(){
-                    @Override
-                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                        if(loadedImage != null){
-                            invalidate();
+                ImageSize imageSize = new ImageSize(getWidth(), getHeight());
+                Log.v(TAG, imageSize.toString());
+                ImageLoader.getInstance().loadImage(bucket.getCvrImgUrl(), imageSize, options, new SimpleImageLoadingListener(){
+                            @Override
+                            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                                super.onLoadingComplete(imageUri, view, loadedImage);
+                                if(loadedImage != null ){
+                                    mImgBucket.setImageBitmap(loadedImage);
+                                }
+                                invalidate();
+                            }
                         }
-                    }
-                });
+                );
+                //ImageLoader.getInstance().displayImage(bucket.getCvrImgUrl(), mImgBucket, options);
             }
         }
     }
@@ -114,9 +119,11 @@ public class CircleBucketImageView extends CircularItemContainer {
 
     @Override
     public void setMainItem(boolean isMainItem) {
-        super.setMainItem(isMainItem());
-        mImgBucket.setMain(isMainItem);
-        invalidate();
+        if(isMainItem() != isMainItem) {
+            super.setMainItem(isMainItem());
+            mImgBucket.setMain(isMainItem);
+            invalidate();
+        }
     }
 
     @Override
@@ -124,8 +131,6 @@ public class CircleBucketImageView extends CircularItemContainer {
         super.onSizeChanged(w, h, oldw, oldh);
         measureChildren(MeasureSpec.EXACTLY | w, MeasureSpec.EXACTLY | h);
         update();
-        mImgBucket.buildDrawingCache();
-        //invalidate();
-        Log.v(TAG, String.format("onSizeChanged index-%d : %d, %d, %d, %d", getIndex(), w, h, oldw, oldh));
     }
+
 }

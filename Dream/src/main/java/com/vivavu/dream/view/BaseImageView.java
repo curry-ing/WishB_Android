@@ -32,7 +32,8 @@ public abstract class BaseImageView extends ImageView {
     private Bitmap mMaskBitmap;
     private Paint mPaint;
     private WeakReference<Bitmap> mWeakBitmap;
-
+    protected boolean mReady;
+    protected boolean mSetupPending;
 
     public BaseImageView(Context context) {
         super(context);
@@ -55,13 +56,28 @@ public abstract class BaseImageView extends ImageView {
     private void sharedConstructor(Context context) {
         mContext = context;
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+        mReady = true;
+
+        if (mSetupPending) {
+            setUp();
+            mSetupPending = false;
+        }
     }
 
-
+    @Override
     public void invalidate() {
         mWeakBitmap = null;
         if (mMaskBitmap != null) { mMaskBitmap.recycle(); }
         super.invalidate();
+    }
+
+    protected void setUp(){
+        if (!mReady) {
+            mSetupPending = true;
+            return;
+        }
+
     }
 
     @SuppressLint("DrawAllocation")
@@ -76,11 +92,13 @@ public abstract class BaseImageView extends ImageView {
                     Drawable drawable = getDrawable();
                     if (drawable != null) {
                         // Allocation onDraw but it's ok because it will not always be called.
+                        Log.v(TAG, String.format("onDraw width:%d, height:%d", getWidth(), getHeight()));
                         bitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
                         Canvas bitmapCanvas = new Canvas(bitmap);
+                        Log.v(TAG, String.format("size:%s", drawable.getBounds().toString()));
                         drawable.setBounds(0, 0, getWidth(), getHeight());
                         drawable.draw(bitmapCanvas);
-
+                        Log.v(TAG, String.format("size:%s", drawable.getBounds().toString()));
                         // If mask is already set, skip and use cached mask.
                         if (mMaskBitmap == null || mMaskBitmap.isRecycled()) {
                             mMaskBitmap = getBitmap();
@@ -88,6 +106,7 @@ public abstract class BaseImageView extends ImageView {
 
                         // Draw Bitmap.
                         mPaint.reset();
+                        mPaint.setAntiAlias(true);
                         mPaint.setFilterBitmap(false);
                         mPaint.setXfermode(sXfermode);
 //                        mBitmapShader = new BitmapShader(mMaskBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
@@ -100,7 +119,8 @@ public abstract class BaseImageView extends ImageView {
 
                 // Bitmap already loaded.
                 if (bitmap != null) {
-                    mPaint.setXfermode(null);
+                    mPaint.reset();
+                    mPaint.setAntiAlias(true);
 //                    mPaint.setShader(null);
                     canvas.drawBitmap(bitmap, 0.0f, 0.0f, mPaint);
                     return;
@@ -119,7 +139,10 @@ public abstract class BaseImageView extends ImageView {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        Log.v(TAG, String.format("onSizeChanged : %d, %d, %d, %d", w, h, getWidth(), getHeight()));
+        Bitmap bitmap = mWeakBitmap != null ? mWeakBitmap.get() : null;
+        if(bitmap != null && !bitmap.isRecycled()){
+            bitmap.recycle();
+        }
     }
 
     public abstract Bitmap getBitmap();

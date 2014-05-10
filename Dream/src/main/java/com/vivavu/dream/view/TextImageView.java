@@ -37,6 +37,9 @@ public class TextImageView extends BaseImageView {
 
     protected Drawable foregroundDrawable;
 
+    Paint textPaint = null;
+    Paint progressPaint = null;
+
     public TextImageView(Context context) {
         this(context, null);
     }
@@ -97,14 +100,18 @@ public class TextImageView extends BaseImageView {
 
     protected void drawProgress(Canvas canvas) {
         if(isMain && percent > 0){
-            Paint paint = new Paint();
-            paint.setAntiAlias(true);
-            paint.setStyle(Paint.Style.STROKE);
-            paint.setStrokeWidth(10);
-            paint.setStrokeCap(Paint.Cap.SQUARE);
-            paint.setColor(getResources().getColor(R.color.mint));
+
+            if(progressPaint == null) {
+                progressPaint = new Paint();
+                progressPaint.setAntiAlias(true);
+                progressPaint.setStyle(Paint.Style.STROKE);
+                progressPaint.setStrokeWidth(10);
+                progressPaint.setStrokeCap(Paint.Cap.SQUARE);
+                progressPaint.setColor(getResources().getColor(R.color.mint));
+            }
+
             RectF rectF = new RectF(padding, padding, getWidth()-padding, getHeight()-padding);
-            canvas.drawArc(rectF, -90, 360*(percent/100), false, paint );
+            canvas.drawArc(rectF, -90, 360*(percent/100), false, progressPaint );
         }
     }
 
@@ -152,29 +159,31 @@ public class TextImageView extends BaseImageView {
      */
     protected void drawText(Canvas canvas){
         if(isMain == false && text != null && text.length() > 0) {
-            Paint pnt = new Paint();
+            if(textPaint == null) {
+                textPaint = new Paint();
 
-            pnt.setAntiAlias(true);
-            pnt.setColor(textColor);
-            pnt.setTextSize(textSize);
-            pnt.setTextAlign(Paint.Align.CENTER);
-            pnt.setStrokeWidth(2.0f);
-            pnt.setStyle(Paint.Style.STROKE);
-            pnt.setShadowLayer(shadowRadius, shadowDx, shadowDy, shadowColor);
+                textPaint.setAntiAlias(true);
+                textPaint.setColor(textColor);
+                textPaint.setTextSize(textSize);
+                textPaint.setTextAlign(Paint.Align.CENTER);
+                textPaint.setStrokeWidth(2.0f);
+                textPaint.setStyle(Paint.Style.STROKE);
+                textPaint.setShadowLayer(shadowRadius, shadowDx, shadowDy, shadowColor);
+            }
 
             float centerX = getWidth()/2;
             float centerY = (float) (getHeight()/2*(1+Math.sin(Math.toRadians(45.0))));
             int innerWidth = (int) Math.ceil(getWidth()*(Math.cos(Math.toRadians(45.0))));
 
-            int measuredTextWidth = (int) Math.ceil(pnt.measureText(text));
+            int measuredTextWidth = (int) Math.ceil(textPaint.measureText(text));
             int charWidth = measuredTextWidth / text.length();
             if(measuredTextWidth > innerWidth){
 
-                int overWidth = measuredTextWidth - innerWidth + (int)Math.ceil(pnt.measureText(ellipsize));
+                int overWidth = measuredTextWidth - innerWidth + (int)Math.ceil(textPaint.measureText(ellipsize));
                 int overChar = overWidth/charWidth;
-                canvas.drawText(text.substring(0, text.length()-overChar)+ ellipsize, centerX, centerY, pnt);
+                canvas.drawText(text.substring(0, text.length()-overChar)+ ellipsize, centerX, centerY, textPaint);
             } else {
-                canvas.drawText(text, centerX, centerY, pnt);
+                canvas.drawText(text, centerX, centerY, textPaint);
             }
         }
     }
@@ -200,6 +209,7 @@ public class TextImageView extends BaseImageView {
             pnt.setStrokeWidth(2.0f);
             pnt.setStyle(Paint.Style.STROKE);
             pnt.setShadowLayer(shadowRadius, shadowDx, shadowDy, shadowColor);
+
             float centerX = getWidth()/2;
             float centerY = (float) (getHeight()/2*(1+Math.sin(Math.toRadians(45.0))));
             int innerWidth = (int) Math.ceil(getWidth()*(Math.cos(Math.toRadians(45.0))));
@@ -224,6 +234,7 @@ public class TextImageView extends BaseImageView {
     }
     private Bitmap getBitmap(int width, int height) {
         // 실제로 마스크 영역
+        Log.v(TAG, String.format("%s : %d, %d", String.valueOf(text), width, height));
         Bitmap bitmapOut = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmapOut);
         Paint pnt = new Paint();
@@ -231,8 +242,7 @@ public class TextImageView extends BaseImageView {
         //꽉찬 원형을 그림
         pnt.setStyle(Paint.Style.FILL);
         pnt.setColor(Color.BLACK);
-        canvas.drawOval(new RectF(0.0f+padding, 0.0f+padding, width-padding, height-padding), pnt);
-        Log.v(TAG, String.format("getBitmap : %d, %d", width, height));
+        canvas.drawOval(new RectF(0.0f + padding, 0.0f + padding, width - padding, height - padding), pnt);
 
         return bitmapOut;
     }
@@ -252,7 +262,6 @@ public class TextImageView extends BaseImageView {
 
         foregroundDrawable = d;
 
-        requestLayout();
         invalidate();
     }
 

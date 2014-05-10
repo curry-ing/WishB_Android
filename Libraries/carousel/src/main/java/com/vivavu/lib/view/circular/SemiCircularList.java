@@ -8,6 +8,8 @@ import android.graphics.Camera;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -66,11 +68,15 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
     private int roundedCenterX;
     private int roundedCenterY;
     private int circleBackground;
+    private Drawable circleBackgroundDrawable;
     private HashMap<Integer, Double> mappingTable;
 
     /* sub 원들의 최대, 최소 크기 비율 factor*/
     private float MAX_SUB_SIZE_SCALE_FACTOR = 1.0f;
     private float MIN_SUB_SIZE_SCALE_FACTOR = 0.5f;
+
+    Paint mPaint = null;
+    Matrix mMatrix = null;
 
     public SemiCircularList(Context context) {
         this(context, null);
@@ -91,6 +97,12 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
         displaySubItemCount = arr.getInteger(R.styleable.Circular_displaySubItemCount, 6);
 
         circleBackground = arr.getResourceId(R.styleable.Circular_circleBackground, -1);
+        if(circleBackground >= 0) {
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), circleBackground);
+            Bitmap sb = Bitmap.createScaledBitmap(bitmap, circleRadius*2, circleRadius*2, false);
+            circleBackgroundDrawable = new BitmapDrawable(getResources(), sb);
+        }
+
         arr.recycle();
 
         degree = 360.0 / displaySubItemCount;
@@ -186,7 +198,7 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
                     getOnMainItemChangedListener().onMainItemChanged(index, child);
                 }
             }
-            child.setMainItem(childPosition == 0);
+            //child.setMainItem(childPosition == 0);
         }
     }
 
@@ -568,10 +580,10 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if(circleBackground >= 0) {
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), circleBackground);
-            Bitmap sb = Bitmap.createScaledBitmap(bitmap, circleRadius*2, circleRadius*2, false);
-            canvas.drawBitmap(sb, roundedCenterX - circleRadius, roundedCenterY -circleRadius, null);
+        if(circleBackgroundDrawable != null) {
+            circleBackgroundDrawable.setBounds(roundedCenterX - circleRadius, roundedCenterY - circleRadius
+                    , roundedCenterX + circleRadius, roundedCenterY + circleRadius);
+            circleBackgroundDrawable.draw(canvas);
         }
     }
 
@@ -617,9 +629,10 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
         CircularItemContainer view = (CircularItemContainer) child;
 
         if(view.getAngleRadian() == Math.toRadians(offsetDegree)){
+            view.setMainItem(true);
             return super.drawChild(canvas, child, drawingTime);
         }
-
+        view.setMainItem(false);
         // 계산에 필요한 파라미터 생성
         double convertRadian = convertDisplayRadian(view.getAngleRadian());
         final int top = (int) calcChildCenterY(convertRadian) - view.getHeight()/2;
@@ -634,16 +647,15 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
         final int middleRadius = subItemRadius;
         final int maxRadius = mainItemRadius;
         double scaleFactor = 1.0f;
-        float scale = 1.0f;
         if(calcSector(convertRadian) > 0){
             scaleFactor = (maxRadius-middleRadius)/(Math.sin(Math.toRadians(90.0))-Math.sin(0.0));
         } else {
             scaleFactor = (middleRadius-minRadius)/(Math.sin(0.0)-Math.sin(Math.toRadians(270.0)));
         }
-        scale = (float) ((scaleFactor * Math.sin(convertRadian) + middleRadius) /(view.getWidth()/2));
+        float scale = (float) ((scaleFactor * Math.sin(convertRadian) + middleRadius) /(view.getWidth()/2));
 
         // Matrix 인스턴스 생성. 이미 생성되어 있다면 reset
-        Matrix mMatrix = null;
+
         if (mMatrix == null) {
             mMatrix = new Matrix();
         } else {
@@ -657,7 +669,6 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
         //mMatrix.postTranslate((float)view.getCenterX() + (centerX/scale), (float)view.getCenterY() + (centerY/scale));	// 아이템의 원래 위치로 이동
 
         // Paint 설정
-        Paint mPaint = null;
         if (mPaint == null) {
             mPaint = new Paint();
             mPaint.setAntiAlias(true);
