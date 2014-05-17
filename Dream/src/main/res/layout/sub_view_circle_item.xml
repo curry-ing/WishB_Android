@@ -12,14 +12,15 @@
         android:layout_height="match_parent"
         android:id="@+id/img_bucket"
         android:background="@drawable/sub_view_default_circle"
+        android:padding="5dp"
         app:foregroundResId="@drawable/sub_view_default_circle_trans"
         app:ellipsize="..."
         app:textSize="10sp"
         app:textColor="@color/white"
         app:shadowColor="@color/darkgray"
-        app:shadowDx="2.0"
-        app:shadowDy="2.0"
-        app:shadowRadius="1.0"
+        app:shadowDx="0.0"
+        app:shadowDy="0.0"
+        app:shadowRadius="2.0"
         />
 
     <ImageView

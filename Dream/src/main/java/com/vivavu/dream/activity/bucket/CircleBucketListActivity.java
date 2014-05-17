@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.vivavu.dream.R;
 import com.vivavu.dream.adapter.bucket.CircleAdapter;
@@ -33,6 +35,10 @@ public class CircleBucketListActivity extends BaseActionBarActivity {
     Button mBtnAdd;
     @InjectView(R.id.title)
     TextView mTitle;
+    @InjectView(R.id.txt_title)
+    TextView mTxtTitle;
+    @InjectView(R.id.btn_today)
+    Button mBtnToday;
     private Context mContext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +52,6 @@ public class CircleBucketListActivity extends BaseActionBarActivity {
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setCustomView(R.layout.actionbar_sub_view);
-
         ButterKnife.inject(this);
 
         mContext = DreamApp.getInstance();
@@ -56,19 +61,35 @@ public class CircleBucketListActivity extends BaseActionBarActivity {
 
         List<Bucket> bucketList = DataRepository.listBucketByRange(groupRange);
         //List itemList = CircularViewTestActivity.getDummyData();
+        if(null == groupRange){
+            mTxtTitle.setText(DreamApp.getInstance().getUser().getTitle_life());
+        } else if("10".equals(groupRange)){
+            mTxtTitle.setText(DreamApp.getInstance().getUser().getTitle_10());
+        }else if("20".equals(groupRange)){
+            mTxtTitle.setText(DreamApp.getInstance().getUser().getTitle_20());
+        }else if("30".equals(groupRange)){
+            mTxtTitle.setText(DreamApp.getInstance().getUser().getTitle_30());
+        }else if("40".equals(groupRange)){
+            mTxtTitle.setText(DreamApp.getInstance().getUser().getTitle_40());
+        }else if("50".equals(groupRange)){
+            mTxtTitle.setText(DreamApp.getInstance().getUser().getTitle_50());
+        }else if("60".equals(groupRange)){
+            mTxtTitle.setText(DreamApp.getInstance().getUser().getTitle_60());
+        }
 
         CircularAdapter circularAdapter;
         circularAdapter = new CircleAdapter(mContext, bucketList);
         mLayoutCard.setAdapter(circularAdapter);
+
         if(bucketList.size() > 0) {
-            mTxtIndicator.setText(String.format("%d Lists", bucketList.size()));
-        } else {
-            mTxtIndicator.setText(String.format("Add Lists"));
+            mTxtIndicator.setText(String.format("%d", bucketList.size()));
         }
+
         mLayoutCard.setOnMainItemChangedListener(new SemiCircularList.OnMainItemChangedListener() {
             @Override
             public void onMainItemChanged(int position, View view) {
-                if(view instanceof CircleBucketImageView) {
+
+                if(!mLayoutCard.isDrag() && view instanceof CircleBucketImageView) {
                     int index = ((CircleBucketImageView) view).getIndex();
                     Adapter adapter = mLayoutCard.getAdapter();
                     Bucket item = (Bucket) adapter.getItem(index);
@@ -77,5 +98,23 @@ public class CircleBucketListActivity extends BaseActionBarActivity {
             }
         });
 
+        mLayoutCard.setOnRotateEndedListener(new SemiCircularList.OnRotateEndedListener() {
+            @Override
+            public void onRotateEnded(int position, View mainItem) {
+                if( mainItem instanceof CircleBucketImageView) {
+                    int index = ((CircleBucketImageView) mainItem).getIndex();
+                    Adapter adapter = mLayoutCard.getAdapter();
+                    Bucket item = (Bucket) adapter.getItem(index);
+                    mTitle.setText(index + "   " + item.getTitle());
+                }
+            }
+        });
+
+        mLayoutCard.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(CircleBucketListActivity.this, "아이템 선택 : #"+position, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

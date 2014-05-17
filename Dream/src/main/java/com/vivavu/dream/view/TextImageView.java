@@ -110,7 +110,7 @@ public class TextImageView extends BaseImageView {
                 progressPaint.setColor(getResources().getColor(R.color.mint));
             }
 
-            RectF rectF = new RectF(padding, padding, getWidth()-padding, getHeight()-padding);
+            RectF rectF = new RectF(getPaddingLeft(), getPaddingTop(), getWidth()-getPaddingRight(), getHeight()-getPaddingBottom());
             canvas.drawArc(rectF, -90, 360*(percent/100), false, progressPaint );
         }
     }
@@ -118,7 +118,7 @@ public class TextImageView extends BaseImageView {
     protected void drawForeground(Canvas canvas) {
         final Drawable foreground = getForegroundDrawable();
         if (foreground != null) {
-            foreground.setBounds(padding, padding, getWidth()-padding, getHeight()-padding);
+            foreground.setBounds(getPaddingLeft(), getPaddingTop(), getWidth()-getPaddingRight(), getHeight()-getPaddingBottom());
 
             final int scrollX = getScrollX();
             final int scrollY = getScrollY();
