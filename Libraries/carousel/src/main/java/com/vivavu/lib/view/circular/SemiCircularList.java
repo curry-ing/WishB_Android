@@ -43,6 +43,8 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
     /* 리스너 */
     private OnMainItemChangedListener onMainItemChangedListener;
     private OnRotateEndedListener onRotateEndedListener;
+    private OnMainItemSelectedListener onMainItemSelectedListener;
+
     /* 화면 갱신을 위한 파라미터 */
     private boolean isDrawing = false;				// 화면 drawing 중에 touch 업데이트로 onLayout() 중복 호출을 방지
     private boolean isDrag = false;
@@ -176,7 +178,6 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-        Log.v(TAG, String.valueOf(changed));
         if (mAdapter == null)
             return;
         isDrawing = true;					// drawing flag 설정
@@ -198,10 +199,10 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
                 mMainItemPosition = child.getIndex();
                 // main item이 변경될 경우 발생시킴
                 if(getOnMainItemChangedListener() != null){
-                    getOnMainItemChangedListener().onMainItemChanged(index, child);
+                    getOnMainItemChangedListener().onMainItemChanged(mMainItemPosition, child);
                 }
                 if(animationRunable.isFinished() && !isDrag() && getOnRotateEndedListener() != null){
-                    getOnRotateEndedListener().onRotateEnded(index, child);
+                    getOnRotateEndedListener().onRotateEnded(mMainItemPosition, child);
                 }
             }
             //child.setMainItem(childPosition == 0);
@@ -521,6 +522,7 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
     }
 
     private void scrollList(MotionEvent event){
+        Log.v(TAG, "scroll");
         if( !isDrawing ) {
             calcMovement(event);
             requestLayout();
@@ -535,14 +537,21 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
         calcMovement(event);
         Log.v(TAG, "endTouch");
         if(animationRunable.isFinished() && getChildCount() > 0){
-            CircularItemContainer child = getChildAt(0);
-            int index = getIndexFromRadian(child.getAngleRadian());
-            double angle = getRadianFromIndex(index);
-            double delta = child.getAngleRadian() - angle;
+            double delta = calcDeltaForMoveToSlot(0);
             animationRunable.startAnimationUsingAngle(delta);
         }
 
         isDrag = false;
+    }
+
+    private double calcDeltaForMoveToSlot(int moveIndex){
+        if(getChildCount() > 0){
+            CircularItemContainer child = getChildAt(0);
+            int index = getIndexFromRadian(child.getAngleRadian());
+            double angle = getRadianFromIndex(index + moveIndex);
+            return angle - child.getAngleRadian();
+        }
+        return 0.0;
     }
 
     private int calcTouchItem(MotionEvent event){
@@ -771,7 +780,10 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
     public boolean onSingleTapUp(MotionEvent e) {
         int index  = calcTouchItem(e);
         if(index > INVALID_ITEM_INDEX && getOnItemClickListener() != null) {
-            getOnItemClickListener().onItemClick(this, getChildAt(index), index, getChildAt(index).getIndex());
+            getOnItemClickListener().onItemClick(this, getChildAt(index), getChildAt(index).getIndex(), getChildAt(index).getIndex());
+        }
+        if(index == (int)Math.ceil(displaySubItemCount / 2) && getOnMainItemSelectedListener() != null){
+            getOnMainItemSelectedListener().onMainItemSelected(getChildAt(index).getIndex(), getChildAt(index));
         }
 
         return true;
@@ -809,17 +821,16 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
      */
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        //손가락을 튕기면 한 아이템씩 이동하는 것으로 변경
-        double startRad = getRadian(e1.getX(), e1.getY(), roundedCenterX, roundedCenterY);
-        double endRad = getRadian(e2.getX(), e2.getY(), roundedCenterX, roundedCenterY);
-        double delta = (endRad - startRad);
-        Log.v(TAG, "onFling");
+
+        Log.v(TAG, String.format("onFling\n e1:%s \n e2:%s\n vX:%f, vY:%f", e1.toString(), e2.toString(), velocityX, velocityY));
         //todo: 부드러운 애니메이션 효과를 위해서는 터치가 끝난 지점에서부터 종료지점까지 이동이 필요함
-        if(delta > 0){
-            animationRunable.startAnimationUsingAngle(mChangeItemRadianThreshold-delta);
+        // 회전 방향을 알아야한다.
+
+        if(mMovedRadian > 0){
+            animationRunable.startAnimationUsingAngle(calcDeltaForMoveToSlot(1));
 
         } else {
-            animationRunable.startAnimationUsingAngle(-mChangeItemRadianThreshold + delta);
+            animationRunable.startAnimationUsingAngle(calcDeltaForMoveToSlot(-1));
         }
 
         return false;
@@ -855,9 +866,23 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
         this.onRotateEndedListener = onRotateEndedListener;
     }
 
+    public interface OnMainItemSelectedListener{
+        public void onMainItemSelected(int position, View mainItem);
+    }
+
+    public OnMainItemSelectedListener getOnMainItemSelectedListener() {
+        return onMainItemSelectedListener;
+    }
+
+    public void setOnMainItemSelectedListener(OnMainItemSelectedListener onMainItemSelectedListener) {
+        this.onMainItemSelectedListener = onMainItemSelectedListener;
+    }
+
     private class AnimationRunable implements Runnable{
         protected long mStartTime;
+        protected long mLastMoveTime;
         private double mDeltaAngle;
+        protected double mMovedAnglePerTik;
         protected double mMoveAngle;
 
         private boolean mFinished;
@@ -870,10 +895,10 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
             startCommon();
             mFinished = false;
             mDeltaAngle = deltaAngle;
+            mDuration = 500;
+            mMovedAnglePerTik = mDeltaAngle / mDuration;
             Log.v(AnimationRunable.class.getSimpleName(), String.format("startAnima delta:%f", deltaAngle));
-            mDuration = 1000;
-            mStartTime = AnimationUtils.currentAnimationTimeMillis();
-
+            mLastMoveTime = mStartTime = AnimationUtils.currentAnimationTimeMillis();
             post(this);
         }
 
@@ -919,8 +944,15 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
          *
          * @return The elapsed time in milliseconds.
          */
-        public int timePassed() {
-            return (int)(AnimationUtils.currentAnimationTimeMillis() - mStartTime);
+        public long timePassed() {
+            return AnimationUtils.currentAnimationTimeMillis() - mStartTime;
+        }
+
+        public long getTimeTik(){
+            long currentTime = AnimationUtils.currentAnimationTimeMillis();
+            long tik = currentTime - mLastMoveTime;
+            mLastMoveTime = currentTime;
+            return tik;
         }
 
         /**
@@ -934,17 +966,13 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
                 return false;
             }
 
-            long systemClock = AnimationUtils.currentAnimationTimeMillis();
-            long timePassed = systemClock - mStartTime;
-
-            if (timePassed < mDuration) {
-                double sc = (double)timePassed / mDuration;
-
-                mMoveAngle = mDeltaAngle * sc;
+            if (mDuration > 0) {
+                //tik을 이용하면 실제 애니메이션이 좀 더 길게 동작할 수 있다.
+                long tick = getTimeTik();
+                mMoveAngle = mMovedAnglePerTik * tick;
+                mDuration -= tick;
                 Log.v(TAG, String.format("AnimationRunable mMoveAngle:%f", mMoveAngle));
-                if(Math.abs(mMoveAngle) > Math.toRadians(0.0)){
-                    return true;
-                }
+                return true;
             }
 
             mFinished = true;

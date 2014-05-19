@@ -13,7 +13,7 @@
         android:id="@+id/img_bucket"
         android:background="@drawable/sub_view_default_circle"
         android:padding="5dp"
-        app:foregroundResId="@drawable/sub_view_default_circle_trans"
+        app:foregroundResId="@drawable/sub_view_circle_big_trans2"
         app:ellipsize="..."
         app:textSize="10sp"
         app:textColor="@color/white"

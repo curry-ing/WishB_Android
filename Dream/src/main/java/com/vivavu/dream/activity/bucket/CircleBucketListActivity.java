@@ -77,7 +77,7 @@ public class CircleBucketListActivity extends BaseActionBarActivity {
             mTxtTitle.setText(DreamApp.getInstance().getUser().getTitle_60());
         }
 
-        CircularAdapter circularAdapter;
+        final CircularAdapter circularAdapter;
         circularAdapter = new CircleAdapter(mContext, bucketList);
         mLayoutCard.setAdapter(circularAdapter);
 
@@ -90,10 +90,9 @@ public class CircleBucketListActivity extends BaseActionBarActivity {
             public void onMainItemChanged(int position, View view) {
 
                 if(!mLayoutCard.isDrag() && view instanceof CircleBucketImageView) {
-                    int index = ((CircleBucketImageView) view).getIndex();
                     Adapter adapter = mLayoutCard.getAdapter();
-                    Bucket item = (Bucket) adapter.getItem(index);
-                    mTitle.setText(index + "   " + item.getTitle());
+                    Bucket item = (Bucket) adapter.getItem(position);
+                    mTitle.setText(position + "   " + item.getTitle());
                 }
             }
         });
@@ -102,10 +101,9 @@ public class CircleBucketListActivity extends BaseActionBarActivity {
             @Override
             public void onRotateEnded(int position, View mainItem) {
                 if( mainItem instanceof CircleBucketImageView) {
-                    int index = ((CircleBucketImageView) mainItem).getIndex();
                     Adapter adapter = mLayoutCard.getAdapter();
-                    Bucket item = (Bucket) adapter.getItem(index);
-                    mTitle.setText(index + "   " + item.getTitle());
+                    Bucket item = (Bucket) adapter.getItem(position);
+                    mTitle.setText(position + "   " + item.getTitle());
                 }
             }
         });
@@ -114,6 +112,16 @@ public class CircleBucketListActivity extends BaseActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(CircleBucketListActivity.this, "아이템 선택 : #"+position, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mLayoutCard.setOnMainItemSelectedListener(new SemiCircularList.OnMainItemSelectedListener() {
+            @Override
+            public void onMainItemSelected(int position, View mainItem) {
+                Bucket item = (Bucket) circularAdapter.getItem(position);
+                if((item.getId() == null || item.getId() < 0) && circularAdapter.getCount() == 0){
+                    Toast.makeText(CircleBucketListActivity.this, "아이템 없음 추가 코드 필요", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
