@@ -27,8 +27,8 @@ public class CircleAdapter extends CircularAdapter<Bucket> {
 
     @Override
     public Bucket getItem(int position) {
-        if(position >= getCount()){
-            return new Bucket("");
+        if(0 > position || position >= getCount()){
+            return null;
         }
 
         return super.getItem(position);
@@ -44,7 +44,11 @@ public class CircleAdapter extends CircularAdapter<Bucket> {
         circularItemContainer.setBackgroundResource(R.drawable.sub_view_default_circle);
 
         circularItemContainer.setBucket(data);
-        //circularItemContainer.update();
+        if(data == null ){
+            circularItemContainer.setEmpty(true);
+        }else{
+            circularItemContainer.setEmpty(false);
+        }
 
         return circularItemContainer;
     }

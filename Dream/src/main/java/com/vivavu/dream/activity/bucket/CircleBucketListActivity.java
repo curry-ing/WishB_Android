@@ -119,7 +119,7 @@ public class CircleBucketListActivity extends BaseActionBarActivity {
             @Override
             public void onMainItemSelected(int position, View mainItem) {
                 Bucket item = (Bucket) circularAdapter.getItem(position);
-                if((item.getId() == null || item.getId() < 0) && circularAdapter.getCount() == 0){
+                if(item == null || (item.getId() == null || item.getId() < 0) && circularAdapter.getCount() == 0){
                     Toast.makeText(CircleBucketListActivity.this, "아이템 없음 추가 코드 필요", Toast.LENGTH_SHORT).show();
                 }
             }

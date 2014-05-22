@@ -70,7 +70,11 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
     private int circleRadius;
     private int displaySubItemCount;
     private double mMovedRadian;
-    private double touchSensFactor = 1.2;
+    private double mAccuMovedRadian = 0.0;
+    private boolean isRestrict = false;
+    private double mLeftAvailableRadian = 0.0;
+    private double mRightAvailableRadian = 0.0;
+    private double touchSensFactor = 1.0;
     private double degree;
     private double offsetDegree = 90.0;
     private double mChangeItemRadianThreshold;
@@ -82,6 +86,7 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
 
     Paint mPaint = null;
     Matrix mMatrix = null;
+
 
     public SemiCircularList(Context context) {
         this(context, null);
@@ -184,6 +189,18 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
 
         redrawLayout();
 
+        // 애니메이션 종료, 움직임 종료 일 경우
+        /*if(animationRunable.isFinished() && !isDrag()){
+            if(!checkValidMainItem()){
+                if(mMovedRadian > 0){
+                    animationRunable.startAnimationUsingAngle(calcDeltaForMoveToSlot(1));
+                }else if(mMovedRadian < 0){
+                    animationRunable.startAnimationUsingAngle(calcDeltaForMoveToSlot(-1));
+                }
+                mMovedRadian = 0.0;
+            }
+        }*/
+
         fireEvent();
         invalidate();								// 화면 업데이트
 
@@ -201,8 +218,11 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
                 if(getOnMainItemChangedListener() != null){
                     getOnMainItemChangedListener().onMainItemChanged(mMainItemPosition, child);
                 }
-                if(animationRunable.isFinished() && !isDrag() && getOnRotateEndedListener() != null){
-                    getOnRotateEndedListener().onRotateEnded(mMainItemPosition, child);
+                // 애니메이션 종료, 움직임 종료 일 경우
+                if(animationRunable.isFinished() && !isDrag()){
+                    if(getOnRotateEndedListener() != null) {
+                        getOnRotateEndedListener().onRotateEnded(mMainItemPosition, child);
+                    }
                 }
             }
             //child.setMainItem(childPosition == 0);
@@ -342,7 +362,9 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
      * 시작은
      */
     private void layoutItems() {
-        layoutItems(mMovedRadian);
+        if(mMovedRadian != 0.0) {
+            layoutItems(mMovedRadian);
+        }
     }
 
     private void layoutItems(double delta){
@@ -519,13 +541,28 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
         mStartY = event.getY();
         isDrag = true;
         isProcessed = false;
+
+        if(getAdapter() != null && getAdapter().getCount() < 2){
+            //3개 이하일 경우에는 좌우로 한칸씩만 이동할 수 있도록 함.
+            isRestrict = false;
+            mLeftAvailableRadian = mChangeItemRadianThreshold;
+            mRightAvailableRadian = -mChangeItemRadianThreshold;
+        } else if(getAdapter() != null && getChildCount() <= displaySubItemCount){
+            isRestrict = false;
+            mLeftAvailableRadian = mChangeItemRadianThreshold * (getAdapter().getCount()-1);
+            mRightAvailableRadian = -mChangeItemRadianThreshold * (getAdapter().getCount()-1);
+        } else {
+            isRestrict = false;
+        }
     }
 
     private void scrollList(MotionEvent event){
         Log.v(TAG, "scroll");
         if( !isDrawing ) {
             calcMovement(event);
-            requestLayout();
+            if(mMovedRadian!= 0.0 ){
+                requestLayout();
+            }
         }
     }
 
@@ -542,6 +579,31 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
         }
 
         isDrag = false;
+    }
+
+    private boolean checkValidMainItem(){
+        if(getChildCount() > 0 ){
+            int center = displaySubItemCount/2;
+            CircularItemContainer childAt = getChildAt(center);
+            if(childAt != null && getAdapter() != null){
+                Object item = getAdapter().getItem( childAt.getIndex() );
+                if(item != null){
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    private boolean isAvailableMove(){
+        if(isRestrict && (mLeftAvailableRadian <= mAccuMovedRadian || mAccuMovedRadian <= mRightAvailableRadian) ){
+            return false;
+        }
+        return true;
     }
 
     private double calcDeltaForMoveToSlot(int moveIndex){
@@ -581,9 +643,22 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
     private void calcMovement(MotionEvent event){
         double startRad = getRadian(mStartX, mStartY, roundedCenterX, roundedCenterY);
         double endRad = getRadian(event.getX(), event.getY(), roundedCenterX, roundedCenterY);
-        mMovedRadian = touchSensFactor*(endRad - startRad);
+        double radian = touchSensFactor * (endRad - startRad);
+
+        checkAvailableRadian(radian);
+
+        Log.v(TAG, String.format("mMovedRadian %f", mMovedRadian));
         mStartX = event.getX();		// 요청을 처리했으므로 터치 시작점 재설정
         mStartY = event.getY();
+    }
+
+    private void checkAvailableRadian(double radian) {
+        if(mLeftAvailableRadian >= mAccuMovedRadian + radian && mAccuMovedRadian + radian >= mRightAvailableRadian){
+            mMovedRadian = radian;
+            mAccuMovedRadian += mMovedRadian;//터치시에 움직인 각 누적함(터치를 띄면 다시 0으로 초기화)
+        } else {
+            mMovedRadian = 0.0;
+        }
     }
 
     /**
@@ -829,7 +904,7 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
         if(mMovedRadian > 0){
             animationRunable.startAnimationUsingAngle(calcDeltaForMoveToSlot(1));
 
-        } else {
+        } else if(mMovedRadian < 0) {
             animationRunable.startAnimationUsingAngle(calcDeltaForMoveToSlot(-1));
         }
 
@@ -925,7 +1000,8 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
             }
 
             //////// Shoud be reworked
-            layoutItems(angle);
+            checkAvailableRadian(angle);
+            layoutItems();
 
             if (more ) {
                 post(this);

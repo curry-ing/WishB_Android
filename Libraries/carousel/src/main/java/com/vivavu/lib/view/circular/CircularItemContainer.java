@@ -13,6 +13,7 @@ public class CircularItemContainer extends FrameLayout {
     protected double centerY;
     protected double angleRadian;
     protected boolean isMainItem = false;
+    protected boolean isEmpty = true;
 
     public CircularItemContainer(Context context) {
         super(context);
@@ -88,4 +89,11 @@ public class CircularItemContainer extends FrameLayout {
         this.isMainItem = isMainItem;
     }
 
+    public boolean isEmpty() {
+        return isEmpty;
+    }
+
+    public void setEmpty(boolean isEmpty) {
+        this.isEmpty = isEmpty;
+    }
 }

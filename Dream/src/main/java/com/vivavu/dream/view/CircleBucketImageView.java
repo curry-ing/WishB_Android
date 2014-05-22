@@ -62,7 +62,7 @@ public class CircleBucketImageView extends CircularItemContainer {
             }
         });*/
 
-        if(bucket != null) {
+        if(!isEmpty() && bucket != null) {
             mTxt.setText(bucket.getTitle());
             mImgBucket.setText(bucket.getTitle());
             if(bucket.getRegDate() != null && bucket.getDeadline()!= null) {
