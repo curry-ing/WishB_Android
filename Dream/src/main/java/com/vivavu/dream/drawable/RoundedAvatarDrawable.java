@@ -39,7 +39,7 @@ public class RoundedAvatarDrawable extends Drawable {
 
             mBitmapWidth = 290;
             mBitmapHeight = 290;
-            mPaint.setShadowLayer(5, 1.0f, 0.0f, Color.GRAY);
+            mPaint.setShadowLayer(5, 1.0f, 0.0f, Color.DKGRAY);
         } else {
             mBitmap = adjustImage(bitmap, imgNum, imgCnt);
             final BitmapShader shader = new BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);

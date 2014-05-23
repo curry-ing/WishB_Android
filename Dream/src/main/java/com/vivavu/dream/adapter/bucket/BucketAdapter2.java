@@ -4,8 +4,7 @@ import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.*;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.app.Fragment;
@@ -19,6 +18,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ScaleXSpan;
+import android.util.AttributeSet;
+
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
@@ -31,13 +35,13 @@ import com.vivavu.dream.model.bucket.BucketGroup;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.vivavu.dream.model.user.User;
 import com.vivavu.dream.repository.connector.UserInfoConnector;
-import com.vivavu.dream.repository.task.CustomAsyncTask;
 
 /**
  * Created by masunghoon on 4/20/14.
@@ -115,6 +119,16 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
         this.mainImages = new ArrayList<Bitmap>();
 
         /* SET MAIN TITLE */
+        Typeface typeface = Typeface.createFromAsset(context.getAssets(), "NanumBarunGothicBold.mp3");
+//        Shader textShader = new LinearGradient(2, 0, 4, 60, new int[]{Color.parseColor("#b4e391"),Color.parseColor("#61c419"),Color.parseColor("#b4e391")},
+//                new float[]{0, 3,1}, Shader.TileMode.MIRROR);
+//        holder.mBtnDecade.getPaint().setShader(textShader);
+        holder.mBtnDecade.setTypeface(typeface);
+        holder.mBtnDecade.setTextSize(22);
+        holder.mBtnDecade.setTextColor(Color.WHITE);
+        holder.mBtnDecade.getPaint().setAntiAlias(true);
+//        holder.mBtnDecade.setCompoundDrawablesWithIntrinsicBounds(R.drawable.pencil,0,0,0);
+
         switch (pos){
             case 0:
                 title = DreamApp.getInstance().getUser().getTitle_life();
@@ -139,7 +153,7 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
                 break;
         }
         if (title != null) {
-            holder.mBtnDecade.setText(title);
+            holder.mBtnDecade.setText(title+" ");
         } else {
             holder.mBtnDecade.setText(bucketGroup.getRangeText());
         }
@@ -164,6 +178,8 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
         }
         if(mainImages.size()==0){
             mainImages.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.up_logo));
+        } else {
+            Collections.shuffle(mainImages);
         }
 //        holder.mBktCount.setText(String.valueOf(cnt)+'개');
         for (int j=0; j<mainImages.size(); j++){
@@ -204,7 +220,18 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
             int endY = Integer.parseInt(DreamApp.getInstance().getUser().getBirthday().substring(0,4))+((pos+1)*10-1) - 1;
             int thisY = cal.get(cal.YEAR);
 
-            holder.mPeriod.setText(String.valueOf(startY)+" ~ "+String.valueOf(endY));
+            Typeface periodTypeFace = Typeface.createFromAsset(context.getAssets(), "Dense-Regular.mp3");
+            holder.mPeriod.setTypeface(periodTypeFace, Typeface.BOLD);
+            holder.mPeriod.setTextSize(25);
+            holder.mPeriod.setText("J A N  "+String.valueOf(startY).charAt(0)+" "
+                                            +String.valueOf(startY).charAt(1)+" "
+                                            +String.valueOf(startY).charAt(2)+" "
+                                            +String.valueOf(startY).charAt(3)+"  -  D E C  "
+                                            +String.valueOf(endY).charAt(0)+" "
+                                            +String.valueOf(endY).charAt(1)+" "
+                                            +String.valueOf(endY).charAt(2)+" "
+                                            +String.valueOf(endY).charAt(3));
+
             if(thisY > endY) {
                 holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, 360, PROGRESS_BAR_BASELINE));
             } else if (thisY < startY) {
@@ -330,8 +357,6 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
             return responseBodyWrapped;
         }
     }
-
-
 
     class ButterknifeViewHolder {
         @InjectView(R.id.btn_decade)

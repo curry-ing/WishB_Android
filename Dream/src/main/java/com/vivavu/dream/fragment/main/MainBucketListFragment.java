@@ -95,6 +95,7 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
         super.onViewCreated(view, savedInstanceState);
         bucketAdapter2 = new BucketAdapter2(this, bucketGroupList);
         mMainPager.setAdapter(bucketAdapter2);
+        mMainPager.setOnPageChangeListener(new MainViewPageChangeListener());
         mMainPager.setOffscreenPageLimit(OFF_SCREEN_PAGE_LIMIT);
         mMainPager.setCurrentItem(DreamApp.getInstance().getUser().getUserAge()/10);
     }
@@ -159,6 +160,24 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
             handler.sendMessage(message);
         }
     }
+
+
+    public class MainViewPageChangeListener extends ViewPager.SimpleOnPageChangeListener {
+        private int currPage;
+
+        @Override
+        public void onPageSelected(int position){
+            currPage = position;
+//            BucketAdapter2 ba2 = new BucketAdapter2();
+//            ba2.setCurrPage(currPage);
+//            mMainProgress.setImageDrawable((new RoundedAvatarDrawable(null, 0, 270)));
+        }
+
+        public final int getCurrPage(){
+            return currPage;
+        }
+    }
+
 
 //    @Override
 //    public void onActivityResult(int requestCode, int resultCode, Intent data) {
