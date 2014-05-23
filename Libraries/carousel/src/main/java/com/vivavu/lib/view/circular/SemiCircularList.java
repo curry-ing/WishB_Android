@@ -434,8 +434,8 @@ public class SemiCircularList extends AdapterView implements GestureDetector.OnG
         child.setCenterX(childCenterX);
         child.setCenterY(childCenterY);
         child.setAngleRadian(angleRad);
-        //if(child.getAngleRadian() == Math.toRadians(offsetDegree)){
-        if(Math.toRadians(0.0) <= child.getAngleRadian() &&  child.getAngleRadian() <= Math.toRadians(180.0)){
+        if(child.getAngleRadian() == Math.toRadians(offsetDegree)){
+        /*if(Math.toRadians(0.0) <= child.getAngleRadian() &&  child.getAngleRadian() <= Math.toRadians(180.0)){*/
             child.layout(mainItemRadius);
             measure(child);
         }else {
