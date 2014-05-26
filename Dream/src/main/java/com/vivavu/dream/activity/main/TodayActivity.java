@@ -30,7 +30,7 @@ public class TodayActivity extends BaseActionBarActivity {
     @InjectView(R.id.actionbar_main_notice)
     Button mActionbarMainNotice;
     @InjectView(R.id.actionbar_main_today)
-    ButtonIncludeCount mActionbarMainToday;
+    TextView mActionbarMainToday;
 
     View noticeView;
     CustomPopupWindow mPopupNotice;
@@ -74,14 +74,14 @@ public class TodayActivity extends BaseActionBarActivity {
             }
         });
 
-        mActionbarMainToday.getButton().setText("Main");
-        mActionbarMainToday.getTextView().setText("1");
-        mActionbarMainToday.getButton().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+//        mActionbarMainToday.getButton().setText("Main");
+//        mActionbarMainToday.getTextView().setText("1");
+//        mActionbarMainToday.getButton().setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                finish();
+//            }
+//        });
     }
 
     @Override

@@ -53,7 +53,6 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
     private LayoutInflater mInflater;
     private List<BucketGroup> bucketGroupList;
     private List<Bitmap> mainImages;
-//    private User user = null;
 
     private String userBirth;
     private String title;
@@ -129,6 +128,7 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
         holder.mBtnDecade.getPaint().setAntiAlias(true);
 //        holder.mBtnDecade.setCompoundDrawablesWithIntrinsicBounds(R.drawable.pencil,0,0,0);
 
+
         switch (pos){
             case 0:
                 title = DreamApp.getInstance().getUser().getTitle_life();
@@ -155,7 +155,7 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
         if (title != null) {
             holder.mBtnDecade.setText(title+" ");
         } else {
-            holder.mBtnDecade.setText(bucketGroup.getRangeText());
+            holder.mBtnDecade.setText(bucketGroup.getRangeText()+" ");
         }
 
         holder.mBtnDecade.setOnClickListener(new View.OnClickListener() {
@@ -165,6 +165,8 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
             }
         });
 
+        int width = holder.mBtnDecade.getMaxWidth();
+        holder.mDecadeBorder.getLayoutParams().width = width;
 
         /* SET MAIN IMAGES */
         int cnt = bucketGroup.getCount();
@@ -181,7 +183,6 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
         } else {
             Collections.shuffle(mainImages);
         }
-//        holder.mBktCount.setText(String.valueOf(cnt)+'개');
         for (int j=0; j<mainImages.size(); j++){
             switch (j){
                 case 0:
@@ -241,8 +242,15 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
             }
         } else {
             int imsi = (int) ((float) DreamApp.getInstance().getUser().getUserAge() / 100 * 360);
+
+            Typeface periodTypeFace = Typeface.createFromAsset(context.getAssets(), "Dense-Regular.mp3");
+            holder.mPeriod.setTypeface(periodTypeFace, Typeface.BOLD);
+            holder.mPeriod.setTextSize(25);
             holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, imsi, PROGRESS_BAR_BASELINE));
-            holder.mPeriod.setText(DreamApp.getInstance().getUser().getBirthday().substring(0,4) + " ~");
+            holder.mPeriod.setText("J A N  " + DreamApp.getInstance().getUser().getBirthday().substring(0,1) + " "
+                                             + DreamApp.getInstance().getUser().getBirthday().substring(1,2) + " "
+                                             + DreamApp.getInstance().getUser().getBirthday().substring(2,3) + " "
+                                             + DreamApp.getInstance().getUser().getBirthday().substring(3,4) + "  ~");
         }
 
         /* SET ON CLICK LISTENER */
@@ -361,8 +369,8 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
     class ButterknifeViewHolder {
         @InjectView(R.id.btn_decade)
         Button mBtnDecade;
-        @InjectView(R.id.bkt_count)
-        TextView mBktCount;
+        @InjectView(R.id.decadeBorder)
+        ImageView mDecadeBorder;
         @InjectView(R.id.main_image1)
         ImageView mMainImage1;
         @InjectView(R.id.main_image2)

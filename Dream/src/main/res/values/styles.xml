@@ -4,16 +4,18 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light">
         <item name="android:actionBarTabStyle">@style/ActionBarTabStyle</item>
-        <item name="android:actionBarSize">60dp</item>
+        <item name="android:actionBarSize">48dp</item>
         <item name="android:actionBarStyle">@style/ActionBarStyle</item>
         <!--<item name="android:background">@drawable/background_gradient</item>-->
     </style>
     <style name="ActionBarTabStyle" parent="android:style/Widget.Holo.ActionBar.TabView">
-        <item name="android:minHeight">60dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:background">@color/action_bar</item>
     </style>
     <style name="ActionBarStyle" parent="Widget.AppCompat.ActionBar">
-        <item name="android:background">@color/mint</item>
-        <item name="android:itemBackground">@color/mint</item>
+        <item name="android:background">@color/action_bar</item>
+        <!--<item name="android:background">@color/mint</item>-->
+        <!--<item name="android:itemBackground">@color/mint</item>-->
     </style>
     <style name="ActivityBottomLine">
 

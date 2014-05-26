@@ -1,6 +1,9 @@
 package com.vivavu.dream.fragment.main;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.ProgressDialog;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -9,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ImageView;
 import com.vivavu.dream.R;
 import com.vivavu.dream.adapter.bucket.BucketAdapter2;
 import com.vivavu.dream.common.DreamApp;
@@ -37,8 +41,17 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
     private static final int SEND_NETWORK_DATA = 3;
     static public final int OFF_SCREEN_PAGE_LIMIT = 5;
 
+    private int mShortAnimationDuration, mMediumAnimationDuration, mLongAnimationDuration;
+
     @InjectView(R.id.main_pager)
     ViewPager mMainPager;
+    @InjectView(R.id.main_pager_bg0)
+    ImageView mMainPageBg0;
+    @InjectView(R.id.main_pager_bg1)
+    ImageView mMainPageBg1;
+
+
+
 
     private List<BucketGroup> bucketGroupList;
     private BucketAdapter2 bucketAdapter2;
@@ -98,6 +111,9 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
         mMainPager.setOnPageChangeListener(new MainViewPageChangeListener());
         mMainPager.setOffscreenPageLimit(OFF_SCREEN_PAGE_LIMIT);
         mMainPager.setCurrentItem(DreamApp.getInstance().getUser().getUserAge()/10);
+        mShortAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
+        mMediumAnimationDuration = getResources().getInteger(android.R.integer.config_mediumAnimTime);
+        mLongAnimationDuration = getResources().getInteger(android.R.integer.config_longAnimTime);
     }
 
     @Override
@@ -167,10 +183,51 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
 
         @Override
         public void onPageSelected(int position){
+            BitmapDrawable toBg = null;
+            if(position == 0) {
+                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg00);
+            } else if (position == 1) {
+                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg10);
+            } else if (position == 2) {
+                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg20);
+            } else if (position == 3) {
+                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg30);
+            } else if (position == 4) {
+                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg40);
+            } else if (position == 5) {
+                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg50);
+            } else if (position == 6) {
+                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg60);
+            } else {
+                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg00);
+            }
+            if ((position+1)%2 == 1 ) {
+                mMainPageBg0.setAlpha(0f);
+                mMainPageBg0.setVisibility(View.VISIBLE);
+                mMainPageBg0.setBackground(toBg);
+
+                mMainPageBg0.animate().alpha(1f).setDuration(mMediumAnimationDuration).setListener(null);
+                mMainPageBg1.animate().alpha(0f).setDuration(mLongAnimationDuration).setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        mMainPageBg1.setVisibility(View.GONE);
+                    }
+                });
+            } else {
+                mMainPageBg1.setAlpha(0f);
+                mMainPageBg1.setVisibility(View.VISIBLE);
+                mMainPageBg1.setBackground(toBg);
+
+                mMainPageBg1.animate().alpha(1f).setDuration(mMediumAnimationDuration).setListener(null);
+                mMainPageBg0.animate().alpha(0f).setDuration(mLongAnimationDuration).setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        mMainPageBg0.setVisibility(View.GONE);
+                    }
+                });
+            }
+
             currPage = position;
-//            BucketAdapter2 ba2 = new BucketAdapter2();
-//            ba2.setCurrPage(currPage);
-//            mMainProgress.setImageDrawable((new RoundedAvatarDrawable(null, 0, 270)));
         }
 
         public final int getCurrPage(){
