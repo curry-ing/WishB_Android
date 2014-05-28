@@ -53,8 +53,6 @@ public class BucketViewActivity extends BaseActionBarActivity {
     ProgressBar mBucketItemProgressbar;
     @InjectView(R.id.bucket_option_note)
     EditText mBucketOptionNote;
-    @InjectView(R.id.btn_option_remove)
-    Button mBtnOptionRemove;
     @InjectView(R.id.layout_bucket_option_note)
     LinearLayout mLayoutBucketOptionNote;
     @InjectView(R.id.bucket_option_list)
@@ -130,7 +128,7 @@ public class BucketViewActivity extends BaseActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.bucket_view_activity_actions, menu);
+        //getMenuInflater().inflate(R.menu.bucket_view_activity_actions, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -202,11 +200,6 @@ public class BucketViewActivity extends BaseActionBarActivity {
                     Toast.makeText(this, "진행중", Toast.LENGTH_SHORT).show();
                 }
                 break;
-            case R.id.btn_option_remove:
-                bucket.setDescription(null);
-                bindData();
-
-                break;
             case R.id.btn_bucket_option_del:
                 AlertDialog.Builder alert_confirm = new AlertDialog.Builder(this);
                 alert_confirm.setMessage("삭제하시겠습니까?").setCancelable(false).setPositiveButton("확인",
@@ -269,7 +262,6 @@ public class BucketViewActivity extends BaseActionBarActivity {
         mBtnBucketOptionNote.setOnClickListener(this);
         mBucketOptionNote.addTextChangedListener(textWatcherInput);
         mBtnBucketOptionPublic.setOnClickListener(this);
-        mBtnOptionRemove.setOnClickListener(this);
         mBtnBucketOptionDel.setOnClickListener(this);
         mBtnBucketOptionPlan.setOnClickListener(this);
         mBtnBucketOptionRepeat.setOnClickListener(this);

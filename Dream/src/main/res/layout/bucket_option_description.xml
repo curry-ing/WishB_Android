@@ -4,20 +4,53 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/layout_bucket_option_note">
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
         >
-
         <Button
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:id="@+id/btn_bucket_option_note"
+            android:background="@drawable/ic_memo"
+            android:enabled="true"
             android:clickable="true"
-            android:background="@drawable/notes"
+            android:layout_marginRight="11dp"
             />
+        <View
+            android:layout_width="44dp"
+            android:layout_height="17dp"
+            android:background="@drawable/txt_bucket_edit_sub_note_title"
+            ></View>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/bg_box"
+        android:paddingLeft="15dp"
+        android:paddingTop="7dp"
+        android:paddingRight="20dp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            >
+            <Button
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/ic_edit"
+                />
+            <Button
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/ic_photo"
+                />
+            </LinearLayout>
         <EditText
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -27,6 +60,7 @@
             android:minLines="6"
             android:gravity="top"
             android:hint="@string/bucket_option_note_hint"
+            android:background="@null"
             />
     </LinearLayout>
 

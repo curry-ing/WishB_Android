@@ -1,14 +1,11 @@
 package com.vivavu.dream.activity.bucket;
 
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -21,23 +18,16 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.vivavu.dream.R;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.Code;
 import com.vivavu.dream.common.enums.RepeatType;
-import com.vivavu.dream.fragment.bucket.option.description.DescriptionViewFragment;
-import com.vivavu.dream.fragment.bucket.option.repeat.RepeatViewFragment;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.model.bucket.option.OptionDDay;
@@ -48,7 +38,6 @@ import com.vivavu.dream.repository.DataRepository;
 import com.vivavu.dream.repository.task.CustomAsyncTask;
 import com.vivavu.dream.util.DateUtils;
 import com.vivavu.dream.util.ImageUtil;
-import com.vivavu.dream.util.ValidationUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -66,15 +55,9 @@ public class BucketAddActivity extends BaseActionBarActivity {
     private static final int SEND_DATA_DELETE = 3;
     public static final String RESULT_EXTRA_BUCKET = "bucket";
     public static final String RESULT_EXTRA_BUCKET_ID = "bucketId";
+
     @InjectView(R.id.bucket_input_title)
     EditText mBucketInputTitle;
-    @InjectView(R.id.btn_input_dday)
-    Button mBtnInputDday;
-    @InjectView(R.id.text_input_dday)
-    TextView mTextInputDday;
-    @InjectView(R.id.text_input_remain)
-    TextView mTextInputRemain;
-
     @InjectView(R.id.btn_bucket_option_note)
     Button mBtnBucketOptionNote;
     @InjectView(R.id.btn_bucket_option_repeat)
@@ -85,14 +68,10 @@ public class BucketAddActivity extends BaseActionBarActivity {
     Button mBtnBucketOptionPic;
     @InjectView(R.id.btn_bucket_option_gallery)
     Button mBtnBucketOptionGallery;
-    @InjectView(R.id.iv_timeline_image)
-    ImageView mIvCardImage;
-    @InjectView(R.id.option_contents)
-    LinearLayout mOptionContents;
-    @InjectView(R.id.bucket_add_image_container)
-    LinearLayout mBucketAddImageContainer;
     @InjectView(R.id.btn_bucket_option_del)
     Button mBtnBucketOptionDel;
+    @InjectView(R.id.bucket_input_deadline)
+    EditText mBucketInputDeadline;
 
     private LayoutInflater layoutInflater;
     private Bucket bucket = null;
@@ -139,10 +118,17 @@ public class BucketAddActivity extends BaseActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.bucket_input_template);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);//api level 11 이상 부터 사용가능
+        setContentView(R.layout.bucket_input_default);
         setResult(RESULT_CANCELED);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayUseLogoEnabled(false);
+        actionBar.setDisplayShowHomeEnabled(false);//로고 버튼 보이는 것 설정
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_before);
+        actionBar.setCustomView(R.layout.actionbar_bucket_edit);
+        actionBar.setDisplayShowCustomEnabled(true);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("진행중");
@@ -163,20 +149,14 @@ public class BucketAddActivity extends BaseActionBarActivity {
             actionBar.setTitle("Add Bucket");
         }
 
-        ScrollView root = (ScrollView) findViewById(R.id.view_intput_template);
-        layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        // intent에서 넘겨준 인자에 따라서 기본입력인지 옵션 입력인지 분리하여 UI 구성시킴
-
-        View viewGroup = layoutInflater.inflate(R.layout.bucket_input_default, null, false);
-        ButterKnife.inject(this, viewGroup);
-        root.addView(viewGroup);
+        ButterKnife.inject(this);
 
         addEventListener();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.bucket_add_activity_actions, menu);
+        //getMenuInflater().inflate(R.menu.bucket_add_activity_actions, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -233,13 +213,13 @@ public class BucketAddActivity extends BaseActionBarActivity {
                     // 찍은 사진을 이미지뷰에 보여준다.
                     if(data != null && data.getExtras() != null) {
                         Bitmap bm = (Bitmap) data.getExtras().getParcelable("data");
-                        mIvCardImage.setVisibility(View.VISIBLE);
-                        mIvCardImage.setImageBitmap(bm);
+                        /*mIvCardImage.setVisibility(View.VISIBLE);
+                        mIvCardImage.setImageBitmap(bm);*/
                     } else if( f.exists() ){
                         /// http://stackoverflow.com/questions/9890757/android-camera-data-intent-returns-null
                         /// EXTRA_OUTPUT을 선언해주면 해당 경로에 파일을 직접생성하고 썸네일을 리턴하지 않음
-                        mIvCardImage.setVisibility(View.VISIBLE);
-                        ImageUtil.setPic(mIvCardImage, mImageCaptureUri.getPath());
+                        /*mIvCardImage.setVisibility(View.VISIBLE);
+                        ImageUtil.setPic(mIvCardImage, mImageCaptureUri.getPath());*/
                     }
                     if(f.exists()){
                         //f.delete();
@@ -302,7 +282,6 @@ public class BucketAddActivity extends BaseActionBarActivity {
     private void addEventListener() {
         mBucketInputTitle.addTextChangedListener(textWatcherInput);
 
-        mBtnInputDday.setOnClickListener(this);
         mBtnBucketOptionNote.setOnClickListener(this);
         mBtnBucketOptionRepeat.setOnClickListener(this);
         mBtnBucketOptionPublic.setOnClickListener(this);
@@ -310,13 +289,29 @@ public class BucketAddActivity extends BaseActionBarActivity {
         mBtnBucketOptionGallery.setOnClickListener(this);
 
         mBtnBucketOptionDel.setOnClickListener(this);
+        mBucketInputDeadline.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goOptionDday();
+            }
+        });
+        mBucketInputDeadline.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus){
+
+                } else {
+
+                }
+            }
+        });
     }
 
 
     private void bindData() {
         mBucketInputTitle.setText(bucket.getTitle());
 
-        ImageLoader.getInstance().displayImage(bucket.getCvrImgUrl(), mIvCardImage, new SimpleImageLoadingListener(){
+        /*ImageLoader.getInstance().displayImage(bucket.getCvrImgUrl(), mIvCardImage, new SimpleImageLoadingListener(){
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                 super.onLoadingComplete(imageUri, view, loadedImage);
@@ -327,19 +322,17 @@ public class BucketAddActivity extends BaseActionBarActivity {
                     view.setVisibility(View.GONE);
                 }
             }
-        });
+        });*/
 
         if (bucket.getDeadline() != null) {
-            mTextInputDday.setText( DateUtils.getDateString(bucket.getDeadline(), "yyyy-MM-dd"));
-            mTextInputRemain.setText(DateUtils.getRemainDayInString(bucket.getDeadline()));
+            mBucketInputDeadline.setText( DateUtils.getDateString(bucket.getDeadline(), "yyyy. MM. dd"));
         } else {
-            mTextInputDday.setText("in my life");
-            mTextInputRemain.setText("");
+            mBucketInputDeadline.setText("In my life");
         }
 
         mBtnBucketOptionPublic.setSelected( bucket.getIsPrivate() == null || bucket.getIsPrivate() == 1 );
 
-        DescriptionViewFragment descriptionViewFragment = (DescriptionViewFragment) getSupportFragmentManager().findFragmentByTag(DescriptionViewFragment.TAG);
+        /*DescriptionViewFragment descriptionViewFragment = (DescriptionViewFragment) getSupportFragmentManager().findFragmentByTag(DescriptionViewFragment.TAG);
         if(ValidationUtils.isNotEmpty(bucket.getDescription())){
             OptionDescription option = new OptionDescription(bucket.getDescription());
             if (descriptionViewFragment == null) {
@@ -371,13 +364,13 @@ public class BucketAddActivity extends BaseActionBarActivity {
                 getSupportFragmentManager().beginTransaction().remove(repeatFragment).commit();
             }
             mBtnBucketOptionRepeat.setVisibility(View.VISIBLE);
-        }
+        }*/
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        ViewTreeObserver viewTreeObserver = mIvCardImage.getViewTreeObserver();
+        /*ViewTreeObserver viewTreeObserver = mIvCardImage.getViewTreeObserver();
         if (viewTreeObserver.isAlive()) {
             viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -393,13 +386,13 @@ public class BucketAddActivity extends BaseActionBarActivity {
 
                 }
             });
-        }
+        }*/
     }
 
     @Override
     public void onClick(View view) {
         super.onClick(view);
-        if(view == mBtnInputDday){
+        if(view == mBucketInputDeadline){
             goOptionDday();
         }else if(view == mBtnBucketOptionNote){
             goOptionDescription();

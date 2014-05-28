@@ -1,15 +1,13 @@
 package com.vivavu.dream.activity.bucket;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.view.Window;
 import android.widget.LinearLayout;
 
 import com.vivavu.dream.R;
@@ -34,18 +32,26 @@ public class BucketOptionActivity extends BaseActionBarActivity {
     Option option;
     @InjectView(R.id.content_frame)
     LinearLayout mContentFrame;
-    @InjectView(R.id.btn_option_remove)
-    Button mBtnOptionRemove;
     @InjectView(R.id.layout_bucket_option_note)
     LinearLayout mLayoutBucketOptionNote;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);//api level 11 이상 부터 사용가능
+
         setContentView(R.layout.bucket_option_template);
-        ButterKnife.inject(this);
+
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayUseLogoEnabled(false);
+        actionBar.setDisplayShowHomeEnabled(false);//로고 버튼 보이는 것 설정
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_before);
+        actionBar.setCustomView(R.layout.actionbar_bucket_edit);
+        actionBar.setDisplayShowCustomEnabled(true);
+
+        ButterKnife.inject(this);
 
         Intent data = getIntent();
 
@@ -64,12 +70,11 @@ public class BucketOptionActivity extends BaseActionBarActivity {
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.content_frame, bucketOption)
                 .commit();
-        mBtnOptionRemove.setOnClickListener(this);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.bucket_add_activity_actions, menu);
+        //getMenuInflater().inflate(R.menu.bucket_add_activity_actions, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -94,7 +99,7 @@ public class BucketOptionActivity extends BaseActionBarActivity {
     @Override
     public void onClick(View view) {
         super.onClick(view);
-        if(view == mBtnOptionRemove){
+        /*if(view == mBtnOptionRemove){
             AlertDialog.Builder alertConfirm = new AlertDialog.Builder(this);
             alertConfirm.setTitle("초기화 확인");
             alertConfirm.setMessage("초기화 하시겠습니까?").setCancelable(false).setPositiveButton("예",
@@ -115,7 +120,7 @@ public class BucketOptionActivity extends BaseActionBarActivity {
             );
             AlertDialog alert = alertConfirm.create();
             alert.show();
-        }
+        }*/
     }
 
     public void saveOption() {

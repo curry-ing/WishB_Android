@@ -6,20 +6,14 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 
 import com.vivavu.dream.R;
 import com.vivavu.dream.common.enums.RepeatType;
 import com.vivavu.dream.fragment.bucket.option.OptionBaseFragment;
 import com.vivavu.dream.model.bucket.option.OptionRepeat;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -43,20 +37,10 @@ public class RepeatFragment extends OptionBaseFragment<OptionRepeat> implements 
     Button mBtnBucketOptionFri;
     @InjectView(R.id.btn_bucket_option_sat)
     Button mBtnBucketOptionSat;
-    @InjectView(R.id.btn_bucket_option_repeat_custom)
-    Button mBtnBucketOptionRepeatCustom;
     @InjectView(R.id.txt_bucket_option_repeat_cnt)
     EditText mTxtBucketOptionRepeatCnt;
-    @InjectView(R.id.btn_bucket_option_repeat_cnt)
-    Button mBtnBucketOptionRepeatCnt;
-    @InjectView(R.id.spin_repeat_period)
-    Spinner mSpinRepeatPeriod;
     @InjectView(R.id.layout_bucket_option_repeat_custom)
     LinearLayout mLayoutBucketOptionRepeatCustom;
-    @InjectView(R.id.btn_bucket_option_repeat_save)
-    Button mBtnBucketOptionRepeatSave;
-    @InjectView(R.id.btn_bucket_option_repeat_cancel)
-    Button mBtnBucketOptionRepeatCancel;
     @InjectView(R.id.layout_bucket_option_repeat_week)
     LinearLayout mLayoutBucketOptionRepeatWeek;
 
@@ -79,9 +63,7 @@ public class RepeatFragment extends OptionBaseFragment<OptionRepeat> implements 
 
         final View rootView = inflater.inflate(R.layout.bucket_option_repeat, container, false);
         ButterKnife.inject(this, rootView);
-        mLayoutBucketOptionRepeatCustom.setVisibility(View.GONE);
 
-        mBtnBucketOptionRepeatCustom.setOnClickListener(this);
         mBtnBucketOptionSun.setOnClickListener(this);
         mBtnBucketOptionMon.setOnClickListener(this);
         mBtnBucketOptionTue.setOnClickListener(this);
@@ -90,10 +72,6 @@ public class RepeatFragment extends OptionBaseFragment<OptionRepeat> implements 
         mBtnBucketOptionFri.setOnClickListener(this);
         mBtnBucketOptionSat.setOnClickListener(this);
 
-        mBtnBucketOptionRepeatSave.setOnClickListener(this);
-        mBtnBucketOptionRepeatCancel.setOnClickListener(this);
-
-        mBtnBucketOptionRepeatCnt.setOnClickListener(this);
         mTxtBucketOptionRepeatCnt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -117,25 +95,6 @@ public class RepeatFragment extends OptionBaseFragment<OptionRepeat> implements 
             }
         });
 
-        List<RepeatType> typeArray = new ArrayList<RepeatType>();
-        typeArray.add(RepeatType.WEEK);
-        typeArray.add(RepeatType.MNTH);
-        ArrayAdapter<RepeatType> repeatTypeArrayAdapter = new ArrayAdapter<RepeatType>(getActivity(), android.R.layout.simple_spinner_item, typeArray);
-        mSpinRepeatPeriod.setAdapter(repeatTypeArrayAdapter);
-        mSpinRepeatPeriod.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                RepeatType repeatType = (RepeatType) adapterView.getItemAtPosition(i);
-                RepeatFragment.this.contents.setRepeatType(repeatType);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                //RepeatFragment.this.contents.setRepeatType(RepeatType.WKRP);
-            }
-        });
-
         update();
 
         return rootView;
@@ -145,16 +104,6 @@ public class RepeatFragment extends OptionBaseFragment<OptionRepeat> implements 
     public void onClick(View view) {
         super.onClick(view);//배경선택시 키보드 없애기 위해 호출
         switch (view.getId()) {
-            case R.id.btn_bucket_option_repeat_custom:
-                if (mLayoutBucketOptionRepeatCustom.getVisibility() == View.VISIBLE) {
-                    mLayoutBucketOptionRepeatCustom.setVisibility(View.GONE);
-                    mLayoutBucketOptionRepeatWeek.setVisibility(View.VISIBLE);
-                } else {
-                    mLayoutBucketOptionRepeatCustom.setVisibility(View.VISIBLE);
-                    mLayoutBucketOptionRepeatWeek.setVisibility(View.GONE);
-                }
-
-                break;
             case R.id.btn_bucket_option_sun:
                 mBtnBucketOptionSun.setSelected(!mBtnBucketOptionSun.isSelected());
                 contents.setSun(mBtnBucketOptionSun.isSelected());
@@ -183,10 +132,6 @@ public class RepeatFragment extends OptionBaseFragment<OptionRepeat> implements 
                 mBtnBucketOptionSat.setSelected(!mBtnBucketOptionSat.isSelected());
                 contents.setSat(mBtnBucketOptionSat.isSelected());
                 break;
-            case R.id.btn_bucket_option_repeat_save:
-                break;
-            case R.id.btn_bucket_option_repeat_cancel:
-                break;
         }
     }
 
@@ -195,8 +140,8 @@ public class RepeatFragment extends OptionBaseFragment<OptionRepeat> implements 
         if(mLayoutBucketOptionRepeatWeek.getVisibility() == View.VISIBLE){
             contents.setRepeatType(RepeatType.WKRP);
         } else {
-            RepeatType repeatType = (RepeatType) mSpinRepeatPeriod.getSelectedItem();
-            contents.setRepeatType(repeatType);
+            /*RepeatType repeatType = (RepeatType) mSpinRepeatPeriod.getSelectedItem();
+            contents.setRepeatType(repeatType);*/
         }
 
         return contents;
@@ -212,18 +157,12 @@ public class RepeatFragment extends OptionBaseFragment<OptionRepeat> implements 
             mBtnBucketOptionThu.setSelected(contents.isThu());
             mBtnBucketOptionFri.setSelected(contents.isFri());
             mBtnBucketOptionSat.setSelected(contents.isSat());
-            mLayoutBucketOptionRepeatCustom.setVisibility(View.GONE);
-            mLayoutBucketOptionRepeatWeek.setVisibility(View.VISIBLE);
         } else if (contents.getRepeatType() == RepeatType.WEEK) {
-            mSpinRepeatPeriod.setSelection(0);
+            //mSpinRepeatPeriod.setSelection(0);
             mTxtBucketOptionRepeatCnt.setText(String.valueOf(contents.getRepeatCount()));
-            mLayoutBucketOptionRepeatCustom.setVisibility(View.VISIBLE);
-            mLayoutBucketOptionRepeatWeek.setVisibility(View.GONE);
         } else if (contents.getRepeatType() == RepeatType.MNTH) {
-            mSpinRepeatPeriod.setSelection(1);
+            //mSpinRepeatPeriod.setSelection(1);
             mTxtBucketOptionRepeatCnt.setText(String.valueOf(contents.getRepeatCount()));
-            mLayoutBucketOptionRepeatCustom.setVisibility(View.VISIBLE);
-            mLayoutBucketOptionRepeatWeek.setVisibility(View.GONE);
         }
     }
 

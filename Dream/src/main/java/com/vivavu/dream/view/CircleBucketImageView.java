@@ -47,21 +47,11 @@ public class CircleBucketImageView extends CircularItemContainer {
         LayoutInflater li = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = li.inflate(R.layout.sub_view_circle_item, null);
         ButterKnife.inject(this, v);
-
+        update();
         addView(v);
     }
 
     public void update(){
-        /*ImageSize imageSize = new ImageSize(getWidth(), getHeight());
-        ImageLoader.getInstance().loadImage("drawable://" + R.drawable.sub_view_circle_big_trans, imageSize, new SimpleImageLoadingListener(){
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                if(loadedImage != null){
-                    mImgBucket.setFrontImage(loadedImage);
-                }
-            }
-        });*/
-
         if(!isEmpty() && bucket != null) {
             mTxt.setText(bucket.getTitle());
             mImgBucket.setText(bucket.getTitle());
@@ -75,7 +65,7 @@ public class CircleBucketImageView extends CircularItemContainer {
                         .cacheInMemory(true)
                         .cacheOnDisc(true)
                         .build();
-                ImageSize imageSize = new ImageSize(getWidth(), getHeight());
+                ImageSize imageSize = new ImageSize(getResources().getDimensionPixelSize(R.dimen.subview_item_radius), getResources().getDimensionPixelSize(R.dimen.subview_item_radius));
                 Log.v(TAG, imageSize.toString());
                 ImageLoader.getInstance().loadImage(bucket.getCvrImgUrl(), imageSize, options, new SimpleImageLoadingListener(){
                             @Override
@@ -130,7 +120,5 @@ public class CircleBucketImageView extends CircularItemContainer {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         measureChildren(MeasureSpec.EXACTLY | w, MeasureSpec.EXACTLY | h);
-        update();
     }
-
 }
