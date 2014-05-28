@@ -4,15 +4,18 @@ import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.graphics.*;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.text.Html;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -57,6 +60,8 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
     private String userBirth;
     private String title;
 
+    private int deviceDensityDpi;
+
     static public final int PROGRESS_BAR_BASELINE = 270;
     public static final String TAG = "DialogActivity";
     public static final int DLG_EXAMPLE1 = 0;
@@ -68,6 +73,13 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
         this.fragment = fragment;
         this.mInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.bucketGroupList = new ArrayList<BucketGroup>(bucketGroupList);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+
+        deviceDensityDpi = displayMetrics.densityDpi;
+
     }
 
     public BucketAdapter2 (Fragment fragment) {
@@ -83,6 +95,7 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
         ViewGroup viewGroup = (ViewGroup) mInflater.inflate(R.layout.main_contents, container, false);
         ButterknifeViewHolder holder = new ButterknifeViewHolder(viewGroup);
         viewGroup.setTag(holder);
+
 
         try {
             init(holder, bucketGroupList.get(position), position);
@@ -165,11 +178,14 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
             }
         });
 
-        int width = holder.mBtnDecade.getMaxWidth();
-        holder.mDecadeBorder.getLayoutParams().width = width;
+//        int width = holder.mBtnDecade.getMaxWidth();
+//        holder.mDecadeBorder.getLayoutParams().width = width;
 
         /* SET MAIN IMAGES */
         int cnt = bucketGroup.getCount();
+//        if (cnt > 8) {
+//            cnt = 7;
+//        }
         if (cnt > 0) {
 //            holder.mBktCount.setVisibility(View.VISIBLE);
             for (int i=0; i<cnt; i++){
@@ -186,31 +202,40 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
         for (int j=0; j<mainImages.size(); j++){
             switch (j){
                 case 0:
-                    holder.mMainImage1.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size()));
+                    holder.mMainImage1.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                    holder.mMainImage1.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi));
                     break;
                 case 1:
-                    holder.mMainImage2.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size()));
+                    holder.mMainImage2.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                    holder.mMainImage2.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi));
                     break;
                 case 2:
-                    holder.mMainImage3.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size()));
+                    holder.mMainImage3.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                    holder.mMainImage3.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi));
                     break;
                 case 3:
-                    holder.mMainImage4.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size()));
+                    holder.mMainImage4.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                    holder.mMainImage4.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi));
                     break;
                 case 4:
-                    holder.mMainImage5.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size()));
+                    holder.mMainImage5.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                    holder.mMainImage5.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi));
                     break;
                 case 5:
-                    holder.mMainImage6.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size()));
+                    holder.mMainImage6.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                    holder.mMainImage6.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi));
                     break;
                 case 6:
-                    holder.mMainImage7.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size()));
+                    holder.mMainImage7.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                    holder.mMainImage7.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi));
                     break;
                 case 7:
-                    holder.mMainImage8.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size()));
+                    holder.mMainImage8.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                    holder.mMainImage8.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi));
                     break;
             }
         }
+        mainImages.clear();
 
 
         /* SET PROGRESS BAR */
@@ -234,11 +259,11 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
                                             +String.valueOf(endY).charAt(3));
 
             if(thisY > endY) {
-                holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, 360, PROGRESS_BAR_BASELINE));
+                holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, 360, PROGRESS_BAR_BASELINE, deviceDensityDpi));
             } else if (thisY < startY) {
-                holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, 0, PROGRESS_BAR_BASELINE));
+                holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, 0, PROGRESS_BAR_BASELINE, deviceDensityDpi));
             } else {
-                holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, cal.get(cal.DAY_OF_YEAR), PROGRESS_BAR_BASELINE));
+                holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, cal.get(cal.DAY_OF_YEAR), PROGRESS_BAR_BASELINE, deviceDensityDpi));
             }
         } else {
             int imsi = (int) ((float) DreamApp.getInstance().getUser().getUserAge() / 100 * 360);
@@ -246,7 +271,7 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
             Typeface periodTypeFace = Typeface.createFromAsset(context.getAssets(), "Dense-Regular.mp3");
             holder.mPeriod.setTypeface(periodTypeFace, Typeface.BOLD);
             holder.mPeriod.setTextSize(25);
-            holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, imsi, PROGRESS_BAR_BASELINE));
+            holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, imsi, PROGRESS_BAR_BASELINE, deviceDensityDpi));
             holder.mPeriod.setText("J A N  " + DreamApp.getInstance().getUser().getBirthday().substring(0,1) + " "
                                              + DreamApp.getInstance().getUser().getBirthday().substring(1,2) + " "
                                              + DreamApp.getInstance().getUser().getBirthday().substring(2,3) + " "

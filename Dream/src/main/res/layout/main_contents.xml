@@ -101,7 +101,7 @@
 
 
     <ImageView
-            android:layout_width="100dp"
+            android:layout_width="200dp"
             android:layout_height="2dp"
             android:shadowColor="#FF000000"
             android:shadowDx="2"

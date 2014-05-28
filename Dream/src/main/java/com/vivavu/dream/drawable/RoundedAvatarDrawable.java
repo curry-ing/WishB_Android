@@ -1,5 +1,6 @@
 package com.vivavu.dream.drawable;
 
+import android.content.res.Configuration;
 import android.graphics.*;
 import android.graphics.drawable.Drawable;
 
@@ -14,12 +15,13 @@ public class RoundedAvatarDrawable extends Drawable {
     private final RectF mRectF;
     private final int mBitmapWidth;
     private final int mBitmapHeight;
-    private final int CANVAS_WIDTH = 520;
-    private final int CANVAS_HEIGHT = 520;
+    private int CANVAS_WIDTH;
+    private int CANVAS_HEIGHT;
     private int imgNum;
     private int imgCnt;
 
-    public RoundedAvatarDrawable(Bitmap bitmap, int num, int cnt){
+
+    public RoundedAvatarDrawable(Bitmap bitmap, int num, int cnt, int res){
 //        mBitmap = bitmap;
         mRectF = new RectF();
         mPaint = new Paint();
@@ -27,6 +29,16 @@ public class RoundedAvatarDrawable extends Drawable {
         mPaint3 = new Paint();
         imgNum = num;
         imgCnt = cnt;
+
+        if (res == 320) {
+            CANVAS_WIDTH = 540;
+            CANVAS_HEIGHT = 540;
+        } else if (res == 480) {
+            CANVAS_WIDTH = 810;
+            CANVAS_HEIGHT = 810;
+        }
+
+
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);
         mPaint2.setAntiAlias(true);
@@ -63,13 +75,13 @@ public class RoundedAvatarDrawable extends Drawable {
             mPaint.setColor(Color.WHITE);
             canvas.drawArc(new RectF(10,10,290,290), imgNum-90, 360-imgNum, true, mPaint);
             mPaint3.setColor(Color.DKGRAY);
-            canvas.drawOval(new RectF(16,16,284,284), mPaint3);
+            canvas.drawOval(new RectF(15,15,285,285), mPaint3);
         } else {
             if (imgCnt > 1) {
-                mPaint.setMaskFilter(new BlurMaskFilter(8, BlurMaskFilter.Blur.INNER));
+                mPaint.setMaskFilter(new BlurMaskFilter(6, BlurMaskFilter.Blur.INNER));
                 canvas.drawArc(mRectF, (float)360/imgCnt*(imgNum-1), (float)360/imgCnt, true, mPaint);
             } else {
-                mPaint.setMaskFilter(new BlurMaskFilter(8, BlurMaskFilter.Blur.INNER));
+                mPaint.setMaskFilter(new BlurMaskFilter(6, BlurMaskFilter.Blur.INNER));
                 canvas.drawOval(mRectF, mPaint);
             }
 //            for (int i=0; i<imgCnt; i++){
@@ -157,11 +169,11 @@ public class RoundedAvatarDrawable extends Drawable {
             }
         } else if (cnt == 3) {
             if (num == 1) {
-                rect = new Rect(130, CANVAS_HEIGHT/2, CANVAS_WIDTH, CANVAS_HEIGHT);
+                rect = new Rect(CANVAS_WIDTH/4, CANVAS_HEIGHT/2, CANVAS_WIDTH, CANVAS_HEIGHT);
             } else if (num == 2) {
-                rect = new Rect(0, 30, CANVAS_WIDTH/2, 490);
+                rect = new Rect(0, 0, CANVAS_WIDTH/2, CANVAS_HEIGHT);
             } else if (num == 3) {
-                rect = new Rect(130, 0, CANVAS_WIDTH, CANVAS_HEIGHT/2);
+                rect = new Rect(CANVAS_WIDTH/4, 0, CANVAS_WIDTH, CANVAS_HEIGHT/2);
             }
         } else if (cnt == 4) {
             switch (num) {
@@ -181,91 +193,91 @@ public class RoundedAvatarDrawable extends Drawable {
         } else if (cnt == 5) {
             switch (num) {
                 case 1:
-                    rect = new Rect(CANVAS_WIDTH/2, CANVAS_HEIGHT/2, CANVAS_WIDTH, CANVAS_HEIGHT-10);
+                    rect = new Rect(CANVAS_WIDTH/2, CANVAS_HEIGHT/2, CANVAS_WIDTH, CANVAS_HEIGHT);
                     break;
                 case 2:
-                    rect = new Rect(50, CANVAS_HEIGHT/2, CANVAS_WIDTH/2+80, CANVAS_HEIGHT);
+                    rect = new Rect(CANVAS_WIDTH/10, CANVAS_HEIGHT/2, CANVAS_WIDTH/10*7, CANVAS_HEIGHT);
                     break;
                 case 3:
-                    rect = new Rect(0, CANVAS_HEIGHT/2-155, CANVAS_WIDTH/2, CANVAS_HEIGHT/2+155);
+                    rect = new Rect(0, CANVAS_HEIGHT/10*2, CANVAS_WIDTH/2, CANVAS_HEIGHT/10*8);
                     break;
                 case 4:
-                    rect = new Rect(50, 0, CANVAS_WIDTH/2+80, CANVAS_HEIGHT/2);
+                    rect = new Rect(CANVAS_WIDTH/10, 0, CANVAS_WIDTH/10*7, CANVAS_HEIGHT/2);
                     break;
                 case 5:
-                    rect = new Rect(CANVAS_WIDTH/2, 10, CANVAS_WIDTH, CANVAS_HEIGHT/2);
+                    rect = new Rect(CANVAS_WIDTH/2, 0, CANVAS_WIDTH, CANVAS_HEIGHT/2);
                     break;
             }
         } else if (cnt == 6) {
             switch (num) {
                 case 1:
-                    rect = new Rect(CANVAS_WIDTH/2, CANVAS_HEIGHT/2, CANVAS_WIDTH, CANVAS_HEIGHT-30);
+                    rect = new Rect(CANVAS_WIDTH/2, CANVAS_HEIGHT/2, CANVAS_WIDTH, CANVAS_HEIGHT);
                     break;
                 case 2:
-                    rect = new Rect(CANVAS_WIDTH/2-130, CANVAS_HEIGHT/2, CANVAS_WIDTH/2+130, CANVAS_HEIGHT);
+                    rect = new Rect(CANVAS_WIDTH/10*2, CANVAS_HEIGHT/2, CANVAS_WIDTH/10*8, CANVAS_HEIGHT);
                     break;
                 case 3:
-                    rect = new Rect(0, CANVAS_HEIGHT/2, CANVAS_WIDTH/2, CANVAS_HEIGHT-30);
+                    rect = new Rect(0, CANVAS_HEIGHT/2, CANVAS_WIDTH/2, CANVAS_HEIGHT);
                     break;
                 case 4:
-                    rect = new Rect(0, 30, CANVAS_WIDTH/2, CANVAS_HEIGHT/2);
+                    rect = new Rect(0, 0, CANVAS_WIDTH/2, CANVAS_HEIGHT/2);
                     break;
                 case 5:
-                    rect = new Rect(CANVAS_WIDTH/2-130, 0, CANVAS_WIDTH/2+130, CANVAS_HEIGHT/2);
+                    rect = new Rect(CANVAS_WIDTH/10*2, 0, CANVAS_WIDTH/10*8, CANVAS_HEIGHT/2);
                     break;
                 case 6:
-                    rect = new Rect(CANVAS_WIDTH/2, 30, CANVAS_WIDTH, CANVAS_HEIGHT/2);
+                    rect = new Rect(CANVAS_WIDTH/2, 0, CANVAS_WIDTH, CANVAS_HEIGHT/2);
                     break;
             }
         } else if (cnt == 7) {
             switch (num) {
                 case 1:
-                    rect = new Rect(CANVAS_WIDTH/2, CANVAS_HEIGHT/2, CANVAS_WIDTH, CANVAS_HEIGHT-55);
+                    rect = new Rect(CANVAS_WIDTH/2, CANVAS_HEIGHT/2, CANVAS_WIDTH, CANVAS_HEIGHT/10*9);
                     break;
                 case 2:
-                    rect = new Rect(CANVAS_WIDTH/2-60, CANVAS_HEIGHT/2, CANVAS_WIDTH/2+165, CANVAS_HEIGHT);
+                    rect = new Rect(CANVAS_WIDTH/10*3, CANVAS_HEIGHT/2, CANVAS_WIDTH/10*9, CANVAS_HEIGHT);
                     break;
                 case 3:
-                    rect = new Rect(20, CANVAS_HEIGHT/2, CANVAS_WIDTH/2, CANVAS_HEIGHT-5);
+                    rect = new Rect(0, CANVAS_HEIGHT/2, CANVAS_WIDTH/2, CANVAS_HEIGHT);
                     break;
                 case 4:
-                    rect = new Rect(0, 100, CANVAS_WIDTH/2, CANVAS_HEIGHT/2+115);
+                    rect = new Rect(0, CANVAS_HEIGHT/10*3, CANVAS_WIDTH/2, CANVAS_HEIGHT/10*7);
                     break;
                 case 5:
-                    rect = new Rect(25, 5, CANVAS_WIDTH/2, CANVAS_HEIGHT/2);
+                    rect = new Rect(0, 0, CANVAS_WIDTH/2, CANVAS_HEIGHT/2);
                     break;
                 case 6:
-                    rect = new Rect(CANVAS_WIDTH/2-70, 0, CANVAS_WIDTH/2+180, CANVAS_HEIGHT/2);
+                    rect = new Rect(CANVAS_WIDTH/10*3, 0, CANVAS_WIDTH/10*9, CANVAS_HEIGHT/2);
                     break;
                 case 7:
-                    rect = new Rect(CANVAS_WIDTH/2, 45, CANVAS_WIDTH, CANVAS_HEIGHT/2);
+                    rect = new Rect(CANVAS_WIDTH/2, CANVAS_HEIGHT/10, CANVAS_WIDTH, CANVAS_HEIGHT/2);
                     break;
             }
         } else if (cnt == 8) {
             switch (num) {
                 case 1:
-                    rect = new Rect(CANVAS_WIDTH/2, CANVAS_HEIGHT/2, CANVAS_WIDTH, CANVAS_HEIGHT-75);
+                    rect = new Rect(CANVAS_WIDTH/2, CANVAS_HEIGHT/2, CANVAS_WIDTH, CANVAS_HEIGHT/10*9);
                     break;
                 case 2:
-                    rect = new Rect(CANVAS_WIDTH/2, CANVAS_HEIGHT/2, CANVAS_WIDTH-75, CANVAS_HEIGHT);
+                    rect = new Rect(CANVAS_WIDTH/2, CANVAS_HEIGHT/2, CANVAS_WIDTH/10*9, CANVAS_HEIGHT);
                     break;
                 case 3:
-                    rect = new Rect(75, CANVAS_HEIGHT/2, CANVAS_WIDTH/2, CANVAS_HEIGHT);
+                    rect = new Rect(CANVAS_WIDTH/10, CANVAS_HEIGHT/2, CANVAS_WIDTH/2, CANVAS_HEIGHT);
                     break;
                 case 4:
-                    rect = new Rect(0, CANVAS_HEIGHT/2, CANVAS_WIDTH/2, CANVAS_HEIGHT-75);
+                    rect = new Rect(0, CANVAS_HEIGHT/2, CANVAS_WIDTH/2, CANVAS_HEIGHT/10*9);
                     break;
                 case 5:
-                    rect = new Rect(0, 75, CANVAS_WIDTH/2, CANVAS_HEIGHT/2);
+                    rect = new Rect(0, CANVAS_HEIGHT/10, CANVAS_WIDTH/2, CANVAS_HEIGHT/2);
                     break;
                 case 6:
-                    rect = new Rect(75, 0, CANVAS_WIDTH/2, CANVAS_HEIGHT/2);
+                    rect = new Rect(CANVAS_WIDTH/10, 0, CANVAS_WIDTH/2, CANVAS_HEIGHT/2);
                     break;
                 case 7:
-                    rect = new Rect(CANVAS_WIDTH/2, 0, CANVAS_WIDTH-75, CANVAS_HEIGHT/2);
+                    rect = new Rect(CANVAS_WIDTH/2, 0, CANVAS_WIDTH/10*9, CANVAS_HEIGHT/2);
                     break;
                 case 8:
-                    rect = new Rect(CANVAS_WIDTH/2, 75, CANVAS_WIDTH, CANVAS_HEIGHT/2);
+                    rect = new Rect(CANVAS_WIDTH/2, CANVAS_HEIGHT/10, CANVAS_WIDTH, CANVAS_HEIGHT/2);
                     break;
             }
         } else {

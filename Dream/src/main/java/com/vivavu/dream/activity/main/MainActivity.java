@@ -47,8 +47,6 @@ public class MainActivity extends BaseActionBarActivity {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);//api level 11 이상 부터 사용가능
         setContentView(R.layout.activity_main);
-        //actionbar setting
-//        getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowHomeEnabled(false);
         actionBar.setDisplayShowTitleEnabled(false);
@@ -153,7 +151,6 @@ public class MainActivity extends BaseActionBarActivity {
     private void goCircleBucketList(){
         Intent intent;
         intent = new Intent();
-        //intent.setClass(this, CircleBucketListActivity.class);
         intent.setClass(this, CircleBucketListActivity.class);
         startActivity(intent);
     }

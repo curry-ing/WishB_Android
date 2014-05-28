@@ -2,8 +2,13 @@ package com.vivavu.dream.fragment.main;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.graphics.*;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -12,7 +17,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.vivavu.dream.R;
 import com.vivavu.dream.adapter.bucket.BucketAdapter2;
 import com.vivavu.dream.common.DreamApp;
@@ -28,6 +37,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.vivavu.dream.util.AndroidUtils;
 
 /**
  * Created by yuja on 14. 2. 27.
@@ -39,9 +49,19 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
     static public final int SEND_REFRESH_STOP = 1;
     static public final int SEND_BUKET_LIST_UPDATE = 2;
     private static final int SEND_NETWORK_DATA = 3;
-    static public final int OFF_SCREEN_PAGE_LIMIT = 5;
+    static public final int OFF_SCREEN_PAGE_LIMIT = 3;
 
     private int mShortAnimationDuration, mMediumAnimationDuration, mLongAnimationDuration;
+
+    private Paint mPaints;
+    private RectF mBigOval;
+    private float mStart, mSweep;
+    private static final int SWEEP_INC = 2;
+    private static final int START_INC = 15;
+
+    private int i = 0;
+    private float mX;
+
 
     @InjectView(R.id.main_pager)
     ViewPager mMainPager;
@@ -49,6 +69,10 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
     ImageView mMainPageBg0;
     @InjectView(R.id.main_pager_bg1)
     ImageView mMainPageBg1;
+    @InjectView(R.id.main_progress)
+    ImageView mMainProgressBar;
+    @InjectView(R.id.progress_layout)
+    LinearLayout mMainProgress;
 
 
 
@@ -109,11 +133,15 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
         bucketAdapter2 = new BucketAdapter2(this, bucketGroupList);
         mMainPager.setAdapter(bucketAdapter2);
         mMainPager.setOnPageChangeListener(new MainViewPageChangeListener());
+//        mMainPager.setBackgroundResource(R.drawable.mainview_bg00);
         mMainPager.setOffscreenPageLimit(OFF_SCREEN_PAGE_LIMIT);
         mMainPager.setCurrentItem(DreamApp.getInstance().getUser().getUserAge()/10);
+//        mMainPager.setPageTransformer(true, new DepthPageTransformer());
         mShortAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
         mMediumAnimationDuration = getResources().getInteger(android.R.integer.config_mediumAnimTime);
         mLongAnimationDuration = getResources().getInteger(android.R.integer.config_longAnimTime);
+
+
     }
 
     @Override
@@ -183,43 +211,60 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
 
         @Override
         public void onPageSelected(int position){
-            BitmapDrawable toBg = null;
+            Bitmap toBg = null;
             if(position == 0) {
-                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg00);
+//                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg00);
+                String imgUri = "drawable://" + R.drawable.mainview_bg00;
+                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             } else if (position == 1) {
-                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg10);
+//                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg10);
+                String imgUri = "drawable://" + R.drawable.mainview_bg10;
+                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             } else if (position == 2) {
-                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg20);
+//                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg20);
+                String imgUri = "drawable://" + R.drawable.mainview_bg20;
+                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             } else if (position == 3) {
-                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg30);
+//                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg30);
+                String imgUri = "drawable://" + R.drawable.mainview_bg30;
+                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             } else if (position == 4) {
-                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg40);
+//                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg40);
+                String imgUri = "drawable://" + R.drawable.mainview_bg40;
+                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             } else if (position == 5) {
-                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg50);
+//                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg50);
+                String imgUri = "drawable://" + R.drawable.mainview_bg50;
+                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             } else if (position == 6) {
-                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg60);
+//                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg60);
+                String imgUri = "drawable://" + R.drawable.mainview_bg60;
+                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             } else {
-                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg00);
+//                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg00);
+                String imgUri = "drawable://" + R.drawable.mainview_bg00;
+                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             }
             if ((position+1)%2 == 1 ) {
-                mMainPageBg0.setAlpha(0f);
+                mMainPageBg0.setAlpha(0.5f);
                 mMainPageBg0.setVisibility(View.VISIBLE);
-                mMainPageBg0.setBackground(toBg);
+                mMainPageBg0.setImageDrawable(new BitmapDrawable(getResources(),toBg));
 
-                mMainPageBg0.animate().alpha(1f).setDuration(mMediumAnimationDuration).setListener(null);
-                mMainPageBg1.animate().alpha(0f).setDuration(mLongAnimationDuration).setListener(new AnimatorListenerAdapter() {
+                mMainPageBg0.animate().alpha(1f).setDuration(mShortAnimationDuration).setListener(null);
+                mMainPageBg1.animate().alpha(0.5f).setDuration(mShortAnimationDuration).setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         mMainPageBg1.setVisibility(View.GONE);
+//                        AndroidUtils.recycleImage(mMainPageBg1);
                     }
                 });
             } else {
-                mMainPageBg1.setAlpha(0f);
+                mMainPageBg1.setAlpha(0.5f);
                 mMainPageBg1.setVisibility(View.VISIBLE);
-                mMainPageBg1.setBackground(toBg);
+                mMainPageBg1.setImageDrawable(new BitmapDrawable(getResources(), toBg));
 
-                mMainPageBg1.animate().alpha(1f).setDuration(mMediumAnimationDuration).setListener(null);
-                mMainPageBg0.animate().alpha(0f).setDuration(mLongAnimationDuration).setListener(new AnimatorListenerAdapter() {
+                mMainPageBg1.animate().alpha(1f).setDuration(mShortAnimationDuration).setListener(null);
+                mMainPageBg0.animate().alpha(0.5f).setDuration(mShortAnimationDuration).setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         mMainPageBg0.setVisibility(View.GONE);
@@ -227,6 +272,9 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
                 });
             }
 
+//            mMainProgressBar.setImageDrawable(new MyDrawable());
+
+//            mMainProgress.addView(new DrawView(getActivity()));
             currPage = position;
         }
 
@@ -234,6 +282,109 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
             return currPage;
         }
     }
+
+    public class DepthPageTransformer implements ViewPager.PageTransformer {
+        public void transformPage(View view, float position){
+            if (position < -1){
+            } else if (position <= 0) {
+
+            } else if (position <= 1) {
+
+            } else {
+
+            }
+        }
+    }
+
+    public class DrawView extends View {
+        public DrawView(Context context) {
+            super(context);
+            ValueAnimator anim = ValueAnimator.ofFloat(0,300);
+            anim.setDuration(1500);
+            anim.setInterpolator(new AccelerateInterpolator());
+            anim.addUpdateListener(new ObjectAnimator.AnimatorUpdateListener(){
+                public void onAnimationUpdate(ValueAnimator animation){
+                    mX = (Float) animation.getAnimatedValue();
+                    invalidate();
+                }
+            });
+            anim.start();
+
+        }
+
+        @Override
+        public void onDraw(Canvas canvas) {
+            mPaints = new Paint();
+            mPaints.setAntiAlias(true);
+            mPaints.setStyle(Paint.Style.STROKE);
+            mPaints.setStrokeWidth(12);
+            mPaints.setColor(Color.RED);
+
+//            canvas.drawColor(R.color.transparent);
+            canvas.drawArc(new RectF(25, 25, 575, 575), 270, mX, false, mPaints);
+//            for (int j=0; j<=i; j++){
+//                canvas.drawArc(new RectF(25, 25, 575, 575), j, 1, false, mPaints);
+//            }
+            mSweep += SWEEP_INC;
+//            if (mSweep > 360) {
+//                mSweep -= 360;
+//                mStart += START_INC;
+//                if (mStart >= 360) {
+//                    mStart -= 360;
+//                }
+//            }
+//            if (i<135) {
+//                invalidate();
+//                i++;
+//            }
+
+        }
+    }
+
+    public class MyDrawable extends Drawable {
+        @Override
+        public void draw(Canvas canvas){
+            mPaints = new Paint();
+            mPaints.setAntiAlias(true);
+            mPaints.setStyle(Paint.Style.STROKE);
+            mPaints.setStrokeWidth(12);
+            mPaints.setColor(Color.RED);
+
+//            canvas.drawColor(R.color.action_bar);
+//            canvas.drawArc(new RectF(40, 10, 280, 250), mStart, mSweep, false, mPaints);
+//            mSweep += SWEEP_INC;
+
+//            for (int i=0; i<24; i++) {
+                canvas.drawArc(new RectF(25, 25, 575, 575), i, 2, false, mPaints);
+                mSweep += SWEEP_INC;
+                if (mSweep > 360) {
+                    mSweep -= 360;
+                    mStart += START_INC*2;
+                    if (mStart >= 360) {
+                        mStart -= 360;
+                    }
+                }
+//            }
+        }
+
+        @Override
+        public void setAlpha(int i) {
+
+        }
+
+        @Override
+        public void setColorFilter(ColorFilter colorFilter) {
+
+        }
+
+        @Override
+        public int getOpacity() {
+            return 0;
+        }
+
+
+    }
+
 
 
 //    @Override
