@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.res.Configuration;
 import android.graphics.*;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,7 +12,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
-import android.text.Html;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,10 +22,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ScaleXSpan;
-import android.util.AttributeSet;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
@@ -48,8 +42,6 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import com.vivavu.dream.model.user.User;
-import com.vivavu.dream.repository.connector.UserInfoConnector;
 
 /**
  * Created by masunghoon on 4/20/14.
@@ -62,7 +54,6 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
     private List<BucketGroup> bucketGroupList;
     private List<Bitmap> mainImages;
 
-    private String userBirth;
     private String title;
 
     private int deviceDensityDpi;
@@ -96,7 +87,6 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
 
     @Override
     public Object instantiateItem(ViewGroup container, int position){
-//        int i = position;
         ViewGroup viewGroup = (ViewGroup) mInflater.inflate(R.layout.main_contents, container, false);
         ButterknifeViewHolder holder = new ButterknifeViewHolder(viewGroup);
         viewGroup.setTag(holder);
@@ -186,9 +176,9 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
 
         /* SET MAIN IMAGES */
         int cnt = bucketGroup.getCount();
-//        if (cnt > 8) {
-//            cnt = 7;
-//        }
+        if (cnt > 4) {
+            cnt = 4;
+        }
         if (cnt > 0) {
 //            holder.mBktCount.setVisibility(View.VISIBLE);
             for (int i=0; i<cnt; i++){

@@ -133,7 +133,6 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
         bucketAdapter2 = new BucketAdapter2(this, bucketGroupList);
         mMainPager.setAdapter(bucketAdapter2);
         mMainPager.setOnPageChangeListener(new MainViewPageChangeListener());
-//        mMainPager.setBackgroundResource(R.drawable.mainview_bg00);
         mMainPager.setOffscreenPageLimit(OFF_SCREEN_PAGE_LIMIT);
         mMainPager.setCurrentItem(DreamApp.getInstance().getUser().getUserAge()/10);
 //        mMainPager.setPageTransformer(true, new DepthPageTransformer());
@@ -213,35 +212,27 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
         public void onPageSelected(int position){
             Bitmap toBg = null;
             if(position == 0) {
-//                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg00);
                 String imgUri = "drawable://" + R.drawable.mainview_bg00;
                 toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             } else if (position == 1) {
-//                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg10);
                 String imgUri = "drawable://" + R.drawable.mainview_bg10;
                 toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             } else if (position == 2) {
-//                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg20);
                 String imgUri = "drawable://" + R.drawable.mainview_bg20;
                 toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             } else if (position == 3) {
-//                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg30);
                 String imgUri = "drawable://" + R.drawable.mainview_bg30;
                 toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             } else if (position == 4) {
-//                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg40);
                 String imgUri = "drawable://" + R.drawable.mainview_bg40;
                 toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             } else if (position == 5) {
-//                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg50);
                 String imgUri = "drawable://" + R.drawable.mainview_bg50;
                 toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             } else if (position == 6) {
-//                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg60);
                 String imgUri = "drawable://" + R.drawable.mainview_bg60;
                 toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             } else {
-//                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg00);
                 String imgUri = "drawable://" + R.drawable.mainview_bg00;
                 toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             }

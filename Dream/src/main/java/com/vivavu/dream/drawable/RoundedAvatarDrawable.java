@@ -1,6 +1,5 @@
 package com.vivavu.dream.drawable;
 
-import android.content.res.Configuration;
 import android.graphics.*;
 import android.graphics.drawable.Drawable;
 
@@ -22,7 +21,6 @@ public class RoundedAvatarDrawable extends Drawable {
 
 
     public RoundedAvatarDrawable(Bitmap bitmap, int num, int cnt, int res){
-//        mBitmap = bitmap;
         mRectF = new RectF();
         mPaint = new Paint();
         mPaint2 = new Paint();
@@ -67,8 +65,6 @@ public class RoundedAvatarDrawable extends Drawable {
     @Override
     public void draw(Canvas canvas){
 //        canvas.drawOval(mRectF, mPaint2);
-        int cWidth = canvas.getWidth();
-        int cHeight = canvas.getHeight();
         if(mBitmap==null) {
             mPaint.setColor(Color.rgb(103, 201, 187));
             canvas.drawArc(new RectF(10,10,290,290), imgCnt, imgNum, true, mPaint);
@@ -84,13 +80,6 @@ public class RoundedAvatarDrawable extends Drawable {
                 mPaint.setMaskFilter(new BlurMaskFilter(6, BlurMaskFilter.Blur.INNER));
                 canvas.drawOval(mRectF, mPaint);
             }
-//            for (int i=0; i<imgCnt; i++){
-//                double Rad = Math.toRadians(360/imgCnt * i);
-//
-//                int x = (int) (cWidth/2 + cWidth/2 * Math.cos(Rad));
-//                int y = (int) (cWidth/2 + cWidth/2 * Math.sin(Rad));
-//                if (imgCnt != 1) canvas.drawLine(cWidth/2, cHeight/2, x, y, mPaint2);
-//            }
         }
     }
 
@@ -241,7 +230,7 @@ public class RoundedAvatarDrawable extends Drawable {
                     rect = new Rect(0, CANVAS_HEIGHT/2, CANVAS_WIDTH/2, CANVAS_HEIGHT);
                     break;
                 case 4:
-                    rect = new Rect(0, CANVAS_HEIGHT/10*3, CANVAS_WIDTH/2, CANVAS_HEIGHT/10*7);
+                    rect = new Rect(0, CANVAS_HEIGHT/10*2, CANVAS_WIDTH/2, CANVAS_HEIGHT/10*8);
                     break;
                 case 5:
                     rect = new Rect(0, 0, CANVAS_WIDTH/2, CANVAS_HEIGHT/2);

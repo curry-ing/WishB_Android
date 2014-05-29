@@ -96,15 +96,6 @@ public class MainActivity extends BaseActionBarActivity {
         mActionbarMainToday.setTypeface(typeface);
         mActionbarMainToday.setTextColor(Color.WHITE);
         mActionbarMainToday.setTextSize(14);
-//        mActionbarMainToday.getButton().setText("Today");
-//        mActionbarMainToday.getTextView().setText("1");
-//        mActionbarMainToday.getButton().setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(MainActivity.this, TodayActivity.class);
-//                startActivity(intent);
-//            }
-//        });
     }
 
     @Override
