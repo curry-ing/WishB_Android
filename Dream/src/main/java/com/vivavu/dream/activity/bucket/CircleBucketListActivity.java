@@ -1,17 +1,23 @@
 package com.vivavu.dream.activity.bucket;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.vivavu.dream.R;
 import com.vivavu.dream.adapter.bucket.CircleAdapter;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.DreamApp;
-import com.vivavu.dream.model.bucket.BucketGroup;
+import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.repository.DataRepository;
+import com.vivavu.dream.view.CircleBucketImageView;
 import com.vivavu.lib.view.circular.CircularAdapter;
 import com.vivavu.lib.view.circular.SemiCircularList;
 
@@ -27,6 +33,12 @@ public class CircleBucketListActivity extends BaseActionBarActivity {
     SemiCircularList mLayoutCard;
     @InjectView(R.id.btn_add)
     Button mBtnAdd;
+    @InjectView(R.id.title)
+    TextView mTitle;
+    @InjectView(R.id.txt_title)
+    TextView mTxtTitle;
+    @InjectView(R.id.btn_today)
+    Button mBtnToday;
     private Context mContext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,21 +52,77 @@ public class CircleBucketListActivity extends BaseActionBarActivity {
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setCustomView(R.layout.actionbar_sub_view);
-
         ButterKnife.inject(this);
 
         mContext = DreamApp.getInstance();
 
-        List<BucketGroup> bucketGroup = DataRepository.listBucketGroup();
-        //List itemList = CircularViewTestActivity.getDummyData();
+        Intent data = getIntent();
+        String groupRange = data.getStringExtra("groupRange");
 
-        CircularAdapter circularAdapter = new CircleAdapter(mContext, bucketGroup.get(0).getBukets());
-        mLayoutCard.setAdapter(circularAdapter);
-        if(bucketGroup.get(0).getBukets().size() > 0) {
-            mTxtIndicator.setText(String.format("%d Lists", bucketGroup.get(0).getBukets().size()));
-        } else {
-            mTxtIndicator.setText(String.format("Add Lists"));
+        List<Bucket> bucketList = DataRepository.listBucketByRange(groupRange);
+        //List itemList = CircularViewTestActivity.getDummyData();
+        if(null == groupRange){
+            mTxtTitle.setText(DreamApp.getInstance().getUser().getTitle_life());
+        } else if("10".equals(groupRange)){
+            mTxtTitle.setText(DreamApp.getInstance().getUser().getTitle_10());
+        }else if("20".equals(groupRange)){
+            mTxtTitle.setText(DreamApp.getInstance().getUser().getTitle_20());
+        }else if("30".equals(groupRange)){
+            mTxtTitle.setText(DreamApp.getInstance().getUser().getTitle_30());
+        }else if("40".equals(groupRange)){
+            mTxtTitle.setText(DreamApp.getInstance().getUser().getTitle_40());
+        }else if("50".equals(groupRange)){
+            mTxtTitle.setText(DreamApp.getInstance().getUser().getTitle_50());
+        }else if("60".equals(groupRange)){
+            mTxtTitle.setText(DreamApp.getInstance().getUser().getTitle_60());
         }
 
+        final CircularAdapter circularAdapter;
+        circularAdapter = new CircleAdapter(mContext, bucketList);
+        mLayoutCard.setAdapter(circularAdapter);
+
+        if(bucketList.size() > 0) {
+            mTxtIndicator.setText(String.format("%d", bucketList.size()));
+        }
+
+        mLayoutCard.setOnMainItemChangedListener(new SemiCircularList.OnMainItemChangedListener() {
+            @Override
+            public void onMainItemChanged(int position, View view) {
+
+                if(!mLayoutCard.isDrag() && view instanceof CircleBucketImageView) {
+                    Adapter adapter = mLayoutCard.getAdapter();
+                    Bucket item = (Bucket) adapter.getItem(position);
+                    mTitle.setText(position + "   " + item.getTitle());
+                }
+            }
+        });
+
+        mLayoutCard.setOnRotateEndedListener(new SemiCircularList.OnRotateEndedListener() {
+            @Override
+            public void onRotateEnded(int position, View mainItem) {
+                if( mainItem instanceof CircleBucketImageView) {
+                    Adapter adapter = mLayoutCard.getAdapter();
+                    Bucket item = (Bucket) adapter.getItem(position);
+                    mTitle.setText(position + "   " + item.getTitle());
+                }
+            }
+        });
+
+        mLayoutCard.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(CircleBucketListActivity.this, "아이템 선택 : #"+position, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mLayoutCard.setOnMainItemSelectedListener(new SemiCircularList.OnMainItemSelectedListener() {
+            @Override
+            public void onMainItemSelected(int position, View mainItem) {
+                Bucket item = (Bucket) circularAdapter.getItem(position);
+                if(item == null || (item.getId() == null || item.getId() < 0) && circularAdapter.getCount() == 0){
+                    Toast.makeText(CircleBucketListActivity.this, "아이템 없음 추가 코드 필요", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }

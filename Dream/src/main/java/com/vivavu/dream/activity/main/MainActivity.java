@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.bucket.BucketAddActivity;
 import com.vivavu.dream.activity.bucket.BucketViewActivity;
-import com.vivavu.dream.activity.bucket.CircleBucketListActivity;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.Code;
 import com.vivavu.dream.fragment.main.MainBucketListFragment;
@@ -135,8 +134,7 @@ public class MainActivity extends BaseActionBarActivity {
         super.onClick(view);
         switch (view.getId()) {
             case R.id.btn_add_bucket:
-                //goAddBucket();
-                goCircleBucketList();
+                goAddBucket();
                 break;
         }
     }
@@ -148,12 +146,6 @@ public class MainActivity extends BaseActionBarActivity {
         startActivity(intent);
     }
 
-    private void goCircleBucketList(){
-        Intent intent;
-        intent = new Intent();
-        intent.setClass(this, CircleBucketListActivity.class);
-        startActivity(intent);
-    }
     @Override
     protected void onStop() {
         super.onStop();

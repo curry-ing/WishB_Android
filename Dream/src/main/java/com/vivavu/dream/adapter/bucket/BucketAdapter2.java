@@ -6,6 +6,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.graphics.*;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.app.Fragment;
@@ -26,14 +29,16 @@ import android.text.SpannableString;
 import android.text.style.ScaleXSpan;
 import android.util.AttributeSet;
 
-
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.vivavu.dream.R;
+import com.vivavu.dream.activity.bucket.CircleBucketListActivity;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.drawable.RoundedAvatarDrawable;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.bucket.BucketGroup;
+import com.vivavu.dream.model.user.User;
+import com.vivavu.dream.repository.connector.UserInfoConnector;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -178,8 +183,6 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
             }
         });
 
-//        int width = holder.mBtnDecade.getMaxWidth();
-//        holder.mDecadeBorder.getLayoutParams().width = width;
 
         /* SET MAIN IMAGES */
         int cnt = bucketGroup.getCount();
@@ -282,11 +285,11 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
         holder.mMainImage8.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
-                AlertDialog.Builder ab = new AlertDialog.Builder(context);
-                ab.setMessage( Html.fromHtml("<b><font color=#ff00ff> HTML View</font></b><br>Android.com"));
-                ab.setPositiveButton(android.R.string.ok, null);
-                ab.setTitle( "Basic Alert Dialog" );
-                ab.show();
+                Intent intent;
+                intent = new Intent();
+                intent.putExtra("groupRange", getBucketGroupList().get(pos).getRange());
+                intent.setClass(context, CircleBucketListActivity.class);
+                fragment.startActivity(intent);
             }
 
         });
