@@ -21,7 +21,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.vivavu.dream.R;
@@ -38,6 +37,7 @@ import com.vivavu.dream.repository.DataRepository;
 import com.vivavu.dream.repository.task.CustomAsyncTask;
 import com.vivavu.dream.util.DateUtils;
 import com.vivavu.dream.util.ImageUtil;
+import com.vivavu.dream.view.TextImageView;
 
 import java.io.File;
 import java.io.IOException;
@@ -56,8 +56,12 @@ public class BucketAddActivity extends BaseActionBarActivity {
     public static final String RESULT_EXTRA_BUCKET = "bucket";
     public static final String RESULT_EXTRA_BUCKET_ID = "bucketId";
 
+    @InjectView(R.id.bucket_img)
+    TextImageView mBucketImg;
     @InjectView(R.id.bucket_input_title)
     EditText mBucketInputTitle;
+    @InjectView(R.id.bucket_input_deadline)
+    EditText mBucketInputDeadline;
     @InjectView(R.id.btn_bucket_option_note)
     Button mBtnBucketOptionNote;
     @InjectView(R.id.btn_bucket_option_repeat)
@@ -70,8 +74,7 @@ public class BucketAddActivity extends BaseActionBarActivity {
     Button mBtnBucketOptionGallery;
     @InjectView(R.id.btn_bucket_option_del)
     Button mBtnBucketOptionDel;
-    @InjectView(R.id.bucket_input_deadline)
-    EditText mBucketInputDeadline;
+
 
     private LayoutInflater layoutInflater;
     private Bucket bucket = null;
@@ -239,12 +242,6 @@ public class BucketAddActivity extends BaseActionBarActivity {
                         }
                     }
                     doCropPhoto();
-                    /*Uri currImageURI = data.getData( ) ;
-                    String path = getRealPathFromURI(currImageURI) ;
-                    tempPictuePath = path ;
-                    // 찍은 사진을 이미지뷰에 보여준다.
-                    ImageView ivCardImage = (ImageView) findViewById(R.id.ivCardImage);
-                    ImageUtil.setAlbumImage( path, ivCardImage ) ;*/
                 }
                 break;
             case Code.ACT_ADD_BUCKET_CROP_FROM_CAMERA:
@@ -252,8 +249,7 @@ public class BucketAddActivity extends BaseActionBarActivity {
                     final Bundle extras = data.getExtras();
                     if(extras != null){
                         Bitmap photo = extras.getParcelable("data");
-                        ImageView ivCardImage = (ImageView) findViewById(R.id.iv_timeline_image);
-                        ivCardImage.setImageBitmap(photo);
+                        mBucketImg.setImageBitmap(photo);
                     }
                 }
                 break;
@@ -289,6 +285,40 @@ public class BucketAddActivity extends BaseActionBarActivity {
         mBtnBucketOptionGallery.setOnClickListener(this);
 
         mBtnBucketOptionDel.setOnClickListener(this);
+        mBucketImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String items[] = {"카메라", "겔러리"};
+                AlertDialog.Builder ab = new AlertDialog.Builder(BucketAddActivity.this);
+                ab.setTitle("선택");
+                ab.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case 0:
+                                doTakePhotoAction();
+                                break;
+                            case 1:
+                                doTakeAlbumAction();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                ab.show();
+            }
+        });
         mBucketInputDeadline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -299,7 +329,7 @@ public class BucketAddActivity extends BaseActionBarActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus){
-
+                    goOptionDday();
                 } else {
 
                 }
@@ -529,8 +559,8 @@ public class BucketAddActivity extends BaseActionBarActivity {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(mImageCaptureUri, "image/*");
 
-        intent.putExtra("outputX", 90);
-        intent.putExtra("outputY", 90);
+        intent.putExtra("outputX", 400);
+        intent.putExtra("outputY", 400);
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
         intent.putExtra("scale", true);

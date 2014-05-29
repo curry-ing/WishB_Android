@@ -12,6 +12,7 @@
         android:layout_height="200dp"
         android:id="@+id/bucket_img"
         android:background="@drawable/sub_view_default_circle"
+        android:clickable="true"
         >
 
     </com.vivavu.dream.view.TextImageView>

@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/layout_bucket_add_custom_date"
         android:visibility="visible"
-        android:background="@drawable/bg_box"
+        android:background="@drawable/bg_box_with_top_line"
         >
 
         <DatePicker
