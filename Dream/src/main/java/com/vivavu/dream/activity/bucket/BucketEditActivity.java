@@ -15,8 +15,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -24,9 +22,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.vivavu.dream.R;
+import com.vivavu.dream.activity.main.MainActivity;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.Code;
+import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.common.enums.RepeatType;
+import com.vivavu.dream.fragment.bucket.option.description.DescriptionViewFragment;
+import com.vivavu.dream.fragment.bucket.option.repeat.RepeatViewFragment;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.model.bucket.option.OptionDDay;
@@ -37,10 +39,12 @@ import com.vivavu.dream.repository.DataRepository;
 import com.vivavu.dream.repository.task.CustomAsyncTask;
 import com.vivavu.dream.util.DateUtils;
 import com.vivavu.dream.util.ImageUtil;
+import com.vivavu.dream.util.ValidationUtils;
 import com.vivavu.dream.view.TextImageView;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -48,11 +52,12 @@ import butterknife.InjectView;
 /**
  * Created by yuja on 14. 1. 13.
  */
-public class BucketAddActivity extends BaseActionBarActivity {
+public class BucketEditActivity extends BaseActionBarActivity {
     private static final int SEND_DATA_START = 0;
     private static final int SEND_DATA_END = 1;
     private static final int SEND_DATA_ERROR = 2;
     private static final int SEND_DATA_DELETE = 3;
+    private static final int SEND_DATA_DELETE_ERROR = 4;
     public static final String RESULT_EXTRA_BUCKET = "bucket";
     public static final String RESULT_EXTRA_BUCKET_ID = "bucketId";
 
@@ -74,6 +79,10 @@ public class BucketAddActivity extends BaseActionBarActivity {
     Button mBtnBucketOptionGallery;
     @InjectView(R.id.btn_bucket_option_del)
     Button mBtnBucketOptionDel;
+    @InjectView(R.id.menu_previous)
+    Button mMenuPrevious;
+    @InjectView(R.id.menu_save)
+    Button mMenuSave;
 
 
     private LayoutInflater layoutInflater;
@@ -94,7 +103,7 @@ public class BucketAddActivity extends BaseActionBarActivity {
                     if(progressDialog.isShowing()) {
                         progressDialog.dismiss();
                     }
-                    Toast.makeText(BucketAddActivity.this, modString + "성공", Toast.LENGTH_LONG).show();
+                    Toast.makeText(BucketEditActivity.this, modString + "성공", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent();
                     intent.putExtra(RESULT_EXTRA_BUCKET_ID, (Integer) bucket.getId());
                     intent.putExtra(RESULT_EXTRA_BUCKET, bucket);
@@ -105,15 +114,21 @@ public class BucketAddActivity extends BaseActionBarActivity {
                     if(progressDialog.isShowing()) {
                         progressDialog.dismiss();
                     }
-                    Toast.makeText(BucketAddActivity.this, modString + "실패하였습니다. 다시 시도해주세요.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(BucketEditActivity.this, modString + "실패하였습니다. 다시 시도해주세요.", Toast.LENGTH_LONG).show();
                     break;
                 case SEND_DATA_DELETE:
                     if(progressDialog.isShowing()) {
                         progressDialog.dismiss();
                     }
-                    Toast.makeText(BucketAddActivity.this, modString + "버킷을 삭제하였습니다.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(BucketEditActivity.this, modString + "버킷을 삭제하였습니다.", Toast.LENGTH_LONG).show();
                     setResult(RESULT_USER_DATA_DELETED);
                     finish();
+                    break;
+                case SEND_DATA_DELETE_ERROR:
+                    if(progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                    }
+                    Toast.makeText(BucketEditActivity.this, modString + "버킷을 삭제에 실패하였습니다.", Toast.LENGTH_LONG).show();
                     break;
             }
         }
@@ -139,6 +154,7 @@ public class BucketAddActivity extends BaseActionBarActivity {
         Intent data = getIntent();
 
         int bucketId = data.getIntExtra(RESULT_EXTRA_BUCKET_ID, -1);
+        int range = data.getIntExtra(MainActivity.EXTRA_BUCKET_DEFAULT_RANGE, -1);
         bucket = DataRepository.getBucket(bucketId);
         int code;
         if (bucketId > 0) {
@@ -154,38 +170,23 @@ public class BucketAddActivity extends BaseActionBarActivity {
 
         ButterKnife.inject(this);
 
+        mBucketInputTitle.setTypeface(getNanumBarunGothicFont());
+        mBucketInputDeadline.setTypeface(getDenseRegularFont());
+        if(range > -1 && DreamApp.getInstance().getUser().getBirthday() != null){
+            Date birthday = DateUtils.getDateFromString(DreamApp.getInstance().getUser().getBirthday(), "yyyyMMdd", new Date());
+            mBucketInputDeadline.setText(DateUtils.getDateString(DateUtils.getLastDayOfPeriod(birthday, range), "yyyy.MM.dd"));
+        }
         addEventListener();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //getMenuInflater().inflate(R.menu.bucket_add_activity_actions, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        Intent intent;
-        switch (id) {
-            case R.id.bucket_add_menu_save:
-
-                if (bucket == null || bucket.getTitle() == null || bucket.getTitle().trim().length() <= 0) {
-                    Toast.makeText(this, "필수입력 항목이 입력되지 않았음", Toast.LENGTH_SHORT).show();
-                }else{
-                    saveBucket();
-                }
-
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     public void saveBucket() {
-        handler.sendEmptyMessage(SEND_DATA_START);
-        BucketAddTask bucketAddTask = new BucketAddTask();
-        bucketAddTask.execute(bucket);
+        if (bucket == null || bucket.getTitle() == null || bucket.getTitle().trim().length() <= 0) {
+            Toast.makeText(this, "필수입력 항목이 입력되지 않았음", Toast.LENGTH_SHORT).show();
+        }else{
+            handler.sendEmptyMessage(SEND_DATA_START);
+            BucketAddTask bucketAddTask = new BucketAddTask();
+            bucketAddTask.execute(bucket);
+        }
     }
 
     @Override
@@ -289,7 +290,7 @@ public class BucketAddActivity extends BaseActionBarActivity {
             @Override
             public void onClick(View v) {
                 final String items[] = {"카메라", "겔러리"};
-                AlertDialog.Builder ab = new AlertDialog.Builder(BucketAddActivity.this);
+                AlertDialog.Builder ab = new AlertDialog.Builder(BucketEditActivity.this);
                 ab.setTitle("선택");
                 ab.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
                     @Override
@@ -335,6 +336,20 @@ public class BucketAddActivity extends BaseActionBarActivity {
                 }
             }
         });
+
+        mMenuSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveBucket();
+            }
+        });
+
+        mMenuPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
 
@@ -362,21 +377,19 @@ public class BucketAddActivity extends BaseActionBarActivity {
 
         mBtnBucketOptionPublic.setSelected( bucket.getIsPrivate() == null || bucket.getIsPrivate() == 1 );
 
-        /*DescriptionViewFragment descriptionViewFragment = (DescriptionViewFragment) getSupportFragmentManager().findFragmentByTag(DescriptionViewFragment.TAG);
+        DescriptionViewFragment descriptionViewFragment = (DescriptionViewFragment) getSupportFragmentManager().findFragmentByTag(DescriptionViewFragment.TAG);
         if(ValidationUtils.isNotEmpty(bucket.getDescription())){
             OptionDescription option = new OptionDescription(bucket.getDescription());
             if (descriptionViewFragment == null) {
                 descriptionViewFragment = new DescriptionViewFragment(option);
-                getSupportFragmentManager().beginTransaction().add(R.id.option_contents, descriptionViewFragment, DescriptionViewFragment.TAG).commit();
+                getSupportFragmentManager().beginTransaction().add(R.id.option_contents_note, descriptionViewFragment, DescriptionViewFragment.TAG).commit();
             } else {
                 descriptionViewFragment.setContents(option);
             }
-            mBtnBucketOptionNote.setVisibility(View.GONE);
         }else{
             if (descriptionViewFragment != null) {
                 getSupportFragmentManager().beginTransaction().remove(descriptionViewFragment).commit();
             }
-            mBtnBucketOptionNote.setVisibility(View.VISIBLE);
         }
 
         RepeatViewFragment repeatFragment = (RepeatViewFragment) getSupportFragmentManager().findFragmentByTag(RepeatViewFragment.TAG);
@@ -384,17 +397,15 @@ public class BucketAddActivity extends BaseActionBarActivity {
             OptionRepeat option = new OptionRepeat(RepeatType.fromCode(bucket.getRptType()), bucket.getRptCndt());
             if (repeatFragment == null) {
                 repeatFragment = new RepeatViewFragment(option);
-                getSupportFragmentManager().beginTransaction().add(R.id.option_contents, repeatFragment, RepeatViewFragment.TAG).commit();
+                getSupportFragmentManager().beginTransaction().add(R.id.option_contents_repeat, repeatFragment, RepeatViewFragment.TAG).commit();
             } else {
                 repeatFragment.setContents(option);
             }
-            mBtnBucketOptionRepeat.setVisibility(View.GONE);
         } else {
             if (repeatFragment != null) {
                 getSupportFragmentManager().beginTransaction().remove(repeatFragment).commit();
             }
-            mBtnBucketOptionRepeat.setVisibility(View.VISIBLE);
-        }*/
+        }
     }
 
     @Override
@@ -443,26 +454,32 @@ public class BucketAddActivity extends BaseActionBarActivity {
 
     private void doDelte() {
 
-        AlertDialog.Builder alertConfirm = new AlertDialog.Builder(this);
-        alertConfirm.setTitle("삭제확인");
-        alertConfirm.setMessage("버킷을 삭제하시겠습니까?").setCancelable(false).setPositiveButton("예",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        BucketDeleteTask bucketDeleteTask = new BucketDeleteTask();
-                        bucketDeleteTask.execute(bucket);
+
+            AlertDialog.Builder alertConfirm = new AlertDialog.Builder(this);
+            alertConfirm.setTitle("삭제확인");
+            alertConfirm.setMessage("버킷을 삭제하시겠습니까?").setCancelable(false).setPositiveButton("예",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (bucket != null && bucket.getId() != null && bucket.getId() > 0) {
+                                BucketDeleteTask bucketDeleteTask = new BucketDeleteTask();
+                                bucketDeleteTask.execute(bucket);
+                            } else {
+                                finish();
+                            }
+                        }
                     }
-                }
-        ).setNegativeButton("아니오",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        return;
+            ).setNegativeButton("아니오",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            return;
+                        }
                     }
-                }
-        );
-        AlertDialog alert = alertConfirm.create();
-        alert.show();
+            );
+            AlertDialog alert = alertConfirm.create();
+            alert.show();
+
     }
 
     public void goOptionRepeat() {
@@ -589,7 +606,7 @@ public class BucketAddActivity extends BaseActionBarActivity {
 
         @Override
         protected void onPostExecute(ResponseBodyWrapped<Bucket> bucketWrappedResponseBodyWrapped) {
-            if(bucketWrappedResponseBodyWrapped.getData() != null){
+            if(bucketWrappedResponseBodyWrapped.getData() != null && bucketWrappedResponseBodyWrapped.isSuccess()){
                 Bucket bucket = bucketWrappedResponseBodyWrapped.getData();
                 if(bucket != null){
                     DataRepository.saveBucket(bucket);
@@ -622,7 +639,7 @@ public class BucketAddActivity extends BaseActionBarActivity {
                 DataRepository.deleteBucket(bucket);
                 handler.sendEmptyMessage(SEND_DATA_DELETE);
             }else {
-                handler.sendEmptyMessage(SEND_DATA_ERROR);
+                handler.sendEmptyMessage(SEND_DATA_DELETE_ERROR);
             }
         }
     }
@@ -642,7 +659,7 @@ public class BucketAddActivity extends BaseActionBarActivity {
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(BucketAddActivity.this, "예", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(BucketEditActivity.this, "예", Toast.LENGTH_SHORT).show();
                         }
                     }
             ).setNegativeButton("아니오",

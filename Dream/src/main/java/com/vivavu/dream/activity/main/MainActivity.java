@@ -1,10 +1,15 @@
 package com.vivavu.dream.activity.main;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -29,7 +34,7 @@ public class MainActivity extends BaseActionBarActivity {
     @InjectView(R.id.actionbar_main_notice)
     Button mActionbarMainNotice;
     @InjectView(R.id.actionbar_main_today)
-    ButtonIncludeCount mActionbarMainToday;
+    TextView mActionbarMainToday;
 
     View noticeView;
     CustomPopupWindow mPopupNotice;
@@ -39,8 +44,8 @@ public class MainActivity extends BaseActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);//api level 11 이상 부터 사용가능
         setContentView(R.layout.activity_main);
-        //actionbar setting
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowHomeEnabled(false);
         actionBar.setDisplayShowTitleEnabled(false);
@@ -75,15 +80,22 @@ public class MainActivity extends BaseActionBarActivity {
             }
         });
 
-        mActionbarMainToday.getButton().setText("Today");
-        mActionbarMainToday.getTextView().setText("1");
-        mActionbarMainToday.getButton().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, TodayActivity.class);
-                startActivity(intent);
-            }
-        });
+        Typeface typeface = Typeface.createFromAsset(context.getAssets(), "NanumBarunGothicBold.mp3");
+
+        SpannableString text = new SpannableString("logos");
+        text.setSpan(new ForegroundColorSpan(R.color.skyblue),0,1,0);
+        text.setSpan(new ForegroundColorSpan(R.color.white),1,2,0);
+        text.setSpan(new ForegroundColorSpan(R.color.lightgreen),2,3,0);
+        text.setSpan(new ForegroundColorSpan(R.color.lightred),3,4,0);
+
+        mActionbarMainTitle.setText(text, TextView.BufferType.SPANNABLE);
+        mActionbarMainTitle.setTypeface(typeface);
+        mActionbarMainTitle.setTextSize(22);
+        mActionbarMainTitle.setTextColor(Color.WHITE);
+
+        mActionbarMainToday.setTypeface(typeface);
+        mActionbarMainToday.setTextColor(Color.WHITE);
+        mActionbarMainToday.setTextSize(14);
     }
 
     @Override

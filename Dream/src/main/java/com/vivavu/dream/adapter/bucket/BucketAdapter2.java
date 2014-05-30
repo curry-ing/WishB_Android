@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.*;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,9 +12,11 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,6 +37,7 @@ import com.vivavu.dream.repository.connector.UserInfoConnector;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -49,10 +53,10 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
     private LayoutInflater mInflater;
     private List<BucketGroup> bucketGroupList;
     private List<Bitmap> mainImages;
-//    private User user = null;
 
-    private String userBirth;
     private String title;
+
+    private int deviceDensityDpi;
 
     static public final int PROGRESS_BAR_BASELINE = 270;
     public static final String TAG = "DialogActivity";
@@ -65,6 +69,13 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
         this.fragment = fragment;
         this.mInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.bucketGroupList = new ArrayList<BucketGroup>(bucketGroupList);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+
+        deviceDensityDpi = displayMetrics.densityDpi;
+
     }
 
     public BucketAdapter2 (Fragment fragment) {
@@ -76,10 +87,10 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
 
     @Override
     public Object instantiateItem(ViewGroup container, int position){
-//        int i = position;
         ViewGroup viewGroup = (ViewGroup) mInflater.inflate(R.layout.main_contents, container, false);
         ButterknifeViewHolder holder = new ButterknifeViewHolder(viewGroup);
         viewGroup.setTag(holder);
+
 
         try {
             init(holder, bucketGroupList.get(position), position);
@@ -115,6 +126,17 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
         this.mainImages = new ArrayList<Bitmap>();
 
         /* SET MAIN TITLE */
+        Typeface typeface = Typeface.createFromAsset(context.getAssets(), "NanumBarunGothicBold.mp3");
+//        Shader textShader = new LinearGradient(2, 0, 4, 60, new int[]{Color.parseColor("#b4e391"),Color.parseColor("#61c419"),Color.parseColor("#b4e391")},
+//                new float[]{0, 3,1}, Shader.TileMode.MIRROR);
+//        holder.mBtnDecade.getPaint().setShader(textShader);
+        holder.mBtnDecade.setTypeface(typeface);
+        holder.mBtnDecade.setTextSize(22);
+        holder.mBtnDecade.setTextColor(Color.WHITE);
+        holder.mBtnDecade.getPaint().setAntiAlias(true);
+//        holder.mBtnDecade.setCompoundDrawablesWithIntrinsicBounds(R.drawable.pencil,0,0,0);
+
+
         switch (pos){
             case 0:
                 title = DreamApp.getInstance().getUser().getTitle_life();
@@ -139,9 +161,9 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
                 break;
         }
         if (title != null) {
-            holder.mBtnDecade.setText(title);
+            holder.mBtnDecade.setText(title+" ");
         } else {
-            holder.mBtnDecade.setText(bucketGroup.getRangeText());
+            holder.mBtnDecade.setText(bucketGroup.getRangeText()+" ");
         }
 
         holder.mBtnDecade.setOnClickListener(new View.OnClickListener() {
@@ -154,6 +176,9 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
 
         /* SET MAIN IMAGES */
         int cnt = bucketGroup.getCount();
+        if (cnt > 4) {
+            cnt = 4;
+        }
         if (cnt > 0) {
 //            holder.mBktCount.setVisibility(View.VISIBLE);
             for (int i=0; i<cnt; i++){
@@ -164,36 +189,46 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
         }
         if(mainImages.size()==0){
             mainImages.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.up_logo));
+        } else {
+            Collections.shuffle(mainImages);
         }
-//        holder.mBktCount.setText(String.valueOf(cnt)+'개');
         for (int j=0; j<mainImages.size(); j++){
             switch (j){
                 case 0:
-                    holder.mMainImage1.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size()));
+                    holder.mMainImage1.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                    holder.mMainImage1.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi));
                     break;
                 case 1:
-                    holder.mMainImage2.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size()));
+                    holder.mMainImage2.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                    holder.mMainImage2.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi));
                     break;
                 case 2:
-                    holder.mMainImage3.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size()));
+                    holder.mMainImage3.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                    holder.mMainImage3.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi));
                     break;
                 case 3:
-                    holder.mMainImage4.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size()));
+                    holder.mMainImage4.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                    holder.mMainImage4.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi));
                     break;
                 case 4:
-                    holder.mMainImage5.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size()));
+                    holder.mMainImage5.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                    holder.mMainImage5.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi));
                     break;
                 case 5:
-                    holder.mMainImage6.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size()));
+                    holder.mMainImage6.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                    holder.mMainImage6.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi));
                     break;
                 case 6:
-                    holder.mMainImage7.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size()));
+                    holder.mMainImage7.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                    holder.mMainImage7.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi));
                     break;
                 case 7:
-                    holder.mMainImage8.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size()));
+                    holder.mMainImage8.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                    holder.mMainImage8.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi));
                     break;
             }
         }
+        mainImages.clear();
 
 
         /* SET PROGRESS BAR */
@@ -204,18 +239,36 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
             int endY = Integer.parseInt(DreamApp.getInstance().getUser().getBirthday().substring(0,4))+((pos+1)*10-1) - 1;
             int thisY = cal.get(cal.YEAR);
 
-            holder.mPeriod.setText(String.valueOf(startY)+" ~ "+String.valueOf(endY));
+            Typeface periodTypeFace = Typeface.createFromAsset(context.getAssets(), "Dense-Regular.mp3");
+            holder.mPeriod.setTypeface(periodTypeFace, Typeface.BOLD);
+            holder.mPeriod.setTextSize(25);
+            holder.mPeriod.setText("J A N  "+String.valueOf(startY).charAt(0)+" "
+                                            +String.valueOf(startY).charAt(1)+" "
+                                            +String.valueOf(startY).charAt(2)+" "
+                                            +String.valueOf(startY).charAt(3)+"  -  D E C  "
+                                            +String.valueOf(endY).charAt(0)+" "
+                                            +String.valueOf(endY).charAt(1)+" "
+                                            +String.valueOf(endY).charAt(2)+" "
+                                            +String.valueOf(endY).charAt(3));
+
             if(thisY > endY) {
-                holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, 360, PROGRESS_BAR_BASELINE));
+                holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, 360, PROGRESS_BAR_BASELINE, deviceDensityDpi));
             } else if (thisY < startY) {
-                holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, 0, PROGRESS_BAR_BASELINE));
+                holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, 0, PROGRESS_BAR_BASELINE, deviceDensityDpi));
             } else {
-                holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, cal.get(cal.DAY_OF_YEAR), PROGRESS_BAR_BASELINE));
+                holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, cal.get(cal.DAY_OF_YEAR), PROGRESS_BAR_BASELINE, deviceDensityDpi));
             }
         } else {
             int imsi = (int) ((float) DreamApp.getInstance().getUser().getUserAge() / 100 * 360);
-            holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, imsi, PROGRESS_BAR_BASELINE));
-            holder.mPeriod.setText(DreamApp.getInstance().getUser().getBirthday().substring(0,4) + " ~");
+
+            Typeface periodTypeFace = Typeface.createFromAsset(context.getAssets(), "Dense-Regular.mp3");
+            holder.mPeriod.setTypeface(periodTypeFace, Typeface.BOLD);
+            holder.mPeriod.setTextSize(25);
+            holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, imsi, PROGRESS_BAR_BASELINE, deviceDensityDpi));
+            holder.mPeriod.setText("J A N  " + DreamApp.getInstance().getUser().getBirthday().substring(0,1) + " "
+                                             + DreamApp.getInstance().getUser().getBirthday().substring(1,2) + " "
+                                             + DreamApp.getInstance().getUser().getBirthday().substring(2,3) + " "
+                                             + DreamApp.getInstance().getUser().getBirthday().substring(3,4) + "  ~");
         }
 
         /* SET ON CLICK LISTENER */
@@ -331,13 +384,11 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
         }
     }
 
-
-
     class ButterknifeViewHolder {
         @InjectView(R.id.btn_decade)
         Button mBtnDecade;
-        @InjectView(R.id.bkt_count)
-        TextView mBktCount;
+        @InjectView(R.id.decadeBorder)
+        ImageView mDecadeBorder;
         @InjectView(R.id.main_image1)
         ImageView mMainImage1;
         @InjectView(R.id.main_image2)
