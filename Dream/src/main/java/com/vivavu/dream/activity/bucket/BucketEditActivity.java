@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.vivavu.dream.R;
@@ -44,6 +45,7 @@ import com.vivavu.dream.view.TextImageView;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
 
 import butterknife.ButterKnife;
@@ -73,17 +75,12 @@ public class BucketEditActivity extends BaseActionBarActivity {
     Button mBtnBucketOptionRepeat;
     @InjectView(R.id.btn_bucket_option_public)
     Button mBtnBucketOptionPublic;
-    @InjectView(R.id.btn_bucket_option_pic)
-    Button mBtnBucketOptionPic;
-    @InjectView(R.id.btn_bucket_option_gallery)
-    Button mBtnBucketOptionGallery;
     @InjectView(R.id.btn_bucket_option_del)
     Button mBtnBucketOptionDel;
     @InjectView(R.id.menu_previous)
-    Button mMenuPrevious;
+    ImageButton mMenuPrevious;
     @InjectView(R.id.menu_save)
-    Button mMenuSave;
-
+    ImageButton mMenuSave;
 
     private LayoutInflater layoutInflater;
     private Bucket bucket = null;
@@ -173,10 +170,16 @@ public class BucketEditActivity extends BaseActionBarActivity {
         mBucketInputTitle.setTypeface(getNanumBarunGothicFont());
         mBucketInputDeadline.setTypeface(getDenseRegularFont());
         if(range > -1 && DreamApp.getInstance().getUser().getBirthday() != null){
+
             Date birthday = DateUtils.getDateFromString(DreamApp.getInstance().getUser().getBirthday(), "yyyyMMdd", new Date());
-            mBucketInputDeadline.setText(DateUtils.getDateString(DateUtils.getLastDayOfPeriod(birthday, range), "yyyy.MM.dd"));
+            Date temp = DateUtils.getLastDayOfPeriod(birthday, range);
+            mBucketInputDeadline.setText(DateUtils.getDateString(temp, "yyyy.MM.dd"));
+            bucket.setDeadline(temp);
+            bucket.setRange(String.valueOf(range));
         }
         addEventListener();
+        checkRequireElement();
+        bindData();
     }
 
     public void saveBucket() {
@@ -260,7 +263,19 @@ public class BucketEditActivity extends BaseActionBarActivity {
     private void updateUiData(OptionDDay dday) {
         bucket.setTitle(mBucketInputTitle.getText().toString());
         bucket.setScope("DECADE");
-        bucket.setRange(dday.getRange());
+        Date birthday = DateUtils.getDateFromString(DreamApp.getInstance().getUser().getBirthday(), "yyyyMMdd", new Date());
+        Calendar instance = Calendar.getInstance();
+        instance.setTime(birthday);
+        int year = instance.get(Calendar.YEAR);
+        instance.setTime(dday.getDeadline());
+        int deadlinYear = instance.get(Calendar.YEAR);
+        int diff = (deadlinYear - year)/10;
+        diff += 10;
+        if(diff > 0){
+            bucket.setRange(String.valueOf(diff) );
+        } else {
+            bucket.setRange(dday.getRange());
+        }
         bucket.setDeadline(dday.getDeadline());
         bindData();
     }
@@ -282,8 +297,6 @@ public class BucketEditActivity extends BaseActionBarActivity {
         mBtnBucketOptionNote.setOnClickListener(this);
         mBtnBucketOptionRepeat.setOnClickListener(this);
         mBtnBucketOptionPublic.setOnClickListener(this);
-        mBtnBucketOptionPic.setOnClickListener(this);
-        mBtnBucketOptionGallery.setOnClickListener(this);
 
         mBtnBucketOptionDel.setOnClickListener(this);
         mBucketImg.setOnClickListener(new View.OnClickListener() {
@@ -375,6 +388,9 @@ public class BucketEditActivity extends BaseActionBarActivity {
             mBucketInputDeadline.setText("In my life");
         }
 
+        checkRequireElement();//
+
+        // 눌린 상태가 비공개
         mBtnBucketOptionPublic.setSelected( bucket.getIsPrivate() == null || bucket.getIsPrivate() == 1 );
 
         DescriptionViewFragment descriptionViewFragment = (DescriptionViewFragment) getSupportFragmentManager().findFragmentByTag(DescriptionViewFragment.TAG);
@@ -386,10 +402,12 @@ public class BucketEditActivity extends BaseActionBarActivity {
             } else {
                 descriptionViewFragment.setContents(option);
             }
+            mBtnBucketOptionNote.setVisibility(View.GONE);
         }else{
             if (descriptionViewFragment != null) {
                 getSupportFragmentManager().beginTransaction().remove(descriptionViewFragment).commit();
             }
+            mBtnBucketOptionNote.setVisibility(View.VISIBLE);
         }
 
         RepeatViewFragment repeatFragment = (RepeatViewFragment) getSupportFragmentManager().findFragmentByTag(RepeatViewFragment.TAG);
@@ -401,10 +419,12 @@ public class BucketEditActivity extends BaseActionBarActivity {
             } else {
                 repeatFragment.setContents(option);
             }
+            mBtnBucketOptionRepeat.setVisibility(View.GONE);
         } else {
             if (repeatFragment != null) {
                 getSupportFragmentManager().beginTransaction().remove(repeatFragment).commit();
             }
+            mBtnBucketOptionRepeat.setVisibility(View.VISIBLE);
         }
     }
 
@@ -443,10 +463,6 @@ public class BucketEditActivity extends BaseActionBarActivity {
         } else if(view == mBtnBucketOptionPublic){
             mBtnBucketOptionPublic.setSelected(!mBtnBucketOptionPublic.isSelected());
             bucket.setIsPrivate( mBtnBucketOptionPublic.isSelected() ? 1 : 0 );
-        } else if(view == mBtnBucketOptionPic) {
-            doTakePhotoAction();
-        } else if( view == mBtnBucketOptionGallery ) {
-            doTakeAlbumAction();
         } else if (view == mBtnBucketOptionDel){
             doDelte();
         }
@@ -525,9 +541,16 @@ public class BucketEditActivity extends BaseActionBarActivity {
             }else {
                 bucket.setTitle(s.toString());
             }
+            checkRequireElement();
         }
     };
-
+    private void checkRequireElement(){
+        if (bucket == null || bucket.getTitle() == null || bucket.getTitle().trim().length() <= 0) {
+            mMenuSave.setVisibility(View.INVISIBLE);
+        }else{
+            mMenuSave.setVisibility(View.VISIBLE);
+        }
+    }
     private void doTakePhotoAction(){
         /*
         * 참고 해볼곳

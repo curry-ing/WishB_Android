@@ -246,7 +246,7 @@ public class BucketViewActivity extends BaseActionBarActivity {
     }
 
     private void modDefaultBucketInfo() {
-        Intent intent = new Intent(this, BucketAddActivity.class);
+        Intent intent = new Intent(this, BucketEditActivity.class);
         intent.putExtra("bucketId", (Integer) bucket.getId());
         startActivityForResult(intent, Code.ACT_MOD_BUCKET_DEFAULT_CARD);
     }
@@ -374,7 +374,7 @@ public class BucketViewActivity extends BaseActionBarActivity {
     private void goAddBucket() {
         Intent intent;
         intent = new Intent();
-        intent.setClass(this, BucketAddActivity.class);
+        intent.setClass(this, BucketEditActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         intent.putExtra("parentBucket", bucket);
         startActivity(intent);

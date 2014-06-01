@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.vivavu.dream.R;
-import com.vivavu.dream.activity.bucket.BucketAddActivity;
+import com.vivavu.dream.activity.bucket.BucketEditActivity;
 import com.vivavu.dream.model.bucket.Today;
 import com.vivavu.dream.util.DateUtils;
 
@@ -81,7 +81,7 @@ public class TodayItemAdapter extends BaseAdapter {
             public void onClick(View v) {
                 Intent intent;
                 intent = new Intent();
-                intent.setClass(getContext(), BucketAddActivity.class);
+                intent.setClass(getContext(), BucketEditActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 getContext().startActivity(intent);
             }

@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -32,6 +33,9 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
     protected IntentFilter intentFilterChange;
     protected IntentFilter intentFilterWifi;
     public static final int RESULT_USER_DATA_DELETED = RESULT_FIRST_USER + 0;
+    public static Typeface denseRegularFont = null;
+    public static Typeface nanumBarunGothicFont = null;
+    public static Typeface nanumBarunGothicBoldFont = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,7 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
         intentFilterWifi = new IntentFilter("android.net.wifi.WIFI_STATE_CHANGED");
         checkNetwork();
     }
+
 
     @Override
     protected void onResume() {
@@ -212,6 +217,27 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public static Typeface getDenseRegularFont() {
+        if(denseRegularFont == null){
+            denseRegularFont = Typeface.createFromAsset(DreamApp.getInstance().getAssets(), "Dense-Regular.mp3");
+        }
+        return denseRegularFont;
+    }
+
+    public static Typeface getNanumBarunGothicFont() {
+        if(nanumBarunGothicFont == null){
+            nanumBarunGothicFont = Typeface.createFromAsset(DreamApp.getInstance().getAssets(), "NanumBarunGothic.mp3");
+        }
+        return nanumBarunGothicFont;
+    }
+
+    public static Typeface getNanumBarunGothicBoldFont() {
+        if(nanumBarunGothicBoldFont == null){
+            nanumBarunGothicBoldFont = Typeface.createFromAsset(DreamApp.getInstance().getAssets(), "NanumBarunGothicBold.mp3");
+        }
+        return nanumBarunGothicBoldFont;
     }
 
     public class CheckLoginTesk extends AsyncTask<Void, Void, Void>{

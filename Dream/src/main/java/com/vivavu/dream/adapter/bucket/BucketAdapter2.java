@@ -27,6 +27,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.bucket.CircleBucketListActivity;
+import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.drawable.RoundedAvatarDrawable;
 import com.vivavu.dream.model.ResponseBodyWrapped;
@@ -239,7 +240,7 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
             int endY = Integer.parseInt(DreamApp.getInstance().getUser().getBirthday().substring(0,4))+((pos+1)*10-1) - 1;
             int thisY = cal.get(cal.YEAR);
 
-            Typeface periodTypeFace = Typeface.createFromAsset(context.getAssets(), "Dense-Regular.mp3");
+            Typeface periodTypeFace = BaseActionBarActivity.getDenseRegularFont();
             holder.mPeriod.setTypeface(periodTypeFace, Typeface.BOLD);
             holder.mPeriod.setTextSize(25);
             holder.mPeriod.setText("J A N  "+String.valueOf(startY).charAt(0)+" "

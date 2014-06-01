@@ -155,8 +155,8 @@ public class TimelineActivity extends BaseActionBarActivity {
         mBtnTimelineTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(TimelineActivity.this, BucketAddActivity.class);
-                intent.putExtra(BucketAddActivity.RESULT_EXTRA_BUCKET_ID, (Integer) bucket.getId());
+                Intent intent = new Intent(TimelineActivity.this, BucketEditActivity.class);
+                intent.putExtra(BucketEditActivity.RESULT_EXTRA_BUCKET_ID, (Integer) bucket.getId());
                 startActivityForResult(intent, REQUEST_MOD_BUCKET);
             }
         });
@@ -206,7 +206,7 @@ public class TimelineActivity extends BaseActionBarActivity {
                 break;
             case REQUEST_MOD_BUCKET:
                 if(resultCode == RESULT_OK) {
-                    Bucket result = (Bucket) data.getSerializableExtra(BucketAddActivity.RESULT_EXTRA_BUCKET);
+                    Bucket result = (Bucket) data.getSerializableExtra(BucketEditActivity.RESULT_EXTRA_BUCKET);
                     bindData(result);
                 } else if (requestCode == RESULT_USER_DATA_DELETED) {
                     setResult(RESULT_OK);

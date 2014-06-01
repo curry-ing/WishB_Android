@@ -2,7 +2,6 @@ package com.vivavu.dream.activity.main;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.text.SpannableString;
@@ -14,13 +13,12 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.vivavu.dream.R;
-import com.vivavu.dream.activity.bucket.BucketAddActivity;
+import com.vivavu.dream.activity.bucket.BucketEditActivity;
 import com.vivavu.dream.activity.bucket.BucketViewActivity;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.Code;
 import com.vivavu.dream.fragment.main.MainBucketListFragment;
 import com.vivavu.dream.util.AndroidUtils;
-import com.vivavu.dream.view.ButtonIncludeCount;
 import com.vivavu.dream.view.CustomPopupWindow;
 
 import butterknife.ButterKnife;
@@ -40,6 +38,8 @@ public class MainActivity extends BaseActionBarActivity {
     CustomPopupWindow mPopupNotice;
 
     MainBucketListFragment mainBucketListFragment;
+
+    public static final String EXTRA_BUCKET_DEFAULT_RANGE="extraBucketDefaultRange";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,8 +80,6 @@ public class MainActivity extends BaseActionBarActivity {
             }
         });
 
-        Typeface typeface = Typeface.createFromAsset(context.getAssets(), "NanumBarunGothicBold.mp3");
-
         SpannableString text = new SpannableString("logos");
         text.setSpan(new ForegroundColorSpan(R.color.skyblue),0,1,0);
         text.setSpan(new ForegroundColorSpan(R.color.white),1,2,0);
@@ -89,11 +87,11 @@ public class MainActivity extends BaseActionBarActivity {
         text.setSpan(new ForegroundColorSpan(R.color.lightred),3,4,0);
 
         mActionbarMainTitle.setText(text, TextView.BufferType.SPANNABLE);
-        mActionbarMainTitle.setTypeface(typeface);
+        mActionbarMainTitle.setTypeface(getNanumBarunGothicBoldFont());
         mActionbarMainTitle.setTextSize(22);
         mActionbarMainTitle.setTextColor(Color.WHITE);
 
-        mActionbarMainToday.setTypeface(typeface);
+        mActionbarMainToday.setTypeface(getNanumBarunGothicBoldFont());
         mActionbarMainToday.setTextColor(Color.WHITE);
         mActionbarMainToday.setTextSize(14);
     }
@@ -111,7 +109,7 @@ public class MainActivity extends BaseActionBarActivity {
 
         switch (requestCode) {
             case Code.ACT_ADD_BUCKET:
-                int bucketId = data.getIntExtra(BucketAddActivity.RESULT_EXTRA_BUCKET_ID, -1);
+                int bucketId = data.getIntExtra(BucketEditActivity.RESULT_EXTRA_BUCKET_ID, -1);
                 if (bucketId > 0) {
                     goBucketView(bucketId);
                 }
@@ -133,7 +131,11 @@ public class MainActivity extends BaseActionBarActivity {
     private void goAddBucket() {
         Intent intent;
         intent = new Intent();
-        intent.setClass(this, BucketAddActivity.class);
+        intent.setClass(this, BucketEditActivity.class);
+        if(mainBucketListFragment != null) {
+            intent.putExtra(EXTRA_BUCKET_DEFAULT_RANGE, mainBucketListFragment.getViewPagerPage() * 10);
+        }
+
         startActivity(intent);
     }
 

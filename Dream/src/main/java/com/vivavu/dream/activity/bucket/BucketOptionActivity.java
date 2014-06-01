@@ -5,9 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.vivavu.dream.R;
@@ -34,6 +34,10 @@ public class BucketOptionActivity extends BaseActionBarActivity {
     LinearLayout mContentFrame;
     @InjectView(R.id.layout_bucket_option_note)
     LinearLayout mLayoutBucketOptionNote;
+    @InjectView(R.id.menu_previous)
+    ImageButton mMenuPrevious;
+    @InjectView(R.id.menu_save)
+    ImageButton mMenuSave;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +71,19 @@ public class BucketOptionActivity extends BaseActionBarActivity {
             finish();
         }
 
+        mMenuSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveOption();
+            }
+        });
+        mMenuPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setResult(Activity.RESULT_CANCELED);
+                finish();
+            }
+        });
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.content_frame, bucketOption)
                 .commit();
@@ -76,24 +93,6 @@ public class BucketOptionActivity extends BaseActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         //getMenuInflater().inflate(R.menu.bucket_add_activity_actions, menu);
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        Intent intent;
-        switch (id) {
-            case R.id.bucket_add_menu_save:
-                saveOption();
-
-                return true;
-            /*case R.id.bucket_add_menu_cancel:
-                setResult(Activity.RESULT_CANCELED);
-                finish();
-                return true;*/
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

@@ -9,11 +9,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.vivavu.dream.R;
-import com.vivavu.dream.activity.bucket.BucketAddActivity;
+import com.vivavu.dream.activity.bucket.BucketEditActivity;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.fragment.main.MainTodayDailyFragment;
 import com.vivavu.dream.util.AndroidUtils;
-import com.vivavu.dream.view.ButtonIncludeCount;
 import com.vivavu.dream.view.CustomPopupWindow;
 
 import butterknife.ButterKnife;
@@ -102,7 +101,7 @@ public class TodayActivity extends BaseActionBarActivity {
     private void goAddBucket() {
         Intent intent;
         intent = new Intent();
-        intent.setClass(this, BucketAddActivity.class);
+        intent.setClass(this, BucketEditActivity.class);
         startActivity(intent);
     }
 

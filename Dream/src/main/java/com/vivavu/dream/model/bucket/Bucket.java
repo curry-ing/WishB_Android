@@ -40,7 +40,7 @@ public class Bucket implements Serializable{
 
     @DatabaseField
     @SerializedName("private")
-    private Integer isPrivate;
+    private Integer isPrivate = 1;
 
     @DatabaseField
     @SerializedName("scope")

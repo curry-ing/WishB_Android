@@ -78,7 +78,7 @@
     <string name="bucket_status_achievement">달성</string>
     <string name="bucket_status_seal">봉인</string>
     <string name="bucket_status_delete">삭제</string>
-    <string name="bucket_option_note_hint">노트를 입력하세요.</string>
+    <string name="bucket_option_note_hint">노트를 입력하세요_</string>
     <string name="no_network_connection_toast">네트워크에 연결할 수 없습니다.</string>
     <string name="today">Today</string>
     <string name="invalid_selected_date">데이터가 없는 날짜입니다. 다시 선택해주세요.</string>

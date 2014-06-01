@@ -6,7 +6,12 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.graphics.*;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -16,10 +21,10 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.vivavu.dream.R;
@@ -37,7 +42,6 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import com.vivavu.dream.util.AndroidUtils;
 
 /**
  * Created by yuja on 14. 2. 27.
@@ -167,6 +171,10 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
         if(bucketAdapter2 != null) {
             bucketAdapter2.notifyDataSetChanged();
         }
+    }
+
+    public int getViewPagerPage(){
+        return mMainPager.getCurrentItem();
     }
 
 //    @Override

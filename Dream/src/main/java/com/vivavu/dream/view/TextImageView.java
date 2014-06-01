@@ -242,7 +242,8 @@ public class TextImageView extends BaseImageView {
         //꽉찬 원형을 그림
         pnt.setStyle(Paint.Style.FILL);
         pnt.setColor(Color.BLACK);
-        canvas.drawOval(new RectF(0.0f + padding, 0.0f + padding, width - padding, height - padding), pnt);
+        //canvas.drawOval(new RectF(0.0f + getPaddingLeft(), 0.0f + getPaddingTop(), width - getPaddingRight(), height - getPaddingBottom()), pnt);
+        canvas.drawCircle( (float)width / 2, (float)height/2, (float)Math.min(width-getPaddingLeft()-getPaddingRight(), height-getPaddingTop()-getPaddingBottom())/2, pnt);
 
         return bitmapOut;
     }

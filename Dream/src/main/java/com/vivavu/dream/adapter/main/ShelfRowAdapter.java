@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.vivavu.dream.R;
-import com.vivavu.dream.activity.bucket.BucketAddActivity;
+import com.vivavu.dream.activity.bucket.BucketEditActivity;
 import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.util.DateUtils;
 
@@ -78,7 +78,7 @@ public class ShelfRowAdapter extends PagerAdapter implements View.OnClickListene
             public void onClick(View v) {
                 Intent intent;
                 intent = new Intent();
-                intent.setClass(context, BucketAddActivity.class);
+                intent.setClass(context, BucketEditActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 context.startActivity(intent);
             }

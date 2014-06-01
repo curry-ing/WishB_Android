@@ -3,6 +3,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     >
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,11 +27,7 @@
             android:background="@drawable/txt_bucket_edit_sub_repeat_title"
             ></View>
         </LinearLayout>
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
-        >
+
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -72,7 +70,7 @@
                     android:layout_height="32dp"
                     android:id="@+id/btn_bucket_option_mon"
                     android:enabled="true"
-                    android:clickable="true"
+                    android:clickable="false"
                     android:background="@drawable/ic_week_mon"
                     />
                 <Button
@@ -80,7 +78,7 @@
                     android:layout_height="32dp"
                     android:id="@+id/btn_bucket_option_tue"
                     android:enabled="true"
-                    android:clickable="true"
+                    android:clickable="false"
                     android:background="@drawable/ic_week_tue"
                     />
                 <Button
@@ -88,7 +86,7 @@
                     android:layout_height="32dp"
                     android:id="@+id/btn_bucket_option_wen"
                     android:enabled="true"
-                    android:clickable="true"
+                    android:clickable="false"
                     android:background="@drawable/ic_week_wen"
                     />
                 <Button
@@ -96,7 +94,7 @@
                     android:layout_height="32dp"
                     android:id="@+id/btn_bucket_option_thu"
                     android:enabled="true"
-                    android:clickable="true"
+                    android:clickable="false"
                     android:background="@drawable/ic_week_thu"
                     />
                 <Button
@@ -104,7 +102,7 @@
                     android:layout_height="32dp"
                     android:id="@+id/btn_bucket_option_fri"
                     android:enabled="true"
-                    android:clickable="true"
+                    android:clickable="false"
                     android:background="@drawable/ic_week_fri"
                     />
                 <Button
@@ -112,7 +110,7 @@
                     android:layout_height="32dp"
                     android:id="@+id/btn_bucket_option_sat"
                     android:enabled="true"
-                    android:clickable="true"
+                    android:clickable="false"
                     android:background="@drawable/ic_week_sat"
                     />
                 <Button
@@ -120,25 +118,12 @@
                     android:layout_height="32dp"
                     android:id="@+id/btn_bucket_option_sun"
                     android:enabled="true"
-                    android:clickable="true"
+                    android:clickable="false"
                     android:background="@drawable/ic_week_sun" />
 
             </LinearLayout>
         </LinearLayout>
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/layout_bucket_option_repeat_week_mask"
-            android:background="@color/disable"
-            >
 
-            </FrameLayout>
-        </FrameLayout>
-
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -177,7 +162,7 @@
                     android:layout_height="32dp"
                     android:id="@+id/btn_bucket_option_week"
                     android:enabled="true"
-                    android:clickable="true"
+                    android:clickable="false"
                     android:background="@drawable/ic_option_week"
                     />
                 <View
@@ -192,7 +177,7 @@
                     android:layout_height="32dp"
                     android:id="@+id/btn_bucket_option_month"
                     android:enabled="true"
-                    android:clickable="true"
+                    android:clickable="false"
                     android:background="@drawable/ic_week_mon"
                     />
                 <View
@@ -202,7 +187,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     ></View>
-                <EditText
+                <TextView
                     android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
@@ -224,12 +209,4 @@
                     />
             </LinearLayout>
         </LinearLayout>
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/layout_bucket_option_repeat_custom_mask"
-            android:background="@color/disable"
-            >
-        </FrameLayout>
-    </FrameLayout>
 </LinearLayout>

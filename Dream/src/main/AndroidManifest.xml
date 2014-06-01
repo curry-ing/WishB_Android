@@ -71,7 +71,7 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" >
         </activity>
         <activity
-            android:name="com.vivavu.dream.activity.bucket.BucketAddActivity"
+            android:name=".activity.bucket.BucketEditActivity"
             android:label="Add Bucket"
             android:screenOrientation="portrait" >
         </activity>
