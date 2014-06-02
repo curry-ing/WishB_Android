@@ -4,11 +4,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.vivavu.dream.R;
-import com.vivavu.dream.activity.bucket.BucketAddActivity;
+import com.vivavu.dream.activity.bucket.BucketEditActivity;
 import com.vivavu.dream.fragment.bucket.option.OptionBaseFragment;
 import com.vivavu.dream.model.bucket.option.OptionDescription;
 
@@ -20,13 +21,12 @@ import butterknife.InjectView;
  */
 public class DescriptionViewFragment extends OptionBaseFragment<OptionDescription> implements View.OnClickListener {
     public static final String TAG = "com.vivavu.dream.fragment.bucket.option.description.DescriptionViewFragment";
-
-    @InjectView(R.id.option_view_icon)
-    ImageView mOptionViewIcon;
-    @InjectView(R.id.option_view_contents)
-    TextView mOptionViewContents;
-    @InjectView(R.id.option_view_layer)
-    View mOptionViewLayer;
+    @InjectView(R.id.btn_bucket_option_note)
+    Button mBtnBucketOptionNote;
+    @InjectView(R.id.bucket_option_note)
+    TextView mBucketOptionNote;
+    @InjectView(R.id.layout_bucket_option_note)
+    LinearLayout mLayoutBucketOptionNote;
 
     public DescriptionViewFragment(OptionDescription originalData) {
         super(originalData);
@@ -47,25 +47,25 @@ public class DescriptionViewFragment extends OptionBaseFragment<OptionDescriptio
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View rootView =  inflater.inflate(R.layout.bucket_option_view, container, false);
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.bucket_option_description_view, container, false);
         ButterKnife.inject(this, rootView);
-        mOptionViewIcon.setImageResource(R.drawable.notes);
-        mOptionViewContents.setOnClickListener(this);
-        mOptionViewLayer.setOnClickListener(this);
-        mOptionViewLayer.bringToFront();
+        for(int i = 0; i < rootView.getChildCount(); i++){
+            View v = rootView.getChildAt(i);
+            v.setOnClickListener(this);
+        }
         return rootView;
     }
 
     @Override
     public void onClick(View view) {
         super.onClick(view);//배경선택시 키보드 없애기 위해 호출
-        BucketAddActivity bucketAddActivity = (BucketAddActivity) getActivity();
-        bucketAddActivity.goOptionDescription();
+        BucketEditActivity bucketEditActivity = (BucketEditActivity) getActivity();
+        bucketEditActivity.goOptionDescription();
     }
 
     @Override
     public void update() {
-        mOptionViewContents.setText(contents.getDescription());
+        mBucketOptionNote.setText(contents.getDescription());
     }
 
     @Override

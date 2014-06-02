@@ -12,6 +12,10 @@ import android.widget.LinearLayout;
 import com.vivavu.dream.R;
 import com.vivavu.dream.fragment.bucket.option.OptionBaseFragment;
 import com.vivavu.dream.model.bucket.option.OptionDDay;
+import com.vivavu.dream.util.DateUtils;
+
+import java.util.Calendar;
+import java.util.Date;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -50,7 +54,12 @@ public class DDayFragment extends OptionBaseFragment<OptionDDay> implements View
 
         final View rootView = inflater.inflate(R.layout.bucket_option_dday, container, false);
         ButterKnife.inject(this, rootView);
-
+        Date deadline = contents.getDeadline();
+        if(deadline != null) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(deadline);
+            mCustomDate.updateDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        }
         return rootView;
     }
 
@@ -87,7 +96,11 @@ public class DDayFragment extends OptionBaseFragment<OptionDDay> implements View
 
     @Override
     public void bind() {
+        int year = mCustomDate.getYear();
+        int month = mCustomDate.getMonth();
+        int dayOfMonth = mCustomDate.getDayOfMonth();
 
+        contents.setDeadline(DateUtils.getDate(year, month, dayOfMonth));
     }
 
 }

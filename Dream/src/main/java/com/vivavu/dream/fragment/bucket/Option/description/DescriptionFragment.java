@@ -20,7 +20,6 @@ import butterknife.InjectView;
  */
 public class DescriptionFragment extends OptionBaseFragment<OptionDescription> implements View.OnClickListener {
     public static final String TAG = "com.vivavu.dream.fragment.bucket.option.description.DescriptionFragment";
-
     @InjectView(R.id.btn_bucket_option_note)
     Button mBtnBucketOptionNote;
     @InjectView(R.id.bucket_option_note)

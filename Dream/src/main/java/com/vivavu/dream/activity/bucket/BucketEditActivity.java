@@ -20,6 +20,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.vivavu.dream.R;
@@ -68,7 +69,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
     @InjectView(R.id.bucket_input_title)
     EditText mBucketInputTitle;
     @InjectView(R.id.bucket_input_deadline)
-    EditText mBucketInputDeadline;
+    TextView mBucketInputDeadline;
     @InjectView(R.id.btn_bucket_option_note)
     Button mBtnBucketOptionNote;
     @InjectView(R.id.btn_bucket_option_repeat)
