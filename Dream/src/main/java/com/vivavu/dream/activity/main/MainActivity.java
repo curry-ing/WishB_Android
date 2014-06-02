@@ -88,7 +88,8 @@ public class MainActivity extends BaseActionBarActivity {
         text.setSpan(new ForegroundColorSpan(R.color.lightgreen),2,3,0);
         text.setSpan(new ForegroundColorSpan(R.color.lightred),3,4,0);
 
-        mActionbarMainTitle.setText(text, TextView.BufferType.SPANNABLE);
+//        mActionbarMainTitle.setText(text, TextView.BufferType.SPANNABLE);
+        mActionbarMainTitle.setText("Wish Ballon");
         mActionbarMainTitle.setTypeface(typeface);
         mActionbarMainTitle.setTextSize(22);
         mActionbarMainTitle.setTextColor(Color.WHITE);
