@@ -15,19 +15,18 @@ repositories {
 android {
     compileSdkVersion 19
     buildToolsVersion '19.0.1'
-
     defaultConfig {
         minSdkVersion 11
         targetSdkVersion 19
         versionCode 1
-        versionName "1.0"
+        versionName '1.0'
     }
-    signingConfigs{
-        myConfig{
-            storeFile file("../dream.keystore.jks")
-            storePassword "dreamproject"
-            keyAlias "dreamprojectkey"
-            keyPassword "dreamproject"
+    signingConfigs {
+        myConfig {
+            storeFile file('../dream.keystore.jks')
+            storePassword 'dreamproject'
+            keyAlias 'dreamprojectkey'
+            keyPassword 'dreamproject'
         }
     }
     buildTypes {
@@ -35,7 +34,7 @@ android {
             runProguard false
             jniDebugBuild false
         }
-        debug{
+        debug {
             debuggable true
             jniDebugBuild true
             signingConfig signingConfigs.myConfig
@@ -48,24 +47,20 @@ android {
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/NOTICE'
     }
+    productFlavors {
+    }
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:+'
-    compile 'com.android.support:support-v4:19.0.0'
-
+    compile 'com.android.support:appcompat-v7:19.1.+'
+    compile 'com.android.support:support-v4:19.1.+'
     compile 'com.google.code.gson:gson:2.2.4'
-    /*compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
-    compile 'org.codehaus.jackson:jackson-core-asl:1.9.13'*/
-
     compile 'com.jakewharton:butterknife:4.0.1'
     compile 'org.springframework.android:spring-android-core:1.0.1.RELEASE@jar'
     compile 'org.springframework.android:spring-android-auth:1.0.1.RELEASE@jar'
     compile 'org.springframework.android:spring-android-rest-template:1.0.1.RELEASE@jar'
-
     compile 'com.navercorp.pulltorefresh:library:3.2.0@aar'
     compile 'com.j256.ormlite:ormlite-android:4.48'
-
     compile 'com.github.johnkil.android-progressfragment:progressfragment:1.4.0'
     compile 'com.tonicartos:stickygridheaders:1.0.1'
     compile 'com.squareup:android-times-square:1.1.1@aar'
@@ -74,4 +69,5 @@ dependencies {
     compile project(':Libraries:facebook')
     compile project(':Libraries:viewpagerindicator')
     compile project(':Libraries:carousel')
+    compile 'com.android.support:gridlayout-v7:+'
 }

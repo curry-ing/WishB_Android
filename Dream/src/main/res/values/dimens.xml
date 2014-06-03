@@ -6,4 +6,5 @@
     <dimen name="subview_item_radius">110dp</dimen>
     <dimen name="subview_item_width">110dp</dimen>
     <dimen name="subview_item_height">110dp</dimen>
+    <dimen name="sub_view_item_padding">20dp</dimen>
 </resources>

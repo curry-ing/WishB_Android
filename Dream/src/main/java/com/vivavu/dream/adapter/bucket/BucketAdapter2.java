@@ -26,7 +26,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.vivavu.dream.R;
-import com.vivavu.dream.activity.bucket.CircleBucketListActivity;
+import com.vivavu.dream.activity.bucket.BucketGroupViewActivity;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.drawable.RoundedAvatarDrawable;
@@ -279,7 +279,8 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
                 Intent intent;
                 intent = new Intent();
                 intent.putExtra("groupRange", getBucketGroupList().get(pos).getRange());
-                intent.setClass(context, CircleBucketListActivity.class);
+                //intent.setClass(context, CircleBucketListActivity.class);
+                intent.setClass(context, BucketGroupViewActivity.class);
                 fragment.startActivity(intent);
             }
 
