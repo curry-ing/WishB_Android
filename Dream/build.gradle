@@ -53,6 +53,7 @@ android {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:19.1.+'
+    compile 'com.android.support:gridlayout-v7:19.1+'
     compile 'com.android.support:support-v4:19.1.+'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.jakewharton:butterknife:4.0.1'
@@ -69,5 +70,4 @@ dependencies {
     compile project(':Libraries:facebook')
     compile project(':Libraries:viewpagerindicator')
     compile project(':Libraries:carousel')
-    compile 'com.android.support:gridlayout-v7:+'
 }

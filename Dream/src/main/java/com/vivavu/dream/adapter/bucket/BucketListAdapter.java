@@ -22,7 +22,7 @@ import butterknife.InjectView;
  * Created by yuja on 2014-06-02.
  */
 public class BucketListAdapter extends BaseAdapter {
-
+    public static final int INVALID_ITEM_ID = -1;
     private List<Bucket> list;
     private Context mContext;
 
@@ -50,7 +50,11 @@ public class BucketListAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return position;
+        Bucket item = getItem(position);
+        if( item != null){
+            return item.getId();
+        }
+        return INVALID_ITEM_ID;
     }
 
     @Override

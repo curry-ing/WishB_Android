@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.view.CustomPopupWindow;
 
 import java.security.MessageDigest;
@@ -117,7 +118,11 @@ public class AndroidUtils {
     }
 
     public static int getPixelFromDIP(final View view, int value) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, view.getResources().getDisplayMetrics());
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, DreamApp.getInstance().getResources().getDisplayMetrics());
+    }
+
+    public static int getSpFromPx(int px){
+        return  (int) (px / DreamApp.getInstance().getResources().getDisplayMetrics().scaledDensity);
     }
 
     public static CustomPopupWindow makePopupWindow(View contentsView, int width, int height ){

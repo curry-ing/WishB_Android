@@ -6,28 +6,28 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
+import android.view.Window;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.bucket.timeline.TimelineCalendarActivity;
-import com.vivavu.dream.activity.bucket.timeline.TimelineItemEditActivity;
 import com.vivavu.dream.activity.bucket.timeline.TimelineItemViewActivity;
 import com.vivavu.dream.adapter.bucket.timeline.TimelineDailyAdapter;
 import com.vivavu.dream.common.BaseActionBarActivity;
-import com.vivavu.dream.fragment.bucket.timeline.TimelineFragment;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.model.bucket.timeline.Post;
 import com.vivavu.dream.model.bucket.timeline.TimelineMetaInfo;
 import com.vivavu.dream.repository.DataRepository;
 import com.vivavu.dream.repository.connector.TimelineConnector;
+import com.vivavu.dream.util.AndroidUtils;
 import com.vivavu.dream.util.DateUtils;
+import com.vivavu.dream.view.TextImageView;
 
 import java.util.Collections;
 import java.util.Date;
@@ -51,28 +51,26 @@ public class TimelineActivity extends BaseActionBarActivity {
     private static final int REQUEST_MOD_BUCKET = 3;
 
 
-    @InjectView(R.id.btn_timeline_title)
-    Button mBtnTimelineTitle;
-    @InjectView(R.id.btn_bucket_complete)
-    Button mBtnBucketComplete;
-    @InjectView(R.id.progressBar)
-    ProgressBar mProgressBar;
-    @InjectView(R.id.txt_start_date)
-    TextView mTxtStartDate;
-    @InjectView(R.id.txt_current_date)
-    TextView mTxtCurrentDate;
-    @InjectView(R.id.txt_end_date)
-    TextView mTxtEndDate;
-    @InjectView(R.id.container_post_info)
-    LinearLayout mContainerPostInfo;
-    @InjectView(R.id.daily_timeline)
-    ViewPager mDailyTimeline;
-    @InjectView(R.id.btn_add_timeline)
-    Button mBtnAddTimeline;
-
     Bucket bucket;
     TimelineMetaInfo timelineMetaInfo;
     TimelineDailyAdapter timelineDailyAdapter;
+    @InjectView(R.id.menu_previous)
+    ImageButton mMenuPrevious;
+    @InjectView(R.id.txt_bucket_title)
+    TextView mTxtBucketTitle;
+    @InjectView(R.id.txt_bucket_deadline)
+    TextView mTxtBucketDeadline;
+    @InjectView(R.id.txt_bucket_remain)
+    TextView mTxtBucketRemain;
+    @InjectView(R.id.btn_achieve)
+    ImageButton mBtnAchieve;
+    @InjectView(R.id.btn_edit)
+    ImageButton mBtnEdit;
+    @InjectView(R.id.img_bucket)
+    TextImageView mImgBucket;
+    @InjectView(R.id.txt_bucket_description)
+    TextView mTxtBucketDescription;
+
     private ProgressDialog progressDialog;
     private static final int FETCH_DATA_START = 0;
     private static final int FETCH_DATA_SUCCESS = 1;
@@ -102,19 +100,26 @@ public class TimelineActivity extends BaseActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);//api level 11 이상 부터 사용가능
         setContentView(R.layout.activity_timeline);
 
         ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
+/*
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setCustomView(R.layout.actionbar_timeline);
+*/
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("진행중");
 
         ButterKnife.inject(this);
 
+        mTxtBucketDeadline.setTypeface(getDenseRegularFont());
+        mTxtBucketRemain.setTypeface(getDenseRegularFont());
+        mTxtBucketDescription.setTypeface(getNanumBarunGothicFont());
         Intent data = getIntent();
         Integer bucketId = data.getIntExtra(extraKey, -1);
         bucket = DataRepository.getBucket(bucketId);
@@ -129,8 +134,8 @@ public class TimelineActivity extends BaseActionBarActivity {
     private void initTimelineContents() {
         if(timelineDailyAdapter == null) {
             timelineDailyAdapter = new TimelineDailyAdapter(getSupportFragmentManager(), this, timelineMetaInfo);
-            mDailyTimeline.setAdapter(timelineDailyAdapter);
-            mDailyTimeline.setOffscreenPageLimit(OFF_SCREEN_PAGE_LIMIT);
+            /*mDailyTimeline.setAdapter(timelineDailyAdapter);
+            mDailyTimeline.setOffscreenPageLimit(OFF_SCREEN_PAGE_LIMIT);*/
         }
         timelineMetaInfo.setBucketId(bucket.getId());
         timelineDailyAdapter.setTimelineMetaInfo(timelineMetaInfo);
@@ -138,21 +143,31 @@ public class TimelineActivity extends BaseActionBarActivity {
     }
 
     private void bindData(Bucket bucket) {
-        mBtnTimelineTitle.setText(bucket.getTitle());
+        mTxtBucketTitle.setText(bucket.getTitle());
         Date start = bucket.getRegDate();
-        Date current = new Date();
         Date end = bucket.getDeadline();
-        mTxtStartDate.setText(DateUtils.getDateString(start, "yyyy.MM.dd"));
-        mTxtCurrentDate.setText(DateUtils.getDateString(current, "yyyy.MM.dd"));
-        mTxtEndDate.setText(DateUtils.getDateString(end, "yyyy.MM.dd"));
-
-        if(start != null && end != null) {
-            int progress = DateUtils.getProgress(start, end);
-            mProgressBar.setProgress(progress);
+        mTxtBucketDeadline.setText(DateUtils.getDateString(end, "yyyy.MM.dd"));
+        Long remainDay = DateUtils.getRemainDay(end);
+        if(remainDay >= 0) {
+            mTxtBucketRemain.setText("D-" + String.valueOf(remainDay));
+        }else{
+            mTxtBucketRemain.setText("D+" + String.valueOf(Math.abs(remainDay)));
         }
+
+        int progress = DateUtils.getProgress(start, end);
+        Log.v(TAG, String.valueOf( AndroidUtils.getSpFromPx(65)));
+        ImageLoader.getInstance().displayImage(bucket.getCvrImgUrl(), mImgBucket);
+
+        mTxtBucketDescription.setText(bucket.getDescription());
+
+        /*String desc = "<font color=\"red\">V</font><font color=\"black\">i</font>sit my site";
+        String table="<table><tr>"+ "<td style=\"background:#FF00FF\">"+ "v"+ "</td>" + "<td>"+ "v"+ "</td>"+"</tr></table>";
+        mTxtBucketRemain.setText(Html.fromHtml(table));*/
+
     }
+
     private void initEvent() {
-        mBtnTimelineTitle.setOnClickListener(new View.OnClickListener() {
+        mBtnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TimelineActivity.this, BucketEditActivity.class);
@@ -160,7 +175,7 @@ public class TimelineActivity extends BaseActionBarActivity {
                 startActivityForResult(intent, REQUEST_MOD_BUCKET);
             }
         });
-        mBtnAddTimeline.setOnClickListener(new View.OnClickListener() {
+        /*mBtnAddTimeline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TimelineActivity.this, TimelineItemEditActivity.class);
@@ -169,8 +184,8 @@ public class TimelineActivity extends BaseActionBarActivity {
                 intent.putExtra(extraKeyWriteDate, new Date());
                 startActivityForResult(intent, REQUEST_ADD_POST);
             }
-        });
-        mDailyTimeline.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        });*/
+        /*mDailyTimeline.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
@@ -185,7 +200,7 @@ public class TimelineActivity extends BaseActionBarActivity {
             public void onPageScrollStateChanged(int state) {
 
             }
-        });
+        });*/
     }
 
     @Override
@@ -197,7 +212,7 @@ public class TimelineActivity extends BaseActionBarActivity {
                     Date selectedDate = (Date) data.getSerializableExtra(TimelineCalendarActivity.selectedDateExtraName);
                     Integer selectedIndex =  data.getIntExtra(TimelineCalendarActivity.selectedDateIndexExtraName, 0);
                     if(selectedDate != null){
-                        mDailyTimeline.setCurrentItem(selectedIndex, true);
+                        //mDailyTimeline.setCurrentItem(selectedIndex, true);
                     }
                     return;
                 }

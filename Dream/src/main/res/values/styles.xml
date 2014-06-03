@@ -17,6 +17,25 @@
         <!--<item name="android:background">@color/mint</item>-->
         <!--<item name="android:itemBackground">@color/mint</item>-->
     </style>
+    <style name="TextBucketTitleStyle" >
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:gravity">center</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:maxLength">20</item>
+        <item name="android:shadowColor">#AA000000</item>
+        <item name="android:shadowDx">2.0</item>
+        <item name="android:shadowDy">2.0</item>
+        <item name="android:shadowRadius">2.0</item>
+    </style>
+    <style name="TextBucketDeadlineStyle" >
+        <item name="android:textColor">@color/white</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:shadowColor">#AA000000</item>
+        <item name="android:shadowDx">0.0</item>
+        <item name="android:shadowDy">0.0</item>
+        <item name="android:shadowRadius">8.0</item>
+    </style>
     <style name="ActivityBottomLine">
 
     </style>

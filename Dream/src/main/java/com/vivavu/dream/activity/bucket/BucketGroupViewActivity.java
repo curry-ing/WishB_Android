@@ -41,7 +41,6 @@ public class BucketGroupViewActivity extends BaseActionBarActivity {
     Button mBtnToday;
     @InjectView(R.id.layout_sub_view_background)
     RelativeLayout mLayoutSubViewBackground;
-    private Bucket bucket;
 
     /*private MainContentsFragment mainContentsFragment;*/
 
@@ -95,7 +94,7 @@ public class BucketGroupViewActivity extends BaseActionBarActivity {
         mGridBucketList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(BucketGroupViewActivity.this, position + "번 아이템 클릭", Toast.LENGTH_SHORT).show();
+                goTimelineActivity((int) id);
             }
         });
 
@@ -115,4 +114,10 @@ public class BucketGroupViewActivity extends BaseActionBarActivity {
 
     }
 
+    public void goTimelineActivity(int bucketId){
+        Intent intent = new Intent();
+        intent.setClass(this, TimelineActivity.class);
+        intent.putExtra(TimelineActivity.extraKey, bucketId);
+        startActivity(intent);
+    }
 }
