@@ -24,12 +24,12 @@ import butterknife.InjectView;
 /**
  * Created by yuja on 2014-04-01.
  */
-public class TimelineListAdapter extends BaseAdapter {
+public class TimelineListAdapter2 extends BaseAdapter {
     protected Context context;
     protected LayoutInflater layoutInflater;
     protected List<Post> postList;
 
-    public TimelineListAdapter(Activity context, List<Post> postList) {
+    public TimelineListAdapter2(Activity context, List<Post> postList) {
         this.context = context;
         this.layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.postList = postList;

@@ -15,7 +15,7 @@ import android.widget.ListView;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.bucket.TimelineActivity;
 import com.vivavu.dream.activity.bucket.timeline.TimelineCalendarActivity;
-import com.vivavu.dream.adapter.bucket.timeline.TimelineListAdapter;
+import com.vivavu.dream.adapter.bucket.timeline.TimelineListAdapter2;
 import com.vivavu.dream.fragment.CustomBaseFragment;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.bucket.timeline.Post;
@@ -40,7 +40,7 @@ public class TimelineFragment extends CustomBaseFragment {
     protected TimelineMetaInfo timelineMetaInfo;
     protected Date selectedDate;
     protected List<Post> postList;
-    protected TimelineListAdapter timelineListAdapter;
+    protected TimelineListAdapter2 timelineListAdapter2;
 
     @InjectView(R.id.btn_date)
     Button mBtnDate;
@@ -130,12 +130,12 @@ public class TimelineFragment extends CustomBaseFragment {
     }
 
     private void updateTimeline(){
-        if(timelineListAdapter == null){
-            timelineListAdapter = new TimelineListAdapter(getActivity(), postList);
-            mListTimeline.setAdapter(timelineListAdapter);
+        if(timelineListAdapter2 == null){
+            timelineListAdapter2 = new TimelineListAdapter2(getActivity(), postList);
+            mListTimeline.setAdapter(timelineListAdapter2);
         }
-        timelineListAdapter.setPostList(postList);
-        timelineListAdapter.notifyDataSetChanged();
+        timelineListAdapter2.setPostList(postList);
+        timelineListAdapter2.notifyDataSetChanged();
 
     }
 

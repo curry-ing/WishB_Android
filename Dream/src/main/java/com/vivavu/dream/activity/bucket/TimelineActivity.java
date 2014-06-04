@@ -120,6 +120,7 @@ public class TimelineActivity extends BaseActionBarActivity {
         mTxtBucketDeadline.setTypeface(getDenseRegularFont());
         mTxtBucketRemain.setTypeface(getDenseRegularFont());
         mTxtBucketDescription.setTypeface(getNanumBarunGothicFont());
+
         Intent data = getIntent();
         Integer bucketId = data.getIntExtra(extraKey, -1);
         bucket = DataRepository.getBucket(bucketId);

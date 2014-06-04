@@ -207,7 +207,16 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/layout_bucket_default_info"
         android:id="@+id/layout_timeline_info"
+        android:paddingBottom="10dp"
         >
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/list_timeline"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            >
 
+            </ListView>
         </LinearLayout>
 </RelativeLayout>
