@@ -163,7 +163,7 @@
                     android:id="@+id/btn_bucket_option_week"
                     android:enabled="true"
                     android:clickable="false"
-                    android:background="@drawable/ic_option_week"
+                    android:background="@drawable/ic_option_week_release"
                     />
                 <View
                     android:layout_width="21dp"

@@ -9,6 +9,7 @@
     <!-- 디자인 -->
     <color name="white">#ffffffff</color>
     <color name="black">#ff000000</color>
+    <color name="default_darkgray">#444444</color>
     <color name="darkgray">#666</color>
     <color name="mint">#67c9bb</color>
     <color name="orange">#fa9261</color>

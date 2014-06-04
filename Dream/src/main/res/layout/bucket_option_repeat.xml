@@ -195,7 +195,7 @@
                     android:id="@+id/btn_bucket_option_month"
                     android:enabled="true"
                     android:clickable="true"
-                    android:background="@drawable/ic_week_mon"
+                    android:background="@drawable/ic_option_month"
                     />
                 <View
                     android:layout_width="2dp"

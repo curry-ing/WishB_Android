@@ -86,6 +86,28 @@ public class TimelineConnector extends Connector<Post> {
         }
         return result;
     }
+
+    public ResponseBodyWrapped<Timeline> getTimelineAll(Integer bucketId){
+        RestTemplate restTemplate = RestTemplateFactory.getInstance();
+        HttpHeaders requestHeaders = getBasicAuthHeader(DreamApp.getInstance());
+        HttpEntity request = new HttpEntity<String>(requestHeaders);
+        ResponseEntity<String> resultString = null;
+        try {
+            resultString = restTemplate.exchange(Constants.apiTimeline, HttpMethod.GET, request, String.class, bucketId);
+
+        } catch (RestClientException e) {
+            Log.e("dream", e.toString());
+        }
+
+        ResponseBodyWrapped<Timeline> result = new ResponseBodyWrapped<Timeline>("error", String.valueOf(resultString.getStatusCode()), new Timeline());
+
+        if(RestTemplateUtils.isAvailableParseToJson(resultString)){
+            Gson gson = JsonFactory.getInstance();
+            Type type = new TypeToken<ResponseBodyWrapped<Timeline>>(){}.getType();
+            result = gson.fromJson((String) resultString.getBody(), type);
+        }
+        return result;
+    }
     @Override
     public ResponseBodyWrapped<Post> post(final Post data) {
         RestTemplate restTemplate = RestTemplateFactory.getInstance();

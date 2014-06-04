@@ -10,26 +10,35 @@ import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.bucket.timeline.TimelineCalendarActivity;
+import com.vivavu.dream.activity.bucket.timeline.TimelineItemEditActivity;
 import com.vivavu.dream.activity.bucket.timeline.TimelineItemViewActivity;
-import com.vivavu.dream.adapter.bucket.timeline.TimelineDailyAdapter;
+import com.vivavu.dream.adapter.bucket.timeline.TimelineListAdapter;
 import com.vivavu.dream.common.BaseActionBarActivity;
+import com.vivavu.dream.common.enums.RepeatType;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.bucket.Bucket;
+import com.vivavu.dream.model.bucket.option.OptionRepeat;
 import com.vivavu.dream.model.bucket.timeline.Post;
+import com.vivavu.dream.model.bucket.timeline.Timeline;
 import com.vivavu.dream.model.bucket.timeline.TimelineMetaInfo;
+import com.vivavu.dream.repository.BucketConnector;
 import com.vivavu.dream.repository.DataRepository;
 import com.vivavu.dream.repository.connector.TimelineConnector;
 import com.vivavu.dream.util.AndroidUtils;
 import com.vivavu.dream.util.DateUtils;
 import com.vivavu.dream.view.TextImageView;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -53,7 +62,7 @@ public class TimelineActivity extends BaseActionBarActivity {
 
     Bucket bucket;
     TimelineMetaInfo timelineMetaInfo;
-    TimelineDailyAdapter timelineDailyAdapter;
+    TimelineListAdapter timelineListAdapter;
     @InjectView(R.id.menu_previous)
     ImageButton mMenuPrevious;
     @InjectView(R.id.txt_bucket_title)
@@ -70,11 +79,47 @@ public class TimelineActivity extends BaseActionBarActivity {
     TextImageView mImgBucket;
     @InjectView(R.id.txt_bucket_description)
     TextView mTxtBucketDescription;
+    @InjectView(R.id.layout_bucket_default_info)
+    LinearLayout mLayoutBucketDefaultInfo;
+    @InjectView(R.id.btn_add_post)
+    Button mBtnAddPost;
+    @InjectView(R.id.list_timeline)
+    ListView mListTimeline;
+    @InjectView(R.id.layout_timeline_info)
+    RelativeLayout mLayoutTimelineInfo;
+    @InjectView(R.id.layout_bucket_default_info_repeat_week)
+    LinearLayout mLayoutBucketDefaultInfoRepeatWeek;
+    @InjectView(R.id.layout_bucket_default_info_repeat_month)
+    LinearLayout mLayoutBucketDefaultInfoRepeatMonth;
+    @InjectView(R.id.btn_bucket_option_mon)
+    Button mBtnBucketOptionMon;
+    @InjectView(R.id.btn_bucket_option_tue)
+    Button mBtnBucketOptionTue;
+    @InjectView(R.id.btn_bucket_option_wen)
+    Button mBtnBucketOptionWen;
+    @InjectView(R.id.btn_bucket_option_thu)
+    Button mBtnBucketOptionThu;
+    @InjectView(R.id.btn_bucket_option_fri)
+    Button mBtnBucketOptionFri;
+    @InjectView(R.id.btn_bucket_option_sat)
+    Button mBtnBucketOptionSat;
+    @InjectView(R.id.btn_bucket_option_sun)
+    Button mBtnBucketOptionSun;
+    @InjectView(R.id.btn_bucket_option_month)
+    View mBtnBucketOptionMonth;
+    @InjectView(R.id.btn_bucket_option_week)
+    View mBtnBucketOptionWeek;
+    @InjectView(R.id.txt_bucket_option_repeat_cnt)
+    TextView mTxtBucketOptionRepeatCnt;
 
     private ProgressDialog progressDialog;
     private static final int FETCH_DATA_START = 0;
     private static final int FETCH_DATA_SUCCESS = 1;
     private static final int FETCH_DATA_FAIL = 2;
+    private static final int UPDATE_BUCKET_DATA_SUCCESS = 3;
+    private static final int UPDATE_BUCKET_DATA_FAIL = 4;
+
+    private Timeline timeline;
 
     protected final Handler handler = new Handler() {
         @Override
@@ -84,14 +129,21 @@ public class TimelineActivity extends BaseActionBarActivity {
                     progressDialog.show();
                     break;
                 case FETCH_DATA_SUCCESS:
-                    timelineMetaInfo = (TimelineMetaInfo) msg.obj;
-                    List<Date> dateList = timelineMetaInfo.getDateList();
-                    Collections.reverse(dateList);
-                    initTimelineContents();
+                    timeline = (Timeline) msg.obj;
+                    List<Post> dataList = timeline.getTimelineData();
+                    initTimelineContents(dataList);
                     progressDialog.dismiss();
                     break;
                 case FETCH_DATA_FAIL:
                     progressDialog.dismiss();
+                    break;
+                case UPDATE_BUCKET_DATA_SUCCESS:
+                    bucket = (Bucket) msg.obj;
+                    bindData(bucket);
+                    progressDialog.dismiss();
+                    break;
+                case UPDATE_BUCKET_DATA_FAIL:
+                    Toast.makeText(TimelineActivity.this, "버킷 정보 갱신에 실패하였습니다.", Toast.LENGTH_SHORT ).show();
                     break;
             }
         }
@@ -128,19 +180,19 @@ public class TimelineActivity extends BaseActionBarActivity {
         timelineMetaInfo = new TimelineMetaInfo();
         initEvent();
 
-        Thread thread = new Thread(new NetworkThread());
+        Thread thread = new Thread(new TimelineThread());
         thread.start();
     }
 
-    private void initTimelineContents() {
-        if(timelineDailyAdapter == null) {
-            timelineDailyAdapter = new TimelineDailyAdapter(getSupportFragmentManager(), this, timelineMetaInfo);
-            /*mDailyTimeline.setAdapter(timelineDailyAdapter);
-            mDailyTimeline.setOffscreenPageLimit(OFF_SCREEN_PAGE_LIMIT);*/
+    private void initTimelineContents(List<Post> dataList) {
+        if(timelineListAdapter == null) {
+            timelineListAdapter = new TimelineListAdapter(this);
+            mListTimeline.setAdapter(timelineListAdapter);
         }
         timelineMetaInfo.setBucketId(bucket.getId());
-        timelineDailyAdapter.setTimelineMetaInfo(timelineMetaInfo);
-        timelineDailyAdapter.notifyDataSetChanged();
+        timelineListAdapter.setTimelineMetaInfo(timelineMetaInfo);
+        timelineListAdapter.setPostList(dataList);
+        timelineListAdapter.notifyDataSetChanged();
     }
 
     private void bindData(Bucket bucket) {
@@ -150,9 +202,15 @@ public class TimelineActivity extends BaseActionBarActivity {
         mTxtBucketDeadline.setText(DateUtils.getDateString(end, "yyyy.MM.dd"));
         Long remainDay = DateUtils.getRemainDay(end);
         if(remainDay >= 0) {
-            mTxtBucketRemain.setText("D-" + String.valueOf(remainDay));
+            mTxtBucketRemain.setText(String.format("D - %05d", remainDay));
         }else{
-            mTxtBucketRemain.setText("D+" + String.valueOf(Math.abs(remainDay)));
+            mTxtBucketRemain.setText(String.format("D + %05d", Math.abs(remainDay)));
+        }
+
+        if(bucket.getStatus() == 0) {
+            mBtnAchieve.setSelected(false);
+        } else {
+            mBtnAchieve.setSelected(true);
         }
 
         int progress = DateUtils.getProgress(start, end);
@@ -160,11 +218,34 @@ public class TimelineActivity extends BaseActionBarActivity {
         ImageLoader.getInstance().displayImage(bucket.getCvrImgUrl(), mImgBucket);
 
         mTxtBucketDescription.setText(bucket.getDescription());
+        OptionRepeat repeat = new OptionRepeat(RepeatType.fromCode(bucket.getRptType()), bucket.getRptCndt());
+        if(repeat.getRepeatType() == RepeatType.WKRP ){
+            mLayoutBucketDefaultInfoRepeatWeek.setVisibility(View.VISIBLE);
+            mLayoutBucketDefaultInfoRepeatMonth.setVisibility(View.GONE);
 
-        /*String desc = "<font color=\"red\">V</font><font color=\"black\">i</font>sit my site";
-        String table="<table><tr>"+ "<td style=\"background:#FF00FF\">"+ "v"+ "</td>" + "<td>"+ "v"+ "</td>"+"</tr></table>";
-        mTxtBucketRemain.setText(Html.fromHtml(table));*/
+            mBtnBucketOptionSun.setBackgroundResource(repeat.isSun() ? R.drawable.ic_week_sun_release : R.drawable.ic_week_sun_press);
+            mBtnBucketOptionMon.setBackgroundResource(repeat.isMon() ? R.drawable.ic_week_mon_release : R.drawable.ic_week_mon_press);
+            mBtnBucketOptionTue.setBackgroundResource(repeat.isTue() ? R.drawable.ic_week_tue_release : R.drawable.ic_week_tue_press);
+            mBtnBucketOptionWen.setBackgroundResource(repeat.isWen() ? R.drawable.ic_week_wen_release : R.drawable.ic_week_wen_press);
+            mBtnBucketOptionThu.setBackgroundResource(repeat.isThu() ? R.drawable.ic_week_thu_release : R.drawable.ic_week_thu_press);
+            mBtnBucketOptionFri.setBackgroundResource(repeat.isFri() ? R.drawable.ic_week_fri_release : R.drawable.ic_week_fri_press);
+            mBtnBucketOptionSat.setBackgroundResource(repeat.isSat() ? R.drawable.ic_week_sat_release : R.drawable.ic_week_sat_press);
 
+        } else if(repeat.getRepeatType() == RepeatType.WEEK ){
+            mLayoutBucketDefaultInfoRepeatWeek.setVisibility(View.GONE);
+            mLayoutBucketDefaultInfoRepeatMonth.setVisibility(View.VISIBLE);
+
+            mBtnBucketOptionWeek.setBackgroundResource(R.drawable.ic_option_week_release);
+            mBtnBucketOptionMonth.setBackgroundResource(R.drawable.ic_option_month_press);
+            mTxtBucketOptionRepeatCnt.setText(String.valueOf(repeat.getRepeatCount()));
+        } else if(repeat.getRepeatType() == RepeatType.MNTH ){
+            mLayoutBucketDefaultInfoRepeatWeek.setVisibility(View.GONE);
+            mLayoutBucketDefaultInfoRepeatMonth.setVisibility(View.VISIBLE);
+
+            mBtnBucketOptionWeek.setBackgroundResource(R.drawable.ic_option_week_press);
+            mBtnBucketOptionMonth.setBackgroundResource(R.drawable.ic_option_month_release);
+            mTxtBucketOptionRepeatCnt.setText(String.valueOf(repeat.getRepeatCount()));
+        }
     }
 
     private void initEvent() {
@@ -176,7 +257,8 @@ public class TimelineActivity extends BaseActionBarActivity {
                 startActivityForResult(intent, REQUEST_MOD_BUCKET);
             }
         });
-        /*mBtnAddTimeline.setOnClickListener(new View.OnClickListener() {
+
+        mBtnAddPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TimelineActivity.this, TimelineItemEditActivity.class);
@@ -185,23 +267,21 @@ public class TimelineActivity extends BaseActionBarActivity {
                 intent.putExtra(extraKeyWriteDate, new Date());
                 startActivityForResult(intent, REQUEST_ADD_POST);
             }
-        });*/
-        /*mDailyTimeline.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
+        });
 
+        mBtnAchieve.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onPageSelected(int position) {
-                TimelineFragment item = (TimelineFragment) timelineDailyAdapter.getItem(position);
-                //item.getNetworkData();
-            }
+            public void onClick(View v) {
+                if(bucket.getStatus() == 0) {
+                    bucket.setStatus(1);
+                } else {
+                    bucket.setStatus(0);
+                }
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
+                Thread thread = new Thread(new BucketThread());
+                thread.start();
             }
-        });*/
+        });
     }
 
     @Override
@@ -252,6 +332,40 @@ public class TimelineActivity extends BaseActionBarActivity {
                 handler.sendMessage(message);
             }else {
                 handler.sendEmptyMessage(FETCH_DATA_FAIL);
+            }
+        }
+    }
+
+    private class TimelineThread implements Runnable{
+        @Override
+        public void run() {
+            handler.sendEmptyMessage(FETCH_DATA_START);
+
+            TimelineConnector timelineConnector = new TimelineConnector();
+            ResponseBodyWrapped<Timeline> result = timelineConnector.getTimelineAll(bucket.getId());
+
+            if(result.isSuccess()) {
+                Message message = handler.obtainMessage(FETCH_DATA_SUCCESS, result.getData());
+                handler.sendMessage(message);
+            }else {
+                handler.sendEmptyMessage(FETCH_DATA_FAIL);
+            }
+        }
+    }
+
+    private class BucketThread implements Runnable{
+        @Override
+        public void run() {
+            handler.sendEmptyMessage(FETCH_DATA_START);
+
+            BucketConnector bucketConnector = new BucketConnector();
+            ResponseBodyWrapped<Bucket> result = bucketConnector.updateBucketInfo(bucket);
+
+            if(result.isSuccess()) {
+                Message message = handler.obtainMessage(UPDATE_BUCKET_DATA_SUCCESS, result.getData());
+                handler.sendMessage(message);
+            }else {
+                handler.sendEmptyMessage(UPDATE_BUCKET_DATA_FAIL);
             }
         }
     }
