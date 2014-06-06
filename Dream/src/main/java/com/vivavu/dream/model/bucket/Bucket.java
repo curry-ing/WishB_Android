@@ -77,6 +77,10 @@ public class Bucket implements Serializable{
     @SerializedName("cvr_img_url")
     private String cvrImgUrl;
 
+    @DatabaseField
+    @SerializedName("fb_share")
+    private String fbShare;
+
     private File file;
 
     public Bucket(){
@@ -251,6 +255,14 @@ public class Bucket implements Serializable{
 
     public void setFile(File file) {
         this.file = file;
+    }
+
+    public String getFbShare() {
+        return fbShare;
+    }
+
+    public void setFbShare(String fbShare) {
+        this.fbShare = fbShare;
     }
 
     @Override

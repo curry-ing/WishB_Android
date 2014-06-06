@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -280,6 +281,15 @@ public class TimelineActivity extends BaseActionBarActivity {
 
                 Thread thread = new Thread(new BucketThread());
                 thread.start();
+            }
+        });
+        mListTimeline.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Object item = mListTimeline.getAdapter().getItem(position);
+                if(item instanceof Post) {
+                    viewPost((Post) item);
+                }
             }
         });
     }

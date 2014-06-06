@@ -6,6 +6,7 @@
         <item name="android:actionBarTabStyle">@style/ActionBarTabStyle</item>
         <item name="android:actionBarSize">@dimen/actionbar_height</item>
         <item name="android:actionBarStyle">@style/ActionBarStyle</item>
+        <item name="android:popupMenuStyle">@style/PopupMenuStyle</item>
         <!--<item name="android:background">@drawable/background_gradient</item>-->
     </style>
     <style name="ActionBarTabStyle" parent="android:style/Widget.Holo.ActionBar.TabView">
@@ -16,6 +17,10 @@
         <item name="android:background">@color/action_bar</item>
         <!--<item name="android:background">@color/mint</item>-->
         <!--<item name="android:itemBackground">@color/mint</item>-->
+    </style>
+    <style name="PopupMenuStyle" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:textSize">30dp</item>
+        <item name="android:textColor">#FF00ff</item>
     </style>
     <style name="TextBucketTitleStyle" >
         <item name="android:ellipsize">end</item>

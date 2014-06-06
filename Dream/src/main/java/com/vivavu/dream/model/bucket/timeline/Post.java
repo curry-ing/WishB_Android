@@ -38,6 +38,9 @@ public class Post implements Serializable, Comparable<Post> {
     @SerializedName("photo")
     protected File photo;
 
+    @SerializedName("fb_share")
+    protected String fbShare;
+
     public Post(Date date) {
         this.timestamp = date;
     }
@@ -144,6 +147,14 @@ public class Post implements Serializable, Comparable<Post> {
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
+    }
+
+    public String getFbShare() {
+        return fbShare;
+    }
+
+    public void setFbShare(String fbShare) {
+        this.fbShare = fbShare;
     }
 
     @Override

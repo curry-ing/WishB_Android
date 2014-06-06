@@ -36,6 +36,7 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
     public static Typeface denseRegularFont = null;
     public static Typeface nanumBarunGothicFont = null;
     public static Typeface nanumBarunGothicBoldFont = null;
+    public static Typeface ptSansFont = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -238,6 +239,13 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
             nanumBarunGothicBoldFont = Typeface.createFromAsset(DreamApp.getInstance().getAssets(), "NanumBarunGothicBold.mp3");
         }
         return nanumBarunGothicBoldFont;
+    }
+
+    public static Typeface getPtSansFont() {
+        if(ptSansFont == null){
+            ptSansFont = Typeface.createFromAsset(DreamApp.getInstance().getAssets(), "PT_SANS.ttf");
+        }
+        return ptSansFont;
     }
 
     public class CheckLoginTesk extends AsyncTask<Void, Void, Void>{

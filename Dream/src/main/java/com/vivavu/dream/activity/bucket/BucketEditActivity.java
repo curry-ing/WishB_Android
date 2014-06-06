@@ -312,23 +312,15 @@ public class BucketEditActivity extends BaseActionBarActivity {
                         switch (which){
                             case 0:
                                 doTakePhotoAction();
+                                dialog.dismiss();
                                 break;
                             case 1:
                                 doTakeAlbumAction();
+                                dialog.dismiss();
                                 break;
                             default:
                                 break;
                         }
-                    }
-                }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
                     }
                 });
                 ab.show();
