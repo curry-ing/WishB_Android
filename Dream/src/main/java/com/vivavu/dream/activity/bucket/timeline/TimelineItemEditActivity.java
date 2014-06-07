@@ -14,7 +14,6 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -135,12 +134,6 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("진행중");
 
-
-        AlertDialog.Builder builder;
-
-        LayoutInflater inflater = (LayoutInflater)this.getSystemService(LAYOUT_INFLATER_SERVICE);
-        View layout = inflater.inflate( R.layout.layout_date, null);
-
         ButterKnife.inject(this);
 
         Intent data = getIntent();
@@ -221,8 +214,8 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                     }
                 };
                 Calendar calendar = Calendar.getInstance();
-                if(post.getRegDt() != null) {
-                    calendar.setTime(post.getRegDt());
+                if(post.getTimestamp() != null) {
+                    calendar.setTime(post.getTimestamp());
                 }
 
                 DatePickerDialog dialog = new DatePickerDialog(TimelineItemEditActivity.this, listener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1, calendar.get(Calendar.DAY_OF_MONTH));
@@ -240,8 +233,8 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                     }
                 };
                 Calendar calendar = Calendar.getInstance();
-                if(post.getRegDt() != null) {
-                    calendar.setTime(post.getRegDt());
+                if(post.getTimestamp() != null) {
+                    calendar.setTime(post.getTimestamp());
                 }
                 TimePickerDialog dialog = new TimePickerDialog(TimelineItemEditActivity.this, listener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true );
                 dialog.show();
@@ -258,8 +251,8 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
 
     private void bindData(Post post) {
         mTxtPostText.setText(post.getText());
-        mTxtPostDate.setText(DateUtils.getDateString(post.getRegDt(), "yyyy.MM.dd", new Date()));
-        mTxtPostTime.setText(DateUtils.getDateString(post.getRegDt(), "HH:mm", new Date()));
+        mTxtPostDate.setText(DateUtils.getDateString(post.getTimestamp(), "yyyy.MM.dd", new Date()));
+        mTxtPostTime.setText(DateUtils.getDateString(post.getTimestamp(), "HH:mm", new Date()));
         /*ImageLoader.getInstance().displayImage(post.getImgUrl(), mIvCardImage, new SimpleImageLoadingListener(){
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
