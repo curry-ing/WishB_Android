@@ -50,16 +50,16 @@ public class TextImageView extends BaseImageView {
 
     public TextImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        TypedArray arr = getContext().obtainStyledAttributes(attrs, R.styleable.TextImageView);
-        text = arr.getString(R.styleable.TextImageView_text);
-        textSize = arr.getDimensionPixelSize(R.styleable.TextImageView_textSize, 20);
-        textColor = arr.getColor(R.styleable.TextImageView_textColor, Color.WHITE);
-        shadowColor = arr.getColor(R.styleable.TextImageView_shadowColor, Color.DKGRAY);
-        shadowDx = arr.getFloat(R.styleable.TextImageView_shadowDx, 1.0f);
-        shadowDy = arr.getFloat(R.styleable.TextImageView_shadowDy, 1.0f);
-        shadowRadius = arr.getFloat(R.styleable.TextImageView_shadowRadius, 1.0f);
-        ellipsize = arr.getString(R.styleable.TextImageView_ellipsize);
-        foregroundResId = arr.getResourceId(R.styleable.TextImageView_foregroundResId, -1);
+        TypedArray arr = getContext().obtainStyledAttributes(attrs, R.styleable.CustomeImageView);
+        text = arr.getString(R.styleable.CustomeImageView_text);
+        textSize = arr.getDimensionPixelSize(R.styleable.CustomeImageView_textSize, 20);
+        textColor = arr.getColor(R.styleable.CustomeImageView_textColor, Color.WHITE);
+        shadowColor = arr.getColor(R.styleable.CustomeImageView_shadowColor, Color.DKGRAY);
+        shadowDx = arr.getFloat(R.styleable.CustomeImageView_shadowDx, 1.0f);
+        shadowDy = arr.getFloat(R.styleable.CustomeImageView_shadowDy, 1.0f);
+        shadowRadius = arr.getFloat(R.styleable.CustomeImageView_shadowRadius, 1.0f);
+        ellipsize = arr.getString(R.styleable.CustomeImageView_ellipsize);
+        foregroundResId = arr.getResourceId(R.styleable.CustomeImageView_foregroundResId, -1);
         if(foregroundResId > 0) {
             setForegroundResource(foregroundResId);
         }
@@ -232,7 +232,9 @@ public class TextImageView extends BaseImageView {
             canvas.drawBitmap(textBitmap, 0, 0, xferPaint);
         }
     }
-    private Bitmap getBitmap(int width, int height) {
+
+    @Override
+    public Bitmap getBitmap(int width, int height) {
         // 실제로 마스크 영역
         Log.v(TAG, String.format("%s : %d, %d", String.valueOf(text), width, height));
         Bitmap bitmapOut = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
@@ -246,11 +248,6 @@ public class TextImageView extends BaseImageView {
         canvas.drawCircle( (float)width / 2, (float)height/2, (float)Math.min(width-getPaddingLeft()-getPaddingRight(), height-getPaddingTop()-getPaddingBottom())/2, pnt);
 
         return bitmapOut;
-    }
-
-    @Override
-    public Bitmap getBitmap() {
-        return getBitmap(getWidth(), getHeight());
     }
 
     public void setForegroundResource(int resId) {

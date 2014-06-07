@@ -11,7 +11,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vivavu.dream.R;
 import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.util.DateUtils;
-import com.vivavu.dream.view.TextImageView;
+import com.vivavu.dream.view.ShadowImageView;
 
 import java.util.List;
 
@@ -78,8 +78,13 @@ public class BucketListAdapter extends BaseAdapter {
             } else {
                 convertView.setPadding(padding, padding, padding, padding);
             }
+
+            int progress = DateUtils.getProgress(item.getRegDate(), item.getDeadline());
+
             holder.mBucketItemTitle.setText(item.getTitle());
             holder.mBucketItemDeadline.setText(DateUtils.getDateString(item.getDeadline(), "yyyy.MM.dd"));
+            holder.mBucketItemImg.setPercent(progress);
+
             ImageLoader.getInstance().displayImage(item.getCvrImgUrl(), holder.mBucketItemImg);
             return convertView;
 
@@ -94,7 +99,7 @@ public class BucketListAdapter extends BaseAdapter {
  */
     static class ButterknifeViewHolder {
         @InjectView(R.id.bucket_item_img)
-        TextImageView mBucketItemImg;
+        ShadowImageView mBucketItemImg;
         @InjectView(R.id.bucket_item_title)
         TextView mBucketItemTitle;
         @InjectView(R.id.bucket_item_deadline)

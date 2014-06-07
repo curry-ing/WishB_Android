@@ -11,11 +11,19 @@
     android:paddingTop="@dimen/sub_view_item_padding"
     android:paddingBottom="@dimen/sub_view_item_padding">
 
-    <com.vivavu.dream.view.TextImageView
+    <com.vivavu.dream.view.ShadowImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="130dp"
         android:layout_height="130dp"
         android:id="@+id/bucket_item_img"
-        android:background="@drawable/sub_view_default_circle"
+        android:padding="5dp"
+        app:progressBarWidth="4dp"
+        app:progressBarColor="@color/mint"
+        app:isShadow="true"
+        app:shadowColor="@color/darkgray"
+        app:shadowDx="2.0"
+        app:shadowDy="2.0"
+        app:shadowRadius="2.0"
         />
     <TextView
         android:layout_width="match_parent"

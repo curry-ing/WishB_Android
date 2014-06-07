@@ -75,6 +75,10 @@ public class DateUtils {
     }
 
     public static int getProgress(Date startDate, Date endDate){
+        if(startDate == null || endDate == null){
+            return 0;
+        }
+
         Long totalTime = getRemainDay(startDate, endDate);
         Long remainTime = getRemainDay(endDate);
         int percentage = 100;

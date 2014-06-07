@@ -44,7 +44,8 @@ public class CircleImageView extends BaseImageView {
         this.text = text;
     }
 
-    public static Bitmap getBitmap(int width, int height) {
+    @Override
+    public Bitmap getBitmap(int width, int height) {
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -52,11 +53,5 @@ public class CircleImageView extends BaseImageView {
         canvas.drawOval(new RectF(0.0f, 0.0f, width, height), paint);
 
         return bitmap;
-    }
-
-
-    @Override
-    public Bitmap getBitmap() {
-        return getBitmap(getWidth(), getHeight());
     }
 }
