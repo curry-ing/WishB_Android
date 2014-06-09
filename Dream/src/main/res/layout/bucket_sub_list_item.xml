@@ -21,9 +21,9 @@
         app:progressBarColor="@color/mint"
         app:isShadow="true"
         app:shadowColor="@color/darkgray"
-        app:shadowDx="2.0"
+        app:shadowDx="1.0"
         app:shadowDy="2.0"
-        app:shadowRadius="2.0"
+        app:shadowRadius="1.0"
         />
     <TextView
         android:layout_width="match_parent"
