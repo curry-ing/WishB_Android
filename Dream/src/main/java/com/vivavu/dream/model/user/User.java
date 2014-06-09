@@ -197,7 +197,11 @@ public class User{
         SimpleDateFormat CurYearFormat = new SimpleDateFormat("yyyy");
         String strCurYear = CurYearFormat.format(date);
 
-        return Integer.parseInt(strCurYear) - Integer.parseInt(birthday.substring(0,4)) + 1;
+        if (birthday!=null && birthday.length()>0) {
+            return Integer.parseInt(strCurYear) - Integer.parseInt(birthday.substring(0, 4)) + 1;
+        } else {
+            return 0;
+        }
     }
 
     @Override

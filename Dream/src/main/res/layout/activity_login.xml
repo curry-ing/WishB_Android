@@ -3,7 +3,8 @@
     tools:context="com.vivavu.dream.activity.login.LoginActivity"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/register_login_bg">
 
     <!-- Login progress -->
     <LinearLayout android:id="@+id/login_status"
@@ -27,121 +28,236 @@
             android:text="@string/login_progress_signing_in" />
     </LinearLayout>
 
-    <!-- Login form -->
-    <ScrollView
-        android:id="@+id/login_form"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+    <!--<ScrollView-->
+        <!--android:id="@+id/login_form"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="1">-->
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:orientation="vertical">-->
 
-            <TableLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:shrinkColumns="1"
-                android:stretchColumns="1">
+            <!--<TableLayout-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="fill_parent"-->
+                <!--android:shrinkColumns="1"-->
+                <!--android:stretchColumns="1">-->
 
-                <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
+                <!--<TableRow-->
+                    <!--android:layout_width="fill_parent"-->
+                    <!--android:layout_height="fill_parent">-->
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="@string/lb_login_email"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1" />
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
+                        <!--android:text="@string/lb_login_email"-->
+                        <!--android:layout_gravity="center_vertical"-->
+                        <!--android:layout_weight="1" />-->
 
-                    <EditText
-                        android:id="@+id/email"
-                        android:singleLine="true"
-                        android:maxLines="1"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress"
-                        android:hint="@string/prompt_email" />
-                </TableRow>
+                    <!--<EditText-->
+                        <!--android:id="@+id/email"-->
+                        <!--android:singleLine="true"-->
+                        <!--android:maxLines="1"-->
+                        <!--android:layout_width="fill_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:inputType="textEmailAddress"-->
+                        <!--android:hint="@string/prompt_email" />-->
+                <!--</TableRow>-->
 
-                <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
+                <!--<TableRow-->
+                    <!--android:layout_width="fill_parent"-->
+                    <!--android:layout_height="fill_parent">-->
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="@string/lb_login_password"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1" />
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
+                        <!--android:text="@string/lb_login_password"-->
+                        <!--android:layout_gravity="center_vertical"-->
+                        <!--android:layout_weight="1" />-->
 
-                    <EditText
-                        android:id="@+id/password"
-                        android:singleLine="true"
-                        android:maxLines="1"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/prompt_password"
-                        android:inputType="textPassword"
-                        android:imeActionLabel="@string/action_sign_in_short"
-                        android:imeActionId="@+id/login"
-                        android:imeOptions="actionUnspecified" />
-                </TableRow>
-            </TableLayout>
+                    <!--<EditText-->
+                        <!--android:id="@+id/password"-->
+                        <!--android:singleLine="true"-->
+                        <!--android:maxLines="1"-->
+                        <!--android:layout_width="fill_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:hint="@string/prompt_password"-->
+                        <!--android:inputType="textPassword"-->
+                        <!--android:imeActionLabel="@string/action_sign_in_short"-->
+                        <!--android:imeActionId="@+id/login"-->
+                        <!--android:imeOptions="actionUnspecified" />-->
+                <!--</TableRow>-->
+            <!--</TableLayout>-->
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+            <!--<LinearLayout-->
+                <!--android:orientation="vertical"-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="fill_parent">-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text=""
-                    android:id="@+id/txt_response_info"
-                    android:editable="false"
-                    android:enabled="true"
-                    android:focusable="false"
-                    android:textColor="#ff0000" />
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+                    <!--android:text=""-->
+                    <!--android:id="@+id/txt_response_info"-->
+                    <!--android:editable="false"-->
+                    <!--android:enabled="true"-->
+                    <!--android:focusable="false"-->
+                    <!--android:textColor="#ff0000" />-->
 
-                <Button android:id="@+id/sign_in_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/action_sign_in_short"
-                    android:paddingLeft="32dp"
-                    android:paddingRight="32dp"
-                    android:layout_gravity="center" />
+                <!--<Button android:id="@+id/sign_in_button"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="16dp"-->
+                    <!--android:text="@string/action_sign_in_short"-->
+                    <!--android:paddingLeft="32dp"-->
+                    <!--android:paddingRight="32dp"-->
+                    <!--android:layout_gravity="center" />-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/action_forgot_password"
-                    android:id="@+id/txt_forgot_password"
-                    android:layout_gravity="center_horizontal"
-                    android:textColor="#0000ff" />
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+                    <!--android:text="@string/action_forgot_password"-->
+                    <!--android:id="@+id/txt_forgot_password"-->
+                    <!--android:layout_gravity="center_horizontal"-->
+                    <!--android:textColor="#0000ff" />-->
 
-            </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
+            <!--</LinearLayout>-->
+        <!--</LinearLayout>-->
+    <!--</ScrollView>-->
 
+    <!--<LinearLayout-->
+        <!--android:orientation="vertical"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/facebook_container"-->
+        <!-->-->
+
+        <!--<fragment-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:name="com.vivavu.dream.facebook.fragment.FacebookLoginFragment"-->
+            <!--android:id="@+id/fragment"-->
+            <!--tools:layout="@layout/include_facebook_login" />-->
+    <!--</LinearLayout>-->
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/facebook_container"
-        >
-
-        <fragment
-            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_width="280dp"
             android:layout_height="wrap_content"
-            android:name="com.vivavu.dream.facebook.fragment.FacebookLoginFragment"
-            android:id="@+id/fragment"
-            tools:layout="@layout/include_facebook_login" />
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginTop="84dp">
+        <ImageView
+                android:layout_width="35dp"
+                android:layout_height="41dp"
+                android:id="@+id/login_id_icon" android:src="@drawable/login_id_icon" android:contentDescription=""
+                android:layout_gravity="top"/>
+        <EditText
+                android:id="@+id/email"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:layout_width="fill_parent"
+                android:layout_height="41dp"
+                android:inputType="textEmailAddress"
+                android:background="@drawable/login_edittext_bg"
+                android:layout_marginLeft="1dp"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp" />
     </LinearLayout>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content" android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginTop="12dp">
+        <ImageView
+                android:layout_width="35dp"
+                android:layout_height="41dp"
+                android:id="@+id/login_pw_icon" android:src="@drawable/login_pw_icon" android:contentDescription=""
+                android:layout_gravity="top"/>
+        <EditText
+                android:id="@+id/password"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:layout_width="fill_parent"
+                android:layout_height="41dp"
+                android:hint="@string/prompt_password"
+                android:inputType="textPassword"
+                android:imeActionLabel="@string/action_sign_in_short"
+                android:imeActionId="@+id/login"
+                android:imeOptions="actionUnspecified" android:background="@drawable/login_edittext_bg"
+                android:layout_marginLeft="1dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp" />
+    </LinearLayout>
+    <LinearLayout
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+    android:layout_width="280dp"
+    android:layout_height="wrap_content"
+    android:text="알림:  비밀번호를 입력해 주세요!"
+    android:id="@+id/txt_response_info"
+    android:editable="false"
+    android:enabled="true"
+    android:focusable="false"
+    android:layout_gravity="center_horizontal" android:layout_marginTop="40dp"
+    android:typeface="sans" android:textSize="16dp" android:textStyle="bold"
+    android:singleLine="true" android:paddingLeft="5dp" android:visibility="invisible"/>
+
+    <Button android:id="@+id/sign_in_button"
+    android:layout_width="wrap_content"
+    android:layout_height="38dp"
+    android:layout_marginTop="30dp"
+    android:paddingLeft="32dp"
+    android:paddingRight="32dp"
+    android:layout_gravity="center" android:background="@drawable/login_inactive_btn" android:enabled="true"/>
+
+    <Button
+    android:layout_width="wrap_content"
+    android:layout_height="38dp"
+    android:id="@+id/txt_forgot_password"
+    android:layout_gravity="center_horizontal" android:background="@drawable/login_forgetpw_btn"
+    android:layout_marginTop="12dp" android:enabled="true"/>
+
+    </LinearLayout>
+    <LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/facebook_container"
+    >
+
+    <fragment
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:name="com.vivavu.dream.facebook.fragment.FacebookLoginFragment"
+    class="com.vivavu.dream.facebook.fragment.FacebookLoginFragment"
+    android:id="@+id/fragment"
+    tools:layout="@layout/include_facebook_login" />
+    </LinearLayout>
+    <!--<LinearLayout-->
+            <!--android:orientation="vertical"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="fill_parent" android:gravity="center_horizontal">-->
+        <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+                <!--android:text="@string/txt_facebook_login"-->
+                <!--android:id="@+id/login_fb_explain_txt"-->
+                <!--android:gravity="center_horizontal"-->
+                <!--android:textAlignment="center"-->
+                <!--android:lineSpacingExtra="5dp"-->
+                <!--android:layout_marginTop="72dp"/>-->
+        <!--<Button-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="38dp"-->
+                <!--android:id="@+id/login_fb_btn" android:background="@drawable/intro_fb_btn" android:singleLine="false"-->
+                <!--android:layout_marginTop="10dp"/>-->
+    <!--</LinearLayout>-->
 </LinearLayout>

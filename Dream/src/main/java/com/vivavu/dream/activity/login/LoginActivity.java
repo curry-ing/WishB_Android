@@ -1,16 +1,31 @@
 package com.vivavu.dream.activity.login;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.support.v7.app.ActionBar;
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -25,20 +40,34 @@ import com.vivavu.dream.util.ValidationUtils;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
  * well.
  */
-public class LoginActivity extends BaseActionBarActivity {
+public class LoginActivity extends BaseActionBarActivity implements LoaderManager.LoaderCallbacks<Cursor>{
     @InjectView(R.id.txt_response_info)
     TextView mTxtResponseInfo;
+    @InjectView(R.id.actionbar_login_title)
+    TextView mActionbarLoginTitle;
     /**
      * The default email to populate the email field with.
      */
     public static final String EXTRA_EMAIL = "com.example.android.authenticatordemo.extra.EMAIL";
+    @InjectView(R.id.sign_in_button)
+    Button mSignInButton;
     @InjectView(R.id.txt_forgot_password)
     TextView mTxtForgotPassword;
+
+//    @InjectView(R.id.login_fb_explain_txt)
+//    TextView mLoginFbExplainTxt;
+//    @InjectView(R.id.login_fb_btn)
+//    Button mLoginFbBtn;
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -48,6 +77,7 @@ public class LoginActivity extends BaseActionBarActivity {
     // Values for email and password at the time of the login attempt.
     private String mEmail;
     private String mPassword;
+    private Integer mInvalidType = 0;  // 1: Empty Email | 2: Empty PW | 3: Invalid Email | 4: InvalidPW | 5: Unregistered Email
 
     // UI references.
     private EditText mEmailView;
@@ -55,6 +85,7 @@ public class LoginActivity extends BaseActionBarActivity {
     private View mLoginFormView;
     private View mLoginStatusView;
     private TextView mLoginStatusMessageView;
+
 
     @Override
     protected void onDestroy() {
@@ -65,18 +96,139 @@ public class LoginActivity extends BaseActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);//api level 11 이상 부터 사용가능
         setResult(RESULT_CANCELED);
 
         setContentView(R.layout.activity_login);
+        getLoaderManager().initLoader(0, null, this);
+
+        final ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowHomeEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setCustomView(R.layout.actionbar_login);
+
         ButterKnife.inject(this);
+
+//        Typeface NanumGothic = Typeface.createFromAsset(context.getAssets(), "NanumBarunGothic.mp3");
+        Typeface NanumBold = Typeface.createFromAsset(context.getAssets(), "NanumBarunGothicBold.mp3");
+        mActionbarLoginTitle.setText("Wish B");
+        mActionbarLoginTitle.setTypeface(NanumBold);
+        mActionbarLoginTitle.setTextSize(20);
+        mActionbarLoginTitle.setTextColor(Color.WHITE);
+
+        mTxtResponseInfo.setTypeface(NanumBold);
+        mTxtResponseInfo.setTextSize(15);
+        mTxtResponseInfo.setTextColor(Color.WHITE);
+//
+//        Pattern emailPattern = Patterns.EMAIL_ADDRESS;
+//        Account[] accounts = AccountManager.get(context).getAccounts();
+//        for (Account account: accounts) {
+//            if (emailPattern.matcher(account.name).matches()) {
+//                String possibleEmail = account.name;
+//                mTxtResponseInfo.setVisibility(View.VISIBLE);
+//                mTxtResponseInfo.setText(possibleEmail);
+//            }
+//        }
+
+
 
         // Set up the login form.
         mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
         mEmailView = (EditText) findViewById(R.id.email);
         mEmailView.setText(mEmail);
         mEmailView.setText(context.getEmail());
+        mEmailView.setTypeface(NanumBold);
+        mEmailView.setTextSize(15);
+        mEmailView.setTextColor(Color.GRAY);
+        mEmailView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b){
+                    mEmailView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ing_icon, 0);
+                    if (mInvalidType==3||mInvalidType==1) {
+                        setmTxtResponseInfo(mInvalidType=0);
+                    }
+                } else {
+                    if (!ValidationUtils.isValidEmail(mEmailView)) {
+                        mEmailView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_alert_icon, 0);
+                        setmTxtResponseInfo(mInvalidType=3);
+                    } else {
+                        mEmailView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ok_icon, 0);
+                        if (ValidationUtils.isValidPassword(mPasswordView)) {
+                            setmTxtResponseInfo(mInvalidType=9);
+                        }
+                        setmTxtResponseInfo(mInvalidType=0);
+                    }
+                }
+            }
+        });
 
         mPasswordView = (EditText) findViewById(R.id.password);
+        mPasswordView.setTypeface(NanumBold);
+        mPasswordView.setTextSize(15);
+        mPasswordView.setTextColor(Color.GRAY);
+        mPasswordView.setOnFocusChangeListener(new View.OnFocusChangeListener(){
+
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    mPasswordView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ing_icon, 0);
+                } else {
+                    if (!ValidationUtils.isValidPassword(mPasswordView)){
+                        mPasswordView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_alert_icon, 0);
+                        if (TextUtils.isEmpty(mPasswordView.getText())){
+                            setmTxtResponseInfo(mInvalidType=2);
+                        } else {
+                            setmTxtResponseInfo(mInvalidType=4);
+                        }
+                    } else {
+                        mPasswordView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ok_icon, 0);
+                        if (ValidationUtils.isValidEmail(mEmailView)){
+                            setmTxtResponseInfo(mInvalidType=9);
+                        }
+                    }
+                }
+            }
+        });
+
+
+        mEmailView.setOnKeyListener(new View.OnKeyListener(){
+
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if (ValidationUtils.isValidPassword(mPasswordView)) {
+                    if (!ValidationUtils.isValidEmail(mEmailView)) {
+                        setmTxtResponseInfo(mInvalidType = 0); }
+                    else {
+                        setmTxtResponseInfo(mInvalidType = 9);
+                    }
+                }
+                return false;
+            }
+        });
+
+        mPasswordView.setOnKeyListener(new View.OnKeyListener(){
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if (ValidationUtils.isValidEmail(mEmailView)) {
+                    if (ValidationUtils.isValidPassword(mPasswordView)) {
+                        setmTxtResponseInfo(mInvalidType = 9);
+                    } else if (TextUtils.isEmpty(mPasswordView.getText())) {
+                        setmTxtResponseInfo(mInvalidType = 0);
+                    } else if (!ValidationUtils.isValidPassword(mPasswordView)) {
+                        setmTxtResponseInfo(mInvalidType = 0);
+                    }
+                } else {
+                    if (TextUtils.isEmpty(mEmailView.getText())) {
+                        setmTxtResponseInfo(mInvalidType = 1);
+                    } else if (!ValidationUtils.isValidEmail(mEmailView)) {
+                        setmTxtResponseInfo(mInvalidType = 3);
+                    }
+                }
+                return false;
+            }
+        });
 
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -89,12 +241,16 @@ public class LoginActivity extends BaseActionBarActivity {
             }
         });
 
-        mLoginFormView = findViewById(R.id.login_form);
+//        mLoginFbExplainTxt.setTypeface(NanumBold);
+//        mLoginFbExplainTxt.setTextSize(15);
+//        mLoginFbExplainTxt.setTextColor(Color.WHITE);
+
+//        mLoginFormView = findViewById(R.id.login_form);
         mLoginStatusView = findViewById(R.id.login_status);
         mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
 
         // 로그인 버튼 클릭 이벤트
-        findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
+        mSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
@@ -118,6 +274,60 @@ public class LoginActivity extends BaseActionBarActivity {
         return true;
     }
 
+    public void setmTxtResponseInfo(int invalidType){
+        switch(invalidType){
+            case 0:
+                mTxtResponseInfo.setVisibility(View.INVISIBLE);
+                mTxtResponseInfo.setText("");
+                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.login_inactive_btn));
+//                mSignInButton.setEnabled(false);
+                break;
+            case 1:
+                mTxtResponseInfo.setVisibility(View.VISIBLE);
+                mTxtResponseInfo.setText("알림:  이메일 주소가 입력되지 않았습니다.");
+                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.login_inactive_btn));
+//                mSignInButton.setEnabled(false);
+                break;
+            case 2:
+                mTxtResponseInfo.setVisibility(View.VISIBLE);
+                mTxtResponseInfo.setText("알림:  패스워드가 입력되지 않았습니다.");
+                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.login_inactive_btn));
+//                mSignInButton.setEnabled(false);
+                break;
+            case 3:
+                mTxtResponseInfo.setVisibility(View.VISIBLE);
+                mTxtResponseInfo.setText("알림:  올바르지 않은 이메일 형식입니다.");
+                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.login_inactive_btn));
+//                mSignInButton.setEnabled(false);
+                break;
+            case 4:
+                mTxtResponseInfo.setVisibility(View.VISIBLE);
+                mTxtResponseInfo.setText("알림:  비밀번호(6자 이상)를 확인해 주세요.");
+                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.login_inactive_btn));
+//                mSignInButton.setEnabled(false);
+                break;
+            case 5:
+                mTxtResponseInfo.setVisibility(View.VISIBLE);
+                mTxtResponseInfo.setText("알림:  가입하지 않은 이메일입니다.");
+                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.login_inactive_btn));
+//                mSignInButton.setEnabled(false);
+                break;
+            case 6:
+                mTxtResponseInfo.setVisibility(View.VISIBLE);
+                mTxtResponseInfo.setText("알림:  비밀번호가 일치하지 않습니다.");
+                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.login_inactive_btn));
+//                mSignInButton.setEnabled(false);
+                break;
+            case 9:
+                mTxtResponseInfo.setVisibility(View.INVISIBLE);
+                mTxtResponseInfo.setText("");
+                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.login_active_btn));
+//                mSignInButton.setEnabled(true);
+                break;
+
+        }
+    }
+
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
@@ -129,29 +339,48 @@ public class LoginActivity extends BaseActionBarActivity {
         }
 
         // Reset errors.
-        mEmailView.setError(null);
-        mPasswordView.setError(null);
+//        mEmailView.setError(null);
+//        mPasswordView.setError(null);
+
+        // Check for a valid email address.
+        if (ValidationUtils.isValidEmail(mEmailView)) {
+            if (TextUtils.isEmpty(mPasswordView.getText())) {
+                setmTxtResponseInfo(mInvalidType = 2);
+                return;
+            } else if (!ValidationUtils.isValidPassword(mPasswordView)) {
+                setmTxtResponseInfo(mInvalidType = 4);
+                return;
+            }
+        } else {
+            if (TextUtils.isEmpty(mEmailView.getText())) {
+                setmTxtResponseInfo(mInvalidType = 1);
+                return;
+            } else if (!ValidationUtils.isValidEmail(mEmailView)) {
+                setmTxtResponseInfo(mInvalidType = 3);
+                return;
+            }
+        }
+//        if (!ValidationUtils.isValidEmail(mEmailView)) {
+//            mEmailView.requestFocus();
+//            return;
+//        }
+
+        // Check for a valid password.
+//        if (!ValidationUtils.isValidPassword(mPasswordView)) {
+//            mPasswordView.requestFocus();
+//            return;
+//        }
+
 
         // Store values at the time of the login attempt.
         mEmail = mEmailView.getText().toString();
         mPassword = mPasswordView.getText().toString();
 
-        // Check for a valid email address.
-        if (!ValidationUtils.isValidEmail(mEmailView)) {
-            mEmailView.requestFocus();
-            return;
-        }
-
-        // Check for a valid password.
-        if (!ValidationUtils.isValidPassword(mPasswordView)) {
-            mPasswordView.requestFocus();
-            return;
-        }
 
 
         // Show a progress spinner, and kick off a background task to
         // perform the user login attempt.
-        mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
+//        mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
         mAuthTask = new UserLoginTask();
 
         LoginInfo user = new LoginInfo();
@@ -183,21 +412,21 @@ public class LoginActivity extends BaseActionBarActivity {
                         }
                     });
 
-            mLoginFormView.setVisibility(View.VISIBLE);
-            mLoginFormView.animate()
-                    .setDuration(shortAnimTime)
-                    .alpha(show ? 0 : 1)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                        }
-                    });
+//            mLoginFormView.setVisibility(View.VISIBLE);
+//            mLoginFormView.animate()
+//                    .setDuration(shortAnimTime)
+//                    .alpha(show ? 0 : 1)
+//                    .setListener(new AnimatorListenerAdapter() {
+//                        @Override
+//                        public void onAnimationEnd(Animator animation) {
+//                            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+//                        }
+//                    });
         } else {
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
             mLoginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+//            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 
@@ -205,6 +434,52 @@ public class LoginActivity extends BaseActionBarActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle arguments) {
+        return new CursorLoader(this,
+                // Retrieve data rows for the device user's 'profile' contact.
+                Uri.withAppendedPath(
+                        ContactsContract.Profile.CONTENT_URI,
+                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY),
+                ProfileQuery.PROJECTION,
+
+                // Select only email addresses.
+                ContactsContract.Contacts.Data.MIMETYPE + " = ?",
+                new String[]{ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE},
+
+                // Show primary email addresses first. Note that there won't be
+                // a primary email address if the user hasn't specified one.
+                ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+        List<String> emails = new ArrayList<String>();
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            emails.add(cursor.getString(ProfileQuery.ADDRESS));
+            // Potentially filter on ProfileQuery.IS_PRIMARY
+            cursor.moveToNext();
+        }
+//        mTxtResponseInfo.setVisibility(View.VISIBLE);
+//        mTxtResponseInfo.setText(emails.get(0));
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> cursorLoader) {
+
+    }
+
+    private interface ProfileQuery {
+        String[] PROJECTION = {
+                ContactsContract.CommonDataKinds.Email.ADDRESS,
+                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
+        };
+
+        int ADDRESS = 0;
+        int IS_PRIMARY = 1;
     }
 
     /**
@@ -223,15 +498,14 @@ public class LoginActivity extends BaseActionBarActivity {
             }
 
             UserInfoConnector userInfoConnector = new UserInfoConnector();
-            ResponseBodyWrapped<SecureToken> userInfo = userInfoConnector.getToken(user.getEmail(), user.getPassword());
 
-            return userInfo;
+            return UserInfoConnector.getToken(user.getEmail(), user.getPassword());
         }
 
         @Override
         protected void onPostExecute(final ResponseBodyWrapped<SecureToken> success) {
             mAuthTask = null;
-            showProgress(false);
+//            showProgress(false);
 
             if (success != null && success.isSuccess()) {
                 context.setLogin(true);
@@ -253,20 +527,20 @@ public class LoginActivity extends BaseActionBarActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            showProgress(true);
+//            showProgress(true);
         }
 
         @Override
         protected void onCancelled() {
             mAuthTask = null;
             this.cancel(true);
-            showProgress(false);
+//            showProgress(false);
         }
     }
 
     @Override
     public void onBackPressed() {
-        if (context != null && context.isLogin() == true) {
+        if (context != null && context.isLogin()) {
             super.onBackPressed();
         } else {
             setResult(RESULT_CANCELED);

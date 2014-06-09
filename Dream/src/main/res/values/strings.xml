@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--<string name="app_id">214219172094153</string>-->
-    <!--<string name="app_id">268430496627035</string>-->
-    <string name="app_id">453419611460252</string>
+    <string name="app_id">268430496627035</string>
+    <!--<string name="app_id">467564843379062</string>-->
+    <!--<string name="app_id">453419611460252</string>-->
     <string name="app_name">DreamProject</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="main_menu_add_bucket">추가</string>
@@ -65,8 +66,8 @@
     <string name="access_terms">이용약관</string>
     <string name="lbl_access_terms">이용약관</string>
     <string name="lbl_private">개인정보 보호방침</string>
-    <string name="regist_agreement">본인은 가입을 통해 이용약관과 개인정보 보호정책에 동의 합니다.</string>
-    <string name="txt_facebook_login">페이스북으로 로그인하면 친구들의 꿈도 볼 수 있어요!</string>
+    <string name="regist_agreement">가입을 통해 이용약관과\n개인정보 보호정책에 동의 합니다.</string>
+    <string name="txt_facebook_login">페이스북으로 로그인하면\n친구들의 꿈도 볼 수 있어요!</string>
     <string name="txt_write_joined_email">가입한 이메일 주소를 적어주세요.</string>
     <string name="txt_btn_submit">전송</string>
     <string name="not_valid_email">올바르지 않은 이메일 형식입니다.</string>

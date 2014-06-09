@@ -29,5 +29,8 @@
         <item name="android:windowEnterAnimation">@anim/dropdown</item>
         <item name="android:windowExitAnimation">@anim/riseup</item>
     </style>
+    <style name="Theme.AppCompat.Light.NoActionBar" parent="@style/Theme.AppCompat.Light">
+        <item name="android:windowNoTitle">true</item>
+    </style>
 
 </resources>

@@ -9,12 +9,12 @@ public class Constants {
     static public final String token = "token";
     static public final String tokenType = "tokenType";
 
-//    static public String url = "http://masunghoon.iptime.org";
-    static public String url = "http://54.178.201.197";
+    static public String url = "http://masunghoon.iptime.org";
+//    static public String url = "http://54.178.201.197";
 //    static public String port = "5000";
     static public String port = "5001";
-//    static public String baseUrl = url + ":"+port+"/";
-    static public String baseUrl = url+"/";
+    static public String baseUrl = url + ":"+port+"/";
+//    static public String baseUrl = url+"/";
     static public String apiUsers = baseUrl+"api/users";
     static public String apiUserInfo = baseUrl+"api/user/{userId}";
 

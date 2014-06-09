@@ -7,18 +7,40 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+            <!--android:id="@+id/txt_facebook_login_explain"-->
+            <!--android:text="@string/txt_facebook_login"-->
+            <!--/>-->
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:id="@+id/txt_facebook_login_explain"
-            android:text="@string/txt_facebook_login"
-            />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/txt_facebook_login"
+                android:id="@+id/txt_facebook_login_explain"
+                android:gravity="center_horizontal"
+                android:textAlignment="center"
+                android:lineSpacingExtra="5dp"
+                android:layout_marginTop="72dp"/>
+        <!--<Button-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="38dp"-->
+                <!--android:layout_gravity="center_horizontal"-->
+                <!--android:id="@+id/authButton"-->
+                <!--android:background="@drawable/intro_fb_btn"-->
+                <!--android:singleLine="false"-->
+                <!--android:layout_marginTop="10dp"/>-->
         <com.facebook.widget.LoginButton
+            xmlns:fb="http://schemas.android.com/apk/res-auto"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="38dp"
             android:layout_gravity="center"
             android:id="@+id/authButton"
-            />
+            android:layout_marginTop="10dp"
+            fb:login_text=""
+            fb:logout_text=""/>
     </LinearLayout>
 </LinearLayout>

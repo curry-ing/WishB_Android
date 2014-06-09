@@ -1,11 +1,15 @@
 package com.vivavu.dream.activity.intro;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,6 +30,8 @@ import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.Code;
 import com.vivavu.dream.util.AndroidUtils;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
 
 import butterknife.ButterKnife;
@@ -51,16 +57,16 @@ public class IntroActivity extends BaseActionBarActivity {
     Button mSignInButton;
     @InjectView(R.id.register_button)
     Button mRegisterButton;
-    @InjectView(R.id.pager)
-    ViewPager mPager;
-    @InjectView(R.id.intro_viewpager_indicator)
-    CirclePageIndicator mIntroViewpagerIndicator;
-    @InjectView(R.id.facebook_container)
-    LinearLayout mFacebookContainer;
-    @InjectView(R.id.btn_user_agreement)
-    Button mBtnUserAgreement;
-    @InjectView(R.id.btn_private)
-    Button mBtnPrivate;
+//    @InjectView(R.id.pager)
+//    ViewPager mPager;
+//    @InjectView(R.id.intro_viewpager_indicator)
+//    CirclePageIndicator mIntroViewpagerIndicator;
+//    @InjectView(R.id.facebook_container)
+//    LinearLayout mFacebookContainer;
+//    @InjectView(R.id.btn_user_agreement)
+//    Button mBtnUserAgreement;
+//    @InjectView(R.id.btn_private)
+//    Button mBtnPrivate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,9 +79,9 @@ public class IntroActivity extends BaseActionBarActivity {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mPager.setAdapter(mSectionsPagerAdapter);
+//        mPager.setAdapter(mSectionsPagerAdapter);
 
-        mIntroViewpagerIndicator.setViewPager(mPager);
+//        mIntroViewpagerIndicator.setViewPager(mPager);
 
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,22 +95,23 @@ public class IntroActivity extends BaseActionBarActivity {
                 goLogin();
             }
         });
-        mBtnUserAgreement.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goUserAgreement();
-            }
-        });
-        mBtnPrivate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goPrivacy();
-            }
-        });
+//        mBtnUserAgreement.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                goUserAgreement();
+//            }
+//        });
+//        mBtnPrivate.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                goPrivacy();
+//            }
+//        });
 
         AndroidUtils.getKeyHashes(this);
 
     }
+
 
     private void goPrivacy() {
         Intent intent = new Intent();

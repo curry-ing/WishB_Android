@@ -41,6 +41,8 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.vivavu.dream.util.AndroidUtils;
 
+import static com.vivavu.dream.common.DreamApp.getInstance;
+
 /**
  * Created by yuja on 14. 2. 27.
  */
@@ -127,7 +129,11 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
         super.onViewCreated(view, savedInstanceState);
         bucketAdapter2 = new BucketAdapter2(this, bucketGroupList);
         mMainPager.setAdapter(bucketAdapter2);
-        mMainPager.setCurrentItem(DreamApp.getInstance().getUser().getUserAge()/10);
+        if (DreamApp.getInstance().getUser().getUserAge() == 0) {
+            mMainPager.setCurrentItem(0);
+        } else {
+            mMainPager.setCurrentItem(getInstance().getUser().getUserAge() / 10);
+        }
         mMainPager.setOnPageChangeListener(new MainViewPageChangeListener());
         mMainPager.setOffscreenPageLimit(OFF_SCREEN_PAGE_LIMIT);
 //        mMainPager.setPageTransformer(true, new DepthPageTransformer());
@@ -153,7 +159,7 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
         }
         bucketAdapter2.setBucketGroupList(bucketGroupList);
         bucketAdapter2.notifyDataSetChanged();
-        mMainPager.setCurrentItem(DreamApp.getInstance().getUser().getUserAge()/10);
+        mMainPager.setCurrentItem(getInstance().getUser().getUserAge()/10);
     }
 
     @Override

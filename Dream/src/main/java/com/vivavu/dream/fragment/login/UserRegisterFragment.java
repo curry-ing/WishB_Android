@@ -29,12 +29,12 @@ public class UserRegisterFragment extends CustomProgressFragment {
     EditText mEmail;
     @InjectView(R.id.password)
     EditText mPassword;
-    @InjectView(R.id.password_dup)
-    EditText mPasswordDup;
-    @InjectView(R.id.regist_button)
+//    @InjectView(R.id.password_dup)
+//    EditText mPasswordDup;
+    @InjectView(R.id.register_button)
     Button mRegistButton;
-    @InjectView(R.id.register_form)
-    ScrollView mRegisterForm;
+//    @InjectView(R.id.register_form)
+//    ScrollView mRegisterForm;
 
     public static UserRegisterFragment newInstance(){
         return new UserRegisterFragment();
@@ -67,7 +67,7 @@ public class UserRegisterFragment extends CustomProgressFragment {
         // Store values at the time of the login attempt.
         String mEmailValue = mEmail.getText().toString();
         String mPasswordValue = mPassword.getText().toString();
-        String mPasswordDupValue = mPasswordDup.getText().toString();
+//        String mPasswordDupValue = mPasswordDup.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -81,10 +81,10 @@ public class UserRegisterFragment extends CustomProgressFragment {
             mPassword.setError(getString(R.string.error_invalid_password));
             focusView = mPassword;
             cancel = true;
-        } else if (!mPasswordValue.equals(mPasswordDupValue)){
-            mPasswordDup.setError(getString(R.string.error_invalid_password_dup));
-            focusView = mPasswordDup;
-            cancel = true;
+//        } else if (!mPasswordValue.equals(mPasswordDupValue)){
+//            mPasswordDup.setError(getString(R.string.error_invalid_password_dup));
+//            focusView = mPasswordDup;
+//            cancel = true;
         }
 
         // Check for a valid email address.
