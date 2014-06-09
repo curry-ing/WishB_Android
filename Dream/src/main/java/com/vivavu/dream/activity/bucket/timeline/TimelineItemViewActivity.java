@@ -141,6 +141,9 @@ public class TimelineItemViewActivity extends BaseActionBarActivity{
                 if(resultCode == RESULT_OK){
                     Post returnValue = (Post) data.getSerializableExtra(extraKeyReturnValue);
                     bindData(returnValue);
+                    setResult(RESULT_OK);
+                } else {
+                    setResult(RESULT_CANCELED);
                 }
                 return;
         }

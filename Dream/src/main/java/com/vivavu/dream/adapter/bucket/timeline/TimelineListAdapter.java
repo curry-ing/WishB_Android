@@ -62,22 +62,29 @@ public class TimelineListAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         ButterknifeViewHolder viewHolder = null;
-        /*if(convertView == null){*/
+        if(convertView == null){
             convertView = layoutInflater.inflate(R.layout.fragment_timeline_item, parent, false);
             viewHolder = new ButterknifeViewHolder(convertView);
-        /*} else {
+        } else {
             viewHolder = (ButterknifeViewHolder) convertView.getTag();
-        }*/
-        Post post = (Post) getItem(position);
+        }
+        final Post post = (Post) getItem(position);
         viewHolder.mTxtPostText.setText(post.getText());
         viewHolder.mTxtPostDate.setText(DateUtils.getDateString(post.getRegDt(), "yyyy.MM.dd hh:mm"));
         viewHolder.mTxtPostText.setTypeface(BaseActionBarActivity.getNanumBarunGothicFont());
         viewHolder.mBtnSeeMore.setVisibility(View.GONE);
-        if( post.getImgUrl() == null && viewHolder.mTxtPostText.getLineCount() == 5){
-            viewHolder.mBtnSeeMore.setVisibility(View.VISIBLE);
-        } else if(post.getImgUrl() != null && viewHolder.mTxtPostText.getLineCount() == 2){
-            viewHolder.mBtnSeeMore.setVisibility(View.VISIBLE);
-        }
+        final ButterknifeViewHolder finalViewHolder = viewHolder;
+        viewHolder.mTxtPostText.post(new Runnable() {
+            @Override
+            public void run() {
+                if( post.getImgUrl() == null && finalViewHolder.mTxtPostText.getLineCount() == 5){
+                    finalViewHolder.mBtnSeeMore.setVisibility(View.VISIBLE);
+                } else if(post.getImgUrl() != null && finalViewHolder.mTxtPostText.getLineCount() == 2){
+                    finalViewHolder.mBtnSeeMore.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
 
         ImageLoader.getInstance().displayImage(post.getImgUrl(), viewHolder.mIvTimelineImage, new SimpleImageLoadingListener(){
             @Override
@@ -91,6 +98,8 @@ public class TimelineListAdapter extends BaseAdapter {
                 }
             }
         });
+
+        convertView.setTag(viewHolder);
         return convertView;
     }
 

@@ -18,6 +18,9 @@
     <color name="lightred">#ffec5a6f</color>
     <color name="transparent">#00000000</color>
 
+    <color name="default_text_color">#88888888</color>
+    <color name="text_color_dday_over">#88FF3636</color>
+
     <color name="color_preloader_start">#ffffffff</color>
     <color name="color_preloader_center">#ff56a9c7</color>
     <color name="color_preloader_end">#ff56a9c7</color>
@@ -29,7 +32,7 @@
     <color name="progress_40">#FFD16D9F</color>
     <color name="progress_50">#FF7380D5</color>
     <color name="progress_60">#FFB28CDD</color>
-
+    <color name="progress_complete">#FFFFF612</color>
 
     <color name="action_bar">#90000000</color>
 

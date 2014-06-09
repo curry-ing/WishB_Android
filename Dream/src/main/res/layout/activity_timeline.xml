@@ -78,6 +78,7 @@
                     android:gravity="right"
                     android:textSize="32sp"
                     android:hint="D-2012"
+                    android:textColor="@color/default_text_color"
                     android:layout_marginTop="2dp"
                     />
                 <LinearLayout
@@ -104,11 +105,19 @@
                         />
                     </LinearLayout>
                 </LinearLayout>
-            <com.vivavu.dream.view.TextImageView
+            <com.vivavu.dream.view.ShadowImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:id="@+id/img_bucket"
                 android:layout_centerHorizontal="true"
+                android:padding="5dp"
+                app:progressBarWidth="2dp"
+                app:progressBarColor="@color/mint"
+                app:isShadow="true"
+                app:shadowColor="@color/darkgray"
+                app:shadowDx="1.0"
+                app:shadowDy="2.0"
+                app:shadowRadius="1.0"
                 />
             <TextView
                 android:layout_width="100dp"

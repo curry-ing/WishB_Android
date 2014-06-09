@@ -26,6 +26,7 @@ import com.vivavu.dream.activity.bucket.timeline.TimelineItemEditActivity;
 import com.vivavu.dream.activity.bucket.timeline.TimelineItemViewActivity;
 import com.vivavu.dream.adapter.bucket.timeline.TimelineListAdapter;
 import com.vivavu.dream.common.BaseActionBarActivity;
+import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.common.enums.RepeatType;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.bucket.Bucket;
@@ -38,7 +39,7 @@ import com.vivavu.dream.repository.DataRepository;
 import com.vivavu.dream.repository.connector.TimelineConnector;
 import com.vivavu.dream.util.AndroidUtils;
 import com.vivavu.dream.util.DateUtils;
-import com.vivavu.dream.view.TextImageView;
+import com.vivavu.dream.view.ShadowImageView;
 
 import java.util.Date;
 import java.util.List;
@@ -58,6 +59,7 @@ public class TimelineActivity extends BaseActionBarActivity {
     private static final int OFF_SCREEN_PAGE_LIMIT = 1;
     public static final int REQUEST_CALENDAR = 1;
     public static final int REQUEST_ADD_POST = 2;
+    public static final int REQUEST_MOD_POST = 4;
     private static final int REQUEST_MOD_BUCKET = 3;
 
 
@@ -77,7 +79,7 @@ public class TimelineActivity extends BaseActionBarActivity {
     @InjectView(R.id.btn_edit)
     ImageButton mBtnEdit;
     @InjectView(R.id.img_bucket)
-    TextImageView mImgBucket;
+    ShadowImageView mImgBucket;
     @InjectView(R.id.txt_bucket_description)
     TextView mTxtBucketDescription;
     @InjectView(R.id.layout_bucket_default_info)
@@ -204,19 +206,39 @@ public class TimelineActivity extends BaseActionBarActivity {
         Long remainDay = DateUtils.getRemainDay(end);
         if(remainDay >= 0) {
             mTxtBucketRemain.setText(String.format("D - %05d", remainDay));
+            mTxtBucketRemain.setTextColor(getResources().getColor(R.color.default_text_color));
         }else{
             mTxtBucketRemain.setText(String.format("D + %05d", Math.abs(remainDay)));
+            mTxtBucketRemain.setTextColor(getResources().getColor(R.color.text_color_dday_over));
         }
 
         if(bucket.getStatus() == 0) {
             mBtnAchieve.setSelected(false);
+            if("10".equals(bucket.getRange())){
+                mImgBucket.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_10));
+            } else if("20".equals(bucket.getRange())){
+                mImgBucket.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_20));
+            } else if("30".equals(bucket.getRange())){
+                mImgBucket.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_30));
+            } else if("40".equals(bucket.getRange())){
+                mImgBucket.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_40));
+            } else if("50".equals(bucket.getRange())){
+                mImgBucket.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_50));
+            } else if("60".equals(bucket.getRange())){
+                mImgBucket.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_60));
+            } else {
+                mImgBucket.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_lt));
+            }
         } else {
             mBtnAchieve.setSelected(true);
+            mImgBucket.setProgressBarColor(getResources().getColor(R.color.progress_complete));
         }
 
         int progress = DateUtils.getProgress(start, end);
         Log.v(TAG, String.valueOf( AndroidUtils.getSpFromPx(65)));
         ImageLoader.getInstance().displayImage(bucket.getCvrImgUrl(), mImgBucket);
+        mImgBucket.setPercent(progress);
+
 
         mTxtBucketDescription.setText(bucket.getDescription());
         OptionRepeat repeat = new OptionRepeat(RepeatType.fromCode(bucket.getRptType()), bucket.getRptCndt());
@@ -292,6 +314,7 @@ public class TimelineActivity extends BaseActionBarActivity {
                 }
             }
         });
+
     }
 
     @Override
@@ -309,6 +332,18 @@ public class TimelineActivity extends BaseActionBarActivity {
                 }
                 break;
             case REQUEST_ADD_POST:
+                if(resultCode == RESULT_OK) {
+                    // 포스트 작성되었을 경우
+                    Thread thread = new Thread(new TimelineThread());
+                    thread.start();
+                }
+                break;
+            case REQUEST_MOD_POST:
+                if(resultCode == RESULT_OK) {
+                    // 포스트 작성되었을 경우
+                    Thread thread = new Thread(new TimelineThread());
+                    thread.start();
+                }
                 break;
             case REQUEST_MOD_BUCKET:
                 if(resultCode == RESULT_OK) {
@@ -326,7 +361,7 @@ public class TimelineActivity extends BaseActionBarActivity {
         Intent intent = new Intent(this, TimelineItemViewActivity.class);
         intent.putExtra(TimelineActivity.extraKeyBucket, bucket);
         intent.putExtra(TimelineActivity.extraKeyPost, post);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_MOD_POST);
     }
 
     private class NetworkThread implements Runnable{
