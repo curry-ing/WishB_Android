@@ -52,7 +52,7 @@ public class BucketGroupViewActivity extends BaseActionBarActivity {
         setResult(RESULT_CANCELED);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayUseLogoEnabled(false);
         actionBar.setDisplayShowHomeEnabled(false);//로고 버튼 보이는 것 설정
         actionBar.setDisplayShowTitleEnabled(false);
@@ -67,30 +67,41 @@ public class BucketGroupViewActivity extends BaseActionBarActivity {
 
         List<Bucket> bucketList = DataRepository.listBucketByRange(groupRange);
         //List itemList = CircularViewTestActivity.getDummyData();
+
+
+        BucketListAdapter bucketListAdapter = new BucketListAdapter(DreamApp.getInstance(), bucketList);
+
         if(null == groupRange){
             mTxtTitle.setText(DreamApp.getInstance().getUser().getTitle_life());
             mLayoutSubViewBackground.setBackgroundResource(R.drawable.mainview_bg00);
+            bucketListAdapter.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_lt));
         } else if("10".equals(groupRange)){
             mTxtTitle.setText(DreamApp.getInstance().getUser().getTitle_10());
             mLayoutSubViewBackground.setBackgroundResource(R.drawable.mainview_bg10);
+            bucketListAdapter.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_10));
         }else if("20".equals(groupRange)){
             mTxtTitle.setText(DreamApp.getInstance().getUser().getTitle_20());
             mLayoutSubViewBackground.setBackgroundResource(R.drawable.mainview_bg20);
+            bucketListAdapter.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_20));
         }else if("30".equals(groupRange)){
             mTxtTitle.setText(DreamApp.getInstance().getUser().getTitle_30());
             mLayoutSubViewBackground.setBackgroundResource(R.drawable.mainview_bg30);
+            bucketListAdapter.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_30));
         }else if("40".equals(groupRange)){
             mTxtTitle.setText(DreamApp.getInstance().getUser().getTitle_40());
             mLayoutSubViewBackground.setBackgroundResource(R.drawable.mainview_bg40);
+            bucketListAdapter.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_40));
         }else if("50".equals(groupRange)){
             mTxtTitle.setText(DreamApp.getInstance().getUser().getTitle_50());
             mLayoutSubViewBackground.setBackgroundResource(R.drawable.mainview_bg50);
+            bucketListAdapter.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_50));
         }else if("60".equals(groupRange)){
             mTxtTitle.setText(DreamApp.getInstance().getUser().getTitle_60());
             mLayoutSubViewBackground.setBackgroundResource(R.drawable.mainview_bg60);
+            bucketListAdapter.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_60));
         }
 
-        mGridBucketList.setAdapter(new BucketListAdapter(DreamApp.getInstance(), bucketList));
+        mGridBucketList.setAdapter(bucketListAdapter);
         mGridBucketList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -111,7 +122,6 @@ public class BucketGroupViewActivity extends BaseActionBarActivity {
                 Toast.makeText(BucketGroupViewActivity.this, "투데이", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 
     public void goTimelineActivity(int bucketId){

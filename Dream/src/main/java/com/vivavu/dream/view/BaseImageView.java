@@ -3,7 +3,9 @@ package com.vivavu.dream.view;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
+import android.graphics.MaskFilter;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
@@ -108,6 +110,7 @@ public abstract class BaseImageView extends ImageView {
                         // Draw Bitmap.
                         mPaint.reset();
                         mPaint.setAntiAlias(true);
+                        mPaint.setDither(true);
                         mPaint.setFilterBitmap(false);
                         mPaint.setXfermode(sXfermode);
 //                        mBitmapShader = new BitmapShader(mMaskBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
@@ -122,6 +125,9 @@ public abstract class BaseImageView extends ImageView {
                 if (bitmap != null) {
                     mPaint.reset();
                     mPaint.setAntiAlias(true);
+                    mPaint.setDither(true);
+                    MaskFilter maskFilter = new BlurMaskFilter(6, BlurMaskFilter.Blur.INNER);
+                    mPaint.setMaskFilter(maskFilter);
 //                    mPaint.setShader(null);
                     canvas.drawBitmap(bitmap, 0.0f, 0.0f, mPaint);
                     return;

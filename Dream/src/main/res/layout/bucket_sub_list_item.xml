@@ -17,7 +17,7 @@
         android:layout_height="130dp"
         android:id="@+id/bucket_item_img"
         android:padding="5dp"
-        app:progressBarWidth="4dp"
+        app:progressBarWidth="2dp"
         app:progressBarColor="@color/mint"
         app:isShadow="true"
         app:shadowColor="@color/darkgray"

@@ -1,6 +1,7 @@
 package com.vivavu.dream.adapter.bucket;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,10 +26,12 @@ public class BucketListAdapter extends BaseAdapter {
     public static final int INVALID_ITEM_ID = -1;
     private List<Bucket> list;
     private Context mContext;
+    private int progressBarColor = Color.WHITE;
 
     public BucketListAdapter(Context mContext, List list) {
         this.mContext = mContext;
         this.list = list;
+        progressBarColor = mContext.getResources().getColor(R.color.mint);
     }
 
     @Override
@@ -84,14 +87,23 @@ public class BucketListAdapter extends BaseAdapter {
             holder.mBucketItemTitle.setText(item.getTitle());
             holder.mBucketItemDeadline.setText(DateUtils.getDateString(item.getDeadline(), "yyyy.MM.dd"));
             holder.mBucketItemImg.setPercent(progress);
-
+            holder.mBucketItemImg.setProgressBarColor(progressBarColor);
             ImageLoader.getInstance().displayImage(item.getCvrImgUrl(), holder.mBucketItemImg);
             return convertView;
 
         }
         return null;
     }
-/**
+
+    public int getProgressBarColor() {
+        return progressBarColor;
+    }
+
+    public void setProgressBarColor(int progressBarColor) {
+        this.progressBarColor = progressBarColor;
+    }
+
+    /**
  * This class contains all butterknife-injected Views & Layouts from layout file 'null'
  * for easy to all layout elements.
  *

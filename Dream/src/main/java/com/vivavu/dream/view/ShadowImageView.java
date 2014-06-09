@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 
@@ -47,12 +48,14 @@ public class ShadowImageView extends BaseImageView {
 
         backgroundPaint = new Paint();
         backgroundPaint.setAntiAlias(true);
+        backgroundPaint.setDither(true);
         backgroundPaint.setStyle(Paint.Style.FILL);
         backgroundPaint.setColor(Color.WHITE);
 
         progressPaint = new Paint();
         progressPaint.setAntiAlias(true);
-        progressPaint.setStyle(Paint.Style.STROKE);
+        progressPaint.setDither(true);
+        progressPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         progressPaint.setStrokeCap(Paint.Cap.SQUARE);
 
         TypedArray arr = getContext().obtainStyledAttributes(attrs, R.styleable.CustomeImageView);
@@ -65,7 +68,7 @@ public class ShadowImageView extends BaseImageView {
         }
 
         setProgressBarWidth(arr.getDimensionPixelSize(R.styleable.CustomeImageView_progressBarWidth, 2));
-        setProgressBarColor(arr.getColor(R.styleable.CustomeImageView_progressBarColor, getResources().getColor(R.color.mint)));
+        setProgressBarColor(arr.getColor(R.styleable.CustomeImageView_progressBarColor, Color.WHITE));
 
         foregroundResId = arr.getResourceId(R.styleable.CustomeImageView_foregroundResId, -1);
         if(foregroundResId > 0) {
@@ -87,9 +90,11 @@ public class ShadowImageView extends BaseImageView {
 
     protected void drawProgress(Canvas canvas) {
         if(percent > 0){
-
-            RectF rectF = new RectF(getPaddingLeft()+getProgressBarWidth()/2, getPaddingTop()+getProgressBarWidth()/2, getWidth()-(getPaddingRight()+getProgressBarWidth()/2), getHeight()-(getPaddingBottom()+getProgressBarWidth()/2));
-            canvas.drawArc(rectF, -90, 360*(percent/100), false, progressPaint );
+            RectF rectF = new RectF(getPaddingLeft()+getProgressBarWidth()/2
+                    , getPaddingTop()+getProgressBarWidth()/2
+                    , getWidth()-(getPaddingRight()+getProgressBarWidth()/2)
+                    , getHeight()-(getPaddingBottom()+getProgressBarWidth()/2));
+            canvas.drawArc(rectF, -90, 360*(percent/100), true, progressPaint );
         }
     }
 
@@ -157,6 +162,18 @@ public class ShadowImageView extends BaseImageView {
                 , pnt);
 
         return bitmapOut;
+    }
+
+    @Override
+    public Drawable getDrawable() {
+        if(super.getDrawable() != null) {
+            return super.getDrawable();
+        } else {
+            Drawable drawable = new ColorDrawable(Color.WHITE);
+            drawable.setBounds(getPaddingLeft(), getPaddingTop(), getWidth()-getPaddingRight(), getHeight()-getPaddingBottom());
+            return drawable;
+
+        }
     }
 
     public void setForegroundResource(int resId) {
@@ -232,5 +249,6 @@ public class ShadowImageView extends BaseImageView {
     public void setProgressBarColor(int progressBarColor) {
         this.progressBarColor = progressBarColor;
         progressPaint.setColor(progressBarColor);
+        progressPaint.setShadowLayer(3, 1.0f, 0.0f, progressBarColor);
     }
 }
