@@ -14,6 +14,8 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.Shape;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -73,13 +75,6 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
     ImageView mMainPageBg0;
     @InjectView(R.id.main_pager_bg1)
     ImageView mMainPageBg1;
-    @InjectView(R.id.main_progress)
-    ImageView mMainProgressBar;
-    @InjectView(R.id.progress_layout)
-    LinearLayout mMainProgress;
-
-
-
 
     private List<BucketGroup> bucketGroupList;
     private BucketAdapter2 bucketAdapter2;
@@ -136,9 +131,9 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
         super.onViewCreated(view, savedInstanceState);
         bucketAdapter2 = new BucketAdapter2(this, bucketGroupList);
         mMainPager.setAdapter(bucketAdapter2);
+        mMainPager.setCurrentItem(DreamApp.getInstance().getUser().getUserAge()/10);
         mMainPager.setOnPageChangeListener(new MainViewPageChangeListener());
         mMainPager.setOffscreenPageLimit(OFF_SCREEN_PAGE_LIMIT);
-        mMainPager.setCurrentItem(DreamApp.getInstance().getUser().getUserAge()/10);
 //        mMainPager.setPageTransformer(true, new DepthPageTransformer());
         mShortAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
         mMediumAnimationDuration = getResources().getInteger(android.R.integer.config_mediumAnimTime);
@@ -218,36 +213,45 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
 
         @Override
         public void onPageSelected(int position){
-            Bitmap toBg = null;
+            BitmapDrawable toBg = null;
             if(position == 0) {
-                String imgUri = "drawable://" + R.drawable.mainview_bg00;
-                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
+                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg0);
+//                String imgUri = "drawable://" + R.drawable.mainview_bg0;
+//                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             } else if (position == 1) {
-                String imgUri = "drawable://" + R.drawable.mainview_bg10;
-                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
+                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg1);
+//                String imgUri = "drawable://" + R.drawable.mainview_bg1;
+//                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             } else if (position == 2) {
-                String imgUri = "drawable://" + R.drawable.mainview_bg20;
-                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
+                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg2);
+//                String imgUri = "drawable://" + R.drawable.mainview_bg2;
+//                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             } else if (position == 3) {
-                String imgUri = "drawable://" + R.drawable.mainview_bg30;
-                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
+                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg3);
+//                String imgUri = "drawable://" + R.drawable.mainview_bg3;
+//                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             } else if (position == 4) {
-                String imgUri = "drawable://" + R.drawable.mainview_bg40;
-                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
+                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg4);
+//                String imgUri = "drawable://" + R.drawable.mainview_bg4;
+//                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             } else if (position == 5) {
-                String imgUri = "drawable://" + R.drawable.mainview_bg50;
-                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
+                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg5);
+//                String imgUri = "drawable://" + R.drawable.mainview_bg5;
+//                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             } else if (position == 6) {
-                String imgUri = "drawable://" + R.drawable.mainview_bg60;
-                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
+                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg6);
+//                String imgUri = "drawable://" + R.drawable.mainview_bg6;
+//                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             } else {
-                String imgUri = "drawable://" + R.drawable.mainview_bg00;
-                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
+                toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg0);
+//                String imgUri = "drawable://" + R.drawable.mainview_bg0;
+//                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             }
             if ((position+1)%2 == 1 ) {
                 mMainPageBg0.setAlpha(0.5f);
                 mMainPageBg0.setVisibility(View.VISIBLE);
-                mMainPageBg0.setImageDrawable(new BitmapDrawable(getResources(),toBg));
+                mMainPageBg0.setBackground(toBg);
+//                mMainPageBg0.setImageDrawable(new BitmapDrawable(getResources(),toBg));
 
                 mMainPageBg0.animate().alpha(1f).setDuration(mShortAnimationDuration).setListener(null);
                 mMainPageBg1.animate().alpha(0.5f).setDuration(mShortAnimationDuration).setListener(new AnimatorListenerAdapter() {
@@ -260,7 +264,8 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
             } else {
                 mMainPageBg1.setAlpha(0.5f);
                 mMainPageBg1.setVisibility(View.VISIBLE);
-                mMainPageBg1.setImageDrawable(new BitmapDrawable(getResources(), toBg));
+                mMainPageBg1.setBackground(toBg);
+//                mMainPageBg1.setImageDrawable(new BitmapDrawable(getResources(), toBg));
 
                 mMainPageBg1.animate().alpha(1f).setDuration(mShortAnimationDuration).setListener(null);
                 mMainPageBg0.animate().alpha(0.5f).setDuration(mShortAnimationDuration).setListener(new AnimatorListenerAdapter() {
@@ -384,6 +389,25 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
 
     }
 
+
+    private static class MyShapeDrawable extends ShapeDrawable {
+        private Paint mStrokePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+        public MyShapeDrawable(Shape s){
+            super(s);
+            mStrokePaint.setStyle(Paint.Style.STROKE);
+        }
+
+        public Paint getStrokePaint(){
+            return mStrokePaint;
+        }
+
+        @Override
+        protected void onDraw(Shape s, Canvas c, Paint p){
+            s.draw(c, p);
+            s.draw(c, mStrokePaint);
+        }
+    }
 
 
 //    @Override

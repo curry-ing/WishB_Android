@@ -1,5 +1,6 @@
 package com.vivavu.dream.drawable;
 
+import android.app.Activity;
 import android.graphics.*;
 import android.graphics.drawable.Drawable;
 
@@ -18,15 +19,18 @@ public class RoundedAvatarDrawable extends Drawable {
     private int CANVAS_HEIGHT;
     private int imgNum;
     private int imgCnt;
+    private int mPosition;
 
 
-    public RoundedAvatarDrawable(Bitmap bitmap, int num, int cnt, int res){
+
+    public RoundedAvatarDrawable(Bitmap bitmap, int num, int cnt, int res, int position){
         mRectF = new RectF();
         mPaint = new Paint();
         mPaint2 = new Paint();
         mPaint3 = new Paint();
         imgNum = num;
         imgCnt = cnt;
+        mPosition = position;
 
         if (res == 320) {
             CANVAS_WIDTH = 540;
@@ -49,7 +53,7 @@ public class RoundedAvatarDrawable extends Drawable {
 
             mBitmapWidth = 290;
             mBitmapHeight = 290;
-            mPaint.setShadowLayer(5, 1.0f, 0.0f, Color.DKGRAY);
+//            mPaint.setShadowLayer(5, 1.0f, 0.0f, Color.DKGRAY);
         } else {
             mBitmap = adjustImage(bitmap, imgNum, imgCnt);
             final BitmapShader shader = new BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
@@ -64,16 +68,42 @@ public class RoundedAvatarDrawable extends Drawable {
 
     @Override
     public void draw(Canvas canvas){
-//        canvas.drawOval(mRectF, mPaint2);
         if(mBitmap==null) {
-            mPaint.setColor(Color.rgb(103, 201, 187));
-            canvas.drawArc(new RectF(10,10,290,290), imgCnt, imgNum, true, mPaint);
-            mPaint.setColor(Color.WHITE);
-            canvas.drawArc(new RectF(10,10,290,290), imgNum-90, 360-imgNum, true, mPaint);
+            switch(mPosition){
+                case 0:
+                    mPaint.setColor(0xFF5CA1F3);
+                    mPaint.setShadowLayer(3, 1.0f, 0.0f, 0xFF5CA1F3);
+                    break;
+                case 1:
+                    mPaint.setColor(0xFF5DC5F2);
+                    mPaint.setShadowLayer(3, 1.0f, 0.0f, 0xFF5DC5F2);
+                    break;
+                case 2:
+                    mPaint.setColor(0xFF74D6C1);
+                    mPaint.setShadowLayer(3, 1.0f, 0.0f, 0xFF74D6C1);
+                    break;
+                case 3:
+                    mPaint.setColor(0xFFB8D772);
+                    mPaint.setShadowLayer(3, 1.0f, 0.0f, 0xFFB8D772);
+                    break;
+                case 4:
+                    mPaint.setColor(0xFFD16D9F);
+                    mPaint.setShadowLayer(3, 1.0f, 0.0f, 0xFFD16D9F);
+                    break;
+                case 5:
+                    mPaint.setColor(0xFF7380D5);
+                    mPaint.setShadowLayer(3, 1.0f, 0.0f, 0xFF7380D5);
+                    break;
+                case 6:
+                    mPaint.setColor(0xFFB28CDD);
+                    mPaint.setShadowLayer(3, 1.0f, 0.0f, 0xFFB28CDD);
+                    break;
+            }
+            canvas.drawArc(new RectF(13.0f,13.0f,287.0f,287.0f), imgCnt, imgNum, true, mPaint);
             mPaint3.setColor(Color.DKGRAY);
             canvas.drawOval(new RectF(15,15,285,285), mPaint3);
         } else {
-            if (imgCnt > 1) {
+            if (imgCnt == 1) {
                 mPaint.setMaskFilter(new BlurMaskFilter(6, BlurMaskFilter.Blur.INNER));
                 canvas.drawArc(mRectF, (float)360/imgCnt*(imgNum-1), (float)360/imgCnt, true, mPaint);
             } else {

@@ -16,8 +16,23 @@
     <color name="skyblue">#ff1eb2ef</color>
     <color name="lightgreen">#ff71be69</color>
     <color name="lightred">#ffec5a6f</color>
+    <color name="transparent">#00000000</color>
+
+    <color name="color_preloader_start">#ffffffff</color>
+    <color name="color_preloader_center">#ff56a9c7</color>
+    <color name="color_preloader_end">#ff56a9c7</color>
+
+    <color name="progress_lt">#FF5DC5F2</color>
+    <color name="progress_10">#FF74D6C1</color>
+    <color name="progress_20">#FFB8D772</color>
+    <color name="progress_30">#FFD26E9F</color>
+    <color name="progress_40">#FF7380D5</color>
+    <color name="progress_50">#FF9D6DD4</color>
+    <color name="progress_60">#FF5CA1F3</color>
+
+
     <color name="action_bar">#90000000</color>
-    <color name="transparent">#ffffffff</color>
+
     <color name="disable">#E0FFFFFF</color>
     <color name="textBorder1">#60000000</color>
 </resources>
