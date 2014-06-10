@@ -58,6 +58,7 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
     private String title;
 
     private int deviceDensityDpi;
+    private String mUserBirthday;
 
     static public final int PROGRESS_BAR_BASELINE = 270;
     public static final String TAG = "DialogActivity";
@@ -125,6 +126,7 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public void init(final ButterknifeViewHolder holder, BucketGroup bucketGroup, final int pos) throws IOException {
         this.mainImages = new ArrayList<Bitmap>();
+        this.mUserBirthday = DreamApp.getInstance().getUser().getBirthday();
 
         /* SET MAIN TITLE */
         Typeface typeface = Typeface.createFromAsset(context.getAssets(), "NanumBarunGothicBold.mp3");
@@ -233,53 +235,59 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
 
 
         /* SET PROGRESS BAR */
-        if(pos>0){
-            holder.mMainProgress.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-            Calendar cal = java.util.Calendar.getInstance();
-            int startY = Integer.parseInt(DreamApp.getInstance().getUser().getBirthday().substring(0,4))+(pos*10) - 1;
-            int endY = Integer.parseInt(DreamApp.getInstance().getUser().getBirthday().substring(0,4))+((pos+1)*10-1) - 1;
-            int thisY = cal.get(cal.YEAR);
+        if (mUserBirthday != null && !mUserBirthday.isEmpty()) {
+            if (pos > 0) {
+                holder.mMainProgress.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                Calendar cal = java.util.Calendar.getInstance();
+                int startY = Integer.parseInt(mUserBirthday.substring(0, 4)) + (pos * 10) - 1;
+                int endY = Integer.parseInt(mUserBirthday.substring(0, 4)) + ((pos + 1) * 10 - 1) - 1;
+                int thisY = cal.get(cal.YEAR);
 
-            Typeface periodTypeFace = Typeface.createFromAsset(context.getAssets(), "Dense-Regular.mp3");
-            holder.mPeriod.setTypeface(periodTypeFace, Typeface.BOLD);
-            holder.mPeriod.setTextSize(25);
-            if (pos == 6) {
-                holder.mPeriod.setText("J A N  " + String.valueOf(startY).charAt(0) + " "
-                        + String.valueOf(startY).charAt(1) + " "
-                        + String.valueOf(startY).charAt(2) + " "
-                        + String.valueOf(startY).charAt(3) + "  ~");
+                Typeface periodTypeFace = Typeface.createFromAsset(context.getAssets(), "Dense-Regular.mp3");
+                holder.mPeriod.setTypeface(periodTypeFace, Typeface.BOLD);
+                holder.mPeriod.setTextSize(25);
+                if (pos == 6) {
+                    holder.mPeriod.setText("J A N  " + String.valueOf(startY).charAt(0) + " "
+                            + String.valueOf(startY).charAt(1) + " "
+                            + String.valueOf(startY).charAt(2) + " "
+                            + String.valueOf(startY).charAt(3) + "  ~");
+                } else {
+                    holder.mPeriod.setText("J A N  " + String.valueOf(startY).charAt(0) + " "
+                            + String.valueOf(startY).charAt(1) + " "
+                            + String.valueOf(startY).charAt(2) + " "
+                            + String.valueOf(startY).charAt(3) + "  -  D E C  "
+                            + String.valueOf(endY).charAt(0) + " "
+                            + String.valueOf(endY).charAt(1) + " "
+                            + String.valueOf(endY).charAt(2) + " "
+                            + String.valueOf(endY).charAt(3));
+                }
+
+
+                if (thisY > endY) {
+                    holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, 360, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
+                } else if (thisY < startY) {
+                    holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, 0, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
+                } else {
+                    holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, cal.get(cal.DAY_OF_YEAR), PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
+                }
             } else {
-                holder.mPeriod.setText("J A N  " + String.valueOf(startY).charAt(0) + " "
-                        + String.valueOf(startY).charAt(1) + " "
-                        + String.valueOf(startY).charAt(2) + " "
-                        + String.valueOf(startY).charAt(3) + "  -  D E C  "
-                        + String.valueOf(endY).charAt(0) + " "
-                        + String.valueOf(endY).charAt(1) + " "
-                        + String.valueOf(endY).charAt(2) + " "
-                        + String.valueOf(endY).charAt(3));
-            }
+                holder.mMainProgress.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                int imsi = (int) ((float) DreamApp.getInstance().getUser().getUserAge() / 100 * 360);
 
-
-            if(thisY > endY) {
-                holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, 360, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
-            } else if (thisY < startY) {
-                holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, 0, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
-            } else {
-                holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, cal.get(cal.DAY_OF_YEAR), PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
+                Typeface periodTypeFace = Typeface.createFromAsset(context.getAssets(), "Dense-Regular.mp3");
+                holder.mPeriod.setTypeface(periodTypeFace, Typeface.BOLD);
+                holder.mPeriod.setTextSize(25);
+//            holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, 0, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
+                holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, imsi, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
+                holder.mPeriod.setText("J A N  " + mUserBirthday.substring(0, 1) + " "
+                        + mUserBirthday.substring(1, 2) + " "
+                        + mUserBirthday.substring(2, 3) + " "
+                        + mUserBirthday.substring(3, 4) + "  ~");
             }
         } else {
-            holder.mMainProgress.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-            int imsi = (int) ((float) DreamApp.getInstance().getUser().getUserAge() / 100 * 360);
-
-            Typeface periodTypeFace = Typeface.createFromAsset(context.getAssets(), "Dense-Regular.mp3");
-            holder.mPeriod.setTypeface(periodTypeFace, Typeface.BOLD);
-            holder.mPeriod.setTextSize(25);
-//            holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, 0, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
-            holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, imsi, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
-            holder.mPeriod.setText("J A N  " + DreamApp.getInstance().getUser().getBirthday().substring(0, 1) + " "
-                    + DreamApp.getInstance().getUser().getBirthday().substring(1, 2) + " "
-                    + DreamApp.getInstance().getUser().getBirthday().substring(2, 3) + " "
-                    + DreamApp.getInstance().getUser().getBirthday().substring(3, 4) + "  ~");
+            holder.mDecadeBorder.setVisibility(View.GONE);
+            holder.mPeriod.setVisibility(View.GONE);
+            holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, 0, PROGRESS_BAR_BASELINE, deviceDensityDpi, 0));
         }
 
         /* SET ON CLICK LISTENER */

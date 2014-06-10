@@ -145,9 +145,13 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b){
-                    mEmailView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ing_icon, 0);
-                    if (mInvalidType==3||mInvalidType==1) {
-                        setmTxtResponseInfo(mInvalidType=0);
+                    if (ValidationUtils.isValidEmail(mEmailView)){
+                        mEmailView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ok_icon, 0);
+                    } else {
+                        mEmailView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ing_icon, 0);
+                        if (mInvalidType == 3 || mInvalidType == 1) {
+                            setmTxtResponseInfo(mInvalidType = 0);
+                        }
                     }
                 } else {
                     if (!ValidationUtils.isValidEmail(mEmailView)) {
@@ -173,7 +177,11 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    mPasswordView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ing_icon, 0);
+                    if (ValidationUtils.isValidPassword(mPasswordView)){
+                        mPasswordView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ok_icon, 0);
+                    } else {
+                        mPasswordView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ing_icon, 0);
+                    }
                 } else {
                     if (!ValidationUtils.isValidPassword(mPasswordView)){
                         mPasswordView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_alert_icon, 0);
@@ -197,6 +205,11 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
 
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if (ValidationUtils.isValidEmail(mEmailView)){
+                    mEmailView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ok_icon, 0);
+                } else {
+                    mEmailView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ing_icon, 0);
+                }
                 if (ValidationUtils.isValidPassword(mPasswordView)) {
                     if (!ValidationUtils.isValidEmail(mEmailView)) {
                         setmTxtResponseInfo(mInvalidType = 0); }
@@ -211,6 +224,11 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
         mPasswordView.setOnKeyListener(new View.OnKeyListener(){
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if (ValidationUtils.isValidPassword(mPasswordView)) {
+                    mPasswordView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ok_icon, 0);
+                } else {
+                    mPasswordView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ing_icon, 0);
+                }
                 if (ValidationUtils.isValidEmail(mEmailView)) {
                     if (ValidationUtils.isValidPassword(mPasswordView)) {
                         setmTxtResponseInfo(mInvalidType = 9);

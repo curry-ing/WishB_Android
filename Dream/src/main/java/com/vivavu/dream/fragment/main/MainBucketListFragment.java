@@ -131,6 +131,7 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
         mMainPager.setAdapter(bucketAdapter2);
         if (DreamApp.getInstance().getUser().getUserAge() == 0) {
             mMainPager.setCurrentItem(0);
+            mMainPageBg0.setBackground((BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg0));
         } else {
             mMainPager.setCurrentItem(getInstance().getUser().getUserAge() / 10);
         }
@@ -159,7 +160,12 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
         }
         bucketAdapter2.setBucketGroupList(bucketGroupList);
         bucketAdapter2.notifyDataSetChanged();
-        mMainPager.setCurrentItem(getInstance().getUser().getUserAge()/10);
+        if (DreamApp.getInstance().getUser().getUserAge() == 0) {
+            mMainPager.setCurrentItem(0);
+            mMainPageBg0.setBackground((BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg0));
+        } else {
+            mMainPager.setCurrentItem(getInstance().getUser().getUserAge() / 10);
+        }
     }
 
     @Override

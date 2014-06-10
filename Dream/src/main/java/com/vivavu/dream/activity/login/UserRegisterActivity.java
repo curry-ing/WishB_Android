@@ -105,9 +105,13 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b){
-                    mRegisterEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ing_icon, 0);
-                    if (mInvalidType==3||mInvalidType==1) {
-                        setmRegisterTxtResponseInfo(mInvalidType=0);
+                    if (ValidationUtils.isValidEmail(mRegisterEmail)){
+                        mRegisterEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ok_icon, 0);
+                    } else {
+                        mRegisterEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ing_icon, 0);
+                        if (mInvalidType == 3 || mInvalidType == 1) {
+                            setmRegisterTxtResponseInfo(mInvalidType = 0);
+                        }
                     }
                 } else {
                     if (!ValidationUtils.isValidEmail(mRegisterEmail)) {
@@ -132,7 +136,11 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    mRegisterPassword.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ing_icon, 0);
+                    if (ValidationUtils.isValidPassword(mRegisterPassword)){
+                        mRegisterPassword.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ok_icon, 0);
+                    } else {
+                        mRegisterPassword.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ing_icon, 0);
+                    }
                 } else {
                     if (!ValidationUtils.isValidPassword(mRegisterPassword)){
                         mRegisterPassword.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_alert_icon, 0);
@@ -153,9 +161,13 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
 
 
         mRegisterEmail.setOnKeyListener(new View.OnKeyListener(){
-
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if (ValidationUtils.isValidEmail(mRegisterEmail)){
+                    mRegisterEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ok_icon, 0);
+                } else {
+                    mRegisterEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ing_icon, 0);
+                }
                 if (ValidationUtils.isValidPassword(mRegisterPassword)) {
                     if (!ValidationUtils.isValidEmail(mRegisterEmail)) {
                         setmRegisterTxtResponseInfo(mInvalidType = 0); }
@@ -170,6 +182,11 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
         mRegisterPassword.setOnKeyListener(new View.OnKeyListener(){
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if (ValidationUtils.isValidPassword(mRegisterPassword)) {
+                    mRegisterPassword.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ok_icon, 0);
+                } else {
+                    mRegisterPassword.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ing_icon, 0);
+                }
                 if (ValidationUtils.isValidEmail(mRegisterEmail)) {
                     if (ValidationUtils.isValidPassword(mRegisterPassword)) {
                         setmRegisterTxtResponseInfo(mInvalidType = 9);
