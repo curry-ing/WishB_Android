@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--<string name="app_id">214219172094153</string>-->
-    <!--<string name="app_id">268430496627035</string>-->
+
+    <!-- <string name="app_id">214219172094153</string> -->
+    <!-- <string name="app_id">268430496627035</string> -->
     <string name="app_id">453419611460252</string>
     <string name="app_name">DreamProject</string>
     <string name="title_activity_main">MainActivity</string>
@@ -62,7 +63,8 @@
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
-    <string name="access_terms">이용약관</string>
+    <string name="access_terms">이용약관 보기</string>
+    <string name="privacy">개인정보 보호방침 보기</string>
     <string name="lbl_access_terms">이용약관</string>
     <string name="lbl_private">개인정보 보호방침</string>
     <string name="regist_agreement">본인은 가입을 통해 이용약관과 개인정보 보호정책에 동의 합니다.</string>
@@ -71,7 +73,7 @@
     <string name="txt_btn_submit">전송</string>
     <string name="not_valid_email">올바르지 않은 이메일 형식입니다.</string>
     <string name="user_agreement_contents">이용약관 블라블라</string>
-    <string name="privacy">개인정보보호방침</string>
+    <string name="privacy_contents">개인정보보호방침</string>
     <string name="actionbar_main_title">꿈틀</string>
     <string name="actionbar_main_today">Today</string>
     <string name="actionbar_main_notice">알림</string>
@@ -89,5 +91,11 @@
     <string name="menu_save">저장</string>
     <string name="see_more">See More</string>
     <string name="txt_timeline_write">버킷일지를 입력하세요_</string>
+    <string name="title_activity_more">MoreActivity</string>
+    <string name="alert_setting">알림 설정</string>
+    <string name="public_setting">공개설정</string>
+    <string name="help_view">도움말 보기</string>
+    <string name="inquiry">문의하기</string>
+    <string name="member_leave">회원탈퇴하기</string>
 
 </resources>

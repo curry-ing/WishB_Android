@@ -24,7 +24,7 @@ public class PrivacyActivity extends BaseActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_agreement);
         ButterKnife.inject(this);
-        mTxtContents.setText(getString(R.string.privacy));
+        mTxtContents.setText(getString(R.string.privacy_contents));
         //Intent data = getIntent();
 
     }

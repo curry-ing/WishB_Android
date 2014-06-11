@@ -1,0 +1,46 @@
+<resources>
+        <string name="title_activity_alert_settings">설정</string>
+
+    <!-- Strings related to Settings -->
+
+    <string name="pref_header_alert_element">알림항목</string>
+    <string name="pref_title_request_friends">친구요청</string>
+    <string name="pref_title_activity_friends">친구의 활동</string>
+    <string name="pref_title_like">좋아요</string>
+    <string name="pref_title_reply">댓글</string>
+    <string name="pref_title_get_badge">뱃지획득</string>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Data &amp; sync</string>
+
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">알림설정</string>
+    <string name="pref_title_new_message_notifications">반복 설정 알림</string>
+    <string name="pref_title_ringtone">소리</string>
+    <string name="pref_ringtone_silent">무음</string>
+    <string name="pref_title_vibrate">진동</string>
+
+    <string name="pref_header_notifications_time">알림시간설정</string>
+    <string name="pref_title_notifications_time_start">시작시간</string>
+    <string name="pref_title_notifications_time_end">종료시간</string>
+</resources>

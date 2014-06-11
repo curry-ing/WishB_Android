@@ -2,6 +2,7 @@ package com.vivavu.dream.fragment.main;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.main.MainActivity;
+import com.vivavu.dream.activity.setup.MoreActivity;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.model.ResponseBodyWrapped;
@@ -131,6 +133,14 @@ public class LeftMenuDrawerFragment extends Fragment {
                     }
                 });
                 ab.show();
+            }
+        });
+
+        mMainLeftMenuBtnSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MoreActivity.class);
+                startActivity(intent);
             }
         });
 

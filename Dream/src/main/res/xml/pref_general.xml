@@ -1,0 +1,26 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/pref_header_alert_element"
+        >
+        <CheckBoxPreference
+            android:key="pref_key_request_friedns"
+            android:title="@string/pref_title_request_friends"
+            android:defaultValue="true" />
+        <CheckBoxPreference
+            android:key="pref_key_activity_friends"
+            android:title="@string/pref_title_activity_friends"
+            android:defaultValue="true" />
+        <CheckBoxPreference
+            android:key="pref_key_like"
+            android:title="@string/pref_title_like"
+            android:defaultValue="true" />
+        <CheckBoxPreference
+            android:key="pref_key_reply"
+            android:title="@string/pref_title_reply"
+            android:defaultValue="true" />
+        <CheckBoxPreference
+            android:key="pref_key_get_badge"
+            android:title="@string/pref_title_get_badge"
+            android:defaultValue="true" />
+    </PreferenceCategory>
+</PreferenceScreen>
