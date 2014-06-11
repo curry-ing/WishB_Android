@@ -15,7 +15,7 @@
         android:id="@+id/layout_bucket_default_info"
         android:paddingBottom="10dp"
         android:layout_marginBottom="15dp"
-        android:background="#70FFFFFF"
+        android:background="@color/action_bar_white_with_alpha_80"
         >
         <RelativeLayout
             android:orientation="horizontal"

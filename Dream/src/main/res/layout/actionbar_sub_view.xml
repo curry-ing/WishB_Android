@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_vertical"
+    android:background="@color/action_bar_white_with_alpha_80"
     >
     <Button
         android:layout_width="35dp"

@@ -11,7 +11,7 @@
     </style>
     <style name="ActionBarTabStyle" parent="android:style/Widget.Holo.ActionBar.TabView">
         <item name="android:minHeight">@dimen/actionbar_height</item>
-        <item name="android:background">@color/transparent</item>
+        <item name="android:background">@color/action_bar</item>
     </style>
     <style name="ActionBarStyle" parent="Widget.AppCompat.ActionBar">
         <item name="android:background">@color/action_bar</item>
