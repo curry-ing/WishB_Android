@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 
@@ -162,18 +161,6 @@ public class ShadowImageView extends BaseImageView {
                 , pnt);
 
         return bitmapOut;
-    }
-
-    @Override
-    public Drawable getDrawable() {
-        if(super.getDrawable() != null) {
-            return super.getDrawable();
-        } else {
-            Drawable drawable = new ColorDrawable(Color.WHITE);
-            drawable.setBounds(getPaddingLeft(), getPaddingTop(), getWidth()-getPaddingRight(), getHeight()-getPaddingBottom());
-            return drawable;
-
-        }
     }
 
     public void setForegroundResource(int resId) {

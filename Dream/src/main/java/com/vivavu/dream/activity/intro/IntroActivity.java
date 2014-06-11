@@ -16,7 +16,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.viewpagerindicator.CirclePageIndicator;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.login.LoginActivity;
 import com.vivavu.dream.activity.login.PrivacyActivity;
@@ -53,8 +52,6 @@ public class IntroActivity extends BaseActionBarActivity {
     Button mRegisterButton;
     @InjectView(R.id.pager)
     ViewPager mPager;
-    @InjectView(R.id.intro_viewpager_indicator)
-    CirclePageIndicator mIntroViewpagerIndicator;
     @InjectView(R.id.facebook_container)
     LinearLayout mFacebookContainer;
     @InjectView(R.id.btn_user_agreement)
@@ -74,8 +71,6 @@ public class IntroActivity extends BaseActionBarActivity {
 
         // Set up the ViewPager with the sections adapter.
         mPager.setAdapter(mSectionsPagerAdapter);
-
-        mIntroViewpagerIndicator.setViewPager(mPager);
 
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override

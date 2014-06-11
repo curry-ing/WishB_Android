@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.9.+'
+        classpath 'com.android.tools.build:gradle:0.11.+'
     }
 }
 apply plugin: 'android'
@@ -14,7 +14,7 @@ repositories {
 
 android {
     compileSdkVersion 19
-    buildToolsVersion '19.0.1'
+    buildToolsVersion '19.1.0'
     defaultConfig {
         minSdkVersion 11
         targetSdkVersion 19
@@ -68,6 +68,5 @@ dependencies {
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.1'
     compile 'de.hdodenhof:circleimageview:1.1.0'
     compile project(':Libraries:facebook')
-    compile project(':Libraries:viewpagerindicator')
     compile project(':Libraries:carousel')
 }

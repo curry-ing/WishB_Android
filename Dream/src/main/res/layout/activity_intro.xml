@@ -24,13 +24,6 @@
             android:layout_height="match_parent"
             tools:context="com.vivavu.dream.activity.intro.IntroActivity"
              />
-        <com.viewpagerindicator.CirclePageIndicator
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/Theme.PageIndicatorDefaults"
-            android:id="@+id/intro_viewpager_indicator"
-            />
-
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

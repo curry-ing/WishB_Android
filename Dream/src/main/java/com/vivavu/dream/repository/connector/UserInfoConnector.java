@@ -1,6 +1,5 @@
 package com.vivavu.dream.repository.connector;
 
-import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -13,22 +12,22 @@ import com.vivavu.dream.model.BaseInfo;
 import com.vivavu.dream.model.LoginInfo;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.SecureToken;
-import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.model.user.User;
 import com.vivavu.dream.repository.Connector;
-import com.vivavu.dream.util.DateUtils;
-import com.vivavu.dream.util.ImageUtil;
 import com.vivavu.dream.util.JsonFactory;
 import com.vivavu.dream.util.RestTemplateUtils;
 
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Type;
 
 /**
@@ -63,7 +62,7 @@ public class UserInfoConnector extends Connector<User> {
 
         if(RestTemplateUtils.isAvailableParseToJson(resultString)){
             Gson gson = JsonFactory.getInstance();
-            Type type = new TypeToken<ResponseBodyWrapped<Bucket>>(){}.getType();
+            Type type = new TypeToken<ResponseBodyWrapped<User>>(){}.getType();
             result = gson.fromJson((String) resultString.getBody(), type);
         }
 
@@ -177,6 +176,12 @@ public class UserInfoConnector extends Connector<User> {
 
         if (user.getTitle_life() != null) {
             requestUser.add("title_life", user.getTitle_life());
+        }
+        if( user.getUsername() != null){
+            requestUser.add("username", user.getUsername());
+        }
+        if( user.getBirthday() != null){
+            requestUser.add("birthday", user.getBirthday());
         }
         if (user.getTitle_10() != null) {
             requestUser.add("title_10", user.getTitle_10());
