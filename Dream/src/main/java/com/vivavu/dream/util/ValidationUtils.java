@@ -47,6 +47,19 @@ public class ValidationUtils {
         return true;
     }
 
+    public static Boolean isValidNotEmpty(EditText view){
+        Context context = view.getContext();
+        String value = view.getText().toString();
+
+        // Check for a valid email address.
+        if (!isNotEmpty(value)) {
+            view.setError(context.getString(R.string.error_field_required));
+            return false;
+        }
+
+        return true;
+    }
+
     public static Boolean isValidRepeatCount(String count){
         if(count != null && count.length() > 0){
             String numberExp = "\\d+";
@@ -61,7 +74,7 @@ public class ValidationUtils {
     }
 
     public static Boolean isNotEmpty(String str){
-        if(str != null && str.length() > 0){
+        if(str != null && str.length() > 0 && str.trim().length() > 0 ){
             return true;
         }
         return false;

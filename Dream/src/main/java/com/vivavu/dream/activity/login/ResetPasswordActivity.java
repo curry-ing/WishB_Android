@@ -4,9 +4,11 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.vivavu.dream.R;
@@ -29,17 +31,36 @@ public class ResetPasswordActivity extends BaseActionBarActivity {
     EditText mEmail;
     @InjectView(R.id.txt_error)
     TextView mTxtError;
+    @InjectView(R.id.menu_previous)
+    ImageButton mMenuPrevious;
+    @InjectView(R.id.txt_title)
+    TextView mTxtTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password_activity);
+
+        final ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowHomeEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setCustomView(R.layout.actionbar_more);
+
         ButterKnife.inject(this);
 
         mBtnEmailSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 sendEmail();
+            }
+        });
+
+        mTxtTitle.setText(getString(R.string.lbl_private));
+        mMenuPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }

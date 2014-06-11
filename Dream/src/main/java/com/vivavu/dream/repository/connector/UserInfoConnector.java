@@ -94,8 +94,27 @@ public class UserInfoConnector extends Connector<User> {
     }
 
     @Override
-    public ResponseBodyWrapped<User> delete(User data) {
-        return null;
+    public ResponseBodyWrapped<User> delete(User data){
+        RestTemplate restTemplate = RestTemplateFactory.getInstance();
+        HttpHeaders requestHeaders = getBasicAuthHeader(DreamApp.getInstance());
+        HttpEntity request = new HttpEntity<String>(requestHeaders);
+
+        ResponseEntity<String> resultString = null;
+        try {
+            resultString = restTemplate.exchange(Constants.apiUserInfo, HttpMethod.DELETE, request, String.class, DreamApp.getInstance().getUser().getId());
+        } catch (RestClientException e){
+            Log.e("DreamProj.",e.toString());
+        }
+
+        ResponseBodyWrapped<User> result = new ResponseBodyWrapped<User>("error", String.valueOf(resultString.getStatusCode()), new User());
+
+        if(RestTemplateUtils.isAvailableParseToJson(resultString)){
+            Gson gson = JsonFactory.getInstance();
+            Type type = new TypeToken<ResponseBodyWrapped<User>>(){}.getType();
+            result = gson.fromJson((String) resultString.getBody(), type);
+        }
+
+        return result;
     }
 
     public static ResponseBodyWrapped<SecureToken> getToken(String email, String password){

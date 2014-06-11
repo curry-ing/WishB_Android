@@ -1,5 +1,7 @@
 package com.vivavu.dream.util;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -244,5 +246,18 @@ public class AndroidUtils {
             Bitmap bitmap = drawable.getBitmap();
             bitmap.recycle();
         }
+    }
+
+    public static String[] getEmailAccountName(Context context){
+        AccountManager am = AccountManager.get(context);
+        Account[] accts = am.getAccounts();
+        int count = accts.length;
+        if(count > 0) {
+            String[] accountNames = new String[accts.length];
+            for(int i = 0; i < count; i++) {
+                accountNames[i] = accts[i].name;
+            }
+        }
+        return null;
     }
 }

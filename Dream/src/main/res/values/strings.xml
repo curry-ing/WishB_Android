@@ -97,5 +97,9 @@
     <string name="help_view">도움말 보기</string>
     <string name="inquiry">문의하기</string>
     <string name="member_leave">회원탈퇴하기</string>
+    <string name="title_activity_inquiry">InquiryActivity</string>
+    <string name="txt_answer_for_email">답변받을 E-Mail</string>
+    <string name="txt_send_email">보내기</string>
+    <string name="email_info">chee1004@naver.com</string>
 
 </resources>
