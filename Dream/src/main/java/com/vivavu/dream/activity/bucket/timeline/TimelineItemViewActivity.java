@@ -1,8 +1,11 @@
 package com.vivavu.dream.activity.bucket.timeline;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.PopupMenu;
 import android.view.MenuItem;
@@ -13,18 +16,23 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.bucket.TimelineActivity;
 import com.vivavu.dream.common.BaseActionBarActivity;
+import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.model.bucket.timeline.Post;
+import com.vivavu.dream.repository.connector.TimelineConnector;
 import com.vivavu.dream.util.DateUtils;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+
+import static android.widget.Toast.LENGTH_LONG;
 
 /**
  * Created by yuja on 2014-03-28.
@@ -52,6 +60,34 @@ public class TimelineItemViewActivity extends BaseActionBarActivity{
     @InjectView(R.id.menu_more)
     ImageButton mMenuMore;
 
+    Post post;
+
+    private ProgressDialog progressDialog;
+
+    private static final int SEND_DATA_START = 0;
+    private static final int SEND_DATA_DELETE_SUCCESS = 1;
+    private static final int SEND_DATA_DELETE_FAIL = 2;
+
+    protected final Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case SEND_DATA_START:
+                    progressDialog.show();
+                    break;
+                case SEND_DATA_DELETE_SUCCESS:
+                    progressDialog.dismiss();
+                    Toast.makeText(TimelineItemViewActivity.this, "삭제하였습니다.", LENGTH_LONG).show();
+                    setResult(RESULT_OK);
+                    finish();
+                    break;
+                case SEND_DATA_DELETE_FAIL:
+                    progressDialog.dismiss();
+                    Toast.makeText(TimelineItemViewActivity.this, "삭제에 실패하였습니다.", LENGTH_LONG).show();
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,9 +106,13 @@ public class TimelineItemViewActivity extends BaseActionBarActivity{
 
         ButterKnife.inject(this);
 
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("진행중");
+
         Intent data = getIntent();
         Bucket bucket = (Bucket) data.getSerializableExtra(TimelineActivity.extraKeyBucket);
-        Post post  = (Post) data.getSerializableExtra(TimelineActivity.extraKeyPost);
+
+        post = (Post) data.getSerializableExtra(TimelineActivity.extraKeyPost);
         post.setBucketId(bucket.getId());
 
         mTxtTitle.setText(bucket.getTitle());
@@ -81,6 +121,12 @@ public class TimelineItemViewActivity extends BaseActionBarActivity{
             @Override
             public void onClick(View v) {
                 goEdit();
+            }
+        });
+        mMenuPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 
@@ -99,17 +145,16 @@ public class TimelineItemViewActivity extends BaseActionBarActivity{
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
                             case R.id.menu_remove:
-
+                                removePost();
                                 return true;
                             case R.id.menu_share:
-
+                                sharedPost();
                                 return true;
                         }
                         return false;
                     }
                 });
 
-                // Finally show the PopupMenu
                 popup.show();
             }
         });
@@ -150,6 +195,11 @@ public class TimelineItemViewActivity extends BaseActionBarActivity{
     }
 
     private void removePost() {
+        Thread thread = new Thread(new PostDeleteThread());
+        thread.start();
+    }
+
+    private void sharedPost() {
 
     }
 
@@ -157,5 +207,23 @@ public class TimelineItemViewActivity extends BaseActionBarActivity{
         Intent intent = getIntent();
         intent.setClass(this, TimelineItemEditActivity.class);
         startActivityForResult(intent, REQUEST_MOD_POST);
+    }
+
+    private class PostDeleteThread implements Runnable{
+
+        @Override
+        public void run() {
+
+            handler.sendEmptyMessage(SEND_DATA_START);
+
+            if(post != null && post.getId() > 0) {
+                TimelineConnector timelineConnector = new TimelineConnector();
+                ResponseBodyWrapped<Post> result = timelineConnector.delete(post);
+
+                if (result != null && result.isSuccess()) {
+                    handler.sendEmptyMessage(SEND_DATA_DELETE_SUCCESS);
+                }
+            }
+        }
     }
 }

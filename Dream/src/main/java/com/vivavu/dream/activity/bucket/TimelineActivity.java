@@ -315,6 +315,12 @@ public class TimelineActivity extends BaseActionBarActivity {
             }
         });
 
+        mMenuPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     @Override

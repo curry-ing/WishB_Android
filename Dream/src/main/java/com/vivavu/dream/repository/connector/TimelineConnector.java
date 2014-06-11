@@ -231,6 +231,26 @@ public class TimelineConnector extends Connector<Post> {
 
     @Override
     public ResponseBodyWrapped<Post> delete(Post data) {
-        return null;
+
+        RestTemplate restTemplate = RestTemplateFactory.getInstance();
+        HttpHeaders requestHeaders = getBasicAuthHeader(DreamApp.getInstance());
+        HttpEntity request = new HttpEntity<String>(requestHeaders);
+        ResponseEntity<String> resultString = null;
+        try {
+            resultString = restTemplate.exchange(Constants.apiTimelineInfo, HttpMethod.DELETE, request, String.class, data.getId());
+
+        } catch (RestClientException e) {
+            Log.e("dream", e.toString());
+        }
+
+        ResponseBodyWrapped<Post> result = new ResponseBodyWrapped<Post>("error", String.valueOf(resultString.getStatusCode()), new Post(new Date()));
+
+        if(RestTemplateUtils.isAvailableParseToJson(resultString)){
+            Gson gson = JsonFactory.getInstance();
+            Type type = new TypeToken<ResponseBodyWrapped<Post>>(){}.getType();
+            result = gson.fromJson((String) resultString.getBody(), type);
+        }
+        return result;
+
     }
 }

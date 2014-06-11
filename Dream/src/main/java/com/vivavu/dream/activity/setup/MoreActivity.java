@@ -2,20 +2,23 @@ package com.vivavu.dream.activity.setup;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.login.PrivacyActivity;
 import com.vivavu.dream.activity.login.UserAgreementActivity;
 import com.vivavu.dream.activity.main.MainActivity;
+import com.vivavu.dream.common.BaseActionBarActivity;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class MoreActivity extends ActionBarActivity {
+public class MoreActivity extends BaseActionBarActivity {
 
     @InjectView(R.id.btn_alert_setting)
     Button mBtnAlertSetting;
@@ -31,13 +34,31 @@ public class MoreActivity extends ActionBarActivity {
     Button mBtnPrivacy;
     @InjectView(R.id.btn_member_leave)
     Button mBtnMemberLeave;
+    @InjectView(R.id.menu_previous)
+    ImageButton mMenuPrevious;
+    @InjectView(R.id.txt_title)
+    TextView mTxtTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_more);
 
+        final ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowHomeEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setCustomView(R.layout.actionbar_more);
+
         ButterKnife.inject(this);
+
+        mMenuPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        mTxtTitle.setTypeface(getNanumBarunGothicFont());
 
         mBtnAlertSetting.setOnClickListener(new View.OnClickListener() {
             @Override

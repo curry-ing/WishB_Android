@@ -247,6 +247,13 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
             }
         });
 
+        mMenuPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setResult(RESULT_CANCELED);
+                finish();
+            }
+        });
     }
 
     private void bindData(Post post) {

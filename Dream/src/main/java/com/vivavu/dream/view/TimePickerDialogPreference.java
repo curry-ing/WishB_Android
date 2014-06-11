@@ -39,16 +39,10 @@ public class TimePickerDialogPreference extends DialogPreference {
     @Override
     public String toString() {
         if(is24HourFormat) {
-            return ((lastHour < 10) ? "0" : "")
-                    + Integer.toString(lastHour)
-                    + ":" + ((lastMinute < 10) ? "0" : "")
-                    + Integer.toString(lastMinute);
+            return String.format("%02d:%02d", lastHour, lastMinute);
         } else {
             int myHour = lastHour % 12;
-            return ((myHour == 0) ? "12" : ((myHour < 10) ? "0" : "") + Integer.toString(myHour))
-                    + ":" + ((lastMinute < 10) ? "0" : "")
-                    + Integer.toString(lastMinute)
-                    + ((lastHour >= 12) ? " PM" : " AM");
+            return String.format("%s %02d:%02d", (lastHour >= 12) ? " PM" : " AM", (myHour == 0) ? 12 : lastHour, lastMinute);
         }
     }
 
