@@ -1,6 +1,5 @@
 package com.vivavu.dream.repository;
 
-import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -27,7 +26,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -100,16 +98,8 @@ public class BucketConnector {
         }
 
         if(bucket.getFile() != null && bucket.getFile().exists()) {
-            Bitmap bm = ImageUtil.getBitmap(bucket.getFile().getAbsolutePath(), 1024, 1024);
-            ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-            bm.compress(Bitmap.CompressFormat.JPEG, 70, byteArray );
-            ByteArrayResource bar = new ByteArrayResource(byteArray.toByteArray()){
-                @Override
-                public String getFilename() throws IllegalStateException {
-                    return bucket.getFile().getName();
-                }
-            };
-            requestBucket.add("photo", bar);
+            ByteArrayResource byteArrayResource = ImageUtil.convertImageFileToByteArrayResource(bucket.getFile(), 1024, 1024, 70);
+            requestBucket.add("photo", byteArrayResource);
         }
 
         return requestBucket;

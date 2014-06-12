@@ -1,6 +1,5 @@
 package com.vivavu.dream.repository.connector;
 
-import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -29,7 +28,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Type;
 import java.util.Date;
 
@@ -124,17 +122,10 @@ public class TimelineConnector extends Connector<Post> {
         if(data.getText() != null){
             requestBucket.set("text", data.getText());
         }
+
         if(data.getPhoto() != null && data.getPhoto().isFile()){
-            Bitmap bm = ImageUtil.getBitmap(data.getPhoto().getAbsolutePath(), 1024, 1024);
-            ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-            bm.compress(Bitmap.CompressFormat.JPEG, 70, byteArray );
-            ByteArrayResource bar = new ByteArrayResource(byteArray.toByteArray()){
-                @Override
-                public String getFilename() throws IllegalStateException {
-                    return data.getPhoto().getName();
-                }
-            };
-            requestBucket.add("photo", bar);
+            ByteArrayResource byteArrayResource = ImageUtil.convertImageFileToByteArrayResource(data.getPhoto(), 1024, 1024, 70);
+            requestBucket.add("photo", byteArrayResource);
         }
 
         HttpEntity request = new HttpEntity<MultiValueMap<String, Object>>(requestBucket, requestHeaders);
@@ -174,16 +165,8 @@ public class TimelineConnector extends Connector<Post> {
             requestBucket.set("text", data.getText());
         }
         if(data.getPhoto() != null && data.getPhoto().isFile()){
-            Bitmap bm = ImageUtil.getBitmap(data.getPhoto().getAbsolutePath(), 1024, 1024);
-            ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-            bm.compress(Bitmap.CompressFormat.JPEG, 70, byteArray );
-            ByteArrayResource bar = new ByteArrayResource(byteArray.toByteArray()){
-                @Override
-                public String getFilename() throws IllegalStateException {
-                    return data.getPhoto().getName();
-                }
-            };
-            requestBucket.add("photo", bar);
+            ByteArrayResource byteArrayResource = ImageUtil.convertImageFileToByteArrayResource(data.getPhoto(), 1024, 1024, 70);
+            requestBucket.add("photo", byteArrayResource);
         }
 
         HttpEntity request = new HttpEntity<MultiValueMap<String, Object>>(requestBucket, requestHeaders);

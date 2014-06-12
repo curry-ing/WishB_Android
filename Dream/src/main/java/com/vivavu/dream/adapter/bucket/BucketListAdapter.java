@@ -94,6 +94,7 @@ public class BucketListAdapter extends BaseAdapter {
             DisplayImageOptions options = new DisplayImageOptions.Builder()
                     .cacheInMemory(true)
                     .cacheOnDisc(true)
+                    .considerExifParams(true)
                     .showImageForEmptyUri(R.drawable.ic_bucket_empty)
                     .build();
 
