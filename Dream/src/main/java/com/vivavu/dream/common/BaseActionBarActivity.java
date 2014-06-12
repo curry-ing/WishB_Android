@@ -33,6 +33,7 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
     protected IntentFilter intentFilterChange;
     protected IntentFilter intentFilterWifi;
     public static final int RESULT_USER_DATA_DELETED = RESULT_FIRST_USER + 0;
+    public static final int RESULT_USER_DATA_UPDATED = RESULT_FIRST_USER + 1;
     public static Typeface denseRegularFont = null;
     public static Typeface nanumBarunGothicFont = null;
     public static Typeface nanumBarunGothicBoldFont = null;

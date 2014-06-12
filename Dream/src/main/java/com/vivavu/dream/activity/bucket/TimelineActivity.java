@@ -354,9 +354,10 @@ public class TimelineActivity extends BaseActionBarActivity {
             case REQUEST_MOD_BUCKET:
                 if(resultCode == RESULT_OK) {
                     Bucket result = (Bucket) data.getSerializableExtra(BucketEditActivity.RESULT_EXTRA_BUCKET);
+                    setResult(RESULT_USER_DATA_UPDATED);
                     bindData(result);
-                } else if (requestCode == RESULT_USER_DATA_DELETED) {
-                    setResult(RESULT_OK);
+                } else if (resultCode == RESULT_USER_DATA_DELETED) {
+                    setResult(RESULT_USER_DATA_DELETED);
                     finish();
                 }
                 break;

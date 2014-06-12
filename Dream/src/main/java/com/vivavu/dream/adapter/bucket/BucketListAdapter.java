@@ -121,6 +121,14 @@ public class BucketListAdapter extends BaseAdapter {
         this.progressBarColor = progressBarColor;
     }
 
+    public List<Bucket> getList() {
+        return list;
+    }
+
+    public void setList(List<Bucket> list) {
+        this.list = list;
+    }
+
     public interface OnBucketImageViewClick {
         public void onItemClick(View view, int position, long id);
     }

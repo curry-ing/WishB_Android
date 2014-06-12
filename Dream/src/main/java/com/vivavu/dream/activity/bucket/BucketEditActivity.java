@@ -271,7 +271,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
         instance.setTime(dday.getDeadline());
         int deadlinYear = instance.get(Calendar.YEAR);
         int diff = (deadlinYear - year)/10;
-        diff += 10;
+        diff *= 10;
         if(diff > 0){
             bucket.setRange(String.valueOf(diff) );
         } else {

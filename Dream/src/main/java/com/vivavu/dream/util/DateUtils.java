@@ -117,8 +117,10 @@ public class DateUtils {
     public static Date getLastDayOfPeriod(Date birthday, int period){
         Calendar cal = Calendar.getInstance();
         cal.setTime(birthday);
-        cal.add(Calendar.YEAR, period);//해당 기간의 시작일로 세팅
+        cal.add(Calendar.YEAR, period-1);//해당 기간의 시작일로 세팅
         cal.add(Calendar.YEAR, 10 );//10년을 더하고
+        cal.set(Calendar.MONTH, Calendar.JANUARY);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
         cal.add(Calendar.DATE, -1);//하루를 빼서 해당기간의 마지막 날짜로 변경함
 
         return cal.getTime();
