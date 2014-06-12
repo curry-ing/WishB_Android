@@ -1,6 +1,7 @@
 package com.vivavu.dream.activity.main;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.View;
@@ -38,7 +39,7 @@ public class TodayActivity extends BaseActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_today);
         //actionbar setting
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowHomeEnabled(false);
@@ -59,6 +60,7 @@ public class TodayActivity extends BaseActionBarActivity {
         mPopupNotice = AndroidUtils.makePopupWindow(noticeView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         //mPopupNotice.setAnimationStyle(R.style.AnimationPopup);
         mBtnAddBucket.setOnClickListener(this);
+        mBtnAddBucket.setVisibility(View.GONE);
         mActionbarMainNotice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,14 +75,22 @@ public class TodayActivity extends BaseActionBarActivity {
             }
         });
 
-//        mActionbarMainToday.getButton().setText("Main");
-//        mActionbarMainToday.getTextView().setText("1");
-//        mActionbarMainToday.getButton().setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                finish();
-//            }
-//        });
+        mActionbarMainTitle.setText("Wish Ballon");
+        mActionbarMainTitle.setTypeface(getNanumBarunGothicBoldFont());
+        mActionbarMainTitle.setTextSize(22);
+        mActionbarMainTitle.setTextColor(Color.WHITE);
+
+        mActionbarMainToday.setTypeface(getNanumBarunGothicBoldFont());
+        mActionbarMainToday.setTextColor(Color.WHITE);
+        mActionbarMainToday.setTextSize(14);
+
+        mActionbarMainToday.setText("Main");
+        mActionbarMainToday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     @Override
