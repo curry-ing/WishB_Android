@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
@@ -102,9 +101,9 @@ public class BucketGroupViewActivity extends BaseActionBarActivity {
         }
 
         mGridBucketList.setAdapter(bucketListAdapter);
-        mGridBucketList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        bucketListAdapter.setOnBucketImageViewClickListener(new BucketListAdapter.OnBucketImageViewClick() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(View view, int position, long id) {
                 goTimelineActivity((int) id);
             }
         });

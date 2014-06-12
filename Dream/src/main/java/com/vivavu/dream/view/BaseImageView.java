@@ -5,10 +5,12 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.MaskFilter;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.RectF;
 import android.graphics.Xfermode;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
@@ -101,7 +103,23 @@ public abstract class BaseImageView extends ImageView {
                         // Allocation onDraw but it's ok because it will not always be called.
                         bitmap = Bitmap.createBitmap(canvasSize, canvasSize, Bitmap.Config.ARGB_8888);
                         Canvas bitmapCanvas = new Canvas(bitmap);
-                        drawable.setBounds(0, 0, bitmapCanvas.getWidth(), bitmapCanvas.getHeight());
+
+                        boolean expand = true;
+
+                        if(expand || drawable.getIntrinsicWidth() > bitmapCanvas.getWidth() || drawable.getIntrinsicHeight() > bitmapCanvas.getHeight()){
+                            drawable.setBounds(0, 0, bitmapCanvas.getWidth(), bitmapCanvas.getHeight());
+                        } else {
+                            int centX = drawable.getIntrinsicWidth() / 2;
+                            int centY = drawable.getIntrinsicHeight() / 2;
+                            drawable.setBounds( bitmapCanvas.getWidth() / 2 - centX , bitmapCanvas.getHeight() / 2 - centY, bitmapCanvas.getWidth() / 2 + centX , bitmapCanvas.getHeight() / 2 + centY );
+                        }
+                        mPaint.reset();
+                        mPaint.setAntiAlias(true);
+                        mPaint.setDither(true);
+                        MaskFilter maskFilter = new BlurMaskFilter(6, BlurMaskFilter.Blur.INNER);
+                        mPaint.setMaskFilter(maskFilter);
+                        mPaint.setColor(Color.WHITE);
+                        bitmapCanvas.drawOval(new RectF(0.0f, 0.0f, canvasSize, canvasSize), mPaint);
                         drawable.draw(bitmapCanvas);
                         // If mask is already set, skip and use cached mask.
                         if (mMaskBitmap == null || mMaskBitmap.isRecycled()) {
