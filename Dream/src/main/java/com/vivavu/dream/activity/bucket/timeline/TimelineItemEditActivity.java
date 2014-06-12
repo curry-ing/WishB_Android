@@ -26,15 +26,19 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.bucket.TimelineActivity;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.Code;
+import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.common.enums.FacebookShareType;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.model.bucket.timeline.Post;
 import com.vivavu.dream.repository.connector.TimelineConnector;
+import com.vivavu.dream.util.AndroidUtils;
 import com.vivavu.dream.util.DateUtils;
 import com.vivavu.dream.util.ImageUtil;
 
@@ -260,10 +264,9 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
         mTxtPostText.setText(post.getText());
         mTxtPostDate.setText(DateUtils.getDateString(post.getTimestamp(), "yyyy.MM.dd", new Date()));
         mTxtPostTime.setText(DateUtils.getDateString(post.getTimestamp(), "HH:mm", new Date()));
-        /*ImageLoader.getInstance().displayImage(post.getImgUrl(), mIvCardImage, new SimpleImageLoadingListener(){
+        ImageLoader.getInstance().displayImage(post.getImgUrl(), mIvTimelineImage, new SimpleImageLoadingListener(){
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                super.onLoadingComplete(imageUri, view, loadedImage);
                 // 이미지가 없을 경우에는 imageview 자체를 안보여줌
                 if(loadedImage != null) {
                     view.setVisibility(View.VISIBLE);
@@ -271,34 +274,54 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                     view.setVisibility(View.GONE);
                 }
             }
-        });*/
+        });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode){
-            case REQUEST_CODE_TAKE_CAMERA:
+            case Code.ACT_ADD_BUCKET_TAKE_GALLERY:
                 if(resultCode == RESULT_OK){
-                    File f = new File(mImageCaptureUri.getPath());
-                    // 찍은 사진을 이미지뷰에 보여준다.
-                    if(data != null && data.getExtras() != null) {
-                        Bitmap bm = (Bitmap) data.getExtras().getParcelable("data");
-                        /*mIvCardImage.setVisibility(View.VISIBLE);
-                        mIvCardImage.setImageBitmap(bm);*/
-                    } else if( f.exists() ){
-                        /// http://stackoverflow.com/questions/9890757/android-camera-data-intent-returns-null
-                        /// EXTRA_OUTPUT을 선언해주면 해당 경로에 파일을 직접생성하고 썸네일을 리턴하지 않음
-                        /*mIvCardImage.setVisibility(View.VISIBLE);
-                        ImageLoader.getInstance().displayImage(mImageCaptureUri.toString(), mIvCardImage);*/
-                        //ImageUtil.setPic(mIvCardImage, mImageCaptureUri.getPath());
-                    }
-                    if(f.exists()){
-                        //f.delete();
-                        post.setPhoto(f);
+                    if(data != null ) {
+                        mImageCaptureUri = data.getData();
+                        showImage(mImageCaptureUri, mIvTimelineImage);
                     }
                 }
-                return;
+                break;
+            case Code.ACT_ADD_BUCKET_TAKE_CAMERA:
+                if(resultCode == RESULT_OK){
+                    showImage(mImageCaptureUri, mIvTimelineImage);
+                }
+                break;
+        }
+    }
+
+    private void showImage(Uri imageUri, ImageView view) {
+        if(imageUri != null){
+            File f = null;
+
+            if("file".equals(imageUri.getScheme() )){
+                f = new File(imageUri.getPath());
+            } else if("content".equals(imageUri.getScheme())){
+                String path = AndroidUtils.convertContentsToFileSchema(DreamApp.getInstance(), imageUri.toString());
+                f = new File(path);
+            }
+
+            if(f!= null && f.exists() && f.isFile()){
+                ImageLoader.getInstance().displayImage(imageUri.toString(), view, new SimpleImageLoadingListener(){
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                        // 이미지가 없을 경우에는 imageview 자체를 안보여줌
+                        if(loadedImage != null) {
+                            view.setVisibility(View.VISIBLE);
+                        }else {
+                            view.setVisibility(View.GONE);
+                        }
+                    }
+                });
+                post.setPhoto(f);
+            }
         }
     }
 
@@ -335,16 +358,18 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
             // Create the File where the photo should go
             File photoFile = null;
             try {
-                photoFile = ImageUtil.createImageFile();
-                mImageCaptureUri = Uri.fromFile(photoFile);
-
+                photoFile = ImageUtil.createImageFile(); // 겔러리에 저장될 파일을 생성해놓음
+                mImageCaptureUri = Uri.fromFile(photoFile); // 파일명 가져오기
             } catch (IOException ex) {
-                Log.e("dream", ex.getMessage());
+                Log.e(TAG, ex.getMessage());
+                Toast.makeText(this, "카메라 준비중 에러가 발생했습니다.", Toast.LENGTH_LONG).show();
             }
+
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
-                startActivityForResult(intent, REQUEST_CODE_TAKE_CAMERA);
+                intent.putExtra("return-data", false);
+                startActivityForResult(intent, Code.ACT_ADD_BUCKET_TAKE_CAMERA);
             }
         }else{
             Toast.makeText(this, "카메라 앱을 실행할 수 없습니다.", Toast.LENGTH_LONG).show();
