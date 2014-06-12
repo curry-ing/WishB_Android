@@ -22,6 +22,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.main.MainActivity;
@@ -355,18 +356,13 @@ public class BucketEditActivity extends BaseActionBarActivity {
     private void bindData() {
         mBucketInputTitle.setText(bucket.getTitle());
 
-        /*ImageLoader.getInstance().displayImage(bucket.getCvrImgUrl(), mIvCardImage, new SimpleImageLoadingListener(){
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                super.onLoadingComplete(imageUri, view, loadedImage);
-                // 이미지가 없을 경우에는 imageview 자체를 안보여줌
-                if(loadedImage != null) {
-                    view.setVisibility(View.VISIBLE);
-                }else {
-                    view.setVisibility(View.GONE);
-                }
-            }
-        });*/
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisc(true)
+                .considerExifParams(true)
+                .showImageForEmptyUri(R.drawable.ic_bucket_empty)
+                .build();
+        ImageLoader.getInstance().displayImage(bucket.getCvrImgUrl(), mBucketImg, options);
 
         if (bucket.getDeadline() != null) {
             mBucketInputDeadline.setText( DateUtils.getDateString(bucket.getDeadline(), "yyyy. MM. dd"));
@@ -455,8 +451,6 @@ public class BucketEditActivity extends BaseActionBarActivity {
     }
 
     private void doDelte() {
-
-
             AlertDialog.Builder alertConfirm = new AlertDialog.Builder(this);
             alertConfirm.setTitle("삭제확인");
             alertConfirm.setMessage("버킷을 삭제하시겠습니까?").setCancelable(false).setPositiveButton("예",
@@ -537,6 +531,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
             mMenuSave.setVisibility(View.VISIBLE);
         }
     }
+
     private void doTakePhotoAction(){
         /*
         * 참고 해볼곳
@@ -569,11 +564,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
         }else{
             Toast.makeText(this, "카메라 앱을 실행할 수 없습니다.", Toast.LENGTH_LONG).show();
         }
-
-
     }
-
-
 
     private void doTakeAlbumAction(){
         Intent intent = new Intent( Intent.ACTION_PICK ) ;
@@ -595,16 +586,6 @@ public class BucketEditActivity extends BaseActionBarActivity {
         intent.putExtra("scale", true);
         intent.putExtra("return-data", false);
         startActivityForResult(intent, RequestCode.ACT_ADD_BUCKET_CROP_FROM_CAMERA.ordinal());
-        /*File tempFile;
-        try {
-            tempFile = ImageUtil.createImageFile("CROP_");
-            mImageCaptureUri = Uri.fromFile(tempFile);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile));
-            startActivityForResult(intent, RequestCode.ACT_ADD_BUCKET_CROP_FROM_CAMERA.ordinal());
-        } catch (IOException e) {
-            Log.e(TAG, e.getMessage());
-            Toast.makeText(this, "이미지 조정중 에러가 발생했습니다.", Toast.LENGTH_LONG).show();
-        }*/
     }
 
     public class BucketAddTask extends CustomAsyncTask<Bucket, Void, ResponseBodyWrapped<Bucket>>{

@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.bucket.timeline.TimelineCalendarActivity;
@@ -239,6 +240,13 @@ public class TimelineActivity extends BaseActionBarActivity {
         ImageLoader.getInstance().displayImage(bucket.getCvrImgUrl(), mImgBucket);
         mImgBucket.setPercent(progress);
 
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisc(true)
+                .considerExifParams(true)
+                .showImageForEmptyUri(R.drawable.ic_bucket_empty)
+                .build();
+        ImageLoader.getInstance().displayImage(bucket.getCvrImgUrl(), mImgBucket, options);
 
         mTxtBucketDescription.setText(bucket.getDescription());
         OptionRepeat repeat = new OptionRepeat(RepeatType.fromCode(bucket.getRptType()), bucket.getRptCndt());

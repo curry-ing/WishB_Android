@@ -14,9 +14,11 @@ import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.SecureToken;
 import com.vivavu.dream.model.user.User;
 import com.vivavu.dream.repository.Connector;
+import com.vivavu.dream.util.ImageUtil;
 import com.vivavu.dream.util.JsonFactory;
 import com.vivavu.dream.util.RestTemplateUtils;
 
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -221,6 +223,10 @@ public class UserInfoConnector extends Connector<User> {
             requestUser.add("title_60", user.getTitle_60());
         }
 
+        if(user.getPhoto() != null && user.getPhoto().exists()){
+            ByteArrayResource byteArrayResource = ImageUtil.convertImageFileToByteArrayResource(user.getPhoto(), 1024, 1024, 70);
+            requestUser.add("photo", byteArrayResource);
+        }
 
         return requestUser;
     }

@@ -1,14 +1,10 @@
 package com.vivavu.dream.model.user;
 
 import com.google.gson.annotations.SerializedName;
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.io.File;
-import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by yuja on 14. 1. 7.
@@ -62,6 +58,7 @@ public class User{
     @SerializedName("title_60")
     private String title_60;
 
+    private File photo;
 
     public String getTitle_60() {
         return title_60;
@@ -189,6 +186,14 @@ public class User{
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public File getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(File photo) {
+        this.photo = photo;
     }
 
     public int getUserAge() {
