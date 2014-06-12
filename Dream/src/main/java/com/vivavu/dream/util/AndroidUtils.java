@@ -242,7 +242,7 @@ public class AndroidUtils {
     public static void recycleImage(View view){
         if(view.getBackground() != null){
             BitmapDrawable drawable = (BitmapDrawable) view.getBackground();
-            view.setBackground(null);
+            view.setBackgroundResource(0);
             Bitmap bitmap = drawable.getBitmap();
             bitmap.recycle();
         }
