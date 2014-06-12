@@ -1,41 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
+    android:background="@drawable/bg_timeline"
     >
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/container_bucket_info"
-        >
-        <include
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/include_bucket_progress" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:id="@+id/content_frame"
+        android:layout_marginTop="@dimen/actionbar_height"
+        android:paddingTop="15dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="12.5dp"
+        android:layout_above="@+id/layout_timeline_option"
         >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_centerHorizontal="true"
             android:id="@+id/container_post_info"
+            android:background="@drawable/bg_timeline_edit_box"
+            android:paddingTop="12.5dp"
+            android:paddingLeft="12.5dp"
+            android:paddingRight="12.5dp"
+            android:paddingBottom="12.5dp"
             >
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_timeline_write_timestamp"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="date"
+                    android:hint="2014.03.03"
+                    android:textSize="16.725sp"
+                    android:id="@+id/txt_post_date"
+                    android:typeface="sans"
+                    android:textColor="#444444"
+                    android:paddingLeft="4dp"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="date"
+                    android:hint="17:30"
+                    android:textSize="16.725sp"
+                    android:id="@+id/txt_post_time"
+                    android:typeface="sans"
+                    android:textColor="#444444"
+                    android:paddingLeft="4dp"
+                    />
+                </LinearLayout>
             <EditText
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:id="@+id/txt_post_text"
+                android:hint="@string/txt_timeline_write"
+                android:background="@null"
+                android:layout_marginTop="12.5dp"
+                android:textSize="21.185sp"
+                android:textColor="#888888"
                 />
             <ImageView
                 android:layout_width="match_parent"
@@ -43,37 +73,32 @@
                 android:id="@+id/iv_timeline_image"
                 android:visibility="gone"
                 />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="date"
-                android:ems="16"
-                android:id="@+id/txt_post_date"
-                android:layout_gravity="right"
-                android:gravity="right"
-                />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <Button
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:id="@+id/btn_post_camera"
-                    android:background="@drawable/camera_blue"
-                    />
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/btn_post_etc"
-                    android:text="emoticon"
-                    />
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/btn_post_facebook"
-                    android:text="facebook"
-                    />
-            </LinearLayout>
+
         </LinearLayout>
         </LinearLayout>
-</LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:paddingTop="7.5dp"
+        android:paddingLeft="15dp"
+        android:paddingBottom="7.5dp"
+        android:id="@+id/layout_timeline_option"
+        android:background="#90FFFFFF"
+        >
+        <Button
+            android:layout_width="33dp"
+            android:layout_height="33dp"
+            android:id="@+id/btn_post_facebook"
+            android:background="@drawable/ic_facebook_release"
+            android:layout_marginRight="12.5dp"
+            />
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/btn_post_camera"
+            android:background="@drawable/ic_add_img_release"
+            />
+    </LinearLayout>
+</RelativeLayout>

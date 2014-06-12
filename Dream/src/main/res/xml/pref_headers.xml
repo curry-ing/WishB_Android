@@ -1,0 +1,13 @@
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- These settings headers are only used on tablets. -->
+
+    <header
+        android:fragment="com.vivavu.dream.activity.setup.AlertSettingsActivity$GeneralPreferenceFragment"
+        android:title="@string/pref_header_alert_element" />
+
+    <header
+        android:fragment="com.vivavu.dream.activity.setup.AlertSettingsActivity$NotificationPreferenceFragment"
+        android:title="@string/pref_header_notifications" />
+
+</preference-headers>

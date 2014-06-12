@@ -18,7 +18,7 @@
     <include
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        layout="@layout/bucket_list_item"
+        layout="@layout/bucket_sub_list_item"
         android:layout_gravity="center_horizontal" />
 
 

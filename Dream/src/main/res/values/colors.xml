@@ -9,6 +9,7 @@
     <!-- 디자인 -->
     <color name="white">#ffffffff</color>
     <color name="black">#ff000000</color>
+    <color name="default_darkgray">#444444</color>
     <color name="darkgray">#666</color>
     <color name="mint">#67c9bb</color>
     <color name="orange">#fa9261</color>
@@ -17,18 +18,24 @@
     <color name="lightred">#ffec5a6f</color>
     <color name="transparent">#00000000</color>
 
+    <color name="default_text_color">#88888888</color>
+    <color name="text_color_dday_over">#88FF3636</color>
+
     <color name="color_preloader_start">#ffffffff</color>
     <color name="color_preloader_center">#ff56a9c7</color>
     <color name="color_preloader_end">#ff56a9c7</color>
 
-    <color name="progress_lt">#FF5DC5F2</color>
-    <color name="progress_10">#FF74D6C1</color>
-    <color name="progress_20">#FFB8D772</color>
-    <color name="progress_30">#FFD26E9F</color>
-    <color name="progress_40">#FF7380D5</color>
-    <color name="progress_50">#FF9D6DD4</color>
-    <color name="progress_60">#FF5CA1F3</color>
+    <color name="progress_lt">#FF5CA1F3</color>
+    <color name="progress_10">#FF5DC5F2</color>
+    <color name="progress_20">#FF74D6C1</color>
+    <color name="progress_30">#FFB8D772</color>
+    <color name="progress_40">#FFD16D9F</color>
+    <color name="progress_50">#FF7380D5</color>
+    <color name="progress_60">#FFB28CDD</color>
+    <color name="progress_complete">#FFFFF612</color>
 
-
-    <color name="action_bar">#90000000</color>
+    <color name="action_bar">#00FFFFFF</color>
+    <color name="action_bar_white_with_alpha_80">#70FFFFFF</color>
+    <color name="disable">#E0FFFFFF</color>
+    <color name="textBorder1">#60000000</color>
 </resources>

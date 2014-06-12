@@ -13,7 +13,9 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.vivavu.dream.R;
+import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.model.bucket.timeline.Post;
+import com.vivavu.dream.model.bucket.timeline.TimelineMetaInfo;
 import com.vivavu.dream.util.DateUtils;
 
 import java.util.List;
@@ -28,15 +30,19 @@ public class TimelineListAdapter extends BaseAdapter {
     protected Context context;
     protected LayoutInflater layoutInflater;
     protected List<Post> postList;
+    protected TimelineMetaInfo timelineMetaInfo;
 
-    public TimelineListAdapter(Activity context, List<Post> postList) {
+    public TimelineListAdapter(Activity context) {
         this.context = context;
         this.layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        this.postList = postList;
     }
 
     @Override
     public int getCount() {
+        /*if (timelineMetaInfo == null) {
+            return 0;
+        }
+        return timelineMetaInfo.getCount();*/
         if (postList == null) {
             return 0;
         }
@@ -56,15 +62,29 @@ public class TimelineListAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         ButterknifeViewHolder viewHolder = null;
-        /*if(convertView == null){*/
+        if(convertView == null){
             convertView = layoutInflater.inflate(R.layout.fragment_timeline_item, parent, false);
             viewHolder = new ButterknifeViewHolder(convertView);
-        /*} else {
+        } else {
             viewHolder = (ButterknifeViewHolder) convertView.getTag();
-        }*/
-        Post post = (Post) getItem(position);
+        }
+        final Post post = (Post) getItem(position);
         viewHolder.mTxtPostText.setText(post.getText());
         viewHolder.mTxtPostDate.setText(DateUtils.getDateString(post.getRegDt(), "yyyy.MM.dd hh:mm"));
+        viewHolder.mTxtPostText.setTypeface(BaseActionBarActivity.getNanumBarunGothicFont());
+        viewHolder.mBtnSeeMore.setVisibility(View.GONE);
+        final ButterknifeViewHolder finalViewHolder = viewHolder;
+        viewHolder.mTxtPostText.post(new Runnable() {
+            @Override
+            public void run() {
+                if( post.getImgUrl() == null && finalViewHolder.mTxtPostText.getLineCount() == 5){
+                    finalViewHolder.mBtnSeeMore.setVisibility(View.VISIBLE);
+                } else if(post.getImgUrl() != null && finalViewHolder.mTxtPostText.getLineCount() == 2){
+                    finalViewHolder.mBtnSeeMore.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
 
         ImageLoader.getInstance().displayImage(post.getImgUrl(), viewHolder.mIvTimelineImage, new SimpleImageLoadingListener(){
             @Override
@@ -78,6 +98,8 @@ public class TimelineListAdapter extends BaseAdapter {
                 }
             }
         });
+
+        convertView.setTag(viewHolder);
         return convertView;
     }
 
@@ -88,23 +110,35 @@ public class TimelineListAdapter extends BaseAdapter {
     public void setPostList(List<Post> postList) {
         this.postList = postList;
     }
-    /**
+
+    public TimelineMetaInfo getTimelineMetaInfo() {
+        return timelineMetaInfo;
+    }
+
+    public void setTimelineMetaInfo(TimelineMetaInfo timelineMetaInfo) {
+        this.timelineMetaInfo = timelineMetaInfo;
+    }
+
+
+/**
  * This class contains all butterknife-injected Views & Layouts from layout file 'null'
  * for easy to all layout elements.
  *
  * @author Android Butter Zelezny, plugin for IntelliJ IDEA/Android Studio by Inmite (www.inmite.eu)
  */
     static class ButterknifeViewHolder {
-        @InjectView(R.id.txt_post_text)
-        TextView mTxtPostText;
-        @InjectView(R.id.iv_timeline_image)
-        ImageView mIvTimelineImage;
         @InjectView(R.id.txt_post_date)
         TextView mTxtPostDate;
+        @InjectView(R.id.txt_post_text)
+        TextView mTxtPostText;
+        @InjectView(R.id.btn_see_more)
+        TextView mBtnSeeMore;
+        @InjectView(R.id.iv_timeline_image)
+        ImageView mIvTimelineImage;
 
-
-    ButterknifeViewHolder(View view) {
+        ButterknifeViewHolder(View view) {
             ButterKnife.inject(this, view);
         }
     }
+
 }

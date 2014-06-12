@@ -1,32 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
+    android:background="@drawable/bg_timeline"
     >
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/container_bucket_info"
-        >
-        <include
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/include_bucket_progress" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:id="@+id/content_frame"
+        android:layout_marginTop="@dimen/actionbar_height"
+        android:paddingTop="15dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="12.5dp"
         >
-        <include
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/fragment_timeline_item" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/container_post_info"
+            android:background="@drawable/bg_timeline_edit_box"
+            android:paddingTop="12.5dp"
+            android:paddingLeft="12.5dp"
+            android:paddingRight="12.5dp"
+            android:paddingBottom="12.5dp"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="date"
+                    android:hint="2014.03.03 17:30"
+                    android:textSize="16.725sp"
+                    android:id="@+id/txt_post_date"
+                    android:typeface="sans"
+                    android:background="@drawable/bg_timeline_view_timestamp"
+                    android:textColor="#444444"
+                    android:paddingLeft="4dp"
+                    />
+                <Button
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:id="@+id/btn_timeline_edit"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/ic_timeline_edit"
+                    />
+                </RelativeLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txt_post_text"
+                android:hint="@string/txt_timeline_write"
+                android:background="@null"
+                android:layout_marginTop="12.5dp"
+                android:textSize="21.185sp"
+                android:textColor="#666666"
+                />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:id="@+id/iv_timeline_image"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="17.5dp"
+                android:visibility="gone"
+                />
+
         </LinearLayout>
-</LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

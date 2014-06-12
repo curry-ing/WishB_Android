@@ -2,26 +2,28 @@ package com.vivavu.dream.activity.main;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.vivavu.dream.R;
-import com.vivavu.dream.activity.bucket.BucketAddActivity;
+import com.vivavu.dream.activity.bucket.BucketEditActivity;
 import com.vivavu.dream.activity.bucket.BucketViewActivity;
 import com.vivavu.dream.broadcastReceiver.AlarmManagerBroadcastReceiver;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.Code;
 import com.vivavu.dream.fragment.main.MainBucketListFragment;
 import com.vivavu.dream.util.AndroidUtils;
-import com.vivavu.dream.view.ButtonIncludeCount;
 import com.vivavu.dream.view.CustomPopupWindow;
 
 import butterknife.ButterKnife;
@@ -42,7 +44,18 @@ public class MainActivity extends BaseActionBarActivity {
     View noticeView;
     CustomPopupWindow mPopupNotice;
 
+    View customeActionBarView;
+    View customeActionBarViewProfile;
+
     MainBucketListFragment mainBucketListFragment;
+
+    public static final String EXTRA_BUCKET_DEFAULT_RANGE="extraBucketDefaultRange";
+    @InjectView(R.id.content_frame)
+    FrameLayout mContentFrame;
+    @InjectView(R.id.container)
+    DrawerLayout mContainer;
+    @InjectView(R.id.profile)
+    ImageView mProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +66,15 @@ public class MainActivity extends BaseActionBarActivity {
         actionBar.setDisplayShowHomeEnabled(false);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setCustomView(R.layout.actionbar_main);
+
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+
+        customeActionBarView = inflater.inflate(R.layout.actionbar_main, null);
+        customeActionBarViewProfile = inflater.inflate(R.layout.actionbar_main_profile, null);
+        ActionBarProfileViewHolder actionBarProfileViewHolder = new ActionBarProfileViewHolder(customeActionBarViewProfile);
+        customeActionBarViewProfile.setTag(actionBarProfileViewHolder);
+
+        actionBar.setCustomView(customeActionBarView);
 
         ButterKnife.inject(this);
 
@@ -83,8 +104,6 @@ public class MainActivity extends BaseActionBarActivity {
             }
         });
 
-        Typeface typeface = Typeface.createFromAsset(context.getAssets(), "NanumBarunGothicBold.mp3");
-
         SpannableString text = new SpannableString("logos");
         text.setSpan(new ForegroundColorSpan(R.color.skyblue),0,1,0);
         text.setSpan(new ForegroundColorSpan(R.color.white),1,2,0);
@@ -92,12 +111,12 @@ public class MainActivity extends BaseActionBarActivity {
         text.setSpan(new ForegroundColorSpan(R.color.lightred),3,4,0);
 
 //        mActionbarMainTitle.setText(text, TextView.BufferType.SPANNABLE);
-        mActionbarMainTitle.setText("Wish B");
-        mActionbarMainTitle.setTypeface(typeface);
-        mActionbarMainTitle.setTextSize(20);
+        mActionbarMainTitle.setText("Wish Ballon");
+        mActionbarMainTitle.setTypeface(getNanumBarunGothicBoldFont());
+        mActionbarMainTitle.setTextSize(22);
         mActionbarMainTitle.setTextColor(Color.WHITE);
 
-        mActionbarMainToday.setTypeface(typeface);
+        mActionbarMainToday.setTypeface(getNanumBarunGothicBoldFont());
         mActionbarMainToday.setTextColor(Color.WHITE);
         mActionbarMainToday.setTextSize(14);
 
@@ -106,6 +125,33 @@ public class MainActivity extends BaseActionBarActivity {
 //        alarm.SetAlarm(context, 1, true, 23);
 //        alarm.SetAlarm(context, 2, true, 11);
 //        alarm.CancelAlarm(context);
+
+        actionBarProfileViewHolder.mTxtProfile.setTypeface(getNanumBarunGothicFont());
+
+        mContainer.setDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                ActionBar bar = getSupportActionBar();
+                bar.setCustomView(customeActionBarViewProfile);
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                ActionBar bar = getSupportActionBar();
+                bar.setCustomView(customeActionBarView);
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
+
     }
 
     @Override
@@ -121,7 +167,7 @@ public class MainActivity extends BaseActionBarActivity {
 
         switch (requestCode) {
             case Code.ACT_ADD_BUCKET:
-                int bucketId = data.getIntExtra(BucketAddActivity.RESULT_EXTRA_BUCKET_ID, -1);
+                int bucketId = data.getIntExtra(BucketEditActivity.RESULT_EXTRA_BUCKET_ID, -1);
                 if (bucketId > 0) {
                     goBucketView(bucketId);
                 }
@@ -143,7 +189,11 @@ public class MainActivity extends BaseActionBarActivity {
     private void goAddBucket() {
         Intent intent;
         intent = new Intent();
-        intent.setClass(this, BucketAddActivity.class);
+        intent.setClass(this, BucketEditActivity.class);
+        if(mainBucketListFragment != null) {
+            intent.putExtra(EXTRA_BUCKET_DEFAULT_RANGE, mainBucketListFragment.getViewPagerPage() * 10);
+        }
+
         startActivity(intent);
     }
 
@@ -174,4 +224,20 @@ public class MainActivity extends BaseActionBarActivity {
         }
     }
 
+/**
+ * This class contains all butterknife-injected Views & Layouts from layout file 'null'
+ * for easy to all layout elements.
+ *
+ * @author Android Butter Zelezny, plugin for IntelliJ IDEA/Android Studio by Inmite (www.inmite.eu)
+ */
+    static class ActionBarProfileViewHolder {
+        @InjectView(R.id.profile)
+        ImageView mProfile;
+        @InjectView(R.id.txt_profile)
+        TextView mTxtProfile;
+
+    ActionBarProfileViewHolder(View view) {
+            ButterKnife.inject(this, view);
+        }
+    }
 }

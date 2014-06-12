@@ -20,7 +20,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.viewpagerindicator.CirclePageIndicator;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.login.LoginActivity;
 import com.vivavu.dream.activity.login.PrivacyActivity;

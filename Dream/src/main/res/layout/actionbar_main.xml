@@ -4,6 +4,7 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_vertical"
+    android:background="#90000000"
     >
     <ImageView android:layout_width="wrap_content"
                android:layout_height="48dp"
@@ -35,7 +36,7 @@
               android:layout_height="48dp"
               android:id="@+id/actionbar_main_today"
               android:text="Today"
-              android:background="@color/transparent"
+              android:background="@null"
               android:layout_alignParentRight="true" android:layout_marginRight="15dp" android:gravity="center"/>
 
 

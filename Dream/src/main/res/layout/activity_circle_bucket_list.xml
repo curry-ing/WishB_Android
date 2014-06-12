@@ -19,7 +19,7 @@
             android:layout_weight="1"
             pj:circleRadius="120dp"
             pj:displaySubItemCount="7"
-            pj:mainItemRadius="110dp"
+            pj:mainItemRadius="@dimen/subview_item_radius"
             pj:subItemRadius="55dp"
             pj:circleBackground="@drawable/sub_view_base_circle_border"
             >

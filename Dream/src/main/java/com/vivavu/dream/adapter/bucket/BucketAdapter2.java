@@ -4,11 +4,11 @@ import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.*;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.app.Fragment;
@@ -27,7 +27,8 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.vivavu.dream.R;
-import com.vivavu.dream.activity.bucket.CircleBucketListActivity;
+import com.vivavu.dream.activity.bucket.BucketGroupViewActivity;
+import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.drawable.RoundedAvatarDrawable;
 import com.vivavu.dream.model.ResponseBodyWrapped;
@@ -297,7 +298,8 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
                 Intent intent;
                 intent = new Intent();
                 intent.putExtra("groupRange", getBucketGroupList().get(pos).getRange());
-                intent.setClass(context, CircleBucketListActivity.class);
+                //intent.setClass(context, CircleBucketListActivity.class);
+                intent.setClass(context, BucketGroupViewActivity.class);
                 fragment.startActivity(intent);
             }
 
@@ -401,53 +403,6 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
 
             return responseBodyWrapped;
         }
-    }
-
-    public class MyDrawable extends Drawable {
-        @Override
-        public void draw(Canvas canvas){
-            Paint mPaints = new Paint();
-            mPaints.setAntiAlias(true);
-//            mPaints.setStyle(Paint.Style.STROKE);
-//            mPaints.setStrokeWidth(12);
-//            mPaints.setColor(Color.WHITE);
-            mPaints.setColor(0xFFB8D772);
-            mPaints.setShadowLayer(10, 1.0f, 0.0f, 0xFFB8D772);
-
-            canvas.drawOval(new RectF(420,540,425,545), mPaints);
-//            canvas.drawColor(R.color.action_bar);
-//            canvas.drawArc(new RectF(40, 10, 280, 250), mStart, mSweep, false, mPaints);
-//            mSweep += SWEEP_INC;
-
-//            for (int i=0; i<24; i++) {
-//            canvas.drawArc(new RectF(25, 25, 575, 575), 0, 270, false, mPaints);
-//            mSweep += SWEEP_INC;
-//            if (mSweep > 360) {
-//                mSweep -= 360;
-//                mStart += START_INC*2;
-//                if (mStart >= 360) {
-//                    mStart -= 360;
-//                }
-//            }
-//            }
-        }
-
-        @Override
-        public void setAlpha(int i) {
-
-        }
-
-        @Override
-        public void setColorFilter(ColorFilter colorFilter) {
-
-        }
-
-        @Override
-        public int getOpacity() {
-            return 0;
-        }
-
-
     }
 
     class ButterknifeViewHolder {

@@ -5,16 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:paddingLeft="15dp"
-    android:paddingRight="21dp"
     android:background="@drawable/bg_actionbar_bucket_edit_main"
     android:layout_gravity="center_vertical"
     >
-    <Button
-        android:layout_width="15dp"
-        android:layout_height="22dp"
-        android:background="@drawable/ic_previous"
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_previous"
+        android:background="@null"
+        android:id="@+id/menu_previous"
         android:layout_weight="0.1"
+        android:paddingLeft="15dp"
+        android:paddingRight="10dp"
         />
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,10 +24,14 @@
         android:layout_weight="1">
 
         </LinearLayout>
-    <Button
-        android:layout_width="32dp"
-        android:layout_height="12dp"
-        android:background="@drawable/ic_save"
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_save"
+        android:background="@null"
+        android:id="@+id/menu_save"
         android:layout_weight="0.1"
+        android:paddingLeft="5dp"
+        android:paddingRight="21dp"
         />
 </LinearLayout>

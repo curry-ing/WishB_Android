@@ -1,8 +1,20 @@
 package com.vivavu.dream.drawable;
 
-import android.app.Activity;
-import android.graphics.*;
+import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
+import android.graphics.BlurMaskFilter;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.Paint;
+import android.graphics.PixelFormat;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
+
+import com.vivavu.dream.R;
+import com.vivavu.dream.common.DreamApp;
 
 /**
  * Created by masunghoon on 4/23/14.
@@ -71,32 +83,32 @@ public class RoundedAvatarDrawable extends Drawable {
         if(mBitmap==null) {
             switch(mPosition){
                 case 0:
-                    mPaint.setColor(0xFF5CA1F3);
-                    mPaint.setShadowLayer(3, 1.0f, 0.0f, 0xFF5CA1F3);
+                    mPaint.setColor(DreamApp.getInstance().getResources().getColor(R.color.progress_lt));
+                    mPaint.setShadowLayer(3, 1.0f, 0.0f, DreamApp.getInstance().getResources().getColor(R.color.progress_lt));
                     break;
                 case 1:
-                    mPaint.setColor(0xFF5DC5F2);
-                    mPaint.setShadowLayer(3, 1.0f, 0.0f, 0xFF5DC5F2);
+                    mPaint.setColor(DreamApp.getInstance().getResources().getColor(R.color.progress_10));
+                    mPaint.setShadowLayer(3, 1.0f, 0.0f, DreamApp.getInstance().getResources().getColor(R.color.progress_10));
                     break;
                 case 2:
-                    mPaint.setColor(0xFF74D6C1);
-                    mPaint.setShadowLayer(3, 1.0f, 0.0f, 0xFF74D6C1);
+                    mPaint.setColor(DreamApp.getInstance().getResources().getColor(R.color.progress_20));
+                    mPaint.setShadowLayer(3, 1.0f, 0.0f, DreamApp.getInstance().getResources().getColor(R.color.progress_20));
                     break;
                 case 3:
-                    mPaint.setColor(0xFFB8D772);
-                    mPaint.setShadowLayer(3, 1.0f, 0.0f, 0xFFB8D772);
+                    mPaint.setColor(DreamApp.getInstance().getResources().getColor(R.color.progress_30));
+                    mPaint.setShadowLayer(3, 1.0f, 0.0f, DreamApp.getInstance().getResources().getColor(R.color.progress_30));
                     break;
                 case 4:
-                    mPaint.setColor(0xFFD16D9F);
-                    mPaint.setShadowLayer(3, 1.0f, 0.0f, 0xFFD16D9F);
+                    mPaint.setColor(DreamApp.getInstance().getResources().getColor(R.color.progress_40));
+                    mPaint.setShadowLayer(3, 1.0f, 0.0f, DreamApp.getInstance().getResources().getColor(R.color.progress_40));
                     break;
                 case 5:
-                    mPaint.setColor(0xFF7380D5);
-                    mPaint.setShadowLayer(3, 1.0f, 0.0f, 0xFF7380D5);
+                    mPaint.setColor(DreamApp.getInstance().getResources().getColor(R.color.progress_50));
+                    mPaint.setShadowLayer(3, 1.0f, 0.0f, DreamApp.getInstance().getResources().getColor(R.color.progress_50));
                     break;
                 case 6:
-                    mPaint.setColor(0xFFB28CDD);
-                    mPaint.setShadowLayer(3, 1.0f, 0.0f, 0xFFB28CDD);
+                    mPaint.setColor(DreamApp.getInstance().getResources().getColor(R.color.progress_60));
+                    mPaint.setShadowLayer(3, 1.0f, 0.0f, DreamApp.getInstance().getResources().getColor(R.color.progress_60));
                     break;
             }
             canvas.drawArc(new RectF(13.0f,13.0f,287.0f,287.0f), imgCnt, imgNum, true, mPaint);

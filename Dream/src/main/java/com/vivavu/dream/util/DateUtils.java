@@ -75,6 +75,10 @@ public class DateUtils {
     }
 
     public static int getProgress(Date startDate, Date endDate){
+        if(startDate == null || endDate == null){
+            return 0;
+        }
+
         Long totalTime = getRemainDay(startDate, endDate);
         Long remainTime = getRemainDay(endDate);
         int percentage = 100;
@@ -108,6 +112,16 @@ public class DateUtils {
         }
 
         return ddays;
+    }
+
+    public static Date getLastDayOfPeriod(Date birthday, int period){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(birthday);
+        cal.add(Calendar.YEAR, period);//해당 기간의 시작일로 세팅
+        cal.add(Calendar.YEAR, 10 );//10년을 더하고
+        cal.add(Calendar.DATE, -1);//하루를 빼서 해당기간의 마지막 날짜로 변경함
+
+        return cal.getTime();
     }
 
     public static int getAgeInFull(Date birthday){

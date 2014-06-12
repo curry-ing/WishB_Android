@@ -91,6 +91,9 @@ public class BucketConnector {
         if(bucket.getScope() != null){
             requestBucket.add("scope", bucket.getScope());
         }
+        if(bucket.getStatus() != null){
+            requestBucket.add("status", String.valueOf(bucket.getStatus()));
+        }
         if (bucket.getRptType() != null) {
             requestBucket.add("rpt_type", bucket.getRptType());
             requestBucket.add("rpt_cndt", bucket.getRptCndt());

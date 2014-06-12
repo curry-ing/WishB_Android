@@ -3,7 +3,9 @@ package com.vivavu.dream.view;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
+import android.graphics.MaskFilter;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
@@ -34,6 +36,7 @@ public abstract class BaseImageView extends ImageView {
     private WeakReference<Bitmap> mWeakBitmap;
     protected boolean mReady;
     protected boolean mSetupPending;
+    private int canvasSize;
 
     public BaseImageView(Context context) {
         super(context);
@@ -63,6 +66,8 @@ public abstract class BaseImageView extends ImageView {
             setUp();
             mSetupPending = false;
         }
+        this.requestLayout();
+        this.invalidate();
     }
 
     @Override
@@ -86,23 +91,26 @@ public abstract class BaseImageView extends ImageView {
         if (!isInEditMode()) {
             int i = canvas.saveLayer(0.0f, 0.0f, getWidth(), getHeight(), null, Canvas.ALL_SAVE_FLAG);
             try {
+                canvasSize = Math.min(getWidth(), getHeight());
+
                 Bitmap bitmap = mWeakBitmap != null ? mWeakBitmap.get() : null;
                 // Bitmap not loaded.
                 if (bitmap == null || bitmap.isRecycled()) {
                     Drawable drawable = getDrawable();
                     if (drawable != null) {
                         // Allocation onDraw but it's ok because it will not always be called.
-                        bitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+                        bitmap = Bitmap.createBitmap(canvasSize, canvasSize, Bitmap.Config.ARGB_8888);
                         Canvas bitmapCanvas = new Canvas(bitmap);
-                        drawable.setBounds(0, 0, getWidth(), getHeight());
+                        drawable.setBounds(0, 0, bitmapCanvas.getWidth(), bitmapCanvas.getHeight());
                         drawable.draw(bitmapCanvas);
                         // If mask is already set, skip and use cached mask.
                         if (mMaskBitmap == null || mMaskBitmap.isRecycled()) {
-                            mMaskBitmap = getBitmap();
+                            mMaskBitmap = getBitmap(bitmapCanvas.getWidth(), bitmapCanvas.getHeight());
                         }
                         // Draw Bitmap.
                         mPaint.reset();
                         mPaint.setAntiAlias(true);
+                        mPaint.setDither(true);
                         mPaint.setFilterBitmap(false);
                         mPaint.setXfermode(sXfermode);
 //                        mBitmapShader = new BitmapShader(mMaskBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
@@ -117,6 +125,9 @@ public abstract class BaseImageView extends ImageView {
                 if (bitmap != null) {
                     mPaint.reset();
                     mPaint.setAntiAlias(true);
+                    mPaint.setDither(true);
+                    MaskFilter maskFilter = new BlurMaskFilter(6, BlurMaskFilter.Blur.INNER);
+                    mPaint.setMaskFilter(maskFilter);
 //                    mPaint.setShader(null);
                     canvas.drawBitmap(bitmap, 0.0f, 0.0f, mPaint);
                     return;
@@ -141,5 +152,54 @@ public abstract class BaseImageView extends ImageView {
         }
     }
 
-    public abstract Bitmap getBitmap();
+    private int measureWidth(int measureSpec) {
+        int result = 0;
+        int specMode = MeasureSpec.getMode(measureSpec);
+        int specSize = MeasureSpec.getSize(measureSpec);
+
+
+        if (specMode == MeasureSpec.EXACTLY) {
+            // The parent has determined an exact size for the child.
+            result = specSize;
+        } else if (specMode == MeasureSpec.AT_MOST) {
+            // The child can be as large as it wants up to the specified size.
+            result = specSize;
+        } else {
+            // The parent has not imposed any constraint on the child.
+            result = canvasSize;
+        }
+
+
+        return result;
+    }
+
+
+    private int measureHeight(int measureSpecHeight) {
+        int result = 0;
+        int specMode = MeasureSpec.getMode(measureSpecHeight);
+        int specSize = MeasureSpec.getSize(measureSpecHeight);
+
+        if (specMode == MeasureSpec.EXACTLY) {
+            // We were told how big to be
+            result = specSize;
+        } else if (specMode == MeasureSpec.AT_MOST) {
+            // The child can be as large as it wants up to the specified size.
+            result = specSize;
+        } else {
+            // Measure the text (beware: ascent is a negative number)
+            result = canvasSize;
+        }
+
+        return result;
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int width = measureWidth(widthMeasureSpec);
+        int height = measureHeight(heightMeasureSpec);
+        setMeasuredDimension(width, height);
+        //super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+
+    public abstract Bitmap getBitmap(int width, int height);
 }

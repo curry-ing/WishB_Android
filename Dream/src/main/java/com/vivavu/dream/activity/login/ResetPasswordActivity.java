@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.vivavu.dream.R;
@@ -101,6 +102,14 @@ public class ResetPasswordActivity extends BaseActionBarActivity {
                 sendEmail();
             }
         });
+
+//        mTxtTitle.setText(getString(R.string.lbl_private));
+//        mMenuPrevious.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                finish();
+//            }
+//        });
     }
 
     private void sendEmail() {

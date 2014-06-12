@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#322"
+    android:background="@drawable/bg_bucket_edit_main"
     >
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/actionbar_height"
         android:id="@+id/scrollView">
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="fill_parent"
+            android:layout_marginTop="20dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            >
 
             <LinearLayout
                 android:orientation="vertical"
@@ -24,137 +30,108 @@
                 android:padding="10dp"
                 >
 
-                <ImageButton
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
+                <com.vivavu.dream.view.ShadowImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:id="@+id/main_left_menu_btn_profile"
                     android:layout_gravity="center_horizontal"
-                    android:src="@drawable/question"
+                    android:src="@drawable/ic_profile_empty"
+                    app:progressBarWidth="2dp"
                     />
 
-                <LinearLayout
-                    android:orientation="horizontal"
+                <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal">
-
-                    <EditText
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:inputType="textPersonName"
-                        android:hint="Name"
-                        android:ems="10"
-                        android:id="@+id/main_left_menu_txt_name" />
-
-                    <Button
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:text=""
-                        android:id="@+id/main_left_menu_btn_name"
-                        android:background="@drawable/glyphicons_030_pencil"
-                        />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@drawable/ic_name_edit"
+                    android:background="@null"
+                    android:inputType="textPersonName"
                     android:layout_gravity="center_horizontal"
-                    >
-
-                    <Button
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:id="@+id/main_left_menu_btn_badge1"
-                        android:layout_margin="5dp"
-                        android:background="@drawable/glyphicons_432_plus" />
-
-                    <Button
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:id="@+id/main_left_menu_btn_badge2"
-                        android:layout_margin="5dp"
-                        android:background="@drawable/glyphicons_432_plus"/>
-
-                    <Button
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:id="@+id/main_left_menu_btn_badge3"
-                        android:layout_margin="5dp"
-                        android:background="@drawable/glyphicons_432_plus"/>
-                </LinearLayout>
-
+                    android:gravity="center"
+                    android:hint="Name"
+                    android:minWidth="100dp"
+                    android:layout_marginTop="10dp"
+                    android:textSize="25sp"
+                    android:textColor="@color/white"
+                    android:id="@+id/main_left_menu_txt_name" />
             </LinearLayout>
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:background="@drawable/bg_profile_divider"
+                android:paddingTop="20dp"
+                android:paddingBottom="10dp"
                 >
-
                 <LinearLayout
                     android:orientation="vertical"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    >
 
                     <Button
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
                         android:id="@+id/main_left_menu_btn_cnt_bucket"
                         android:layout_gravity="center_horizontal"
-                        android:background="@drawable/glyphicons_194_circle_question_mark"
+                        android:background="@drawable/ic_small_circle"
+                        android:textColor="@color/skyblue"
                         />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/main_left_menu_txt_bucket"
-                        android:id="@+id/main_left_menu_txt_bucket"
+                        android:background="@drawable/txt_profile_bucket"
                         android:layout_gravity="center_horizontal" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:orientation="vertical"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    >
 
                     <Button
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
                         android:id="@+id/main_left_menu_btn_cnt_friends"
                         android:layout_gravity="center_horizontal"
-                        android:background="@drawable/glyphicons_194_circle_question_mark"
+                        android:background="@drawable/ic_small_circle"
+                        android:textColor="@color/skyblue"
                         />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/main_left_menu_txt_friends"
-                        android:id="@+id/main_left_menu_txt_friends"
+                        android:background="@drawable/txt_profile_friends"
                         android:layout_gravity="center_horizontal" />
                 </LinearLayout>
                 <LinearLayout
                     android:orientation="vertical"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    >
 
                     <Button
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
                         android:id="@+id/main_left_menu_btn_cnt_badge"
                         android:layout_gravity="center_horizontal"
-                        android:background="@drawable/glyphicons_194_circle_question_mark"
+                        android:background="@drawable/ic_small_circle"
+                        android:textColor="@color/skyblue"
                         />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/main_left_menu_txt_badge"
-                        android:id="@+id/main_left_menu_txt_badge"
+                        android:background="@drawable/txt_profile_badge"
                         android:layout_gravity="center_horizontal" />
                 </LinearLayout>
             </LinearLayout>
@@ -163,28 +140,52 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
                 android:padding="10dp">
-
                 <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="200dp"
+                    android:layout_height="40dp"
                     android:text="@string/main_left_menu_setting"
-                    android:id="@+id/main_left_menu_btn_setting" />
+                    android:background="@drawable/bg_btn_profile"
+                    android:id="@+id/main_left_menu_btn_setting"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    />
                 <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="200dp"
+                    android:layout_height="40dp"
                     android:text="@string/main_left_menu_notice"
-                    android:id="@+id/main_left_menu_btn_notice" />
+                    android:background="@drawable/bg_btn_profile"
+                    android:id="@+id/main_left_menu_btn_notice"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    />
                 <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="200dp"
+                    android:layout_height="40dp"
                     android:text="@string/main_left_menu_update"
-                    android:id="@+id/main_left_menu_btn_update" />
+                    android:background="@drawable/bg_btn_profile"
+                    android:id="@+id/main_left_menu_btn_update"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    />
                 <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="200dp"
+                    android:layout_height="40dp"
                     android:text="@string/main_left_menu_logout"
-                    android:id="@+id/main_left_menu_btn_logout" />
+                    android:background="@drawable/bg_btn_profile"
+                    android:id="@+id/main_left_menu_btn_logout"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

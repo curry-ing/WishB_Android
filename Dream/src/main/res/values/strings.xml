@@ -63,7 +63,8 @@
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
-    <string name="access_terms">이용약관</string>
+    <string name="access_terms">이용약관 보기</string>
+    <string name="privacy">개인정보 보호방침 보기</string>
     <string name="lbl_access_terms">이용약관</string>
     <string name="lbl_private">개인정보 보호방침</string>
     <string name="regist_agreement">가입을 통해 이용약관과\n개인정보 보호정책에 동의 합니다.</string>
@@ -72,14 +73,14 @@
     <string name="txt_btn_submit">전송</string>
     <string name="not_valid_email">올바르지 않은 이메일 형식입니다.</string>
     <string name="user_agreement_contents">이용약관 블라블라</string>
-    <string name="privacy">개인정보보호방침</string>
+    <string name="privacy_contents">개인정보보호방침</string>
     <string name="actionbar_main_title">꿈틀</string>
     <string name="actionbar_main_today">Today</string>
     <string name="actionbar_main_notice">알림</string>
     <string name="bucket_status_achievement">달성</string>
     <string name="bucket_status_seal">봉인</string>
     <string name="bucket_status_delete">삭제</string>
-    <string name="bucket_option_note_hint">버킷의 상세 설명을 입력하세요.</string>
+    <string name="bucket_option_note_hint">노트를 입력하세요_</string>
     <string name="no_network_connection_toast">네트워크에 연결할 수 없습니다.</string>
     <string name="today">Today</string>
     <string name="invalid_selected_date">데이터가 없는 날짜입니다. 다시 선택해주세요.</string>
@@ -88,5 +89,17 @@
     <string name="menu_share">공유</string>
     <string name="menu_remove">삭제</string>
     <string name="menu_save">저장</string>
+    <string name="see_more">See More</string>
+    <string name="txt_timeline_write">버킷일지를 입력하세요_</string>
+    <string name="title_activity_more">MoreActivity</string>
+    <string name="alert_setting">알림 설정</string>
+    <string name="public_setting">공개설정</string>
+    <string name="help_view">도움말 보기</string>
+    <string name="inquiry">문의하기</string>
+    <string name="member_leave">회원탈퇴하기</string>
+    <string name="title_activity_inquiry">InquiryActivity</string>
+    <string name="txt_answer_for_email">답변받을 E-Mail</string>
+    <string name="txt_send_email">보내기</string>
+    <string name="email_info">chee1004@naver.com</string>
 
 </resources>

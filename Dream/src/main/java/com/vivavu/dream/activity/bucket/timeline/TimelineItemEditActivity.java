@@ -1,6 +1,10 @@
 package com.vivavu.dream.activity.bucket.timeline;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -10,22 +14,23 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.bucket.TimelineActivity;
 import com.vivavu.dream.common.BaseActionBarActivity;
+import com.vivavu.dream.common.Code;
+import com.vivavu.dream.common.enums.FacebookShareType;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.model.bucket.timeline.Post;
@@ -35,6 +40,7 @@ import com.vivavu.dream.util.ImageUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
 
 import butterknife.ButterKnife;
@@ -48,40 +54,39 @@ import static android.widget.Toast.LENGTH_LONG;
 public class TimelineItemEditActivity extends BaseActionBarActivity {
     public static final String TAG = "com.vivavu.dream.activity.bucket.timeline.TimelineItemEditActivity";
     public static final int REQUEST_CODE_TAKE_CAMERA = 0;
-    @InjectView(R.id.btn_timeline_title)
-    Button mBtnTimelineTitle;
-    @InjectView(R.id.progressBar)
-    ProgressBar mProgressBar;
-    @InjectView(R.id.txt_start_date)
-    TextView mTxtStartDate;
-    @InjectView(R.id.txt_current_date)
-    TextView mTxtCurrentDate;
-    @InjectView(R.id.txt_end_date)
-    TextView mTxtEndDate;
-    @InjectView(R.id.container_post_info)
-    LinearLayout mContainerPostInfo;
-    @InjectView(R.id.content_frame)
-    LinearLayout mContentFrame;
-    @InjectView(R.id.container_bucket_info)
-    LinearLayout mContainerBucketInfo;
-    @InjectView(R.id.txt_post_text)
-    EditText mTxtPostText;
-    @InjectView(R.id.txt_post_date)
-    TextView mTxtPostDate;
-    @InjectView(R.id.btn_post_camera)
-    Button mBtnPostCamera;
-    @InjectView(R.id.btn_post_etc)
-    Button mBtnPostEtc;
-    @InjectView(R.id.btn_post_facebook)
-    Button mBtnPostFacebook;
+
 
     Bucket bucket;
     Post post;
     protected Uri mImageCaptureUri;
+    @InjectView(R.id.txt_post_date)
+    TextView mTxtPostDate;
+    @InjectView(R.id.txt_post_text)
+    EditText mTxtPostText;
     @InjectView(R.id.iv_timeline_image)
-    ImageView mIvCardImage;
+    ImageView mIvTimelineImage;
+    @InjectView(R.id.container_post_info)
+    LinearLayout mContainerPostInfo;
+    @InjectView(R.id.content_frame)
+    LinearLayout mContentFrame;
+    @InjectView(R.id.btn_post_facebook)
+    Button mBtnPostFacebook;
+    @InjectView(R.id.btn_post_camera)
+    Button mBtnPostCamera;
+    @InjectView(R.id.layout_timeline_option)
+    LinearLayout mLayoutTimelineOption;
+    @InjectView(R.id.menu_previous)
+    ImageButton mMenuPrevious;
+    @InjectView(R.id.txt_title)
+    TextView mTxtTitle;
+    @InjectView(R.id.menu_save)
+    ImageButton mMenuSave;
+    @InjectView(R.id.txt_post_time)
+    TextView mTxtPostTime;
+
 
     private ProgressDialog progressDialog;
+
     private static final int SEND_DATA_START = 0;
     private static final int SEND_DATA_SUCCESS = 1;
     private static final int SEND_DATA_FAIL = 2;
@@ -113,13 +118,18 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);//api level 11 이상 부터 사용가능
         setContentView(R.layout.activity_timeline_item_edit);
+        setResult(RESULT_CANCELED);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setDisplayUseLogoEnabled(false);
+        actionBar.setDisplayShowHomeEnabled(false);//로고 버튼 보이는 것 설정
         actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_before);
+        actionBar.setCustomView(R.layout.actionbar_timeline_edit);
         actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setCustomView(R.layout.actionbar_timeline_title_only);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("진행중");
@@ -133,6 +143,8 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
             post.setBucketId(bucket.getId());
         }
 
+        mTxtPostText.setTypeface(getNanumBarunGothicFont());
+
         bindData(bucket);
         bindData(post);
 
@@ -143,15 +155,112 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
         mBtnPostCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                doTakePhotoAction();
+                final String items[] = {"카메라", "겔러리"};
+                AlertDialog.Builder ab = new AlertDialog.Builder(TimelineItemEditActivity.this);
+                ab.setTitle("선택");
+                ab.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                doTakePhotoAction();
+                                dialog.dismiss();
+                                break;
+                            case 1:
+                                doTakeAlbumAction();
+                                dialog.dismiss();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                });
+                ab.show();
+            }
+        });
+        mBtnPostFacebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final String[] items = FacebookShareType.names();
+
+                AlertDialog.Builder ab = new AlertDialog.Builder(TimelineItemEditActivity.this);
+                ab.setTitle("선택");
+                FacebookShareType fsType = FacebookShareType.fromCode(post.getFbShare());
+                ab.setSingleChoiceItems(items, fsType.ordinal(), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        FacebookShareType selectedType = FacebookShareType.fromCode(items[which]);
+                        post.setFbShare(selectedType.getCode());
+                        if (post.getFbShare() != null) {
+                            mBtnPostFacebook.setSelected(true);
+                        } else {
+                            mBtnPostFacebook.setSelected(false);
+                        }
+                        dialog.dismiss();
+                    }
+                });
+                ab.show();
+            }
+        });
+
+        mTxtPostDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        mTxtPostDate.setText(String.format("%4d.%02d.%02d", year, monthOfYear, dayOfMonth ));
+                    }
+                };
+                Calendar calendar = Calendar.getInstance();
+                if(post.getTimestamp() != null) {
+                    calendar.setTime(post.getTimestamp());
+                }
+
+                DatePickerDialog dialog = new DatePickerDialog(TimelineItemEditActivity.this, listener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1, calendar.get(Calendar.DAY_OF_MONTH));
+                dialog.show();
+            }
+        });
+
+        mTxtPostTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        mTxtPostTime.setText(String.format("%02d:%02d", hourOfDay, minute));
+                    }
+                };
+                Calendar calendar = Calendar.getInstance();
+                if(post.getTimestamp() != null) {
+                    calendar.setTime(post.getTimestamp());
+                }
+                TimePickerDialog dialog = new TimePickerDialog(TimelineItemEditActivity.this, listener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true );
+                dialog.show();
+            }
+        });
+        mMenuSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postSave();
+            }
+        });
+
+        mMenuPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setResult(RESULT_CANCELED);
+                finish();
             }
         });
     }
 
     private void bindData(Post post) {
         mTxtPostText.setText(post.getText());
-        mTxtPostDate.setText(DateUtils.getDateString(post.getRegDt(), "yyyy.MM.dd HH:mm", new Date()));
-        ImageLoader.getInstance().displayImage(post.getImgUrl(), mIvCardImage, new SimpleImageLoadingListener(){
+        mTxtPostDate.setText(DateUtils.getDateString(post.getTimestamp(), "yyyy.MM.dd", new Date()));
+        mTxtPostTime.setText(DateUtils.getDateString(post.getTimestamp(), "HH:mm", new Date()));
+        /*ImageLoader.getInstance().displayImage(post.getImgUrl(), mIvCardImage, new SimpleImageLoadingListener(){
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                 super.onLoadingComplete(imageUri, view, loadedImage);
@@ -162,24 +271,7 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                     view.setVisibility(View.GONE);
                 }
             }
-        });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.timeline_item_edit_activity_actions, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.menu_save:
-                postSave();
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        });*/
     }
 
     @Override
@@ -192,13 +284,13 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                     // 찍은 사진을 이미지뷰에 보여준다.
                     if(data != null && data.getExtras() != null) {
                         Bitmap bm = (Bitmap) data.getExtras().getParcelable("data");
-                        mIvCardImage.setVisibility(View.VISIBLE);
-                        mIvCardImage.setImageBitmap(bm);
+                        /*mIvCardImage.setVisibility(View.VISIBLE);
+                        mIvCardImage.setImageBitmap(bm);*/
                     } else if( f.exists() ){
                         /// http://stackoverflow.com/questions/9890757/android-camera-data-intent-returns-null
                         /// EXTRA_OUTPUT을 선언해주면 해당 경로에 파일을 직접생성하고 썸네일을 리턴하지 않음
-                        mIvCardImage.setVisibility(View.VISIBLE);
-                        ImageLoader.getInstance().displayImage(mImageCaptureUri.toString(), mIvCardImage);
+                        /*mIvCardImage.setVisibility(View.VISIBLE);
+                        ImageLoader.getInstance().displayImage(mImageCaptureUri.toString(), mIvCardImage);*/
                         //ImageUtil.setPic(mIvCardImage, mImageCaptureUri.getPath());
                     }
                     if(f.exists()){
@@ -219,23 +311,12 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
 
     public Post getPost() {
         post.setText(String.valueOf(mTxtPostText.getText()));
-        post.setTimestamp(DateUtils.getDateFromString(String.valueOf(mTxtPostDate.getText()), "yyyy-MM-dd HH:mm", new Date()));
+        post.setTimestamp(DateUtils.getDateFromString(String.valueOf(mTxtPostDate.getText() + " " + mTxtPostTime), "yyyy-MM-dd HH:mm", new Date()));
         return post;
     }
 
     private void bindData(Bucket bucket) {
-        mBtnTimelineTitle.setText(bucket.getTitle());
-        Date start = bucket.getRegDate();
-        Date current = new Date();
-        Date end = bucket.getDeadline();
-        mTxtStartDate.setText(DateUtils.getDateString(start, "yyyy.MM.dd"));
-        mTxtCurrentDate.setText(DateUtils.getDateString(current, "yyyy.MM.dd"));
-        mTxtEndDate.setText(DateUtils.getDateString(end, "yyyy.MM.dd"));
-
-        if(start != null && end != null) {
-            int progress = DateUtils.getProgress(start, end);
-            mProgressBar.setProgress(progress);
-        }
+        mTxtTitle.setText(bucket.getTitle());
     }
 
     private void doTakePhotoAction(){
@@ -268,8 +349,12 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
         }else{
             Toast.makeText(this, "카메라 앱을 실행할 수 없습니다.", Toast.LENGTH_LONG).show();
         }
+    }
 
-
+    private void doTakeAlbumAction(){
+        Intent intent = new Intent( Intent.ACTION_PICK ) ;
+        intent.setType(MediaStore.Images.Media.CONTENT_TYPE) ;
+        startActivityForResult( intent, Code.ACT_ADD_BUCKET_TAKE_GALLERY ) ;
     }
 
     private class NetworkThread implements Runnable{
@@ -298,5 +383,4 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
             }
         }
     }
-
 }
