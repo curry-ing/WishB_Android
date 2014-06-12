@@ -51,6 +51,13 @@ public class UserInfoConnector extends Connector<User> {
         final MultiValueMap<String, Object> requestUser = convertUserToMap(user);
 
         requestHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        if(user != null && user.getPhoto() != null) {
+            requestHeaders.setContentType(MediaType.MULTIPART_FORM_DATA);
+        }else {
+            requestHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        }
+
         HttpEntity request = new HttpEntity<MultiValueMap<String, Object>>(requestUser, requestHeaders);
 
         ResponseEntity<String> resultString = null;
