@@ -16,9 +16,13 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Message;
+import android.os.Handler;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBar;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -35,6 +39,12 @@ import com.vivavu.dream.common.Code;
 import com.vivavu.dream.model.LoginInfo;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.SecureToken;
+import com.vivavu.dream.model.Status;
+import com.vivavu.dream.model.bucket.Bucket;
+import com.vivavu.dream.model.bucket.timeline.TimelineMetaInfo;
+import com.vivavu.dream.repository.BucketConnector;
+import com.vivavu.dream.repository.DataRepository;
+import com.vivavu.dream.repository.connector.TimelineConnector;
 import com.vivavu.dream.repository.connector.UserInfoConnector;
 import com.vivavu.dream.util.ValidationUtils;
 
@@ -64,11 +74,6 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
     @InjectView(R.id.txt_forgot_password)
     TextView mTxtForgotPassword;
 
-//    @InjectView(R.id.login_fb_explain_txt)
-//    TextView mLoginFbExplainTxt;
-//    @InjectView(R.id.login_fb_btn)
-//    Button mLoginFbBtn;
-
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -86,6 +91,23 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
     private View mLoginStatusView;
     private TextView mLoginStatusMessageView;
 
+    protected final Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 0:
+                    mEmailView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_alert_icon, 0);
+                    setmTxtResponseInfo(7);
+                    break;
+                case 1:
+                    mEmailView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ok_icon, 0);
+                    if (ValidationUtils.isValidPassword(mPasswordView)) {
+                        setmTxtResponseInfo(mInvalidType=9);
+                    }
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onDestroy() {
@@ -110,7 +132,6 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
 
         ButterKnife.inject(this);
 
-//        Typeface NanumGothic = Typeface.createFromAsset(context.getAssets(), "NanumBarunGothic.mp3");
         Typeface NanumBold = Typeface.createFromAsset(context.getAssets(), "NanumBarunGothicBold.mp3");
         mActionbarLoginTitle.setText("Wish B");
         mActionbarLoginTitle.setTypeface(NanumBold);
@@ -120,18 +141,6 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
         mTxtResponseInfo.setTypeface(NanumBold);
         mTxtResponseInfo.setTextSize(15);
         mTxtResponseInfo.setTextColor(Color.WHITE);
-//
-//        Pattern emailPattern = Patterns.EMAIL_ADDRESS;
-//        Account[] accounts = AccountManager.get(context).getAccounts();
-//        for (Account account: accounts) {
-//            if (emailPattern.matcher(account.name).matches()) {
-//                String possibleEmail = account.name;
-//                mTxtResponseInfo.setVisibility(View.VISIBLE);
-//                mTxtResponseInfo.setText(possibleEmail);
-//            }
-//        }
-
-
 
         // Set up the login form.
         mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
@@ -159,9 +168,6 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
                         setmTxtResponseInfo(mInvalidType=3);
                     } else {
                         mEmailView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ok_icon, 0);
-                        if (ValidationUtils.isValidPassword(mPasswordView)) {
-                            setmTxtResponseInfo(mInvalidType=9);
-                        }
                         setmTxtResponseInfo(mInvalidType=0);
                     }
                 }
@@ -200,11 +206,17 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
             }
         });
 
-
-        mEmailView.setOnKeyListener(new View.OnKeyListener(){
+        mEmailView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            }
 
             @Override
-            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
                 if (ValidationUtils.isValidEmail(mEmailView)){
                     mEmailView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ok_icon, 0);
                 } else {
@@ -217,13 +229,23 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
                         setmTxtResponseInfo(mInvalidType = 9);
                     }
                 }
-                return false;
             }
         });
 
-        mPasswordView.setOnKeyListener(new View.OnKeyListener(){
+
+        mPasswordView.addTextChangedListener(new TextWatcher() {
             @Override
-            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
                 if (ValidationUtils.isValidPassword(mPasswordView)) {
                     mPasswordView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ok_icon, 0);
                 } else {
@@ -244,7 +266,6 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
                         setmTxtResponseInfo(mInvalidType = 3);
                     }
                 }
-                return false;
             }
         });
 
@@ -259,11 +280,6 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
             }
         });
 
-//        mLoginFbExplainTxt.setTypeface(NanumBold);
-//        mLoginFbExplainTxt.setTextSize(15);
-//        mLoginFbExplainTxt.setTextColor(Color.WHITE);
-
-//        mLoginFormView = findViewById(R.id.login_form);
         mLoginStatusView = findViewById(R.id.login_status);
         mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
 
@@ -298,49 +314,47 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
                 mTxtResponseInfo.setVisibility(View.INVISIBLE);
                 mTxtResponseInfo.setText("");
                 mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.login_inactive_btn));
-//                mSignInButton.setEnabled(false);
                 break;
             case 1:
                 mTxtResponseInfo.setVisibility(View.VISIBLE);
+                mTxtResponseInfo.setTextColor(Color.WHITE);
                 mTxtResponseInfo.setText("알림:  이메일 주소가 입력되지 않았습니다.");
                 mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.login_inactive_btn));
-//                mSignInButton.setEnabled(false);
                 break;
             case 2:
                 mTxtResponseInfo.setVisibility(View.VISIBLE);
+                mTxtResponseInfo.setTextColor(Color.WHITE);
                 mTxtResponseInfo.setText("알림:  패스워드가 입력되지 않았습니다.");
                 mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.login_inactive_btn));
-//                mSignInButton.setEnabled(false);
                 break;
             case 3:
                 mTxtResponseInfo.setVisibility(View.VISIBLE);
+                mTxtResponseInfo.setTextColor(Color.WHITE);
                 mTxtResponseInfo.setText("알림:  올바르지 않은 이메일 형식입니다.");
                 mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.login_inactive_btn));
-//                mSignInButton.setEnabled(false);
                 break;
             case 4:
                 mTxtResponseInfo.setVisibility(View.VISIBLE);
+                mTxtResponseInfo.setTextColor(Color.WHITE);
                 mTxtResponseInfo.setText("알림:  비밀번호(6자 이상)를 확인해 주세요.");
                 mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.login_inactive_btn));
-//                mSignInButton.setEnabled(false);
                 break;
             case 5:
                 mTxtResponseInfo.setVisibility(View.VISIBLE);
+                mTxtResponseInfo.setTextColor(Color.WHITE);
                 mTxtResponseInfo.setText("알림:  가입하지 않은 이메일입니다.");
                 mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.login_inactive_btn));
-//                mSignInButton.setEnabled(false);
                 break;
             case 6:
                 mTxtResponseInfo.setVisibility(View.VISIBLE);
-                mTxtResponseInfo.setText("알림:  비밀번호가 일치하지 않습니다.");
+                mTxtResponseInfo.setTextColor(Color.RED);
+                mTxtResponseInfo.setText("알림:  로그인 정보가 유효하지 않습니다.");
                 mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.login_inactive_btn));
-//                mSignInButton.setEnabled(false);
                 break;
             case 9:
                 mTxtResponseInfo.setVisibility(View.INVISIBLE);
                 mTxtResponseInfo.setText("");
                 mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.login_active_btn));
-//                mSignInButton.setEnabled(true);
                 break;
 
         }
@@ -538,7 +552,7 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
             } else {
                 this.cancel(false);
                 context.setLogin(false);
-                mTxtResponseInfo.setText(success.getDescription());
+                setmTxtResponseInfo(mInvalidType=6);
             }
         }
 

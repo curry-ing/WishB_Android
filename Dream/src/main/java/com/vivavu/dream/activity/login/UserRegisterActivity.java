@@ -10,9 +10,13 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBar;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -28,6 +32,7 @@ import com.vivavu.dream.model.LoginInfo;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.SecureToken;
 import com.vivavu.dream.repository.DataRepository;
+import com.vivavu.dream.repository.connector.UserInfoConnector;
 import com.vivavu.dream.util.ValidationUtils;
 
 import butterknife.ButterKnife;
@@ -65,6 +70,31 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
     private String mEmail;
     private String mPassword;
     private Integer mInvalidType = 0;  // 1: Empty Email | 2: Empty PW | 3: Invalid Email | 4: InvalidPW | 5: Unregistered Email
+    private Boolean mAvailableEmail;
+
+    protected final Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    if (ValidationUtils.isValidEmail(mRegisterEmail)) {
+                        mAvailableEmail = true;
+                        mRegisterEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ok_icon, 0);
+                    }
+                    if (ValidationUtils.isValidPassword(mRegisterPassword)) {
+                        setmRegisterTxtResponseInfo(mInvalidType = 9);
+                    } else {
+                        setmRegisterTxtResponseInfo(mInvalidType = 0);
+                    }
+                    break;
+                case 0:
+                    mAvailableEmail = false;
+                    mRegisterEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_alert_icon, 0);
+                    setmRegisterTxtResponseInfo(mInvalidType = 7);
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +136,12 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
             public void onFocusChange(View view, boolean b) {
                 if (b){
                     if (ValidationUtils.isValidEmail(mRegisterEmail)){
-                        mRegisterEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ok_icon, 0);
+                        if (mAvailableEmail) {
+                            mRegisterEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ok_icon, 0);
+                        } else {
+                            mRegisterEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_alert_icon, 0);
+                            setmRegisterTxtResponseInfo(mInvalidType = 7);
+                        }
                     } else {
                         mRegisterEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ing_icon, 0);
                         if (mInvalidType == 3 || mInvalidType == 1) {
@@ -118,11 +153,13 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
                         mRegisterEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_alert_icon, 0);
                         setmRegisterTxtResponseInfo(mInvalidType=3);
                     } else {
-                        mRegisterEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ok_icon, 0);
-                        if (ValidationUtils.isValidPassword(mRegisterPassword)) {
-                            setmRegisterTxtResponseInfo(mInvalidType=9);
-                        }
-                        setmRegisterTxtResponseInfo(mInvalidType=0);
+                        Thread thread = new Thread(new NetworkThread());
+                        thread.start();
+//                        mRegisterEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ok_icon, 0);
+//                        if (ValidationUtils.isValidPassword(mRegisterPassword)) {
+//                            setmRegisterTxtResponseInfo(mInvalidType=9);
+//                        }
+//                        setmRegisterTxtResponseInfo(mInvalidType=0);
                     }
                 }
             }
@@ -160,28 +197,48 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
         });
 
 
-        mRegisterEmail.setOnKeyListener(new View.OnKeyListener(){
+        mRegisterEmail.addTextChangedListener(new TextWatcher() {
             @Override
-            public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                if (ValidationUtils.isValidEmail(mRegisterEmail)){
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (ValidationUtils.isValidEmail(mRegisterEmail)) {
                     mRegisterEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ok_icon, 0);
                 } else {
                     mRegisterEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ing_icon, 0);
                 }
                 if (ValidationUtils.isValidPassword(mRegisterPassword)) {
                     if (!ValidationUtils.isValidEmail(mRegisterEmail)) {
-                        setmRegisterTxtResponseInfo(mInvalidType = 0); }
-                    else {
+                        setmRegisterTxtResponseInfo(mInvalidType = 0);
+                    } else {
                         setmRegisterTxtResponseInfo(mInvalidType = 9);
                     }
+                } else {
+                    setmRegisterTxtResponseInfo(mInvalidType = 4);
                 }
-                return false;
             }
         });
 
-        mRegisterPassword.setOnKeyListener(new View.OnKeyListener(){
+
+        mRegisterPassword.addTextChangedListener(new TextWatcher() {
             @Override
-            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
                 if (ValidationUtils.isValidPassword(mRegisterPassword)) {
                     mRegisterPassword.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ok_icon, 0);
                 } else {
@@ -189,7 +246,11 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
                 }
                 if (ValidationUtils.isValidEmail(mRegisterEmail)) {
                     if (ValidationUtils.isValidPassword(mRegisterPassword)) {
-                        setmRegisterTxtResponseInfo(mInvalidType = 9);
+                        if (mAvailableEmail) {
+                            setmRegisterTxtResponseInfo(mInvalidType = 9);
+                        } else {
+                            setmRegisterTxtResponseInfo(mInvalidType = 0);
+                        }
                     } else if (TextUtils.isEmpty(mRegisterPassword.getText())) {
                         setmRegisterTxtResponseInfo(mInvalidType = 0);
                     } else if (!ValidationUtils.isValidPassword(mRegisterPassword)) {
@@ -202,7 +263,6 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
                         setmRegisterTxtResponseInfo(mInvalidType = 3);
                     }
                 }
-                return false;
             }
         });
 
@@ -216,10 +276,6 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
                 return false;
             }
         });
-
-//        mRegisterFbExplainTxt.setTypeface(NanumBold);
-//        mRegisterFbExplainTxt.setTextSize(15);
-//        mRegisterFbExplainTxt.setTextColor(Color.WHITE);
 
         mRegisterButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -295,37 +351,50 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
                 break;
             case 1:
                 mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
+                mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
                 mRegisterTxtResponseInfo.setText("알림:  이메일 주소가 입력되지 않았습니다.");
                 mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.register_inactive_btn));
 //                mRegisterButton.setEnabled(false);
                 break;
             case 2:
                 mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
+                mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
                 mRegisterTxtResponseInfo.setText("알림:  패스워드가 입력되지 않았습니다.");
                 mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.register_inactive_btn));
 //                mRegisterButton.setEnabled(false);
                 break;
             case 3:
                 mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
+                mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
                 mRegisterTxtResponseInfo.setText("알림:  올바르지 않은 이메일 형식입니다.");
                 mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.register_inactive_btn));
 //                mRegisterButton.setEnabled(false);
                 break;
             case 4:
                 mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
+                mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
                 mRegisterTxtResponseInfo.setText("알림:  비밀번호(6자 이상)를 확인해 주세요.");
                 mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.register_inactive_btn));
 //                mRegisterButton.setEnabled(false);
                 break;
             case 5:
                 mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
+                mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
                 mRegisterTxtResponseInfo.setText("알림:  가입하지 않은 이메일입니다.");
                 mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.register_inactive_btn));
 //                mRegisterButton.setEnabled(false);
                 break;
             case 6:
                 mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
-                mRegisterTxtResponseInfo.setText("알림:  비밀번호가 일치하지 않습니다.");
+                mRegisterTxtResponseInfo.setTextColor(Color.RED);
+                mRegisterTxtResponseInfo.setText("알림:  오류가 발생했습니다. 다시 시도해주세요.");
+                mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.register_inactive_btn));
+//                mRegisterButton.setEnabled(false);
+                break;
+            case 7:
+                mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
+                mRegisterTxtResponseInfo.setTextColor(Color.RED);
+                mRegisterTxtResponseInfo.setText("알림:  이미 가입된 이메일입니다.");
                 mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.register_inactive_btn));
 //                mRegisterButton.setEnabled(false);
                 break;
@@ -351,7 +420,15 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
 
         // Check for a valid email address.
         if (ValidationUtils.isValidEmail(mRegisterEmail)) {
-            if (TextUtils.isEmpty(mRegisterPassword.getText())) {
+            UserInfoConnector userInfoConnector = new UserInfoConnector();
+            ResponseBodyWrapped<Integer> result = userInfoConnector.checkEmailExists(mRegisterEmail.getText().toString());
+            mAvailableEmail = (result.getData() != 0);
+
+            if (!mAvailableEmail) {
+                mRegisterEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_alert_icon, 0);
+                setmRegisterTxtResponseInfo(mInvalidType = 7);
+                return;
+            } else if (TextUtils.isEmpty(mRegisterPassword.getText())) {
                 setmRegisterTxtResponseInfo(mInvalidType = 2);
                 return;
             } else if (!ValidationUtils.isValidPassword(mRegisterPassword)) {
@@ -425,8 +502,7 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
             } else {
                 this.cancel(false);
                 context.setLogin(false);
-                mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
-                mRegisterTxtResponseInfo.setText(resp.getDescription());
+                setmRegisterTxtResponseInfo(mInvalidType=6);
             }
         }
 
@@ -438,6 +514,16 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
         @Override
         protected void onCancelled() {
             this.cancel(true);
+        }
+    }
+
+    public class NetworkThread implements Runnable{
+        @Override
+        public void run() {
+            UserInfoConnector userInfoConnector = new UserInfoConnector();
+            ResponseBodyWrapped<Integer> result = userInfoConnector.checkEmailExists(mRegisterEmail.getText().toString());
+            Message message = handler.obtainMessage(result.getData());
+            handler.sendMessage(message);
         }
     }
 }

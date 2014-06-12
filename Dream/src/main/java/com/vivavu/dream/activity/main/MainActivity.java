@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.bucket.BucketAddActivity;
 import com.vivavu.dream.activity.bucket.BucketViewActivity;
+import com.vivavu.dream.broadcastReceiver.AlarmManagerBroadcastReceiver;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.Code;
 import com.vivavu.dream.fragment.main.MainBucketListFragment;
@@ -27,6 +28,8 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class MainActivity extends BaseActionBarActivity {
+    private AlarmManagerBroadcastReceiver alarm;
+
     @InjectView(R.id.btn_add_bucket)
     Button mBtnAddBucket;
     @InjectView(R.id.actionbar_main_title)
@@ -97,6 +100,12 @@ public class MainActivity extends BaseActionBarActivity {
         mActionbarMainToday.setTypeface(typeface);
         mActionbarMainToday.setTextColor(Color.WHITE);
         mActionbarMainToday.setTextSize(14);
+
+
+//        alarm = new AlarmManagerBroadcastReceiver();
+//        alarm.SetAlarm(context, 1, true, 23);
+//        alarm.SetAlarm(context, 2, true, 11);
+//        alarm.CancelAlarm(context);
     }
 
     @Override
