@@ -115,7 +115,7 @@ public class RoundedAvatarDrawable extends Drawable {
             mPaint3.setColor(Color.DKGRAY);
             canvas.drawOval(new RectF(15,15,285,285), mPaint3);
         } else {
-            if (imgCnt == 1) {
+            if (imgCnt > 1) {
                 mPaint.setMaskFilter(new BlurMaskFilter(6, BlurMaskFilter.Blur.INNER));
                 canvas.drawArc(mRectF, (float)360/imgCnt*(imgNum-1), (float)360/imgCnt, true, mPaint);
             } else {

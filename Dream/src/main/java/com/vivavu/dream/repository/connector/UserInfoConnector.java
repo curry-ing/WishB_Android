@@ -199,6 +199,31 @@ public class UserInfoConnector extends Connector<User> {
         return new ResponseBodyWrapped<LoginInfo>();
     }
 
+    /* 20140611 by MA */
+    public static ResponseBodyWrapped<Integer> checkEmailExists(String email){
+        RestTemplate restTemplate = RestTemplateFactory.getInstance();
+        HttpHeaders requestHeaders = RestTemplateUtils.getBasicAuthHeader(null, null);
+        HttpEntity request = new HttpEntity<String>(requestHeaders);
+        ResponseEntity<String> result = null;
+
+        try {
+            result = restTemplate.exchange(Constants.apiValidEmail, HttpMethod.GET, request, String.class, email);
+        } catch (RestClientException e) {
+            Log.e("dream", e.toString());
+        }
+
+        if(result.getStatusCode() == HttpStatus.OK){
+            Gson gson = new GsonBuilder().create();
+            Type type = new TypeToken<ResponseBodyWrapped<Integer>>(){}.getType();
+
+            ResponseBodyWrapped<Integer> responseBodyWrapped = gson.fromJson((String) result.getBody(), type);
+            return responseBodyWrapped;
+        }
+
+        return new ResponseBodyWrapped<Integer>("error", "오류가 발생하였습니다. 다시 시도해주시기 바랍니다.", null);
+    }
+
+
     public MultiValueMap convertUserToMap(final User user){
         MultiValueMap<String, Object> requestUser = new LinkedMultiValueMap<String, Object>();
 

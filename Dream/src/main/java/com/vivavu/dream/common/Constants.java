@@ -10,15 +10,19 @@ public class Constants {
     static public final String tokenType = "tokenType";
 
     static public String url = "http://masunghoon.iptime.org";
-    //static public String url = "http://54.178.201.197";
+//    static public String url = "http://54.178.201.197";
 //    static public String port = "5000";
     static public String port = "5001";
     static public String baseUrl = url + ":"+port+"/";
 //    static public String baseUrl = url+"/";
+
+    // Authentication
     static public String apiUsers = baseUrl+"api/users";
     static public String apiUserInfo = baseUrl+"api/user/{userId}";
-
     static public String apiResetPassword = baseUrl+"api/reset_password/{email}";
+    static public String apiValidEmail = baseUrl+"api/valid_email/{email}";
+
+
     static public String apiPostBucket = baseUrl+"api/buckets/";
     static public String apiBuckets = baseUrl+"api/buckets/user/{userId}";
     static public String apiBucketGroup = baseUrl+"api/test/{userId}";

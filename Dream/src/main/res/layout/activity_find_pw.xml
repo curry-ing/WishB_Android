@@ -1,0 +1,81 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.vivavu.dream.activity.login.LoginActivity"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/register_login_bg">
+
+    <!-- Login progress -->
+    <!--<LinearLayout android:id="@+id/login_status"-->
+        <!--android:visibility="gone"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:gravity="center_horizontal"-->
+        <!--android:orientation="vertical">-->
+        <!--<ProgressBar style="?android:attr/progressBarStyleLarge"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="8dp"/>-->
+        <!--<TextView-->
+            <!--android:id="@+id/login_status_message"-->
+            <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+            <!--android:fontFamily="sans-serif-light"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="16dp"-->
+            <!--android:text="@string/login_progress_signing_in" />-->
+    <!--</LinearLayout>-->
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginTop="84dp">
+        <ImageView
+                android:layout_width="35dp"
+                android:layout_height="41dp"
+                android:id="@+id/login_id_icon" android:src="@drawable/login_id_icon" android:contentDescription=""
+                android:layout_gravity="top"/>
+        <EditText
+                android:id="@+id/findpw_email"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:layout_width="fill_parent"
+                android:layout_height="41dp"
+                android:inputType="textEmailAddress"
+                android:background="@drawable/login_edittext_bg"
+                android:layout_marginLeft="1dp"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp" />
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:text="@string/txt_write_joined_email"
+            android:id="@+id/findpw_txt_response_info"
+            android:editable="false"
+            android:enabled="true"
+            android:focusable="false"
+            android:layout_gravity="center_horizontal" android:layout_marginTop="18dp"
+            android:typeface="sans" android:textSize="16dp" android:textStyle="bold"
+            android:singleLine="true" android:paddingLeft="5dp" android:visibility="visible" android:gravity="center"/>
+
+        <Button
+            android:id="@+id/findpw_send_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:layout_marginTop="18dp"
+            android:paddingLeft="32dp"
+            android:paddingRight="32dp"
+            android:layout_gravity="center" android:background="@drawable/findpw_send_inactive_btn" android:enabled="true"/>
+
+    </LinearLayout>
+</LinearLayout>

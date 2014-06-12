@@ -423,4 +423,40 @@ public class DataRepository {
             Log.e("dream", e.getMessage());
         }
     }
+
+    public static List<Bucket> ListBucketByRptCndt(String weekDay, Integer dayOfWeekInMonth){
+        List<Bucket> list = null;
+        try {
+            QueryBuilder<Bucket, Integer> queryBuilder = getDatabaseHelper().getBucketRuntimeDao().queryBuilder();
+            Where where = queryBuilder.where();
+            where.eq("rptType", "WKRP");
+            where.and();
+            if (weekDay.equals("Mon")) {
+                where.like("rptCndt", "1______");
+                where.or();
+                where.eq("rptType", "WEEK");
+                if (dayOfWeekInMonth == 1){
+                    where.or();
+                    where.eq("rptType", "MNTH");
+                }
+            } else if (weekDay.equals("Tue")) {
+                where.like("rptCndt","_1_____");
+            } else if (weekDay.equals("Wed")) {
+                where.like("rptCndt","__1____");
+            } else if (weekDay.equals("Thu")) {
+                where.like("rptCndt","___1___");
+            } else if (weekDay.equals("Fri")) {
+                where.like("rptCndt","____1__");
+            } else if (weekDay.equals("Sat")) {
+                where.like("rptCndt","_____1_");
+            } else if (weekDay.equals("Sun")) {
+                where.like("rptCndt","______1");
+            }
+            list = queryBuilder.query();
+        } catch (SQLException e) {
+            Log.e("dream", e.getMessage());
+        }
+
+        return list;
+    }
 }

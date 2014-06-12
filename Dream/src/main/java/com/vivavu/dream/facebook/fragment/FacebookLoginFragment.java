@@ -3,6 +3,8 @@ package com.vivavu.dream.facebook.fragment;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -39,7 +41,7 @@ public class FacebookLoginFragment extends CustomBaseFragment {
     @InjectView(R.id.txt_facebook_login_explain)
     TextView mTxtFacebookLoginExplain;
     private UiLifecycleHelper uiHelper;
-    private ProgressDialog progressDialog;
+//    private ProgressDialog progressDialog;
 
     private Session.StatusCallback callback = new Session.StatusCallback() {
         public void call(Session session, SessionState state, Exception exception) {
@@ -51,10 +53,16 @@ public class FacebookLoginFragment extends CustomBaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.include_facebook_login, container, false);
         ButterKnife.inject(this, rootView);
+        mAuthButton.setBackgroundResource(R.drawable.intro_fb_btn);
+        Typeface NanumBold = Typeface.createFromAsset(getActivity().getAssets(), "NanumBarunGothicBold.mp3");
         List<String> readPermissions = new ArrayList<String>();
         readPermissions.add("public_profile");
         readPermissions.add("email");
         readPermissions.add("user_birthday");
+
+        mTxtFacebookLoginExplain.setTypeface(NanumBold);
+        mTxtFacebookLoginExplain.setTextSize(15);
+        mTxtFacebookLoginExplain.setTextColor(Color.WHITE);
 
         mAuthButton.setReadPermissions(readPermissions);
         mAuthButton.setFragment(this);
@@ -72,8 +80,8 @@ public class FacebookLoginFragment extends CustomBaseFragment {
         uiHelper = new UiLifecycleHelper(getActivity(), callback);
         uiHelper.onCreate(savedInstanceState);
 
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setMessage("진행중");
+//        progressDialog = new ProgressDialog(getActivity());
+//        progressDialog.setMessage("진행중");
     }
 
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
@@ -107,6 +115,7 @@ public class FacebookLoginFragment extends CustomBaseFragment {
 
         if (requestCode == Session.DEFAULT_AUTHORIZE_ACTIVITY_CODE) {
             if (resultCode == Activity.RESULT_OK) {
+                Session ss = Session.getActiveSession();
                 LoginInfo loginInfo = new LoginInfo();
                 loginInfo.setEmail(Session.getActiveSession().getAccessToken());
                 loginInfo.setPassword("facebook");
@@ -203,10 +212,10 @@ public class FacebookLoginFragment extends CustomBaseFragment {
 
     private void showProgress(boolean b) {
         if(b) {
-            progressDialog.show();
+//            progressDialog.show();
             mAuthButton.setVisibility(View.GONE);
         }else {
-            progressDialog.dismiss();
+//            progressDialog.dismiss();
             mAuthButton.setVisibility(View.VISIBLE);
         }
     }

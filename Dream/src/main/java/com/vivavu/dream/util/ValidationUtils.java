@@ -18,10 +18,10 @@ public class ValidationUtils {
         String value = view.getText().toString();
 
         if (TextUtils.isEmpty(value)) {
-            view.setError(context.getString(R.string.error_field_required));
+//            view.setError(context.getString(R.string.error_field_required));
             return false;
         } else if (value.length() < 6) {
-            view.setError(context.getString(R.string.error_invalid_password));
+//            view.setError(context.getString(R.string.error_invalid_password));
             return false;
         }
 
@@ -37,10 +37,10 @@ public class ValidationUtils {
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(value)) {
-            view.setError(context.getString(R.string.error_field_required));
+//            view.setError(context.getString(R.string.error_field_required));
             return false;
         } else if (!m.matches()) {
-            view.setError(context.getString(R.string.error_invalid_email));
+//            view.setError(context.getString(R.string.error_invalid_email));
             return false;
         }
 
