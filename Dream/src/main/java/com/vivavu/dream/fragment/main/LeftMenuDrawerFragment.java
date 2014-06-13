@@ -124,7 +124,7 @@ public class LeftMenuDrawerFragment extends Fragment {
         mMainLeftMenuBtnProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String items[] = {"카메라", "겔러리"};
+                final String items[] = {"카메라", "겔러리", "이미지삭제"};
                 AlertDialog.Builder ab = new AlertDialog.Builder(getActivity());
                 ab.setTitle("선택");
                 ab.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
@@ -137,7 +137,14 @@ public class LeftMenuDrawerFragment extends Fragment {
                                 break;
                             case 1:
                                 doTakeAlbumAction();
-                                Toast.makeText(getActivity(), "겔러리 선택", Toast.LENGTH_SHORT).show();
+                                dialog.dismiss();
+                                break;
+                            case 2:
+                                User user = DreamApp.getInstance().getUser();
+                                user.setProfileImgUrl(null);
+                                handler.sendEmptyMessage(SEND_DATA_START);
+                                Thread thread = new Thread(new UserModifyThread(user));
+                                thread.start();
                                 dialog.dismiss();
                                 break;
                             default:
@@ -177,6 +184,13 @@ public class LeftMenuDrawerFragment extends Fragment {
         //todo: 로그인 체크하는 것은 한곳에서만 수행할것
         if(context.isLogin()){
             mMainLeftMenuTxtName.setText(DreamApp.getInstance().getUser().getUsername());
+            DisplayImageOptions options = new DisplayImageOptions.Builder()
+                    .cacheInMemory(true)
+                    .cacheOnDisc(true)
+                    .considerExifParams(true)
+                    .showImageForEmptyUri(R.drawable.ic_profile_empty)
+                    .build();
+            ImageLoader.getInstance().displayImage(DreamApp.getInstance().getUser().getProfileImgUrl(), mMainLeftMenuBtnProfile, options);
         }
     }
 
@@ -331,6 +345,7 @@ public class LeftMenuDrawerFragment extends Fragment {
                 handler.sendEmptyMessage(SEND_DATA_ERROR);
                 return;
             }
+            user.setPhoto(null);
             Message message = handler.obtainMessage(SEND_DATA_END, responseBodyWrapped.getData());
             handler.sendMessage(message);
         }

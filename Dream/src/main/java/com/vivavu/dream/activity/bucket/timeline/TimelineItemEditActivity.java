@@ -159,7 +159,7 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
         mBtnPostCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String items[] = {"카메라", "겔러리"};
+                final String items[] = {"카메라", "겔러리", "이미지삭제"};
                 AlertDialog.Builder ab = new AlertDialog.Builder(TimelineItemEditActivity.this);
                 ab.setTitle("선택");
                 ab.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
@@ -172,6 +172,12 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                                 break;
                             case 1:
                                 doTakeAlbumAction();
+                                dialog.dismiss();
+                                break;
+                            case 2:
+                                post.setImgUrl(null);
+                                post.setPhoto(null);
+                                bindData(post);
                                 dialog.dismiss();
                                 break;
                             default:
@@ -334,7 +340,7 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
 
     public Post getPost() {
         post.setText(String.valueOf(mTxtPostText.getText()));
-        post.setTimestamp(DateUtils.getDateFromString(String.valueOf(mTxtPostDate.getText() + " " + mTxtPostTime), "yyyy-MM-dd HH:mm", new Date()));
+        post.setTimestamp(DateUtils.getDateFromString(String.valueOf(mTxtPostDate.getText() + " " + mTxtPostTime), "yyyy.MM.dd HH:mm", new Date()));
         return post;
     }
 

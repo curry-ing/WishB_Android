@@ -254,7 +254,9 @@ public class UserInfoConnector extends Connector<User> {
         if (user.getTitle_60() != null) {
             requestUser.add("title_60", user.getTitle_60());
         }
-
+        if (user.getProfileImgUrl() == null) {
+            requestUser.add("profile_img_id", "");
+        }
         if(user.getPhoto() != null && user.getPhoto().exists()){
             ByteArrayResource byteArrayResource = ImageUtil.convertImageFileToByteArrayResource(user.getPhoto(), 1024, 1024, 70);
             requestUser.add("photo", byteArrayResource);

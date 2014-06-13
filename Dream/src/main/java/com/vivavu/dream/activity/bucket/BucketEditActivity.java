@@ -298,7 +298,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
         mBucketImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String items[] = {"카메라", "겔러리"};
+                final String items[] = {"카메라", "겔러리", "이미지삭제"};
                 AlertDialog.Builder ab = new AlertDialog.Builder(BucketEditActivity.this);
                 ab.setTitle("선택");
                 ab.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
@@ -312,6 +312,13 @@ public class BucketEditActivity extends BaseActionBarActivity {
                             case 1:
                                 doTakeAlbumAction();
                                 dialog.dismiss();
+                                break;
+                            case 2:
+                                bucket.setFile(null);
+                                bucket.setCvrImgId(null);
+                                bucket.setCvrImgUrl(null);
+                                dialog.dismiss();
+                                bindData();
                                 break;
                             default:
                                 break;

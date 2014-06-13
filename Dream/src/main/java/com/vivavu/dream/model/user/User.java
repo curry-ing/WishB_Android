@@ -58,6 +58,9 @@ public class User{
     @SerializedName("title_60")
     private String title_60;
 
+    @SerializedName("profile_img_url")
+    private String profileImgUrl;
+
     private File photo;
 
     public String getTitle_60() {
@@ -194,6 +197,14 @@ public class User{
 
     public void setPhoto(File photo) {
         this.photo = photo;
+    }
+
+    public String getProfileImgUrl() {
+        return profileImgUrl;
+    }
+
+    public void setProfileImgUrl(String profileImgUrl) {
+        this.profileImgUrl = profileImgUrl;
     }
 
     public int getUserAge() {
