@@ -12,6 +12,7 @@
         android:text="@string/actionbar_main_today"
         android:background="@drawable/bg_timeline_view_timestamp"
         android:textColor="@color/default_text_color"
+        android:layout_marginTop="5dp"
         />
 
     <GridView
@@ -23,6 +24,8 @@
         android:numColumns="2"
         android:horizontalSpacing="10dp"
         android:verticalSpacing="10dp"
+        android:layout_marginTop="10dp"
+        android:clickable="false"
         >
 
     </GridView>
