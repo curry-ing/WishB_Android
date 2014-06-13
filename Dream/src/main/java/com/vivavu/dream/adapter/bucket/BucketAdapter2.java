@@ -31,7 +31,7 @@ import com.vivavu.dream.R;
 import com.vivavu.dream.activity.bucket.BucketGroupViewActivity;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.DreamApp;
-import com.vivavu.dream.drawable.RoundedAvatarDrawable;
+import com.vivavu.dream.drawable.FanShapeDrawable;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.bucket.BucketGroup;
 import com.vivavu.dream.model.user.User;
@@ -202,35 +202,35 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
             switch (j){
                 case 0:
                     holder.mMainImage1.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                    holder.mMainImage1.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi, pos));
+                    holder.mMainImage1.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi, pos));
                     break;
                 case 1:
                     holder.mMainImage2.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                    holder.mMainImage2.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi, pos));
+                    holder.mMainImage2.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi, pos));
                     break;
                 case 2:
                     holder.mMainImage3.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                    holder.mMainImage3.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi, pos));
+                    holder.mMainImage3.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi, pos));
                     break;
                 case 3:
                     holder.mMainImage4.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                    holder.mMainImage4.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi, pos));
+                    holder.mMainImage4.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi, pos));
                     break;
                 case 4:
                     holder.mMainImage5.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                    holder.mMainImage5.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi, pos));
+                    holder.mMainImage5.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi, pos));
                     break;
                 case 5:
                     holder.mMainImage6.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                    holder.mMainImage6.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi, pos));
+                    holder.mMainImage6.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi, pos));
                     break;
                 case 6:
                     holder.mMainImage7.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                    holder.mMainImage7.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi, pos));
+                    holder.mMainImage7.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi, pos));
                     break;
                 case 7:
                     holder.mMainImage8.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                    holder.mMainImage8.setBackground(new RoundedAvatarDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi, pos));
+                    holder.mMainImage8.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi, pos));
                     break;
             }
 //            holder.mProgressOverlay.setImageDrawable(new MyDrawable());
@@ -268,12 +268,12 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
 
 
                 if (thisY > endY) {
-                    holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, 360, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
+                    holder.mMainProgress.setImageDrawable(new FanShapeDrawable(null, 360, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
                 } else if (thisY < startY) {
-                    holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, 0, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
+                    holder.mMainProgress.setImageDrawable(new FanShapeDrawable(null, 0, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
                 } else {
                     int marking = (((DreamApp.getInstance().getUser().getUserAge() % 10) * 365) + cal.get(cal.DAY_OF_YEAR)) / 10;
-                    holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, marking, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
+                    holder.mMainProgress.setImageDrawable(new FanShapeDrawable(null, marking, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
                 }
             } else {
                 holder.mMainProgress.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
@@ -282,8 +282,8 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
                 Typeface periodTypeFace = Typeface.createFromAsset(context.getAssets(), "Dense-Regular.mp3");
                 holder.mPeriod.setTypeface(BaseActionBarActivity.getDenseRegularFont(), Typeface.BOLD);
                 holder.mPeriod.setTextSize(25);
-//            holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, 0, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
-                holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, marking, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
+//            holder.mMainProgress.setImageDrawable(new FanShapeDrawable(null, 0, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
+                holder.mMainProgress.setImageDrawable(new FanShapeDrawable(null, marking, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
                 holder.mPeriod.setText("J A N  " + mUserBirthday.substring(0, 1) + " "
                         + mUserBirthday.substring(1, 2) + " "
                         + mUserBirthday.substring(2, 3) + " "
@@ -292,7 +292,7 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
         } else {
             holder.mDecadeBorder.setVisibility(View.GONE);
             holder.mPeriod.setVisibility(View.GONE);
-            holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, 0, PROGRESS_BAR_BASELINE, deviceDensityDpi, 0));
+            holder.mMainProgress.setImageDrawable(new FanShapeDrawable(null, 0, PROGRESS_BAR_BASELINE, deviceDensityDpi, 0));
         }
 
         /* SET ON CLICK LISTENER */
@@ -337,6 +337,7 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
         final EditText input = new EditText(context);
         input.setId(TEXT_ID);
         input.setFilters(new InputFilter[] {new InputFilter.LengthFilter(20)});
+        input.setSingleLine();
         builder.setView(input);
         input.setText(holder.mBtnDecade.getText());
         input.selectAll();

@@ -15,8 +15,12 @@ import android.os.Message;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBar;
 import android.text.Editable;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -60,8 +64,8 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
     Button mRegisterButton;
     @InjectView(R.id.register_txt_response_info)
     TextView mRegisterTxtResponseInfo;
-    @InjectView(R.id.register_agreement)
-    TextView mRegisterAgreement;
+    @InjectView(R.id.register_agreement_txt)
+    TextView mRegisterAgreementTxt;
 //    @InjectView(R.id.register_fb_explain_txt)
 //    TextView mRegisterFbExplainTxt;
 
@@ -120,9 +124,35 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
         mRegisterTxtResponseInfo.setTextSize(15);
         mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
 
-        mRegisterAgreement.setTypeface(NanumBold);
-        mRegisterAgreement.setTextSize(15);
-        mRegisterAgreement.setTextColor(Color.WHITE);
+        mRegisterAgreementTxt.setTypeface(NanumBold);
+        mRegisterAgreementTxt.setTextSize(15);
+//        mRegisterAgreementTxt.setTextColor(Color.WHITE);
+
+        SpannableString agreementText = new SpannableString(getResources().getString(R.string.regist_agreement));
+        ClickableSpan agreement = new ClickableSpan() {
+            @Override
+            public void onClick(View view) {
+//                Toast.makeText(context, "agreement", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(context, UserAgreementActivity.class);
+                startActivity(intent);
+            }
+        };
+        ClickableSpan privacy = new ClickableSpan() {
+            @Override
+            public void onClick(View view) {
+//                Toast.makeText(context, "privacy", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(context, PrivacyActivity.class);
+                startActivity(intent);
+            }
+        };
+        agreementText.setSpan(new ForegroundColorSpan(Color.WHITE), 0, 6, 0);
+        agreementText.setSpan(agreement, 7, 11, 0);
+        agreementText.setSpan(new ForegroundColorSpan(Color.WHITE), 11, 13, 0);
+        agreementText.setSpan(privacy, 13, 22, 0);
+        agreementText.setSpan(new ForegroundColorSpan(Color.WHITE), 22, 31, 0);
+
+        mRegisterAgreementTxt.setMovementMethod(LinkMovementMethod.getInstance());
+        mRegisterAgreementTxt.setText(agreementText, TextView.BufferType.SPANNABLE);
 
         // Set up the login form.
         mRegisterEmail.setText(mEmail);

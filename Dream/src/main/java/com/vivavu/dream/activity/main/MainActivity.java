@@ -1,7 +1,9 @@
 package com.vivavu.dream.activity.main;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -12,17 +14,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.*;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.bucket.BucketEditActivity;
 import com.vivavu.dream.activity.bucket.BucketViewActivity;
 import com.vivavu.dream.broadcastReceiver.AlarmManagerBroadcastReceiver;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.Code;
+import com.vivavu.dream.common.DreamApp;
+import com.vivavu.dream.drawable.RoundedAvatarDrawable;
 import com.vivavu.dream.fragment.main.MainBucketListFragment;
 import com.vivavu.dream.util.AndroidUtils;
 import com.vivavu.dream.view.CustomPopupWindow;
@@ -45,8 +48,8 @@ public class MainActivity extends BaseActionBarActivity {
     View noticeView;
     CustomPopupWindow mPopupNotice;
 
-    View customeActionBarView;
-    View customeActionBarViewProfile;
+    View customActionBarView;
+    View customActionBarViewProfile;
 
     MainBucketListFragment mainBucketListFragment;
 
@@ -71,12 +74,12 @@ public class MainActivity extends BaseActionBarActivity {
 
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
 
-        customeActionBarView = inflater.inflate(R.layout.actionbar_main, null);
-        customeActionBarViewProfile = inflater.inflate(R.layout.actionbar_main_profile, null);
-        ActionBarProfileViewHolder actionBarProfileViewHolder = new ActionBarProfileViewHolder(customeActionBarViewProfile);
-        customeActionBarViewProfile.setTag(actionBarProfileViewHolder);
+        customActionBarView = inflater.inflate(R.layout.actionbar_main, null);
+        customActionBarViewProfile = inflater.inflate(R.layout.actionbar_main_profile, null);
+        ActionBarProfileViewHolder actionBarProfileViewHolder = new ActionBarProfileViewHolder(customActionBarViewProfile);
+        customActionBarViewProfile.setTag(actionBarProfileViewHolder);
 
-        actionBar.setCustomView(customeActionBarView);
+        actionBar.setCustomView(customActionBarView);
 
         ButterKnife.inject(this);
 
@@ -122,10 +125,23 @@ public class MainActivity extends BaseActionBarActivity {
                 startActivity(intent);
             }
         });
-//        alarm = new AlarmManagerBroadcastReceiver();
-//        alarm.SetAlarm(context, 1, true, 23);
-//        alarm.SetAlarm(context, 2, true, 11);
-//        alarm.CancelAlarm(context);
+
+        String userProfileImgUrl = DreamApp.getInstance().getUser().getProfileImgUrl();
+        if (userProfileImgUrl != null && !userProfileImgUrl.isEmpty()){
+            Drawable avatar = new RoundedAvatarDrawable(ImageLoader.getInstance().loadImageSync(userProfileImgUrl,
+                                                        new ImageSize(AndroidUtils.getPixelFromDIP(null, 30),
+                                                                      AndroidUtils.getPixelFromDIP(null, 30))));
+
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(AndroidUtils.getPixelFromDIP(null, 30),
+                                                                             AndroidUtils.getPixelFromDIP(null, 30));
+            lp.setMargins(AndroidUtils.getPixelFromDIP(null, 15),
+                          AndroidUtils.getPixelFromDIP(null, 9), 0, 0);
+
+            mProfile.setLayoutParams(lp);
+            mProfile.setImageDrawable(avatar);
+            actionBarProfileViewHolder.mProfile.setLayoutParams(lp);
+            actionBarProfileViewHolder.mProfile.setImageDrawable(avatar);
+        }
 
         actionBarProfileViewHolder.mTxtProfile.setTypeface(getNanumBarunGothicFont());
 
@@ -154,13 +170,13 @@ public class MainActivity extends BaseActionBarActivity {
             @Override
             public void onDrawerOpened(View drawerView) {
                 ActionBar bar = getSupportActionBar();
-                bar.setCustomView(customeActionBarViewProfile);
+                bar.setCustomView(customActionBarViewProfile);
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 ActionBar bar = getSupportActionBar();
-                bar.setCustomView(customeActionBarView);
+                bar.setCustomView(customActionBarView);
             }
 
             @Override
@@ -176,7 +192,6 @@ public class MainActivity extends BaseActionBarActivity {
         super.onStart();
         // Activity 와 Fragment 실행순서에 따라서 Fragment UI가 다 생성된 이후에 Activity에서
         // Fragment의 UI에 접근 가능. Activity.onCreate -> Fragment.onCreate->Activity.onStart가 수행
-
     }
 
     @Override
