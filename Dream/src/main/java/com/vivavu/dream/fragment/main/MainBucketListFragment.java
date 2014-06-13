@@ -133,7 +133,7 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
         super.onViewCreated(view, savedInstanceState);
         bucketAdapter2 = new BucketAdapter2(this, bucketGroupList);
         mMainPager.setAdapter(bucketAdapter2);
-        int age = DreamApp.getInstance().getUser().getUserAge();
+//        int age = DreamApp.getInstance().getUser().getUserAge();
         if (DreamApp.getInstance().getUser().getUserAge() == 0) {
             mMainPager.setCurrentItem(0);
             mMainPageBg0.setBackground((BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg0));
