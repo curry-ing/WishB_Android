@@ -1,5 +1,6 @@
 package com.vivavu.dream.broadcastReceiver;
 
+import android.annotation.TargetApi;
 import android.app.*;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,10 +8,7 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Bundle;
-import android.os.IBinder;
-import android.os.PowerManager;
-import android.os.SystemClock;
+import android.os.*;
 import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 import com.vivavu.dream.R;
@@ -34,6 +32,7 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver{
         super();
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onReceive(Context context, Intent intent) {
 //        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
@@ -77,7 +76,7 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver{
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
                 .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),R.drawable.main_logo))
-//                .setSmallIcon(R.drawable.login_check_ok_icon,1)
+                .setSmallIcon(R.drawable.login_check_ok_icon,1)
 //                .setNumber(2)
                 .setTicker(NotificationTicker)
                 .setContentTitle(NotificationTitle)
@@ -89,10 +88,10 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver{
         Intent resultIntent = new Intent(context, StartActivity.class);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addParentStack(MainActivity.class);
+//        stackBuilder.addParentStack(MainActivity.class);
         stackBuilder.addNextIntent(resultIntent);
 
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder.setContentIntent(resultPendingIntent);
 
         NotificationManager mNotificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -119,10 +118,15 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver{
         cal.set(Calendar.MONTH, cur_cal.get(Calendar.MONTH));
 
         AlarmManager am=(AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+
+/******* FOR TEST *******/
 //        if (alarmType == 1) {
+//            cal.set(Calendar.HOUR_OF_DAY, cur_cal.get(Calendar.HOUR_OF_DAY));
 //            cal.set(Calendar.MINUTE, cur_cal.get(Calendar.MINUTE) + 1);
 //        } else if (alarmType == 2) {
-//            cal.set(Calendar.MINUTE, cur_cal.get(Calendar.MINUTE) + 2);
+//            cal.set(Calendar.HOUR_OF_DAY, cur_cal.get(Calendar.HOUR_OF_DAY));
+//            cal.set(Calendar.MINUTE, cur_cal.get(Calendar.MINUTE) + 1);
+//            cal.set(Calendar.SECOND, 10);
 //        }
 
         if (alarmOn) {

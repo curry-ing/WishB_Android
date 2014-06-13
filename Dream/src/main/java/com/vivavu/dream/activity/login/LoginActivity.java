@@ -31,9 +31,11 @@ import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.vivavu.dream.R;
+import com.vivavu.dream.broadcastReceiver.AlarmManagerBroadcastReceiver;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.Code;
 import com.vivavu.dream.model.LoginInfo;
@@ -65,6 +67,9 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
     TextView mTxtResponseInfo;
     @InjectView(R.id.actionbar_login_title)
     TextView mActionbarLoginTitle;
+    @InjectView(R.id.actionbar_login_back)
+    ImageView mActionbarLoginBack;
+
     /**
      * The default email to populate the email field with.
      */
@@ -133,7 +138,7 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
         ButterKnife.inject(this);
 
         Typeface NanumBold = Typeface.createFromAsset(context.getAssets(), "NanumBarunGothicBold.mp3");
-        mActionbarLoginTitle.setText("Wish B");
+        mActionbarLoginTitle.setText("로그인");
         mActionbarLoginTitle.setTypeface(NanumBold);
         mActionbarLoginTitle.setTextSize(20);
         mActionbarLoginTitle.setTextColor(Color.WHITE);
@@ -298,6 +303,13 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
                 startActivityForResult(intent, Code.ACT_RESET_PASSWORD);
             }
         });
+
+        mActionbarLoginBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
     }
 
 
@@ -308,6 +320,7 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
         return true;
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public void setmTxtResponseInfo(int invalidType){
         switch(invalidType){
             case 0:
@@ -547,6 +560,11 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
                 context.setTokenType("unused");
                 context.saveAppDefaultInfo();
 
+                /* Set Notifications On */
+                AlarmManagerBroadcastReceiver alarm = new AlarmManagerBroadcastReceiver();
+                alarm.SetAlarm(context, 1, true, 23);
+                alarm.SetAlarm(context, 2, true, 11);
+
                 setResult(RESULT_OK);
                 finish();
             } else {
@@ -579,5 +597,6 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
             finish();
         }
     }
+
 
 }

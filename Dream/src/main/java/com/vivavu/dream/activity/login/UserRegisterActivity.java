@@ -21,10 +21,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
 
 import com.vivavu.dream.R;
 import com.vivavu.dream.common.BaseActionBarActivity;
@@ -48,6 +45,8 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
 
     @InjectView(R.id.actionbar_login_title)
     TextView mActionbarLoginTitle;
+    @InjectView(R.id.actionbar_login_back)
+    ImageView mActionbarLoginBack;
 
     @InjectView(R.id.register_status_message)
     TextView mRegisterStatusMessage;
@@ -284,6 +283,12 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
             }
         });
 
+        mActionbarLoginBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
     }
 
     @Override

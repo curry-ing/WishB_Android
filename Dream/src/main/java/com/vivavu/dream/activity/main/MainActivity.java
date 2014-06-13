@@ -5,6 +5,9 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.view.*;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +58,7 @@ public class MainActivity extends BaseActionBarActivity {
     @InjectView(R.id.profile)
     ImageView mProfile;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,10 +106,9 @@ public class MainActivity extends BaseActionBarActivity {
             }
         });
 
-
-        mActionbarMainTitle.setText("Wish Ballon");
+        mActionbarMainTitle.setText("Wish B.");
         mActionbarMainTitle.setTypeface(getNanumBarunGothicBoldFont());
-        mActionbarMainTitle.setTextSize(22);
+        mActionbarMainTitle.setTextSize(20);
         mActionbarMainTitle.setTextColor(Color.WHITE);
 
         mActionbarMainToday.setTypeface(getNanumBarunGothicBoldFont());
@@ -125,6 +128,22 @@ public class MainActivity extends BaseActionBarActivity {
 //        alarm.CancelAlarm(context);
 
         actionBarProfileViewHolder.mTxtProfile.setTypeface(getNanumBarunGothicFont());
+
+        mContainer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        mProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mContainer.openDrawer(Gravity.LEFT);
+            }
+        });
+
+        actionBarProfileViewHolder.mProfile.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                mContainer.closeDrawer(Gravity.LEFT);
+            }
+        });
 
         mContainer.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
