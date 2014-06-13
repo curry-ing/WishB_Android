@@ -7,10 +7,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
+import android.view.*;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -56,6 +53,7 @@ public class MainActivity extends BaseActionBarActivity {
     DrawerLayout mContainer;
     @InjectView(R.id.profile)
     ImageView mProfile;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,16 +102,16 @@ public class MainActivity extends BaseActionBarActivity {
             }
         });
 
-        SpannableString text = new SpannableString("logos");
-        text.setSpan(new ForegroundColorSpan(R.color.skyblue),0,1,0);
-        text.setSpan(new ForegroundColorSpan(R.color.white),1,2,0);
-        text.setSpan(new ForegroundColorSpan(R.color.lightgreen),2,3,0);
-        text.setSpan(new ForegroundColorSpan(R.color.lightred),3,4,0);
+//        SpannableString text = new SpannableString("logos");
+//        text.setSpan(new ForegroundColorSpan(R.color.skyblue),0,1,0);
+//        text.setSpan(new ForegroundColorSpan(R.color.white),1,2,0);
+//        text.setSpan(new ForegroundColorSpan(R.color.lightgreen),2,3,0);
+//        text.setSpan(new ForegroundColorSpan(R.color.lightred),3,4,0);
 
 //        mActionbarMainTitle.setText(text, TextView.BufferType.SPANNABLE);
-        mActionbarMainTitle.setText("Wish Ballon");
+        mActionbarMainTitle.setText("Wish B.");
         mActionbarMainTitle.setTypeface(getNanumBarunGothicBoldFont());
-        mActionbarMainTitle.setTextSize(22);
+        mActionbarMainTitle.setTextSize(20);
         mActionbarMainTitle.setTextColor(Color.WHITE);
 
         mActionbarMainToday.setTypeface(getNanumBarunGothicBoldFont());
@@ -127,6 +125,22 @@ public class MainActivity extends BaseActionBarActivity {
 //        alarm.CancelAlarm(context);
 
         actionBarProfileViewHolder.mTxtProfile.setTypeface(getNanumBarunGothicFont());
+
+        mContainer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        mProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mContainer.openDrawer(Gravity.LEFT);
+            }
+        });
+
+        actionBarProfileViewHolder.mProfile.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                mContainer.closeDrawer(Gravity.LEFT);
+            }
+        });
 
         mContainer.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override

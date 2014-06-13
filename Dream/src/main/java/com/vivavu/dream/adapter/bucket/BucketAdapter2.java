@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
+import android.text.InputFilter;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -191,7 +192,7 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
             }
         }
         if(mainImages.size()==0){
-            mainImages.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.up_logo));
+            mainImages.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.uplogo));
         } else {
             Collections.shuffle(mainImages);
         }
@@ -269,17 +270,18 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
                 } else if (thisY < startY) {
                     holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, 0, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
                 } else {
-                    holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, cal.get(cal.DAY_OF_YEAR), PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
+                    int marking = (((DreamApp.getInstance().getUser().getUserAge() % 10) * 365) + cal.get(cal.DAY_OF_YEAR)) / 10;
+                    holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, marking, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
                 }
             } else {
                 holder.mMainProgress.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                int imsi = (int) ((float) DreamApp.getInstance().getUser().getUserAge() / 100 * 360);
+                int marking = (int) ((float) DreamApp.getInstance().getUser().getUserAge() / 100 * 360);
 
                 Typeface periodTypeFace = Typeface.createFromAsset(context.getAssets(), "Dense-Regular.mp3");
                 holder.mPeriod.setTypeface(periodTypeFace, Typeface.BOLD);
                 holder.mPeriod.setTextSize(25);
 //            holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, 0, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
-                holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, imsi, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
+                holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, marking, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
                 holder.mPeriod.setText("J A N  " + mUserBirthday.substring(0, 1) + " "
                         + mUserBirthday.substring(1, 2) + " "
                         + mUserBirthday.substring(2, 3) + " "
@@ -323,15 +325,16 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
         final InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         if (!(pos == 0)) {
-            builder.setTitle("당신의 " + pos * 10 + "대");
+            builder.setTitle("Wish B: 당신의 " + pos * 10 + "대");
             builder.setMessage("어떤 10년을 보내고 싶으세요?");
         } else {
-            builder.setTitle("꿈틀");
-            builder.setMessage("당신의 인생을 꾸며보세요");
+            builder.setTitle("Wish B.");
+            builder.setMessage("어떤 인생을 꿈꾸시나요?");
         }
 
         final EditText input = new EditText(context);
         input.setId(TEXT_ID);
+        input.setFilters(new InputFilter[] {new InputFilter.LengthFilter(20)});
         builder.setView(input);
         input.setText(holder.mBtnDecade.getText());
         input.selectAll();
@@ -430,8 +433,6 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
         ImageView mMainProgress;
         @InjectView(R.id.period)
         TextView mPeriod;
-//        @InjectView(R.id.progressOverlay)
-//        ImageView mProgressOverlay;
 
         ButterknifeViewHolder(View view) {
             ButterKnife.inject(this, view);

@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.main.MainActivity;
 import com.vivavu.dream.activity.setup.MoreActivity;
+import com.vivavu.dream.broadcastReceiver.AlarmManagerBroadcastReceiver;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.model.ResponseBodyWrapped;
@@ -95,6 +96,11 @@ public class LeftMenuDrawerFragment extends Fragment {
             public void onClick(View view) {
                 Toast.makeText(getActivity(), "로그아웃", Toast.LENGTH_SHORT ).show();
                 if(getActivity() instanceof MainActivity){
+                    /* Set Notification Off */
+                    AlarmManagerBroadcastReceiver alarm = new AlarmManagerBroadcastReceiver();
+                    alarm.SetAlarm(context, 1, false, 23);
+                    alarm.SetAlarm(context, 2, false, 11);
+
                     MainActivity mainActivity = (MainActivity) getActivity();
                     mainActivity.logout();
                 }

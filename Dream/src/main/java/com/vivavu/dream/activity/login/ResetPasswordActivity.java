@@ -10,10 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.*;
 
 import com.vivavu.dream.R;
 import com.vivavu.dream.common.BaseActionBarActivity;
@@ -38,6 +35,8 @@ public class ResetPasswordActivity extends BaseActionBarActivity {
 
     @InjectView(R.id.actionbar_login_title)
     TextView mActionbarLoginTitle;
+    @InjectView(R.id.actionbar_login_back)
+    ImageView mActionbarLoginBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,13 +102,12 @@ public class ResetPasswordActivity extends BaseActionBarActivity {
             }
         });
 
-//        mTxtTitle.setText(getString(R.string.lbl_private));
-//        mMenuPrevious.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                finish();
-//            }
-//        });
+        mActionbarLoginBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
     }
 
     private void sendEmail() {

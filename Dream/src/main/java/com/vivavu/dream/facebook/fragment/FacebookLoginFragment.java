@@ -18,6 +18,7 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.LoginButton;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.intro.IntroActivity;
+import com.vivavu.dream.broadcastReceiver.AlarmManagerBroadcastReceiver;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.fragment.CustomBaseFragment;
 import com.vivavu.dream.model.LoginInfo;
@@ -35,6 +36,7 @@ import butterknife.InjectView;
  * Created by yuja on 14. 2. 18.
  */
 public class FacebookLoginFragment extends CustomBaseFragment {
+    private DreamApp context = null;
     private static final String TAG = "FacebookLoginFragment";
     @InjectView(R.id.authButton)
     LoginButton mAuthButton;
@@ -51,6 +53,7 @@ public class FacebookLoginFragment extends CustomBaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        context = DreamApp.getInstance();
         final View rootView = inflater.inflate(R.layout.include_facebook_login, container, false);
         ButterKnife.inject(this, rootView);
         mAuthButton.setBackgroundResource(R.drawable.intro_fb_btn);
@@ -179,6 +182,12 @@ public class FacebookLoginFragment extends CustomBaseFragment {
                 DreamApp.getInstance().setToken(success.getData().getToken());
                 DreamApp.getInstance().setTokenType("unused");
                 DreamApp.getInstance().saveAppDefaultInfo();
+
+                /* Set Notifications On */
+                AlarmManagerBroadcastReceiver alarm = new AlarmManagerBroadcastReceiver();
+                alarm.SetAlarm(context, 1, true, 23);
+                alarm.SetAlarm(context, 2, true, 11);
+
                 Session session = Session.getActiveSession();
                 if (session != null && (session.isOpened() || session.isClosed())) {
                     Session.getActiveSession().closeAndClearTokenInformation();
