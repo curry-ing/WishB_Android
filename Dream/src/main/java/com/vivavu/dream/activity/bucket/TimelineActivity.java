@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBar;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -38,7 +37,6 @@ import com.vivavu.dream.model.bucket.timeline.TimelineMetaInfo;
 import com.vivavu.dream.repository.BucketConnector;
 import com.vivavu.dream.repository.DataRepository;
 import com.vivavu.dream.repository.connector.TimelineConnector;
-import com.vivavu.dream.util.AndroidUtils;
 import com.vivavu.dream.util.DateUtils;
 import com.vivavu.dream.view.ShadowImageView;
 
@@ -236,7 +234,6 @@ public class TimelineActivity extends BaseActionBarActivity {
         }
 
         int progress = DateUtils.getProgress(start, end);
-        Log.v(TAG, String.valueOf( AndroidUtils.getSpFromPx(65)));
         ImageLoader.getInstance().displayImage(bucket.getCvrImgUrl(), mImgBucket);
         mImgBucket.setPercent(progress);
 

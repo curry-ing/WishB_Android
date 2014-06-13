@@ -116,6 +116,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
                         progressDialog.dismiss();
                     }
                     Toast.makeText(BucketEditActivity.this, modString + "성공", Toast.LENGTH_LONG).show();
+                    Bucket bucket = (Bucket) msg.obj;
                     Intent intent = new Intent();
                     intent.putExtra(RESULT_EXTRA_BUCKET_ID, (Integer) bucket.getId());
                     intent.putExtra(RESULT_EXTRA_BUCKET, bucket);
@@ -411,28 +412,6 @@ public class BucketEditActivity extends BaseActionBarActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        /*ViewTreeObserver viewTreeObserver = mIvCardImage.getViewTreeObserver();
-        if (viewTreeObserver.isAlive()) {
-            viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-                @Override
-                public void onGlobalLayout() {
-                    if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                        mIvCardImage.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                    }else{
-                        mIvCardImage.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    }
-                    mIvCardImage.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-                    bindData();
-
-                }
-            });
-        }*/
-    }
-
-    @Override
     public void onClick(View view) {
         super.onClick(view);
         if(view == mBucketInputDeadline){
@@ -613,7 +592,10 @@ public class BucketEditActivity extends BaseActionBarActivity {
                 Bucket bucket = bucketWrappedResponseBodyWrapped.getData();
                 if(bucket != null){
                     DataRepository.saveBucket(bucket);
-                    handler.sendEmptyMessage(SEND_DATA_END);
+                    // 파일 전송 후 해제 시킴
+                    BucketEditActivity.this.bucket.setFile(null);
+                    Message message = handler.obtainMessage(SEND_DATA_END, bucket);
+                    handler.sendMessage(message);
                 }
             }else {
                 handler.sendEmptyMessage(SEND_DATA_ERROR);
