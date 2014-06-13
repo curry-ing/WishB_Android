@@ -9,10 +9,10 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.main.MainActivity;
+import com.vivavu.dream.activity.main.TodayActivity;
 import com.vivavu.dream.adapter.bucket.BucketListAdapter;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.DreamApp;
@@ -121,7 +121,8 @@ public class BucketGroupViewActivity extends BaseActionBarActivity {
         mBtnToday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(BucketGroupViewActivity.this, "투데이", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(BucketGroupViewActivity.this, TodayActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -131,6 +132,12 @@ public class BucketGroupViewActivity extends BaseActionBarActivity {
                 goAddBucket();
             }
         });
+
+        mTxtTitle.setTypeface(getNanumBarunGothicBoldFont());
+        mTxtTitle.setTextSize(20);
+
+        mBtnToday.setTypeface(getNanumBarunGothicBoldFont());
+        mBtnToday.setTextSize(14);
     }
 
     @Override
