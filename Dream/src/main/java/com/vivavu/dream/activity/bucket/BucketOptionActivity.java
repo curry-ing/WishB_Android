@@ -47,11 +47,10 @@ public class BucketOptionActivity extends BaseActionBarActivity {
         setContentView(R.layout.bucket_option_template);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayUseLogoEnabled(false);
         actionBar.setDisplayShowHomeEnabled(false);//로고 버튼 보이는 것 설정
         actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_before);
         actionBar.setCustomView(R.layout.actionbar_bucket_edit);
         actionBar.setDisplayShowCustomEnabled(true);
 

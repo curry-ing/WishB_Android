@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,6 +22,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.main.MainActivity;
 import com.vivavu.dream.common.BaseActionBarActivity;
@@ -39,10 +40,11 @@ import com.vivavu.dream.model.bucket.option.OptionRepeat;
 import com.vivavu.dream.repository.BucketConnector;
 import com.vivavu.dream.repository.DataRepository;
 import com.vivavu.dream.repository.task.CustomAsyncTask;
+import com.vivavu.dream.util.AndroidUtils;
 import com.vivavu.dream.util.DateUtils;
 import com.vivavu.dream.util.ImageUtil;
 import com.vivavu.dream.util.ValidationUtils;
-import com.vivavu.dream.view.TextImageView;
+import com.vivavu.dream.view.ShadowImageView;
 
 import java.io.File;
 import java.io.IOException;
@@ -56,6 +58,18 @@ import butterknife.InjectView;
  * Created by yuja on 14. 1. 13.
  */
 public class BucketEditActivity extends BaseActionBarActivity {
+
+    private static final String TAG = BucketEditActivity.class.getSimpleName();
+
+    public enum RequestCode {
+        ACT_ADD_BUCKET_TAKE_CAMERA
+        , ACT_ADD_BUCKET_TAKE_GALLERY
+        , ACT_ADD_BUCKET_CROP_FROM_CAMERA
+        , ACT_ADD_BUCKET_OPTION_DDAY
+        , ACT_ADD_BUCKET_OPTION_DESCRIPTION
+        , ACT_ADD_BUCKET_OPTION_REPEAT
+    }
+
     private static final int SEND_DATA_START = 0;
     private static final int SEND_DATA_END = 1;
     private static final int SEND_DATA_ERROR = 2;
@@ -65,7 +79,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
     public static final String RESULT_EXTRA_BUCKET_ID = "bucketId";
 
     @InjectView(R.id.bucket_img)
-    TextImageView mBucketImg;
+    ShadowImageView mBucketImg;
     @InjectView(R.id.bucket_input_title)
     EditText mBucketInputTitle;
     @InjectView(R.id.bucket_input_deadline)
@@ -102,6 +116,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
                         progressDialog.dismiss();
                     }
                     Toast.makeText(BucketEditActivity.this, modString + "성공", Toast.LENGTH_LONG).show();
+                    Bucket bucket = (Bucket) msg.obj;
                     Intent intent = new Intent();
                     intent.putExtra(RESULT_EXTRA_BUCKET_ID, (Integer) bucket.getId());
                     intent.putExtra(RESULT_EXTRA_BUCKET, bucket);
@@ -138,11 +153,10 @@ public class BucketEditActivity extends BaseActionBarActivity {
         setContentView(R.layout.bucket_input_default);
         setResult(RESULT_CANCELED);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayUseLogoEnabled(false);
         actionBar.setDisplayShowHomeEnabled(false);//로고 버튼 보이는 것 설정
         actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_before);
         actionBar.setCustomView(R.layout.actionbar_bucket_edit);
         actionBar.setDisplayShowCustomEnabled(true);
 
@@ -196,65 +210,46 @@ public class BucketEditActivity extends BaseActionBarActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode){
-            case Code.ACT_ADD_BUCKET_OPTION_DDAY:
+        RequestCode requestCodeEnum = RequestCode.values()[requestCode];
+        switch (requestCodeEnum){
+            case ACT_ADD_BUCKET_OPTION_DDAY:
                 if(resultCode == RESULT_OK){
                     OptionDDay dDay = (OptionDDay) data.getSerializableExtra("option.result");
                     updateUiData(dDay);
                 }
                 break;
-            case Code.ACT_ADD_BUCKET_OPTION_DESCRIPTION:
+            case ACT_ADD_BUCKET_OPTION_DESCRIPTION:
                 if(resultCode == RESULT_OK){
                     OptionDescription description = (OptionDescription) data.getSerializableExtra("option.result");
                     updateUiData(description);
                 }
                 break;
-            case Code.ACT_ADD_BUCKET_OPTION_REPEAT:
+            case ACT_ADD_BUCKET_OPTION_REPEAT:
                 if(resultCode == RESULT_OK){
                     OptionRepeat repeat = (OptionRepeat) data.getSerializableExtra("option.result");
                     updateUiData(repeat);
                 }
                 break;
-            case Code.ACT_ADD_BUCKET_TAKE_CAMERA:
+            case ACT_ADD_BUCKET_TAKE_CAMERA:
                 if(resultCode == RESULT_OK){
-                    File f = new File(mImageCaptureUri.getPath());
-                    // 찍은 사진을 이미지뷰에 보여준다.
-                    if(data != null && data.getExtras() != null) {
-                        Bitmap bm = (Bitmap) data.getExtras().getParcelable("data");
-                        /*mIvCardImage.setVisibility(View.VISIBLE);
-                        mIvCardImage.setImageBitmap(bm);*/
-                    } else if( f.exists() ){
-                        /// http://stackoverflow.com/questions/9890757/android-camera-data-intent-returns-null
-                        /// EXTRA_OUTPUT을 선언해주면 해당 경로에 파일을 직접생성하고 썸네일을 리턴하지 않음
-                        /*mIvCardImage.setVisibility(View.VISIBLE);
-                        ImageUtil.setPic(mIvCardImage, mImageCaptureUri.getPath());*/
-                    }
-                    if(f.exists()){
-                        //f.delete();
-                        bucket.setFile(f);
-                    }
-                }
-                break;
-            case Code.ACT_ADD_BUCKET_TAKE_GALLERY:
-                if(resultCode == RESULT_OK){
-                    // 찍은 사진을 이미지뷰에 보여준다.
-                    if(data != null && data.getExtras() != null) {
-                        mImageCaptureUri = data.getData();
-                        File f = new File(mImageCaptureUri.getPath());
-                        if(f.exists()){
-                            //f.delete();
-                            bucket.setFile(f);
-                        }
-                    }
                     doCropPhoto();
                 }
                 break;
-            case Code.ACT_ADD_BUCKET_CROP_FROM_CAMERA:
-                if(data != null && data.getExtras() != null){
-                    final Bundle extras = data.getExtras();
-                    if(extras != null){
-                        Bitmap photo = extras.getParcelable("data");
-                        mBucketImg.setImageBitmap(photo);
+            case ACT_ADD_BUCKET_TAKE_GALLERY:
+                if(resultCode == RESULT_OK){
+                    if(data != null ) {
+                        mImageCaptureUri = data.getData();
+                        doCropPhoto();
+                    }
+                }
+                break;
+            case ACT_ADD_BUCKET_CROP_FROM_CAMERA:
+                if(data != null && data.getDataString() != null){
+                    String path = AndroidUtils.convertContentsToFileSchema(DreamApp.getInstance(), data.getDataString());
+                    File f = new File(path);
+                    if(f.exists() && f.isFile()){
+                        ImageLoader.getInstance().displayImage(data.getDataString(), mBucketImg);
+                        bucket.setFile(f);
                     }
                 }
                 break;
@@ -271,7 +266,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
         instance.setTime(dday.getDeadline());
         int deadlinYear = instance.get(Calendar.YEAR);
         int diff = (deadlinYear - year)/10;
-        diff += 10;
+        diff *= 10;
         if(diff > 0){
             bucket.setRange(String.valueOf(diff) );
         } else {
@@ -303,7 +298,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
         mBucketImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String items[] = {"카메라", "겔러리"};
+                final String items[] = {"카메라", "겔러리", "이미지삭제"};
                 AlertDialog.Builder ab = new AlertDialog.Builder(BucketEditActivity.this);
                 ab.setTitle("선택");
                 ab.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
@@ -317,6 +312,13 @@ public class BucketEditActivity extends BaseActionBarActivity {
                             case 1:
                                 doTakeAlbumAction();
                                 dialog.dismiss();
+                                break;
+                            case 2:
+                                bucket.setFile(null);
+                                bucket.setCvrImgId(null);
+                                bucket.setCvrImgUrl(null);
+                                dialog.dismiss();
+                                bindData();
                                 break;
                             default:
                                 break;
@@ -362,18 +364,13 @@ public class BucketEditActivity extends BaseActionBarActivity {
     private void bindData() {
         mBucketInputTitle.setText(bucket.getTitle());
 
-        /*ImageLoader.getInstance().displayImage(bucket.getCvrImgUrl(), mIvCardImage, new SimpleImageLoadingListener(){
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                super.onLoadingComplete(imageUri, view, loadedImage);
-                // 이미지가 없을 경우에는 imageview 자체를 안보여줌
-                if(loadedImage != null) {
-                    view.setVisibility(View.VISIBLE);
-                }else {
-                    view.setVisibility(View.GONE);
-                }
-            }
-        });*/
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisc(true)
+                .considerExifParams(true)
+                .showImageForEmptyUri(R.drawable.ic_bucket_empty)
+                .build();
+        ImageLoader.getInstance().displayImage(bucket.getCvrImgUrl(), mBucketImg, options);
 
         if (bucket.getDeadline() != null) {
             mBucketInputDeadline.setText( DateUtils.getDateString(bucket.getDeadline(), "yyyy. MM. dd"));
@@ -422,28 +419,6 @@ public class BucketEditActivity extends BaseActionBarActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        /*ViewTreeObserver viewTreeObserver = mIvCardImage.getViewTreeObserver();
-        if (viewTreeObserver.isAlive()) {
-            viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-                @Override
-                public void onGlobalLayout() {
-                    if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                        mIvCardImage.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                    }else{
-                        mIvCardImage.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    }
-                    mIvCardImage.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-                    bindData();
-
-                }
-            });
-        }*/
-    }
-
-    @Override
     public void onClick(View view) {
         super.onClick(view);
         if(view == mBucketInputDeadline){
@@ -462,8 +437,6 @@ public class BucketEditActivity extends BaseActionBarActivity {
     }
 
     private void doDelte() {
-
-
             AlertDialog.Builder alertConfirm = new AlertDialog.Builder(this);
             alertConfirm.setTitle("삭제확인");
             alertConfirm.setMessage("버킷을 삭제하시겠습니까?").setCancelable(false).setPositiveButton("예",
@@ -496,7 +469,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
         intent.setClass(this, BucketOptionActivity.class);
         OptionRepeat repeat = new OptionRepeat(RepeatType.fromCode(bucket.getRptType()), bucket.getRptCndt());
         intent.putExtra("option", repeat);
-        startActivityForResult(intent, Code.ACT_ADD_BUCKET_OPTION_REPEAT);
+        startActivityForResult(intent, RequestCode.ACT_ADD_BUCKET_OPTION_REPEAT.ordinal());
     }
 
     public void goOptionDescription() {
@@ -504,7 +477,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
         intent.setClass(this, BucketOptionActivity.class);
         OptionDescription description = new OptionDescription(bucket.getDescription());
         intent.putExtra("option", description);
-        startActivityForResult(intent, Code.ACT_ADD_BUCKET_OPTION_DESCRIPTION);
+        startActivityForResult(intent, RequestCode.ACT_ADD_BUCKET_OPTION_DESCRIPTION.ordinal());
     }
 
     public void goOptionDday() {
@@ -512,7 +485,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
         intent.setClass(this, BucketOptionActivity.class);
         OptionDDay dDay = new OptionDDay(bucket.getRange(), bucket.getDeadline());
         intent.putExtra("option", dDay);
-        startActivityForResult(intent, Code.ACT_ADD_BUCKET_OPTION_DDAY);
+        startActivityForResult(intent, RequestCode.ACT_ADD_BUCKET_OPTION_DDAY.ordinal());
     }
 
     TextWatcher textWatcherInput = new TextWatcher() {
@@ -544,6 +517,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
             mMenuSave.setVisibility(View.VISIBLE);
         }
     }
+
     private void doTakePhotoAction(){
         /*
         * 참고 해볼곳
@@ -560,29 +534,28 @@ public class BucketEditActivity extends BaseActionBarActivity {
             // Create the File where the photo should go
             File photoFile = null;
             try {
-                photoFile = ImageUtil.createImageFile();
-                mImageCaptureUri = Uri.fromFile(photoFile);
+                photoFile = ImageUtil.createImageFile(); // 겔러리에 저장될 파일을 생성해놓음
+                mImageCaptureUri = Uri.fromFile(photoFile); // 파일명 가져오기
             } catch (IOException ex) {
-                Log.e("dream", ex.getMessage());
+                Log.e(TAG, ex.getMessage());
+                Toast.makeText(this, "카메라 준비중 에러가 발생했습니다.", Toast.LENGTH_LONG).show();
             }
+
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
-                startActivityForResult(intent, Code.ACT_ADD_BUCKET_TAKE_CAMERA);
+                intent.putExtra("return-data", false);
+                startActivityForResult(intent, RequestCode.ACT_ADD_BUCKET_TAKE_CAMERA.ordinal());
             }
         }else{
             Toast.makeText(this, "카메라 앱을 실행할 수 없습니다.", Toast.LENGTH_LONG).show();
         }
-
-
     }
-
-
 
     private void doTakeAlbumAction(){
         Intent intent = new Intent( Intent.ACTION_PICK ) ;
         intent.setType(MediaStore.Images.Media.CONTENT_TYPE) ;
-        startActivityForResult( intent, Code.ACT_ADD_BUCKET_TAKE_GALLERY ) ;
+        startActivityForResult( intent, RequestCode.ACT_ADD_BUCKET_TAKE_GALLERY.ordinal() ) ;
     }
 
     private void doCropPhoto(){
@@ -597,8 +570,8 @@ public class BucketEditActivity extends BaseActionBarActivity {
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
         intent.putExtra("scale", true);
-        intent.putExtra("return-data", true);
-        startActivityForResult(intent, Code.ACT_ADD_BUCKET_CROP_FROM_CAMERA);
+        intent.putExtra("return-data", false);
+        startActivityForResult(intent, RequestCode.ACT_ADD_BUCKET_CROP_FROM_CAMERA.ordinal());
     }
 
     public class BucketAddTask extends CustomAsyncTask<Bucket, Void, ResponseBodyWrapped<Bucket>>{
@@ -626,7 +599,10 @@ public class BucketEditActivity extends BaseActionBarActivity {
                 Bucket bucket = bucketWrappedResponseBodyWrapped.getData();
                 if(bucket != null){
                     DataRepository.saveBucket(bucket);
-                    handler.sendEmptyMessage(SEND_DATA_END);
+                    // 파일 전송 후 해제 시킴
+                    BucketEditActivity.this.bucket.setFile(null);
+                    Message message = handler.obtainMessage(SEND_DATA_END, bucket);
+                    handler.sendMessage(message);
                 }
             }else {
                 handler.sendEmptyMessage(SEND_DATA_ERROR);

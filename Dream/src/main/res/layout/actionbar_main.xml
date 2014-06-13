@@ -33,11 +33,13 @@
     </LinearLayout>
 
     <TextView android:layout_width="wrap_content"
-              android:layout_height="48dp"
-              android:id="@+id/actionbar_main_today"
-              android:text="Today"
-              android:background="@null"
-              android:layout_alignParentRight="true" android:layout_marginRight="15dp" android:gravity="center"/>
+        android:layout_height="48dp"
+        android:id="@+id/actionbar_main_today"
+        android:text="Today"
+        android:background="@null"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="15dp"
+        android:gravity="center"/>
 
 
     <!--<LinearLayout-->

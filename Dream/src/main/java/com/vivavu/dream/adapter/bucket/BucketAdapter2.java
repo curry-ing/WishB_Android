@@ -36,6 +36,7 @@ import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.bucket.BucketGroup;
 import com.vivavu.dream.model.user.User;
 import com.vivavu.dream.repository.connector.UserInfoConnector;
+import com.vivavu.dream.util.ViewUnbindHelper;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -108,6 +109,7 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
+        ViewUnbindHelper.unbindReferences((View) object);
         container.removeView((View)object);
     }
 
@@ -131,11 +133,11 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
         this.mUserBirthday = DreamApp.getInstance().getUser().getBirthday();
 
         /* SET MAIN TITLE */
-        Typeface typeface = Typeface.createFromAsset(context.getAssets(), "NanumBarunGothicBold.mp3");
+        //Typeface typeface = Typeface.createFromAsset(context.getAssets(), "NanumBarunGothicBold.mp3");
 //        Shader textShader = new LinearGradient(2, 0, 4, 60, new int[]{Color.parseColor("#b4e391"),Color.parseColor("#61c419"),Color.parseColor("#b4e391")},
 //                new float[]{0, 3,1}, Shader.TileMode.MIRROR);
 //        holder.mBtnDecade.getPaint().setShader(textShader);
-        holder.mBtnDecade.setTypeface(typeface);
+        holder.mBtnDecade.setTypeface(BaseActionBarActivity.getNanumBarunGothicBoldFont());
         holder.mBtnDecade.setTextSize(22);
         holder.mBtnDecade.setTextColor(Color.WHITE);
         holder.mBtnDecade.getPaint().setAntiAlias(true);
@@ -192,7 +194,7 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
             }
         }
         if(mainImages.size()==0){
-            mainImages.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.uplogo));
+            mainImages.add(BitmapFactory.decodeResource(DreamApp.getInstance().getResources(), R.drawable.uplogo));
         } else {
             Collections.shuffle(mainImages);
         }
@@ -278,7 +280,7 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
                 int marking = (int) ((float) DreamApp.getInstance().getUser().getUserAge() / 100 * 360);
 
                 Typeface periodTypeFace = Typeface.createFromAsset(context.getAssets(), "Dense-Regular.mp3");
-                holder.mPeriod.setTypeface(periodTypeFace, Typeface.BOLD);
+                holder.mPeriod.setTypeface(BaseActionBarActivity.getDenseRegularFont(), Typeface.BOLD);
                 holder.mPeriod.setTextSize(25);
 //            holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, 0, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
                 holder.mMainProgress.setImageDrawable(new RoundedAvatarDrawable(null, marking, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
@@ -322,7 +324,7 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
     }
 
     private void createExampleDialog(final ButterknifeViewHolder holder, final int pos){
-        final InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        final InputMethodManager imm = (InputMethodManager) DreamApp.getInstance().getSystemService(Context.INPUT_METHOD_SERVICE);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         if (!(pos == 0)) {
             builder.setTitle("Wish B: 당신의 " + pos * 10 + "대");

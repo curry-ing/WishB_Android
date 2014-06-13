@@ -151,8 +151,9 @@ public class DataRepository {
 
     public static void deleteBucket(Bucket bucket)
     {
-        if (bucket == null && bucket.getId() != null) {
-            getDatabaseHelper().getBucketRuntimeDao().delete(bucket);
+        if (bucket != null && bucket.getId() != null) {
+            int row = getDatabaseHelper().getBucketRuntimeDao().delete(bucket);
+            Log.v("aaaa", String.valueOf(row));
         }
     }
 

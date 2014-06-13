@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
@@ -13,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.vivavu.dream.R;
+import com.vivavu.dream.activity.main.MainActivity;
 import com.vivavu.dream.adapter.bucket.BucketListAdapter;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.DreamApp;
@@ -29,6 +29,8 @@ import butterknife.InjectView;
  */
 public class BucketGroupViewActivity extends BaseActionBarActivity {
 
+    private static final int REQUEST_TIMELINE_VIEW = 0;
+    private static final int REQUEST_BUCKET_ADD  = 1;
     @InjectView(R.id.grid_bucket_list)
     GridView mGridBucketList;
     @InjectView(R.id.btn_add_bucket)
@@ -42,7 +44,8 @@ public class BucketGroupViewActivity extends BaseActionBarActivity {
     @InjectView(R.id.layout_sub_view_background)
     RelativeLayout mLayoutSubViewBackground;
 
-    /*private MainContentsFragment mainContentsFragment;*/
+    String groupRange;
+    BucketListAdapter bucketListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,13 +66,12 @@ public class BucketGroupViewActivity extends BaseActionBarActivity {
         ButterKnife.inject(this);
 
         Intent data = getIntent();
-        String groupRange = data.getStringExtra("groupRange");
+
+        groupRange = data.getStringExtra("groupRange");
 
         List<Bucket> bucketList = DataRepository.listBucketByRange(groupRange);
-        //List itemList = CircularViewTestActivity.getDummyData();
 
-
-        BucketListAdapter bucketListAdapter = new BucketListAdapter(DreamApp.getInstance(), bucketList);
+        bucketListAdapter = new BucketListAdapter(DreamApp.getInstance(), bucketList);
 
         if(null == groupRange){
             mTxtTitle.setText(DreamApp.getInstance().getUser().getTitle_life());
@@ -102,9 +104,9 @@ public class BucketGroupViewActivity extends BaseActionBarActivity {
         }
 
         mGridBucketList.setAdapter(bucketListAdapter);
-        mGridBucketList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        bucketListAdapter.setOnBucketImageViewClickListener(new BucketListAdapter.OnBucketImageViewClick() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(View view, int position, long id) {
                 goTimelineActivity((int) id);
             }
         });
@@ -122,12 +124,54 @@ public class BucketGroupViewActivity extends BaseActionBarActivity {
                 Toast.makeText(BucketGroupViewActivity.this, "투데이", Toast.LENGTH_SHORT).show();
             }
         });
+
+        mBtnAddBucket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goAddBucket();
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_TIMELINE_VIEW){
+            if(resultCode == RESULT_USER_DATA_DELETED){
+                List<Bucket> bucketList = DataRepository.listBucketByRange(groupRange);
+                bucketListAdapter.setList(bucketList);
+                bucketListAdapter.notifyDataSetChanged();
+            } else if(resultCode == RESULT_USER_DATA_UPDATED){
+                List<Bucket> bucketList = DataRepository.listBucketByRange(groupRange);
+                bucketListAdapter.setList(bucketList);
+                bucketListAdapter.notifyDataSetChanged();
+            }
+        }
+
+        if(requestCode == REQUEST_BUCKET_ADD){
+            if(resultCode == RESULT_OK){
+                List<Bucket> bucketList = DataRepository.listBucketByRange(groupRange);
+                bucketListAdapter.setList(bucketList);
+                bucketListAdapter.notifyDataSetChanged();
+            }
+        }
     }
 
     public void goTimelineActivity(int bucketId){
         Intent intent = new Intent();
         intent.setClass(this, TimelineActivity.class);
         intent.putExtra(TimelineActivity.extraKey, bucketId);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_TIMELINE_VIEW);
+    }
+
+    private void goAddBucket() {
+        Intent intent;
+        intent = new Intent();
+        intent.setClass(this, BucketEditActivity.class);
+        if(groupRange != null) {
+            intent.putExtra(MainActivity.EXTRA_BUCKET_DEFAULT_RANGE, Integer.valueOf(groupRange));
+        }
+
+        startActivityForResult(intent, REQUEST_BUCKET_ADD);
     }
 }

@@ -6,11 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.bucket.TimelineActivity;
@@ -20,6 +18,7 @@ import com.vivavu.dream.model.bucket.Today;
 import com.vivavu.dream.model.bucket.timeline.Post;
 import com.vivavu.dream.repository.DataRepository;
 import com.vivavu.dream.util.DateUtils;
+import com.vivavu.dream.view.ShadowImageView;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -80,9 +79,10 @@ public class TodayDailyItemAdapter extends BaseAdapter implements View.OnClickLi
 
     public void init(ButterknifeViewHolder holder, final Today today) {
 
-        holder.mBookTitle.setText(today.getTitle());
-        holder.mBookDudate.setText(DateUtils.getDateString(today.getDeadline(), "yyyy-MM-dd"));
-        holder.mBtnBookWrite.setOnClickListener(new View.OnClickListener() {
+        holder.mBucketItemTitle.setText(today.getTitle());
+        holder.mBucketItemDeadline.setText(DateUtils.getDateString(today.getDeadline(), "yyyy.MM.dd"));
+
+        holder.mBucketItemImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent;
@@ -96,16 +96,17 @@ public class TodayDailyItemAdapter extends BaseAdapter implements View.OnClickLi
                 context.startActivity(intent);
             }
         });
-        holder.mBtnBookSetting.setOnClickListener(this);
-
-        holder.mBookCover.setOnClickListener(this);
-        holder.mBookTitle.setOnClickListener(this);
-        holder.mBookDudate.setOnClickListener(this);
-        holder.mBookStatus.setOnClickListener(this);
 
         // Finally load the image asynchronously into the ImageView, this also takes care of
         // setting a placeholder image while the background thread runs
-        ImageLoader.getInstance().displayImage(today.getCvrImgUrl(), holder.mBookCoverImage);
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisc(true)
+                .considerExifParams(true)
+                .showImageOnFail(R.drawable.ic_bucket_empty)
+                .showImageForEmptyUri(R.drawable.ic_bucket_empty)
+                .build();
+        ImageLoader.getInstance().displayImage(today.getCvrImgUrl(), holder.mBucketItemImg, options    );
     }
 
     @Override
@@ -114,26 +115,18 @@ public class TodayDailyItemAdapter extends BaseAdapter implements View.OnClickLi
     }
 
     /**
- * This class contains all butterknife-injected Views & Layouts from layout file 'null'
- * for easy to all layout elements.
- *
- * @author Android Butter Zelezny, plugin for IntelliJ IDEA/Android Studio by Inmite (www.inmite.eu)
- */
-    class ButterknifeViewHolder {
-        @InjectView(R.id.book_cover_image)
-        ImageView mBookCoverImage;
-        @InjectView(R.id.btn_book_write)
-        Button mBtnBookWrite;
-        @InjectView(R.id.btn_book_setting)
-        Button mBtnBookSetting;
-        @InjectView(R.id.book_title)
-        TextView mBookTitle;
-        @InjectView(R.id.book_dudate)
-        TextView mBookDudate;
-        @InjectView(R.id.book_status)
-        TextView mBookStatus;
-        @InjectView(R.id.book_cover)
-        LinearLayout mBookCover;
+     * This class contains all butterknife-injected Views & Layouts from layout file 'null'
+     * for easy to all layout elements.
+     *
+     * @author Android Butter Zelezny, plugin for IntelliJ IDEA/Android Studio by Inmite (www.inmite.eu)
+     */
+    static class ButterknifeViewHolder {
+        @InjectView(R.id.bucket_item_img)
+        ShadowImageView mBucketItemImg;
+        @InjectView(R.id.bucket_item_title)
+        TextView mBucketItemTitle;
+        @InjectView(R.id.bucket_item_deadline)
+        TextView mBucketItemDeadline;
 
         ButterknifeViewHolder(View view) {
             ButterKnife.inject(this, view);

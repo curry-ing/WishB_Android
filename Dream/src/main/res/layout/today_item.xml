@@ -1,23 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <Button
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:id="@+id/btn_today_complete"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:baselineAligned="false"
+    android:paddingLeft="@dimen/sub_view_item_padding"
+    android:paddingRight="@dimen/sub_view_item_padding"
+    android:paddingTop="@dimen/sub_view_item_padding"
+    android:paddingBottom="@dimen/sub_view_item_padding">
+
+    <com.vivavu.dream.view.ShadowImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:id="@+id/bucket_item_img"
+        android:padding="5dp"
+        app:progressBarWidth="2dp"
+        app:progressBarColor="@color/mint"
+        app:isShadow="true"
+        app:shadowColor="@color/darkgray"
+        app:shadowDx="1.0"
+        app:shadowDy="2.0"
+        app:shadowRadius="1.0"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bucket_item_title"
+        android:gravity="center_horizontal"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:textSize="12.265sp"
+        android:textColor="@color/white"
+        android:shadowColor="#BF000000"
+        android:shadowDx="2.0"
+        android:shadowDy="2.0"
+        android:shadowRadius="2.0"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bucket_item_deadline"
+        android:gravity="center_horizontal"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:textSize="12.265sp"
+        android:textColor="@color/white"
+        android:shadowColor="#BF000000"
+        android:shadowDx="2.0"
+        android:shadowDy="2.0"
+        android:shadowRadius="2.0"
         />
 
-    <include
-        android:layout_width="@dimen/book_width_dp"
-        android:layout_height="@dimen/book_height_dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        layout="@layout/shelf_item"
-        android:layout_alignParentTop="true"
-        />
-
-</RelativeLayout>
+</LinearLayout>

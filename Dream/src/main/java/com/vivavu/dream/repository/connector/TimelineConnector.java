@@ -1,6 +1,5 @@
 package com.vivavu.dream.repository.connector;
 
-import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -29,7 +28,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Type;
 import java.util.Date;
 
@@ -113,28 +111,12 @@ public class TimelineConnector extends Connector<Post> {
         RestTemplate restTemplate = RestTemplateFactory.getInstance();
         HttpHeaders requestHeaders = getBasicAuthHeader(DreamApp.getInstance());
 
-        final MultiValueMap<String, Object> requestBucket = new LinkedMultiValueMap<String, Object>();
+        final MultiValueMap<String, Object> requestBucket = convertPostToMap(data);
 
         if(data != null && data.getPhoto() != null) {
             requestHeaders.setContentType(MediaType.MULTIPART_FORM_DATA);
         }else {
             requestHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        }
-
-        if(data.getText() != null){
-            requestBucket.set("text", data.getText());
-        }
-        if(data.getPhoto() != null && data.getPhoto().isFile()){
-            Bitmap bm = ImageUtil.getBitmap(data.getPhoto().getAbsolutePath(), 1024, 1024);
-            ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-            bm.compress(Bitmap.CompressFormat.JPEG, 70, byteArray );
-            ByteArrayResource bar = new ByteArrayResource(byteArray.toByteArray()){
-                @Override
-                public String getFilename() throws IllegalStateException {
-                    return data.getPhoto().getName();
-                }
-            };
-            requestBucket.add("photo", bar);
         }
 
         HttpEntity request = new HttpEntity<MultiValueMap<String, Object>>(requestBucket, requestHeaders);
@@ -162,28 +144,12 @@ public class TimelineConnector extends Connector<Post> {
         RestTemplate restTemplate = RestTemplateFactory.getInstance();
         HttpHeaders requestHeaders = getBasicAuthHeader(DreamApp.getInstance());
 
-        final MultiValueMap<String, Object> requestBucket = new LinkedMultiValueMap<String, Object>();
+        final MultiValueMap<String, Object> requestBucket = convertPostToMap(data);
 
         if(data != null && data.getPhoto() != null) {
             requestHeaders.setContentType(MediaType.MULTIPART_FORM_DATA);
         }else {
             requestHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        }
-
-        if(data.getText() != null){
-            requestBucket.set("text", data.getText());
-        }
-        if(data.getPhoto() != null && data.getPhoto().isFile()){
-            Bitmap bm = ImageUtil.getBitmap(data.getPhoto().getAbsolutePath(), 1024, 1024);
-            ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-            bm.compress(Bitmap.CompressFormat.JPEG, 70, byteArray );
-            ByteArrayResource bar = new ByteArrayResource(byteArray.toByteArray()){
-                @Override
-                public String getFilename() throws IllegalStateException {
-                    return data.getPhoto().getName();
-                }
-            };
-            requestBucket.add("photo", bar);
         }
 
         HttpEntity request = new HttpEntity<MultiValueMap<String, Object>>(requestBucket, requestHeaders);
@@ -252,5 +218,22 @@ public class TimelineConnector extends Connector<Post> {
         }
         return result;
 
+    }
+
+    public MultiValueMap convertPostToMap(final Post post){
+        MultiValueMap<String, Object> requestPost = new LinkedMultiValueMap<String, Object>();
+
+        if(post.getText() != null){
+            requestPost.set("text", post.getText());
+        }
+        if(post.getPhoto() != null && post.getPhoto().isFile()){
+            ByteArrayResource byteArrayResource = ImageUtil.convertImageFileToByteArrayResource(post.getPhoto(), 1024, 1024, 70);
+            requestPost.add("photo", byteArrayResource);
+        }
+        if(post.getImgUrl() == null){
+            requestPost.set("img_id", "");
+        }
+
+        return requestPost;
     }
 }

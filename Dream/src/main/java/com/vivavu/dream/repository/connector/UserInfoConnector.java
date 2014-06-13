@@ -14,9 +14,11 @@ import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.SecureToken;
 import com.vivavu.dream.model.user.User;
 import com.vivavu.dream.repository.Connector;
+import com.vivavu.dream.util.ImageUtil;
 import com.vivavu.dream.util.JsonFactory;
 import com.vivavu.dream.util.RestTemplateUtils;
 
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -49,6 +51,13 @@ public class UserInfoConnector extends Connector<User> {
         final MultiValueMap<String, Object> requestUser = convertUserToMap(user);
 
         requestHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        if(user != null && user.getPhoto() != null) {
+            requestHeaders.setContentType(MediaType.MULTIPART_FORM_DATA);
+        }else {
+            requestHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        }
+
         HttpEntity request = new HttpEntity<MultiValueMap<String, Object>>(requestUser, requestHeaders);
 
         ResponseEntity<String> resultString = null;
@@ -245,7 +254,13 @@ public class UserInfoConnector extends Connector<User> {
         if (user.getTitle_60() != null) {
             requestUser.add("title_60", user.getTitle_60());
         }
-
+        if (user.getProfileImgUrl() == null) {
+            requestUser.add("profile_img_id", "");
+        }
+        if(user.getPhoto() != null && user.getPhoto().exists()){
+            ByteArrayResource byteArrayResource = ImageUtil.convertImageFileToByteArrayResource(user.getPhoto(), 1024, 1024, 70);
+            requestUser.add("photo", byteArrayResource);
+        }
 
         return requestUser;
     }

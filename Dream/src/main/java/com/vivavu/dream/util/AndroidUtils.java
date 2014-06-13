@@ -8,9 +8,12 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
@@ -242,7 +245,7 @@ public class AndroidUtils {
     public static void recycleImage(View view){
         if(view.getBackground() != null){
             BitmapDrawable drawable = (BitmapDrawable) view.getBackground();
-            view.setBackground(null);
+            view.setBackgroundResource(0);
             Bitmap bitmap = drawable.getBitmap();
             bitmap.recycle();
         }
@@ -259,5 +262,13 @@ public class AndroidUtils {
             }
         }
         return null;
+    }
+
+    public static String convertContentsToFileSchema(Context context, String contentSchema){
+        Cursor c = context.getContentResolver().query(Uri.parse(contentSchema), null, null, null, null);
+        c.moveToNext();
+        String path = c.getString(c.getColumnIndex(MediaStore.MediaColumns.DATA));
+
+        return path;
     }
 }

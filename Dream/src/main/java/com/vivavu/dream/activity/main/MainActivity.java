@@ -8,6 +8,10 @@ import android.support.v7.app.ActionBar;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.*;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -102,13 +106,6 @@ public class MainActivity extends BaseActionBarActivity {
             }
         });
 
-//        SpannableString text = new SpannableString("logos");
-//        text.setSpan(new ForegroundColorSpan(R.color.skyblue),0,1,0);
-//        text.setSpan(new ForegroundColorSpan(R.color.white),1,2,0);
-//        text.setSpan(new ForegroundColorSpan(R.color.lightgreen),2,3,0);
-//        text.setSpan(new ForegroundColorSpan(R.color.lightred),3,4,0);
-
-//        mActionbarMainTitle.setText(text, TextView.BufferType.SPANNABLE);
         mActionbarMainTitle.setText("Wish B.");
         mActionbarMainTitle.setTypeface(getNanumBarunGothicBoldFont());
         mActionbarMainTitle.setTextSize(20);
@@ -118,7 +115,13 @@ public class MainActivity extends BaseActionBarActivity {
         mActionbarMainToday.setTextColor(Color.WHITE);
         mActionbarMainToday.setTextSize(14);
 
-
+        mActionbarMainToday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, TodayActivity.class);
+                startActivity(intent);
+            }
+        });
 //        alarm = new AlarmManagerBroadcastReceiver();
 //        alarm.SetAlarm(context, 1, true, 23);
 //        alarm.SetAlarm(context, 2, true, 11);
@@ -178,7 +181,7 @@ public class MainActivity extends BaseActionBarActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+        super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case Code.ACT_ADD_BUCKET:
                 int bucketId = data.getIntExtra(BucketEditActivity.RESULT_EXTRA_BUCKET_ID, -1);

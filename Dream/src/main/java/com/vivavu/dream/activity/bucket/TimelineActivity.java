@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBar;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -19,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.bucket.timeline.TimelineCalendarActivity;
@@ -37,7 +37,6 @@ import com.vivavu.dream.model.bucket.timeline.TimelineMetaInfo;
 import com.vivavu.dream.repository.BucketConnector;
 import com.vivavu.dream.repository.DataRepository;
 import com.vivavu.dream.repository.connector.TimelineConnector;
-import com.vivavu.dream.util.AndroidUtils;
 import com.vivavu.dream.util.DateUtils;
 import com.vivavu.dream.view.ShadowImageView;
 
@@ -235,10 +234,16 @@ public class TimelineActivity extends BaseActionBarActivity {
         }
 
         int progress = DateUtils.getProgress(start, end);
-        Log.v(TAG, String.valueOf( AndroidUtils.getSpFromPx(65)));
         ImageLoader.getInstance().displayImage(bucket.getCvrImgUrl(), mImgBucket);
         mImgBucket.setPercent(progress);
 
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisc(true)
+                .considerExifParams(true)
+                .showImageForEmptyUri(R.drawable.ic_bucket_empty)
+                .build();
+        ImageLoader.getInstance().displayImage(bucket.getCvrImgUrl(), mImgBucket, options);
 
         mTxtBucketDescription.setText(bucket.getDescription());
         OptionRepeat repeat = new OptionRepeat(RepeatType.fromCode(bucket.getRptType()), bucket.getRptCndt());
@@ -354,9 +359,10 @@ public class TimelineActivity extends BaseActionBarActivity {
             case REQUEST_MOD_BUCKET:
                 if(resultCode == RESULT_OK) {
                     Bucket result = (Bucket) data.getSerializableExtra(BucketEditActivity.RESULT_EXTRA_BUCKET);
+                    setResult(RESULT_USER_DATA_UPDATED);
                     bindData(result);
-                } else if (requestCode == RESULT_USER_DATA_DELETED) {
-                    setResult(RESULT_OK);
+                } else if (resultCode == RESULT_USER_DATA_DELETED) {
+                    setResult(RESULT_USER_DATA_DELETED);
                     finish();
                 }
                 break;

@@ -41,6 +41,7 @@ public class DreamApp extends Application {
                 .showImageOnFail(R.drawable.no_image)
                 .cacheInMemory(true)
                 .cacheOnDisc(true)
+                .considerExifParams(true)
                 .build();
 
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())

@@ -2,25 +2,30 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    >
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/btn_date"
         android:text="@string/actionbar_main_today"
+        android:background="@drawable/bg_timeline_view_timestamp"
+        android:textColor="@color/default_text_color"
+        android:layout_marginTop="5dp"
         />
 
     <GridView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/today_contents"
-        android:gravity="center"
         android:layout_gravity="center"
-        android:columnWidth="@dimen/book_width_dp"
-        android:numColumns="auto_fit"
-        android:stretchMode="spacingWidthUniform"
+        android:gravity="center"
+        android:numColumns="2"
         android:horizontalSpacing="10dp"
         android:verticalSpacing="10dp"
+        android:layout_marginTop="10dp"
+        android:clickable="false"
         >
 
     </GridView>

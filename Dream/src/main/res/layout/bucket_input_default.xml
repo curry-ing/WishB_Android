@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
@@ -21,17 +22,22 @@
             android:paddingLeft="@dimen/layout_bucket_option_padding_left"
             android:paddingRight="@dimen/layout_bucket_option_padding_right"
             >
-    <com.vivavu.dream.view.TextImageView
+    <com.vivavu.dream.view.ShadowImageView
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:id="@+id/bucket_img"
-        android:background="@drawable/sub_view_default_circle"
         android:clickable="true"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="30dp"
         android:padding="10dp"
+        app:progressBarWidth="2dp"
+        app:isShadow="true"
+        app:shadowColor="@color/darkgray"
+        app:shadowDx="1.0"
+        app:shadowDy="2.0"
+        app:shadowRadius="1.0"
         >
-    </com.vivavu.dream.view.TextImageView>
+    </com.vivavu.dream.view.ShadowImageView>
 
     <EditText
         android:layout_width="wrap_content"

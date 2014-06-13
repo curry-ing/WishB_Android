@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vivavu.dream.R;
 import com.vivavu.dream.model.bucket.Bucket;
@@ -27,6 +28,7 @@ public class BucketListAdapter extends BaseAdapter {
     private List<Bucket> list;
     private Context mContext;
     private int progressBarColor = Color.WHITE;
+    private OnBucketImageViewClick onBucketImageViewClickListener;
 
     public BucketListAdapter(Context mContext, List list) {
         this.mContext = mContext;
@@ -61,8 +63,8 @@ public class BucketListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        Bucket item = getItem(position);
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        final Bucket item = getItem(position);
         if(item != null) {
 
             ButterknifeViewHolder holder = null;
@@ -88,7 +90,24 @@ public class BucketListAdapter extends BaseAdapter {
             holder.mBucketItemDeadline.setText(DateUtils.getDateString(item.getDeadline(), "yyyy.MM.dd"));
             holder.mBucketItemImg.setPercent(progress);
             holder.mBucketItemImg.setProgressBarColor(progressBarColor);
-            ImageLoader.getInstance().displayImage(item.getCvrImgUrl(), holder.mBucketItemImg);
+
+            DisplayImageOptions options = new DisplayImageOptions.Builder()
+                    .cacheInMemory(true)
+                    .cacheOnDisc(true)
+                    .considerExifParams(true)
+                    .showImageForEmptyUri(R.drawable.ic_bucket_empty)
+                    .build();
+
+            ImageLoader.getInstance().displayImage(item.getCvrImgUrl(), holder.mBucketItemImg, options);
+
+            if(onBucketImageViewClickListener != null) {
+                holder.mBucketItemImg.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onBucketImageViewClickListener.onItemClick(v, position, item.getId() );
+                    }
+                });
+            }
             return convertView;
 
         }
@@ -101,6 +120,26 @@ public class BucketListAdapter extends BaseAdapter {
 
     public void setProgressBarColor(int progressBarColor) {
         this.progressBarColor = progressBarColor;
+    }
+
+    public List<Bucket> getList() {
+        return list;
+    }
+
+    public void setList(List<Bucket> list) {
+        this.list = list;
+    }
+
+    public interface OnBucketImageViewClick {
+        public void onItemClick(View view, int position, long id);
+    }
+
+    public OnBucketImageViewClick getOnBucketImageViewClickListener() {
+        return onBucketImageViewClickListener;
+    }
+
+    public void setOnBucketImageViewClickListener(OnBucketImageViewClick onBucketImageViewClickListener) {
+        this.onBucketImageViewClickListener = onBucketImageViewClickListener;
     }
 
     /**
