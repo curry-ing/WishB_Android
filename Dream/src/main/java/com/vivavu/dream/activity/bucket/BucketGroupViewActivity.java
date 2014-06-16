@@ -72,36 +72,44 @@ public class BucketGroupViewActivity extends BaseActionBarActivity {
         List<Bucket> bucketList = DataRepository.listBucketByRange(groupRange);
 
         bucketListAdapter = new BucketListAdapter(DreamApp.getInstance(), bucketList);
-
+        String title = null;
         if(null == groupRange){
-            mTxtTitle.setText(DreamApp.getInstance().getUser().getTitle_life());
+            title = DreamApp.getInstance().getUser().getTitle_life();
             mLayoutSubViewBackground.setBackgroundResource(R.drawable.mainview_bg00);
             bucketListAdapter.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_lt));
         } else if("10".equals(groupRange)){
-            mTxtTitle.setText(DreamApp.getInstance().getUser().getTitle_10());
+            title = DreamApp.getInstance().getUser().getTitle_10();
             mLayoutSubViewBackground.setBackgroundResource(R.drawable.mainview_bg10);
             bucketListAdapter.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_10));
         }else if("20".equals(groupRange)){
-            mTxtTitle.setText(DreamApp.getInstance().getUser().getTitle_20());
+            title = DreamApp.getInstance().getUser().getTitle_20();
             mLayoutSubViewBackground.setBackgroundResource(R.drawable.mainview_bg20);
             bucketListAdapter.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_20));
         }else if("30".equals(groupRange)){
-            mTxtTitle.setText(DreamApp.getInstance().getUser().getTitle_30());
+            title = DreamApp.getInstance().getUser().getTitle_30();
             mLayoutSubViewBackground.setBackgroundResource(R.drawable.mainview_bg30);
             bucketListAdapter.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_30));
         }else if("40".equals(groupRange)){
-            mTxtTitle.setText(DreamApp.getInstance().getUser().getTitle_40());
+            title = DreamApp.getInstance().getUser().getTitle_40();
             mLayoutSubViewBackground.setBackgroundResource(R.drawable.mainview_bg40);
             bucketListAdapter.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_40));
         }else if("50".equals(groupRange)){
-            mTxtTitle.setText(DreamApp.getInstance().getUser().getTitle_50());
+            title = DreamApp.getInstance().getUser().getTitle_50();
             mLayoutSubViewBackground.setBackgroundResource(R.drawable.mainview_bg50);
             bucketListAdapter.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_50));
         }else if("60".equals(groupRange)){
-            mTxtTitle.setText(DreamApp.getInstance().getUser().getTitle_60());
+            title = DreamApp.getInstance().getUser().getTitle_60();
             mLayoutSubViewBackground.setBackgroundResource(R.drawable.mainview_bg60);
             bucketListAdapter.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_60));
         }
+
+        if(title == null && groupRange != null){
+            title = groupRange + "대";
+        } else if(title == null && groupRange == null){
+            title = "In My Life";
+        }
+
+        mTxtTitle.setText(title);
 
         mGridBucketList.setAdapter(bucketListAdapter);
         bucketListAdapter.setOnBucketImageViewClickListener(new BucketListAdapter.OnBucketImageViewClick() {

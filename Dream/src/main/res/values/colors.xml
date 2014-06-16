@@ -36,6 +36,7 @@
 
     <color name="action_bar">#00FFFFFF</color>
     <color name="action_bar_white_with_alpha_80">#70FFFFFF</color>
+    <color name="action_bar_main_view_background">#90000000</color>
     <color name="disable">#E0FFFFFF</color>
     <color name="textBorder1">#60000000</color>
 </resources>

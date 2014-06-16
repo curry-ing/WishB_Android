@@ -27,7 +27,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.main.MainActivity;
 import com.vivavu.dream.common.BaseActionBarActivity;
-import com.vivavu.dream.common.Code;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.common.enums.RepeatType;
 import com.vivavu.dream.fragment.bucket.option.description.DescriptionViewFragment;
@@ -168,16 +167,11 @@ public class BucketEditActivity extends BaseActionBarActivity {
         int bucketId = data.getIntExtra(RESULT_EXTRA_BUCKET_ID, -1);
         int range = data.getIntExtra(MainActivity.EXTRA_BUCKET_DEFAULT_RANGE, -1);
         bucket = DataRepository.getBucket(bucketId);
-        int code;
-        if (bucketId > 0) {
 
-            code = Code.ACT_MOD_BUCKET_DEFAULT_CARD;
+        if (bucketId > 0) {
             modString = "수정";
-            actionBar.setTitle("Mod Bucket");
         } else {
-            code = Code.ACT_ADD_BUCKET_DEFAULT_CARD;
             modString = "등록";
-            actionBar.setTitle("Add Bucket");
         }
 
         ButterKnife.inject(this);
@@ -265,7 +259,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
         int year = instance.get(Calendar.YEAR);
         instance.setTime(dday.getDeadline());
         int deadlinYear = instance.get(Calendar.YEAR);
-        int diff = (deadlinYear - year)/10;
+        int diff = (deadlinYear - year + 1 )/10;
         diff *= 10;
         if(diff > 0){
             bucket.setRange(String.valueOf(diff) );
