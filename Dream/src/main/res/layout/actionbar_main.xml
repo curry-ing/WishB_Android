@@ -1,47 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_vertical"
     android:background="@color/action_bar_main_view_background"
     >
     <ImageView android:layout_width="wrap_content"
-               android:layout_height="48dp"
-               android:id="@+id/profile"
-               android:text="today"
-               android:layout_alignParentLeft="true"
-               android:src="@drawable/mainview_profile"
-               android:layout_marginLeft="15dp"/>
-
-    <LinearLayout android:layout_width="match_parent"
-                  android:layout_height="48dp"
-                  android:layout_weight="1"
-                  android:gravity="center">
-        <TextView android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:id="@+id/actionbar_main_title"
-                  android:text="logo"
-                  android:gravity="center"
-            android:layout_marginTop="2dp"
-
-            />
-        <Button android:layout_width="1dp"
-                android:layout_height="1dp"
-                android:text="@string/actionbar_main_notice"
-                android:id="@+id/actionbar_main_notice"
-                android:clickable="true"
-                android:visibility="gone"/>
-
-    </LinearLayout>
+        android:layout_height="match_parent"
+        android:id="@+id/profile"
+        android:text="today"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/mainview_profile"
+        android:layout_marginLeft="15dp"/>
 
     <TextView android:layout_width="wrap_content"
-        android:layout_height="48dp"
+        android:layout_height="match_parent"
+        android:id="@+id/actionbar_main_title"
+        android:text="logo"
+        android:gravity="center"
+        android:layout_toRightOf="@+id/profile"
+        android:layout_toLeftOf="@+id/actionbar_main_today"
+        android:layout_centerVertical="true"
+
+        style="@style/TextBucketTitleStyle"
+    />
+    <Button android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/actionbar_main_today"
         android:text="Today"
         android:background="@null"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="15dp"
-        android:gravity="center"/>
+        style="@style/TextActionbarRightButton"
+        />
 
 </RelativeLayout>

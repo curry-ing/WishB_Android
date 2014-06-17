@@ -109,6 +109,8 @@ public class TimelineItemViewActivity extends BaseActionBarActivity{
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("진행중");
 
+        mTxtTitle.setTypeface(getNanumBarunGothicBoldFont());
+
         Intent data = getIntent();
         Bucket bucket = (Bucket) data.getSerializableExtra(TimelineActivity.extraKeyBucket);
 

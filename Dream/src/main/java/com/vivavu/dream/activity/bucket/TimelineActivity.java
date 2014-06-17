@@ -171,6 +171,7 @@ public class TimelineActivity extends BaseActionBarActivity {
 
         ButterKnife.inject(this);
 
+        mTxtBucketTitle.setTypeface(getNanumBarunGothicBoldFont());
         mTxtBucketDeadline.setTypeface(getDenseRegularFont());
         mTxtBucketRemain.setTypeface(getDenseRegularFont());
         mTxtBucketDescription.setTypeface(getNanumBarunGothicFont());

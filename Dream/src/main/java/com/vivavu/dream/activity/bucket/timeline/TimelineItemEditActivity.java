@@ -84,7 +84,7 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
     @InjectView(R.id.txt_title)
     TextView mTxtTitle;
     @InjectView(R.id.menu_save)
-    ImageButton mMenuSave;
+    Button mMenuSave;
     @InjectView(R.id.txt_post_time)
     TextView mTxtPostTime;
 
@@ -147,6 +147,7 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
             post.setBucketId(bucket.getId());
         }
 
+        mTxtTitle.setTypeface(getNanumBarunGothicBoldFont());
         mTxtPostText.setTypeface(getNanumBarunGothicFont());
 
         bindData(bucket);

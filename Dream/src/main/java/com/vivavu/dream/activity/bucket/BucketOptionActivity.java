@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
@@ -37,7 +38,7 @@ public class BucketOptionActivity extends BaseActionBarActivity {
     @InjectView(R.id.menu_previous)
     ImageButton mMenuPrevious;
     @InjectView(R.id.menu_save)
-    ImageButton mMenuSave;
+    Button mMenuSave;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

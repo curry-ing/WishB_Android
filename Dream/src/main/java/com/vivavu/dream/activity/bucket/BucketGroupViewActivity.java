@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -38,7 +39,7 @@ public class BucketGroupViewActivity extends BaseActionBarActivity {
     @InjectView(R.id.txt_title)
     TextView mTxtTitle;
     @InjectView(R.id.menu_previous)
-    Button mMenuPrevious;
+    ImageButton mMenuPrevious;
     @InjectView(R.id.btn_today)
     Button mBtnToday;
     @InjectView(R.id.layout_sub_view_background)
@@ -142,10 +143,7 @@ public class BucketGroupViewActivity extends BaseActionBarActivity {
         });
 
         mTxtTitle.setTypeface(getNanumBarunGothicBoldFont());
-        mTxtTitle.setTextSize(20);
-
         mBtnToday.setTypeface(getNanumBarunGothicBoldFont());
-        mBtnToday.setTextSize(14);
     }
 
     @Override

@@ -28,8 +28,6 @@ public class TodayActivity extends BaseActionBarActivity {
     Button mBtnAddBucket;
     @InjectView(R.id.actionbar_main_title)
     TextView mActionbarMainTitle;
-    @InjectView(R.id.actionbar_main_notice)
-    Button mActionbarMainNotice;
     @InjectView(R.id.actionbar_main_today)
     TextView mActionbarMainToday;
 
@@ -63,7 +61,7 @@ public class TodayActivity extends BaseActionBarActivity {
         //mPopupNotice.setAnimationStyle(R.style.AnimationPopup);
         mBtnAddBucket.setOnClickListener(this);
         mBtnAddBucket.setVisibility(View.GONE);
-        mActionbarMainNotice.setOnClickListener(new View.OnClickListener() {
+        /*mActionbarMainNotice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -75,7 +73,7 @@ public class TodayActivity extends BaseActionBarActivity {
                     v.setSelected(false);
                 }
             }
-        });
+        });*/
 
         mActionbarMainTitle.setText("Wish Ballon");
         mActionbarMainTitle.setTypeface(getNanumBarunGothicBoldFont());

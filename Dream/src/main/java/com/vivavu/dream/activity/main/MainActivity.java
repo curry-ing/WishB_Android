@@ -1,20 +1,20 @@
 package com.vivavu.dream.activity.main;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
-import android.view.*;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
@@ -40,8 +40,6 @@ public class MainActivity extends BaseActionBarActivity {
     Button mBtnAddBucket;
     @InjectView(R.id.actionbar_main_title)
     TextView mActionbarMainTitle;
-    @InjectView(R.id.actionbar_main_notice)
-    Button mActionbarMainNotice;
     @InjectView(R.id.actionbar_main_today)
     TextView mActionbarMainToday;
 
@@ -95,7 +93,7 @@ public class MainActivity extends BaseActionBarActivity {
         mPopupNotice = AndroidUtils.makePopupWindow(noticeView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         //mPopupNotice.setAnimationStyle(R.style.AnimationPopup);
         mBtnAddBucket.setOnClickListener(this);
-        mActionbarMainNotice.setOnClickListener(new View.OnClickListener() {
+        /*mActionbarMainNotice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -107,16 +105,11 @@ public class MainActivity extends BaseActionBarActivity {
                     v.setSelected(false);
                 }
             }
-        });
+        });*/
 
         mActionbarMainTitle.setText("Wish B.");
         mActionbarMainTitle.setTypeface(getNanumBarunGothicBoldFont());
-        mActionbarMainTitle.setTextSize(20);
-        mActionbarMainTitle.setTextColor(Color.WHITE);
-
         mActionbarMainToday.setTypeface(getNanumBarunGothicBoldFont());
-        mActionbarMainToday.setTextColor(Color.WHITE);
-        mActionbarMainToday.setTextSize(14);
 
         mActionbarMainToday.setOnClickListener(new View.OnClickListener() {
             @Override

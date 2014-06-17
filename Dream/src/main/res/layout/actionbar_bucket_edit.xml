@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:background="@drawable/bg_actionbar_bucket_edit_main"
     android:layout_gravity="center_vertical"
     >
@@ -14,24 +13,18 @@
         android:src="@drawable/ic_previous"
         android:background="@null"
         android:id="@+id/menu_previous"
-        android:layout_weight="0.1"
         android:paddingLeft="15dp"
         android:paddingRight="10dp"
+        android:layout_gravity="left"
+        android:layout_alignParentLeft="true"
         />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
 
-        </LinearLayout>
-    <ImageButton
-        android:layout_width="wrap_content"
+    <Button android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:src="@drawable/ic_save"
-        android:background="@null"
         android:id="@+id/menu_save"
-        android:layout_weight="0.1"
-        android:paddingLeft="5dp"
-        android:paddingRight="21dp"
+        android:text="Save"
+        android:background="@null"
+        android:layout_alignParentRight="true"
+        style="@style/TextActionbarRightButton"
         />
-</LinearLayout>
+</RelativeLayout>

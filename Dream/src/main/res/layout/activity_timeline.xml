@@ -33,16 +33,24 @@
                 android:layout_alignParentLeft="true"
                 />
             <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@+id/menu_previous"
+                android:layout_toLeftOf="@+id/btn_edit"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/txt_bucket_title"
+                android:text="Title"
+
+                style="@style/TextBucketTitleStyle"
+                />
+            <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_centerHorizontal="true"
-                android:singleLine="true"
-                android:maxLength="20"
-                android:ellipsize="end"
-                android:textSize="23.415sp"
-                style="@style/TextBucketTitleStyle"
-                android:text="Title"
-                android:id="@+id/txt_bucket_title"
+                android:src="@drawable/btn_timeline_edit"
+                android:background="@null"
+                android:id="@+id/btn_edit"
+                android:layout_alignParentRight="true"
+                android:paddingRight="15dp"
                 />
             </RelativeLayout>
         <RelativeLayout
@@ -94,14 +102,6 @@
                         android:src="@drawable/btn_timeline_achieve"
                         android:background="@null"
                         android:id="@+id/btn_achieve"
-                        />
-                    <ImageButton
-                        android:layout_width="40dp"
-                        android:layout_height="22dp"
-                        android:src="@drawable/btn_timeline_edit"
-                        android:background="@null"
-                        android:layout_marginLeft="11.5dp"
-                        android:id="@+id/btn_edit"
                         />
                     </LinearLayout>
                 </LinearLayout>

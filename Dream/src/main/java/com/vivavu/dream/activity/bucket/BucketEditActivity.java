@@ -94,7 +94,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
     @InjectView(R.id.menu_previous)
     ImageButton mMenuPrevious;
     @InjectView(R.id.menu_save)
-    ImageButton mMenuSave;
+    Button mMenuSave;
 
     private LayoutInflater layoutInflater;
     private Bucket bucket = null;
