@@ -99,6 +99,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
 
     private LayoutInflater layoutInflater;
     private Bucket bucket = null;
+    private boolean modFlag = false;
     protected Uri mImageCaptureUri;
     private String modString;
 
@@ -169,7 +170,6 @@ public class BucketEditActivity extends BaseActionBarActivity {
         int bucketId = data.getIntExtra(RESULT_EXTRA_BUCKET_ID, -1);
         int range = data.getIntExtra(MainActivity.EXTRA_BUCKET_DEFAULT_RANGE, -1);
         bucket = DataRepository.getBucket(bucketId);
-
         if (bucketId > 0) {
             modString = "수정";
         } else {
@@ -191,6 +191,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
         addEventListener();
         checkRequireElement();
         bindData();
+        modFlag = false;
     }
 
     public void saveBucket() {
@@ -210,29 +211,34 @@ public class BucketEditActivity extends BaseActionBarActivity {
         switch (requestCodeEnum){
             case ACT_ADD_BUCKET_OPTION_DDAY:
                 if(resultCode == RESULT_OK){
+                    modFlag = true;
                     OptionDDay dDay = (OptionDDay) data.getSerializableExtra("option.result");
                     updateUiData(dDay);
                 }
                 break;
             case ACT_ADD_BUCKET_OPTION_DESCRIPTION:
                 if(resultCode == RESULT_OK){
+                    modFlag = true;
                     OptionDescription description = (OptionDescription) data.getSerializableExtra("option.result");
                     updateUiData(description);
                 }
                 break;
             case ACT_ADD_BUCKET_OPTION_REPEAT:
                 if(resultCode == RESULT_OK){
+                    modFlag = true;
                     OptionRepeat repeat = (OptionRepeat) data.getSerializableExtra("option.result");
                     updateUiData(repeat);
                 }
                 break;
             case ACT_ADD_BUCKET_TAKE_CAMERA:
                 if(resultCode == RESULT_OK){
+                    modFlag = true;
                     doCropPhoto();
                 }
                 break;
             case ACT_ADD_BUCKET_TAKE_GALLERY:
                 if(resultCode == RESULT_OK){
+                    modFlag = true;
                     if(data != null ) {
                         mImageCaptureUri = data.getData();
                         doCropPhoto();
@@ -310,6 +316,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
                                 dialog.dismiss();
                                 break;
                             case 2:
+                                modFlag = true;
                                 bucket.setFile(null);
                                 bucket.setCvrImgId(null);
                                 bucket.setCvrImgUrl(null);
@@ -425,6 +432,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
         } else if(view == mBtnBucketOptionRepeat){
             goOptionRepeat();
         } else if(view == mBtnBucketOptionPublic){
+            modFlag = true;
             mBtnBucketOptionPublic.setSelected(!mBtnBucketOptionPublic.isSelected());
             bucket.setIsPrivate( mBtnBucketOptionPublic.isSelected() ? 1 : 0 );
         } else if (view == mBtnBucketOptionDel){
@@ -639,15 +647,14 @@ public class BucketEditActivity extends BaseActionBarActivity {
     }
 
     public void confirm(){
-        Bucket compare = DataRepository.getBucket(bucket.getId());
-        if(!compare.equals(bucket)) {
+        if(modFlag) {
             AlertDialog.Builder alertConfirm = new AlertDialog.Builder(this);
             alertConfirm.setTitle("내용 변경 확인");
             alertConfirm.setMessage("변경한 내용을 저장하시겠습니까?").setCancelable(false).setPositiveButton("예",
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(BucketEditActivity.this, "예", Toast.LENGTH_SHORT).show();
+                            saveBucket();
                         }
                     }
             ).setNegativeButton("아니오",
@@ -664,5 +671,11 @@ public class BucketEditActivity extends BaseActionBarActivity {
         } else {
             finish();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mBucketInputTitle.clearFocus();
     }
 }
