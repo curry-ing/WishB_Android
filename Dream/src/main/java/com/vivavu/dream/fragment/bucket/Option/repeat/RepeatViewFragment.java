@@ -88,24 +88,24 @@ public class RepeatViewFragment extends OptionBaseFragment<OptionRepeat> impleme
     public void update() {
         if (contents.getRepeatType() == RepeatType.WKRP) {
             enableWeek(true);
-            mBtnBucketOptionSun.setSelected(contents.isSun());
-            mBtnBucketOptionMon.setSelected(contents.isMon());
-            mBtnBucketOptionTue.setSelected(contents.isTue());
-            mBtnBucketOptionWen.setSelected(contents.isWen());
-            mBtnBucketOptionThu.setSelected(contents.isThu());
-            mBtnBucketOptionFri.setSelected(contents.isFri());
-            mBtnBucketOptionSat.setSelected(contents.isSat());
+            mBtnBucketOptionSun.setBackgroundResource(contents.isSun()?R.drawable.ic_week_sun_release : R.drawable.ic_week_sun_press);
+            mBtnBucketOptionMon.setBackgroundResource(contents.isMon()?R.drawable.ic_week_mon_release : R.drawable.ic_week_mon_press);
+            mBtnBucketOptionTue.setBackgroundResource(contents.isTue()?R.drawable.ic_week_tue_release : R.drawable.ic_week_tue_press);
+            mBtnBucketOptionWen.setBackgroundResource(contents.isWen()?R.drawable.ic_week_wen_release : R.drawable.ic_week_wen_press);
+            mBtnBucketOptionThu.setBackgroundResource(contents.isThu()?R.drawable.ic_week_thu_release : R.drawable.ic_week_thu_press);
+            mBtnBucketOptionFri.setBackgroundResource(contents.isFri()?R.drawable.ic_week_fri_release : R.drawable.ic_week_fri_press);
+            mBtnBucketOptionSat.setBackgroundResource(contents.isSat()?R.drawable.ic_week_sat_release : R.drawable.ic_week_sat_press);
         } else if (contents.getRepeatType() == RepeatType.WEEK) {
             enableWeek(false);
 
-            mBtnBucketOptionWeek.setSelected(true);
-            mBtnBucketOptionMonth.setSelected(false);
+            mBtnBucketOptionWeek.setBackgroundResource(R.drawable.ic_option_week_release);
+            mBtnBucketOptionMonth.setBackgroundResource(R.drawable.ic_option_month_press);
             mTxtBucketOptionRepeatCnt.setText(String.valueOf(contents.getRepeatCount()));
         } else if (contents.getRepeatType() == RepeatType.MNTH) {
             enableWeek(false);
 
-            mBtnBucketOptionMonth.setSelected(true);
-            mBtnBucketOptionWeek.setSelected(false);
+            mBtnBucketOptionWeek.setBackgroundResource(R.drawable.ic_option_week_press);
+            mBtnBucketOptionMonth.setBackgroundResource(R.drawable.ic_option_month_release);
             mTxtBucketOptionRepeatCnt.setText(String.valueOf(contents.getRepeatCount()));
         }
     }
