@@ -2,6 +2,7 @@
 *.apk
 *.ap_
 *.jar
+!Libraries/facebook/libs/*.jar
 
 # lint folder
 lint
