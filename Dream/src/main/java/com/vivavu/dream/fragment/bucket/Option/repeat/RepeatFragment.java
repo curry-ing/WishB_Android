@@ -95,6 +95,7 @@ public class RepeatFragment extends OptionBaseFragment<OptionRepeat> implements 
                 enableWeek(false);
                 contents.setRepeatType(RepeatType.MNTH);
                 v.setSelected(!v.isSelected());
+                mBtnBucketOptionWeek.setSelected(!v.isSelected());
             }
         });
 
@@ -104,6 +105,7 @@ public class RepeatFragment extends OptionBaseFragment<OptionRepeat> implements 
                 enableWeek(false);
                 contents.setRepeatType(RepeatType.WEEK);
                 v.setSelected(!v.isSelected());
+                mBtnBucketOptionMonth.setSelected(!v.isSelected());
             }
         });
 
