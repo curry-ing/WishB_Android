@@ -73,6 +73,44 @@ public class BucketGroupViewActivity extends BaseActionBarActivity {
         List<Bucket> bucketList = DataRepository.listBucketByRange(groupRange);
 
         bucketListAdapter = new BucketListAdapter(DreamApp.getInstance(), bucketList);
+
+        updateGroupRangeInfo();
+
+        mGridBucketList.setAdapter(bucketListAdapter);
+        bucketListAdapter.setOnBucketImageViewClickListener(new BucketListAdapter.OnBucketImageViewClick() {
+            @Override
+            public void onItemClick(View view, int position, long id) {
+                goTimelineActivity((int) id);
+            }
+        });
+
+        mMenuPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        mBtnToday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(BucketGroupViewActivity.this, TodayActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        mBtnAddBucket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goAddBucket();
+            }
+        });
+
+        mTxtTitle.setTypeface(getNanumBarunGothicBoldFont());
+        mBtnToday.setTypeface(getNanumBarunGothicBoldFont());
+    }
+
+    private void updateGroupRangeInfo() {
         String title = null;
         if(null == groupRange){
             title = DreamApp.getInstance().getUser().getTitle_life();
@@ -111,39 +149,6 @@ public class BucketGroupViewActivity extends BaseActionBarActivity {
         }
 
         mTxtTitle.setText(title);
-
-        mGridBucketList.setAdapter(bucketListAdapter);
-        bucketListAdapter.setOnBucketImageViewClickListener(new BucketListAdapter.OnBucketImageViewClick() {
-            @Override
-            public void onItemClick(View view, int position, long id) {
-                goTimelineActivity((int) id);
-            }
-        });
-
-        mMenuPrevious.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        mBtnToday.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(BucketGroupViewActivity.this, TodayActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        mBtnAddBucket.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goAddBucket();
-            }
-        });
-
-        mTxtTitle.setTypeface(getNanumBarunGothicBoldFont());
-        mBtnToday.setTypeface(getNanumBarunGothicBoldFont());
     }
 
     @Override
@@ -163,6 +168,15 @@ public class BucketGroupViewActivity extends BaseActionBarActivity {
 
         if(requestCode == REQUEST_BUCKET_ADD){
             if(resultCode == RESULT_OK){
+                Integer bucketRange = data.getIntExtra(BucketEditActivity.RESULT_EXTRA_BUCKET_RANGE, -1);
+                setResult(RESULT_OK, data);
+                if (bucketRange != null && bucketRange > 0) {
+                    groupRange = String.valueOf(bucketRange);
+                } else {
+                    groupRange = null;
+                }
+
+                updateGroupRangeInfo();
                 List<Bucket> bucketList = DataRepository.listBucketByRange(groupRange);
                 bucketListAdapter.setList(bucketList);
                 bucketListAdapter.notifyDataSetChanged();

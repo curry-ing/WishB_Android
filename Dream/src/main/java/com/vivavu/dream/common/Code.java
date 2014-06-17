@@ -21,5 +21,5 @@ public class Code {
     final static public int ACT_ADD_BUCKET_TAKE_GALLERY = 9;
     final static public int ACT_ADD_BUCKET_CROP_FROM_CAMERA = 10;
 
-
+    final static public int ACT_VIEW_BUCKET_GROUP= 11;
 }

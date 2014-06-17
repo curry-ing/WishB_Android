@@ -2,20 +2,12 @@ package com.vivavu.dream.fragment.main;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.Shape;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -23,14 +15,12 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.vivavu.dream.R;
+import com.vivavu.dream.activity.bucket.BucketEditActivity;
 import com.vivavu.dream.adapter.bucket.BucketAdapter2;
+import com.vivavu.dream.common.Code;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.fragment.CustomBaseFragment;
 import com.vivavu.dream.model.ResponseBodyWrapped;
@@ -155,6 +145,34 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
         super.onActivityCreated(savedInstanceState);
 //        Thread thread = new Thread(new DataThread());
 //        thread.start();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case Code.ACT_ADD_BUCKET:
+                if(resultCode == Activity.RESULT_OK) {
+                    int bucketId = data.getIntExtra(BucketEditActivity.RESULT_EXTRA_BUCKET_ID, -1);
+                    Integer bucketRange = data.getIntExtra(BucketEditActivity.RESULT_EXTRA_BUCKET_RANGE, -1);
+
+                    if (bucketRange != null && bucketRange > 0) {
+                        mMainPager.setCurrentItem(bucketRange / 10, false);
+                    }
+                }
+                break;
+            case Code.ACT_VIEW_BUCKET_GROUP:
+                if(resultCode == Activity.RESULT_OK) {
+                    Integer bucketRange = data.getIntExtra(BucketEditActivity.RESULT_EXTRA_BUCKET_RANGE, -1);
+
+                    if (bucketRange != null && bucketRange > 0) {
+                        mMainPager.setCurrentItem(bucketRange / 10, false);
+                    } else if(bucketRange < 0 ){
+                        mMainPager.setCurrentItem(0, false);
+                    }
+                }
+                break;
+        }
     }
 
     public void updateContents(List<BucketGroup> obj){
@@ -300,142 +318,4 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
         }
     }
 
-    public class DepthPageTransformer implements ViewPager.PageTransformer {
-        public void transformPage(View view, float position){
-            if (position < -1){
-            } else if (position <= 0) {
-
-            } else if (position <= 1) {
-
-            } else {
-
-            }
-        }
-    }
-
-    public class DrawView extends View {
-        public DrawView(Context context) {
-            super(context);
-            ValueAnimator anim = ValueAnimator.ofFloat(0,300);
-            anim.setDuration(1500);
-            anim.setInterpolator(new AccelerateInterpolator());
-            anim.addUpdateListener(new ObjectAnimator.AnimatorUpdateListener(){
-                public void onAnimationUpdate(ValueAnimator animation){
-                    mX = (Float) animation.getAnimatedValue();
-                    invalidate();
-                }
-            });
-            anim.start();
-
-        }
-
-        @Override
-        public void onDraw(Canvas canvas) {
-            mPaints = new Paint();
-            mPaints.setAntiAlias(true);
-            mPaints.setStyle(Paint.Style.STROKE);
-            mPaints.setStrokeWidth(12);
-            mPaints.setColor(Color.RED);
-
-//            canvas.drawColor(R.color.transparent);
-            canvas.drawArc(new RectF(25, 25, 575, 575), 270, mX, false, mPaints);
-//            for (int j=0; j<=i; j++){
-//                canvas.drawArc(new RectF(25, 25, 575, 575), j, 1, false, mPaints);
-//            }
-            mSweep += SWEEP_INC;
-//            if (mSweep > 360) {
-//                mSweep -= 360;
-//                mStart += START_INC;
-//                if (mStart >= 360) {
-//                    mStart -= 360;
-//                }
-//            }
-//            if (i<135) {
-//                invalidate();
-//                i++;
-//            }
-
-        }
-    }
-
-    public class MyDrawable extends Drawable {
-        @Override
-        public void draw(Canvas canvas){
-            mPaints = new Paint();
-            mPaints.setAntiAlias(true);
-            mPaints.setStyle(Paint.Style.STROKE);
-            mPaints.setStrokeWidth(12);
-            mPaints.setColor(Color.RED);
-
-//            canvas.drawColor(R.color.action_bar);
-//            canvas.drawArc(new RectF(40, 10, 280, 250), mStart, mSweep, false, mPaints);
-//            mSweep += SWEEP_INC;
-
-//            for (int i=0; i<24; i++) {
-                canvas.drawArc(new RectF(25, 25, 575, 575), i, 2, false, mPaints);
-                mSweep += SWEEP_INC;
-                if (mSweep > 360) {
-                    mSweep -= 360;
-                    mStart += START_INC*2;
-                    if (mStart >= 360) {
-                        mStart -= 360;
-                    }
-                }
-//            }
-        }
-
-        @Override
-        public void setAlpha(int i) {
-
-        }
-
-        @Override
-        public void setColorFilter(ColorFilter colorFilter) {
-
-        }
-
-        @Override
-        public int getOpacity() {
-            return 0;
-        }
-
-
-    }
-
-
-    private static class MyShapeDrawable extends ShapeDrawable {
-        private Paint mStrokePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
-        public MyShapeDrawable(Shape s){
-            super(s);
-            mStrokePaint.setStyle(Paint.Style.STROKE);
-        }
-
-        public Paint getStrokePaint(){
-            return mStrokePaint;
-        }
-
-        @Override
-        protected void onDraw(Shape s, Canvas c, Paint p){
-            s.draw(c, p);
-            s.draw(c, mStrokePaint);
-        }
-    }
-
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        switch (requestCode){
-//            case REQUEST_CODE_CHANGE_DAY:
-//                if(resultCode == Activity.RESULT_OK){
-//                    Date selectedDate = (Date) data.getSerializableExtra(TodayCalendarActivity.selectedDateExtraName);
-//                    Integer selectedIndex =  data.getIntExtra(TodayCalendarActivity.selectedDateIndexExtraName, 0);
-//                    if(selectedDate != null){
-//                        mMainPager.setCurrentItem(selectedIndex);
-//                    }
-//                    return;
-//                }
-//        }
-//    }
 }

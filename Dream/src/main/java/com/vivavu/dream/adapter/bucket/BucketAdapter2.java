@@ -30,6 +30,7 @@ import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.bucket.BucketGroupViewActivity;
 import com.vivavu.dream.common.BaseActionBarActivity;
+import com.vivavu.dream.common.Code;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.drawable.FanShapeDrawable;
 import com.vivavu.dream.model.ResponseBodyWrapped;
@@ -304,7 +305,7 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
                 intent.putExtra("groupRange", getBucketGroupList().get(pos).getRange());
                 //intent.setClass(context, CircleBucketListActivity.class);
                 intent.setClass(context, BucketGroupViewActivity.class);
-                fragment.startActivity(intent);
+                fragment.startActivityForResult(intent, Code.ACT_VIEW_BUCKET_GROUP);
             }
 
         });

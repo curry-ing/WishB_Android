@@ -76,6 +76,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
     private static final int SEND_DATA_DELETE_ERROR = 4;
     public static final String RESULT_EXTRA_BUCKET = "bucket";
     public static final String RESULT_EXTRA_BUCKET_ID = "bucketId";
+    public static final String RESULT_EXTRA_BUCKET_RANGE = "bucketRange";
 
     @InjectView(R.id.bucket_img)
     ShadowImageView mBucketImg;
@@ -119,6 +120,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
                     Intent intent = new Intent();
                     intent.putExtra(RESULT_EXTRA_BUCKET_ID, (Integer) bucket.getId());
                     intent.putExtra(RESULT_EXTRA_BUCKET, bucket);
+                    intent.putExtra(RESULT_EXTRA_BUCKET_RANGE, bucket.getRange()==null ? 0 : Integer.valueOf(bucket.getRange()));
                     setResult(RESULT_OK, intent);
                     finish();
                     break;
@@ -349,7 +351,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
         mMenuPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                confirm();
             }
         });
     }
