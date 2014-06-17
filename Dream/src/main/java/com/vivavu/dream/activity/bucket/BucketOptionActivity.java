@@ -52,7 +52,7 @@ public class BucketOptionActivity extends BaseActionBarActivity {
         actionBar.setDisplayUseLogoEnabled(false);
         actionBar.setDisplayShowHomeEnabled(false);//로고 버튼 보이는 것 설정
         actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setCustomView(R.layout.actionbar_bucket_edit);
+        actionBar.setCustomView(R.layout.actionbar_bucket_edit_option);
         actionBar.setDisplayShowCustomEnabled(true);
 
         ButterKnife.inject(this);

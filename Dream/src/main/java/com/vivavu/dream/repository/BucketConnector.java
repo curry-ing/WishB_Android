@@ -96,7 +96,7 @@ public class BucketConnector {
             requestBucket.add("rpt_type", bucket.getRptType());
             requestBucket.add("rpt_cndt", bucket.getRptCndt());
         }
-        if(bucket.getCvrImgId() == null){
+        if(bucket.getCvrImgUrl() == null){
             requestBucket.add("cvr_img_id", "");
         }
         if(bucket.getFile() != null && bucket.getFile().exists()) {
