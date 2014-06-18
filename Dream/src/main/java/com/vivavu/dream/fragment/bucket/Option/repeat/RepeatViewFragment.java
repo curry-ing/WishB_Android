@@ -73,7 +73,7 @@ public class RepeatViewFragment extends OptionBaseFragment<OptionRepeat> impleme
             View v = rootView.getChildAt(i);
             v.setOnClickListener(this);
         }
-
+        mTxtBucketOptionRepeatCnt.setOnClickListener(this);
         update();
         return rootView;
     }
