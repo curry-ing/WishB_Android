@@ -79,8 +79,11 @@ public class MainActivity extends BaseActionBarActivity {
         ActionBarProfileViewHolder actionBarProfileViewHolder = new ActionBarProfileViewHolder(customActionBarViewProfile);
         customActionBarViewProfile.setTag(actionBarProfileViewHolder);
 
-        actionBar.setCustomView(customActionBarView);
 
+        actionBar.setCustomView(customActionBarView);
+        RelativeLayout.LayoutParams actionbarLp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        customActionBarView.setLayoutParams(actionbarLp);
+        customActionBarViewProfile.setLayoutParams(actionbarLp);
         ButterKnife.inject(this);
 
         if (savedInstanceState == null) {
