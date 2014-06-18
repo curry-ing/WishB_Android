@@ -80,7 +80,7 @@
     <string name="bucket_status_achievement">달성</string>
     <string name="bucket_status_seal">봉인</string>
     <string name="bucket_status_delete">삭제</string>
-    <string name="bucket_option_note_hint">노트를 입력하세요_</string>
+    <string name="bucket_option_note_hint">노트를 입력하세요</string>
     <string name="no_network_connection_toast">네트워크에 연결할 수 없습니다.</string>
     <string name="today">Today</string>
     <string name="invalid_selected_date">데이터가 없는 날짜입니다. 다시 선택해주세요.</string>
@@ -90,7 +90,7 @@
     <string name="menu_remove">삭제</string>
     <string name="menu_save">저장</string>
     <string name="see_more">See More</string>
-    <string name="txt_timeline_write">버킷일지를 입력하세요_</string>
+    <string name="txt_timeline_write">버킷일지를 입력하세요</string>
     <string name="title_activity_more">MoreActivity</string>
     <string name="alert_setting">알림 설정</string>
     <string name="public_setting">공개설정</string>

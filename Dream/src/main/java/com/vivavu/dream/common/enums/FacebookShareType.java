@@ -4,12 +4,8 @@ package com.vivavu.dream.common.enums;
  * Created by yuja on 2014-06-06.
  */
 public enum FacebookShareType {
-    NONE(null, "공유안함")
-    , SELF("SELF","비공개로 공유")
-    , CUSTOM("CUSTOM","사용자지정 공유")
-    , FRIENDS_OF_FRIENDS("FRIENDS_OF_FRIENDS","FRIENDS_OF_FRIENDS")
-    , ALL_FRIENDS("ALL_FRIENDS", "전체친구에게 공개")
-    , EVERYONE("EVERYONE", "전체공개");
+    NONE("false", "공유안함")
+    , SELF("true","공유");
 
     private String code;
     private String description;
@@ -40,11 +36,20 @@ public enum FacebookShareType {
         for(FacebookShareType type : FacebookShareType.values()){
             if(type.code == null && code == null){
                 return type;
-            } else if(code.equals(type.code)){
+            } else if(type.code.equals(code)){
                 return type;
             }
         }
         return NONE;
+    }
+
+    static public String[] descriptions(){
+        FacebookShareType[] states = values();
+        String[] description = new String[states.length];
+        for (int i = 0; i < states.length; i++) {
+            description[i] = states[i].description;
+        }
+        return description;
     }
 
     static public String[] names(){

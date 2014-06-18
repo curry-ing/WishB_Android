@@ -2,7 +2,7 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
-    android:layout_width="match_parent"
+    android:layout_width="fill_parent"
     android:layout_height="match_parent"
     android:gravity="center_vertical"
     android:background="@color/action_bar_main_view_background"
@@ -13,7 +13,7 @@
         android:text="today"
         android:layout_alignParentLeft="true"
         android:src="@drawable/mainview_profile"
-        android:layout_marginLeft="15dp"/>
+        android:paddingLeft="15dp"/>
 
     <TextView android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -22,17 +22,16 @@
         android:gravity="center"
         android:layout_toRightOf="@+id/profile"
         android:layout_toLeftOf="@+id/actionbar_main_today"
-        android:layout_centerVertical="true"
-
         style="@style/TextBucketTitleStyle"
     />
-    <Button android:layout_width="wrap_content"
+    <Button
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:id="@+id/actionbar_main_today"
         android:text="Today"
         android:background="@null"
         android:layout_alignParentRight="true"
+        android:padding="0dp"
         style="@style/TextActionbarRightButton"
         />
-
 </RelativeLayout>

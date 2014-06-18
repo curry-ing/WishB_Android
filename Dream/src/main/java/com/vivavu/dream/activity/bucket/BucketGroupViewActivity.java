@@ -60,7 +60,6 @@ public class BucketGroupViewActivity extends BaseActionBarActivity {
         actionBar.setDisplayUseLogoEnabled(false);
         actionBar.setDisplayShowHomeEnabled(false);//로고 버튼 보이는 것 설정
         actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_before);
         actionBar.setCustomView(R.layout.actionbar_sub_view);
         actionBar.setDisplayShowCustomEnabled(true);
 

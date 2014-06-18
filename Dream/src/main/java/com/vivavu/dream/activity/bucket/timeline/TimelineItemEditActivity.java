@@ -13,6 +13,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -95,6 +97,29 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
     private static final int SEND_DATA_SUCCESS = 1;
     private static final int SEND_DATA_FAIL = 2;
 
+    TextWatcher textWatcherInput = new TextWatcher() {
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if(s.toString().length() < 1){
+                post.setText(null);
+            }else {
+                post.setText(s.toString());
+            }
+            checkRequireElement();
+        }
+    };
+
     protected final Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -131,7 +156,6 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
         actionBar.setDisplayUseLogoEnabled(false);
         actionBar.setDisplayShowHomeEnabled(false);//로고 버튼 보이는 것 설정
         actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_before);
         actionBar.setCustomView(R.layout.actionbar_timeline_edit);
         actionBar.setDisplayShowCustomEnabled(true);
 
@@ -149,9 +173,11 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
 
         mTxtTitle.setTypeface(getNanumBarunGothicBoldFont());
         mTxtPostText.setTypeface(getNanumBarunGothicFont());
-
+        mTxtPostText.addTextChangedListener(textWatcherInput);
         bindData(bucket);
         bindData(post);
+
+        checkRequireElement();
 
         initEvent();
     }
@@ -193,7 +219,7 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
             @Override
             public void onClick(View v) {
 
-                final String[] items = FacebookShareType.names();
+                final String[] items = FacebookShareType.descriptions();
 
                 AlertDialog.Builder ab = new AlertDialog.Builder(TimelineItemEditActivity.this);
                 ab.setTitle("선택");
@@ -203,7 +229,7 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         FacebookShareType selectedType = FacebookShareType.fromCode(items[which]);
                         post.setFbShare(selectedType.getCode());
-                        if (post.getFbShare() != null) {
+                        if (selectedType != FacebookShareType.NONE) {
                             mBtnPostFacebook.setSelected(true);
                         } else {
                             mBtnPostFacebook.setSelected(false);
@@ -221,7 +247,8 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                 DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        mTxtPostDate.setText(String.format("%4d.%02d.%02d", year, monthOfYear, dayOfMonth ));
+                        // monthOfYear가 -1 되어 들어옴
+                        mTxtPostDate.setText(String.format("%4d.%02d.%02d", year, monthOfYear+1, dayOfMonth ));
                     }
                 };
                 Calendar calendar = Calendar.getInstance();
@@ -229,7 +256,7 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                     calendar.setTime(post.getTimestamp());
                 }
 
-                DatePickerDialog dialog = new DatePickerDialog(TimelineItemEditActivity.this, listener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1, calendar.get(Calendar.DAY_OF_MONTH));
+                DatePickerDialog dialog = new DatePickerDialog(TimelineItemEditActivity.this, listener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
                 dialog.show();
             }
         });
@@ -329,6 +356,17 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                 });
                 post.setPhoto(f);
             }
+        }
+        checkRequireElement();
+    }
+
+    private boolean checkRequireElement(){
+        if (post != null && ( post.getText() != null || post.getPhoto() != null) ) {
+            mMenuSave.setVisibility(View.VISIBLE);
+            return true;
+        }else{
+            mMenuSave.setVisibility(View.INVISIBLE);
+            return false;
         }
     }
 

@@ -45,7 +45,9 @@
             android:gravity="top"
             android:hint="@string/bucket_option_note_hint"
             android:background="@null"
-            />
+            >
+            <requestFocus></requestFocus>
+            </EditText>
     </LinearLayout>
 
 </LinearLayout>

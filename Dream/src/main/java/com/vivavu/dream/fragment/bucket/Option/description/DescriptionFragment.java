@@ -1,9 +1,12 @@
 package com.vivavu.dream.fragment.bucket.option.description;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -44,20 +47,44 @@ public class DescriptionFragment extends OptionBaseFragment<OptionDescription> i
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
         final View rootView = inflater.inflate(R.layout.bucket_option_description, container, false);
         ButterKnife.inject(this, rootView);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        mBucketOptionNote.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Editable text = mBucketOptionNote.getText();
+
+                if(contents.getDescription() == null){
+                    if(text == null ) {
+                        setModFlag(false);
+                    }else if(text != null && text.toString().length() == 0){
+                        setModFlag(false);
+                    } else {
+                        setModFlag(true);
+                    }
+                } else {
+                    if(text == null){
+                        setModFlag(contents.getDescription().length() > 0);
+                    } else {
+                        setModFlag(!contents.getDescription().equals(text.toString()));
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         return rootView;
-    }
-
-    @Override
-    public void onClick(View view) {
-        super.onClick(view);//배경선택시 키보드 없애기 위해 호출
-        switch (view.getId()) {
-
-        }
     }
 
     @Override
@@ -70,5 +97,10 @@ public class DescriptionFragment extends OptionBaseFragment<OptionDescription> i
         contents.setDescription(mBucketOptionNote.getText().toString());
     }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        mBucketOptionNote.selectAll();
+        mBucketOptionNote.requestFocus();
+    }
 }

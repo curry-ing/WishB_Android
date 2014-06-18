@@ -1,10 +1,11 @@
 package com.vivavu.dream.activity.bucket;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -80,8 +81,7 @@ public class BucketOptionActivity extends BaseActionBarActivity {
         mMenuPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setResult(Activity.RESULT_CANCELED);
-                finish();
+                confirm();
             }
         });
         getSupportFragmentManager().beginTransaction()
@@ -89,37 +89,33 @@ public class BucketOptionActivity extends BaseActionBarActivity {
                 .commit();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //getMenuInflater().inflate(R.menu.bucket_add_activity_actions, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public void onClick(View view) {
-        super.onClick(view);
-        /*if(view == mBtnOptionRemove){
+    public void confirm(){
+        if(bucketOption.isModFlag()){
             AlertDialog.Builder alertConfirm = new AlertDialog.Builder(this);
-            alertConfirm.setTitle("초기화 확인");
-            alertConfirm.setMessage("초기화 하시겠습니까?").setCancelable(false).setPositiveButton("예",
+            alertConfirm.setTitle("내용 변경 확인");
+            alertConfirm.setMessage("변경한 내용을 저장하시겠습니까?").setCancelable(false).setPositiveButton("예",
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            //bucketOption.reset();
-                            bucketOption.setContents(option);
+                            saveOption();
                         }
                     }
             ).setNegativeButton("아니오",
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
+                            setResult(Activity.RESULT_CANCELED);
+                            finish();
+                            return;
                         }
                     }
             );
             AlertDialog alert = alertConfirm.create();
             alert.show();
-        }*/
+        } else {
+            setResult(Activity.RESULT_CANCELED);
+            finish();
+        }
     }
 
     public void saveOption() {
@@ -129,5 +125,10 @@ public class BucketOptionActivity extends BaseActionBarActivity {
         intent.putExtra("option.result", option);
         setResult(Activity.RESULT_OK, intent);
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        confirm();
     }
 }
