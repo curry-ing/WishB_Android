@@ -109,6 +109,7 @@
     <Button
             android:layout_width="wrap_content"
             android:layout_height="30dp"
+            android:minWidth="200dp"
             android:text="DECADE"
             android:shadowColor="#AA000000"
             android:shadowDx="2"

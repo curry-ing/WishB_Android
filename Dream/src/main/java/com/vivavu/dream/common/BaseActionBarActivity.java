@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.style.BulletSpan;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -17,6 +18,7 @@ import com.vivavu.dream.R;
 import com.vivavu.dream.activity.StartActivity;
 import com.vivavu.dream.activity.intro.IntroActivity;
 import com.vivavu.dream.activity.main.MainActivity;
+import com.vivavu.dream.activity.main.TodayActivity;
 import com.vivavu.dream.model.BaseInfo;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.repository.connector.UserInfoConnector;
@@ -125,6 +127,11 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
+    public void goToday(){
+        Intent intent = new Intent();
+        intent.setClass(this, TodayActivity.class);
+        startActivity(intent);
+    }
     public void checkAppExit() {
         Intent intent = getIntent();
         boolean isAppExit = intent.getBooleanExtra("isAppExit", false);
@@ -137,8 +144,15 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
     }
 
     public void branch(){
+        Intent intent = getIntent();
+        Boolean goToday = intent.getBooleanExtra("goToday", false);
+
         if(checkLogin()){
-            goMain();
+            if (goToday){
+                goToday();
+            } else {
+                goMain();
+            }
         }else{
             goIntro();
         }

@@ -7,9 +7,12 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.*;
 
 import com.vivavu.dream.R;
@@ -42,6 +45,7 @@ public class ResetPasswordActivity extends BaseActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);//api level 11 이상 부터 사용가능
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         setContentView(R.layout.activity_find_pw);
 
         final ActionBar actionBar = getSupportActionBar();
@@ -81,9 +85,20 @@ public class ResetPasswordActivity extends BaseActionBarActivity {
             }
         });
 
-        mFindpwEmail.setOnKeyListener(new View.OnKeyListener(){
+        mFindpwEmail.addTextChangedListener(new TextWatcher() {
             @Override
-            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                mFindpwTxtResponseInfo.setText("");
                 if (!ValidationUtils.isValidEmail(mFindpwEmail)) {
                     mFindpwEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ing_icon, 0);
                     mFindpwSendBtn.setBackground(getResources().getDrawable(R.drawable.findpw_send_inactive_btn));
@@ -91,9 +106,21 @@ public class ResetPasswordActivity extends BaseActionBarActivity {
                     mFindpwEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ok_icon, 0);
                     mFindpwSendBtn.setBackground(getResources().getDrawable(R.drawable.findpw_send_active_btn));
                 }
-                return false;
             }
         });
+//        mFindpwEmail.setOnKeyListener(new View.OnKeyListener() {
+//            @Override
+//            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+//                if (!ValidationUtils.isValidEmail(mFindpwEmail)) {
+//                    mFindpwEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ing_icon, 0);
+//                    mFindpwSendBtn.setBackground(getResources().getDrawable(R.drawable.findpw_send_inactive_btn));
+//                } else {
+//                    mFindpwEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ok_icon, 0);
+//                    mFindpwSendBtn.setBackground(getResources().getDrawable(R.drawable.findpw_send_active_btn));
+//                }
+//                return false;
+//            }
+//        });
 
         mFindpwSendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,8 +167,9 @@ public class ResetPasswordActivity extends BaseActionBarActivity {
 
             if(loginInfoResponseBodyWrapped != null && loginInfoResponseBodyWrapped.isSuccess()){
                 AlertDialog.Builder alert = new AlertDialog.Builder(ResetPasswordActivity.this);
-                alert.setTitle("메일 발송 완료");
-                alert.setMessage("비밀번호 변경 안내 메일을 발송했습니다.\n메일 내용을 확인 해주세요.");
+//                alert.setTitle("메일 발송 완료");
+//                alert.setMessage("\n비밀번호 변경 안내 메일을 발송했습니다.\n메일 내용을 확인 해주세요.");
+                alert.setMessage("\n" + context.getResources().getText(R.string.sent_reset_passwd_mail) + "\n");
                 alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -158,7 +186,9 @@ public class ResetPasswordActivity extends BaseActionBarActivity {
                 alert.show();
 
             }else{
-                mFindpwTxtResponseInfo.setText(loginInfoResponseBodyWrapped.getDescription());
+//                mFindpwTxtResponseInfo.setText(loginInfoResponseBodyWrapped.getDescription());
+                mFindpwEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_alert_icon, 0);
+                mFindpwTxtResponseInfo.setText("알림:  " + context.getResources().getString(R.string.unregistered_email) );
             }
         }
     }

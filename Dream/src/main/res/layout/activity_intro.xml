@@ -17,29 +17,55 @@
                 android:id="@+id/imageView" android:background="@drawable/main_logo"
                 android:layout_centerInParent="true"/>
     </RelativeLayout>
-    <Button android:id="@+id/register_button"
-            android:layout_width="wrap_content"
-            android:layout_height="38dp"
-            android:layout_marginTop="30dp"
-            android:paddingLeft="32dp"
-            android:paddingRight="32dp" android:layout_gravity="center_horizontal"
-            android:background="@drawable/intro_register" android:clickable="false"/>
-
-    <Button android:id="@+id/sign_in_button"
-            android:layout_width="wrap_content"
-            android:layout_height="38dp"
-            android:paddingLeft="32dp"
-            android:paddingRight="32dp" android:layout_gravity="center_horizontal" android:layout_marginTop="11dp"
-            android:background="@drawable/intro_login"/>
-    <!--<Button android:id="@+id/fb_login_button" android:layout_width="wrap_content" android:layout_height="38dp"-->
-            <!--android:paddingLeft="32dp" android:paddingRight="32dp" android:layout_gravity="center_horizontal"-->
-            <!--android:layout_marginTop="11dp" android:background="@drawable/intro_fb_btn"/>-->
     <fragment
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:name="com.vivavu.dream.facebook.fragment.FacebookLoginFragment"
             android:id="@+id/fragment"
-            tools:layout="@layout/include_facebook_login" />
+            tools:layout="@layout/include_facebook_login" android:layout_marginTop="30dp"/>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal" android:layout_marginTop="12dp">
+        <Button android:id="@+id/register_button"
+                android:layout_width="128dp"
+                android:layout_height="38dp"
+                android:paddingLeft="32dp"
+                android:paddingRight="32dp"
+                android:layout_gravity="center_horizontal"
+                android:background="#64000000"
+                android:clickable="false"
+                android:text="@string/intro_register_btn"
+                android:textColor="@color/white"
+                android:textSize="15dp"
+                android:layout_marginRight="5dp"/>
+        <Button android:id="@+id/sign_in_button"
+                android:layout_width="128dp"
+                android:layout_height="38dp"
+                android:paddingLeft="32dp"
+                android:paddingRight="32dp"
+                android:layout_gravity="center_horizontal"
+                android:background="#64000000"
+                android:text="@string/intro_login_btn"
+                android:textColor="@color/white"
+                android:textSize="15dp"
+                android:layout_marginLeft="5dp"/>
+    </LinearLayout>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/regist_agreement"
+            android:id="@+id/intro_agreement_txt"
+            android:gravity="center_horizontal"
+            android:textAlignment="center"
+            android:lineSpacingExtra="5dp"
+            android:layout_marginTop="15dp" android:layout_gravity="center_horizontal"/>
+    <!--android:shadowColor="#60000000"-->
+    <!--android:shadowDx="0"-->
+    <!--android:shadowDy="0"-->
+    <!--android:shadowRadius="8"-->
 
     <!--<LinearLayout-->
         <!--android:layout_width="match_parent"-->

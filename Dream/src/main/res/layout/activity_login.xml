@@ -161,11 +161,12 @@
                 android:maxLines="1"
                 android:layout_width="fill_parent"
                 android:layout_height="41dp"
+                android:hint="@string/prompt_email"
                 android:inputType="textEmailAddress"
                 android:background="@drawable/login_edittext_bg"
                 android:layout_marginLeft="1dp"
                 android:paddingRight="10dp"
-                android:paddingLeft="10dp" />
+                android:paddingLeft="10dp" android:textSize="15dp"/>
     </LinearLayout>
     <LinearLayout
             android:orientation="horizontal"
@@ -190,7 +191,7 @@
                 android:imeOptions="actionUnspecified" android:background="@drawable/login_edittext_bg"
                 android:layout_marginLeft="1dp"
                 android:paddingLeft="10dp"
-                android:paddingRight="10dp" />
+                android:paddingRight="10dp" android:textSize="15dp"/>
     </LinearLayout>
     <LinearLayout
     android:orientation="vertical"

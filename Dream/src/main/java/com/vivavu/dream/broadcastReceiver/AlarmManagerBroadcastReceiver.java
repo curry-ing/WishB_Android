@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.StartActivity;
 import com.vivavu.dream.activity.main.MainActivity;
+import com.vivavu.dream.common.Code;
 import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.repository.DataRepository;
 
@@ -86,6 +87,7 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver{
                 .setLights(R.color.white, 3000, 3000)
                 .setAutoCancel(true);
         Intent resultIntent = new Intent(context, StartActivity.class);
+        resultIntent.putExtra("goToday", true);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
 //        stackBuilder.addParentStack(MainActivity.class);

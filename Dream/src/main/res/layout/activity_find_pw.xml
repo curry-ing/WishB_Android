@@ -64,15 +64,15 @@
             android:editable="false"
             android:enabled="true"
             android:focusable="false"
-            android:layout_gravity="center_horizontal" android:layout_marginTop="18dp"
+            android:layout_gravity="center_horizontal" android:layout_marginTop="40dp"
             android:typeface="sans" android:textSize="16dp" android:textStyle="bold"
-            android:singleLine="true" android:paddingLeft="5dp" android:visibility="visible" android:gravity="center"/>
+            android:singleLine="true" android:paddingLeft="5dp" android:visibility="visible" android:gravity="fill_horizontal|left"/>
 
         <Button
             android:id="@+id/findpw_send_btn"
             android:layout_width="wrap_content"
             android:layout_height="38dp"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="30dp"
             android:paddingLeft="32dp"
             android:paddingRight="32dp"
             android:layout_gravity="center" android:background="@drawable/findpw_send_inactive_btn" android:enabled="true"/>
