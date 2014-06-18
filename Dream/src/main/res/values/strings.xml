@@ -90,7 +90,7 @@
     <string name="menu_remove">삭제</string>
     <string name="menu_save">저장</string>
     <string name="see_more">See More</string>
-    <string name="txt_timeline_write">버킷일지를 입력하세요_</string>
+    <string name="txt_timeline_write">버킷일지를 입력하세요</string>
     <string name="title_activity_more">MoreActivity</string>
     <string name="alert_setting">알림 설정</string>
     <string name="public_setting">공개설정</string>
