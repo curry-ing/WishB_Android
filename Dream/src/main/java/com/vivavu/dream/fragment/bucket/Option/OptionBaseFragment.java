@@ -9,6 +9,7 @@ import com.vivavu.dream.model.bucket.option.Option;
 public abstract class OptionBaseFragment<T extends Option> extends CustomBaseFragment {
     protected T contents;
     protected boolean displayMode;
+    protected boolean modFlag = false;
     public OptionBaseFragment(T originalData) {
         this.contents = originalData;
     }
@@ -32,5 +33,13 @@ public abstract class OptionBaseFragment<T extends Option> extends CustomBaseFra
 
     public void setDisplayMode(boolean displayMode) {
         this.displayMode = displayMode;
+    }
+
+    public boolean isModFlag() {
+        return modFlag;
+    }
+
+    public void setModFlag(boolean modFlag) {
+        this.modFlag = modFlag;
     }
 }

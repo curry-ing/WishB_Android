@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,11 +20,13 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.main.MainActivity;
 import com.vivavu.dream.common.BaseActionBarActivity;
@@ -364,16 +367,47 @@ public class BucketEditActivity extends BaseActionBarActivity {
     }
 
 
+    private void showImage(Uri imageUri, ImageView view) {
+        if(imageUri != null){
+            File f = null;
+
+            if("file".equals(imageUri.getScheme() )){
+                f = new File(imageUri.getPath());
+            } else if("content".equals(imageUri.getScheme())){
+                String path = AndroidUtils.convertContentsToFileSchema(DreamApp.getInstance(), imageUri.toString());
+                f = new File(path);
+            }
+
+            if(f!= null && f.exists() && f.isFile()){
+                ImageLoader.getInstance().displayImage(imageUri.toString(), view, new SimpleImageLoadingListener(){
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                        // 이미지가 없을 경우에는 imageview 자체를 안보여줌
+                        if(loadedImage != null) {
+                            view.setVisibility(View.VISIBLE);
+                        }else {
+                            view.setVisibility(View.GONE);
+                        }
+                    }
+                });
+
+            }
+        }
+        checkRequireElement();
+    }
+
     private void bindData() {
         mBucketInputTitle.setText(bucket.getTitle());
 
-        DisplayImageOptions options = new DisplayImageOptions.Builder()
-                .cacheInMemory(true)
-                .cacheOnDisc(true)
-                .considerExifParams(true)
-                .showImageForEmptyUri(R.drawable.ic_bucket_empty)
-                .build();
-        ImageLoader.getInstance().displayImage(bucket.getCvrImgUrl(), mBucketImg, options);
+        if(bucket.getFile() == null){
+            DisplayImageOptions options = new DisplayImageOptions.Builder()
+                    .cacheInMemory(true)
+                    .cacheOnDisc(true)
+                    .considerExifParams(true)
+                    .showImageForEmptyUri(R.drawable.ic_bucket_empty)
+                    .build();
+            ImageLoader.getInstance().displayImage(bucket.getCvrImgUrl(), mBucketImg, options);
+        }
 
         if (bucket.getDeadline() != null) {
             mBucketInputDeadline.setText( DateUtils.getDateString(bucket.getDeadline(), "yyyy. MM. dd"));
