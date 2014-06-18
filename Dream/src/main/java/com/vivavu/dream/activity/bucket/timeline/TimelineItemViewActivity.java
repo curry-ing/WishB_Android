@@ -100,7 +100,6 @@ public class TimelineItemViewActivity extends BaseActionBarActivity{
         actionBar.setDisplayUseLogoEnabled(false);
         actionBar.setDisplayShowHomeEnabled(false);//로고 버튼 보이는 것 설정
         actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_before);
         actionBar.setCustomView(R.layout.actionbar_timeline_view);
         actionBar.setDisplayShowCustomEnabled(true);
 
