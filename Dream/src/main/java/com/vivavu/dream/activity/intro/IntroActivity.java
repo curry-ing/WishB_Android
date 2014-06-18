@@ -4,11 +4,18 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.SpannableString;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.UnderlineSpan;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +27,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import android.widget.Toast;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.login.LoginActivity;
 import com.vivavu.dream.activity.login.PrivacyActivity;
@@ -56,6 +64,8 @@ public class IntroActivity extends BaseActionBarActivity {
     Button mSignInButton;
     @InjectView(R.id.register_button)
     Button mRegisterButton;
+    @InjectView(R.id.intro_agreement_txt)
+    TextView mIntroAgreementTxt;
 //    @InjectView(R.id.pager)
 //    ViewPager mPager;
 //    @InjectView(R.id.intro_viewpager_indicator)
@@ -79,8 +89,35 @@ public class IntroActivity extends BaseActionBarActivity {
 
         // Set up the ViewPager with the sections adapter.
 //        mPager.setAdapter(mSectionsPagerAdapter);
-
 //        mIntroViewpagerIndicator.setViewPager(mPager);
+        mRegisterButton.setTypeface(getNanumBarunGothicBoldFont());
+        mSignInButton.setTypeface(getNanumBarunGothicBoldFont());
+        mIntroAgreementTxt.setTypeface(getNanumBarunGothicBoldFont());
+        mIntroAgreementTxt.setTextColor(Color.WHITE);
+        mIntroAgreementTxt.setTextSize(15);
+
+        SpannableString agreementText = new SpannableString(getResources().getString(R.string.regist_agreement));
+        ClickableSpan agreement = new ClickableSpan() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, UserAgreementActivity.class);
+                startActivity(intent);
+            }
+        };
+        ClickableSpan privacy = new ClickableSpan() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, PrivacyActivity.class);
+                startActivity(intent);
+            }
+        };
+        agreementText.setSpan(new ForegroundColorSpan(Color.WHITE), 0, 26, 0);
+        agreementText.setSpan(agreement, 27, 31, 0);
+        agreementText.setSpan(new ForegroundColorSpan(Color.LTGRAY), 27, 31, 0);
+        agreementText.setSpan(new MyclickableSpan("test"), 27, 31, 0);
+
+        mIntroAgreementTxt.setMovementMethod(LinkMovementMethod.getInstance());
+        mIntroAgreementTxt.setText(agreementText, TextView.BufferType.SPANNABLE);
 
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -185,7 +222,7 @@ public class IntroActivity extends BaseActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("test", "introActivity start!!!");
+//        Log.d("test", "introActivity start!!!");
     }
 
     /**
@@ -258,6 +295,22 @@ public class IntroActivity extends BaseActionBarActivity {
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;
+        }
+    }
+
+    class MyclickableSpan extends ClickableSpan {
+        String clicked;
+        public MyclickableSpan(String string){
+            super();
+            clicked = string;
+        }
+
+        public void onClick(View tv){
+            Toast.makeText(context, "test", Toast.LENGTH_LONG).show();
+        }
+
+        public void updateDrawState(TextPaint ds){
+            ds.setUnderlineText(false);
         }
     }
 

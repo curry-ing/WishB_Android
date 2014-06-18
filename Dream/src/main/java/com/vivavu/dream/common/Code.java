@@ -10,6 +10,7 @@ public class Code {
     final static public int ACT_USER_REGISTER = 4;
     final static public int ACT_INTRO = 5;
     final static public int ACT_RESET_PASSWORD = 6;
+    final static public int ACT_TODAY = 7;
 
     final static public int ACT_ADD_BUCKET_DEFAULT_CARD = 3;
     final static public int ACT_MOD_BUCKET_DEFAULT_CARD = 4;

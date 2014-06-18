@@ -24,10 +24,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Patterns;
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.View;
-import android.view.Window;
+import android.view.*;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -124,6 +121,7 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);//api level 11 이상 부터 사용가능
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         setResult(RESULT_CANCELED);
 
         setContentView(R.layout.activity_login);
@@ -360,8 +358,8 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
                 break;
             case 6:
                 mTxtResponseInfo.setVisibility(View.VISIBLE);
-                mTxtResponseInfo.setTextColor(Color.RED);
-                mTxtResponseInfo.setText("알림:  로그인 정보가 유효하지 않습니다.");
+                mTxtResponseInfo.setTextColor(Color.WHITE);
+                mTxtResponseInfo.setText("알림:  " + context.getResources().getString(R.string.login_failed));
                 mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.login_inactive_btn));
                 break;
             case 9:

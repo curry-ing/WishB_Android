@@ -33,14 +33,14 @@
                 <!--android:background="@drawable/intro_fb_btn"-->
                 <!--android:singleLine="false"-->
                 <!--android:layout_marginTop="10dp"/>-->
-        <com.facebook.widget.LoginButton
+        입<com.facebook.widget.LoginButton
             xmlns:fb="http://schemas.android.com/apk/res-auto"
-            android:layout_width="wrap_content"
-            android:layout_height="38dp"
+            android:layout_width="270dp"
+            android:layout_height="44dp"
             android:layout_gravity="center"
             android:id="@+id/authButton"
             android:layout_marginTop="10dp"
-            fb:login_text=""
-            fb:logout_text=""/>
+            fb:login_text="페이스북으로 순식간에 로그인"
+            fb:logout_text="" android:background="#ff627aad"/>
     </LinearLayout>
 </LinearLayout>

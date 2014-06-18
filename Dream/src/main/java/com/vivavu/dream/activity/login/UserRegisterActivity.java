@@ -1,6 +1,7 @@
 package com.vivavu.dream.activity.login;
 
 import android.app.LoaderManager;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -24,11 +25,14 @@ import android.text.style.ForegroundColorSpan;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 
 import com.vivavu.dream.R;
 import com.vivavu.dream.common.BaseActionBarActivity;
+import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.model.LoginInfo;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.SecureToken;
@@ -103,6 +107,7 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);//api level 11 이상 부터 사용가능
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         setContentView(R.layout.activity_register);
         getLoaderManager().initLoader(0, null, this);
 
@@ -123,6 +128,7 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
         mRegisterTxtResponseInfo.setTypeface(NanumBold);
         mRegisterTxtResponseInfo.setTextSize(15);
         mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
+        setmRegisterTxtResponseInfo(mInvalidType = 0);
 
         mRegisterAgreementTxt.setTypeface(NanumBold);
         mRegisterAgreementTxt.setTextSize(15);
@@ -249,7 +255,11 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
                         setmRegisterTxtResponseInfo(mInvalidType = 9);
                     }
                 } else {
-                    setmRegisterTxtResponseInfo(mInvalidType = 4);
+                    if (TextUtils.isEmpty(mRegisterPassword.getText())) {
+                        setmRegisterTxtResponseInfo(mInvalidType = 0);
+                    } else {
+                        setmRegisterTxtResponseInfo(mInvalidType = 4);
+                    }
                 }
             }
         });
@@ -421,14 +431,14 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
                 break;
             case 6:
                 mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
-                mRegisterTxtResponseInfo.setTextColor(Color.RED);
+                mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
                 mRegisterTxtResponseInfo.setText("알림:  오류가 발생했습니다. 다시 시도해주세요.");
                 mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.register_inactive_btn));
 //                mRegisterButton.setEnabled(false);
                 break;
             case 7:
                 mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
-                mRegisterTxtResponseInfo.setTextColor(Color.RED);
+                mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
                 mRegisterTxtResponseInfo.setText("알림:  이미 가입된 이메일입니다.");
                 mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.register_inactive_btn));
 //                mRegisterButton.setEnabled(false);

@@ -3,6 +3,8 @@ package com.vivavu.dream.activity.main;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.view.Gravity;
@@ -10,11 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.*;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
@@ -52,6 +50,7 @@ public class MainActivity extends BaseActionBarActivity {
     MainBucketListFragment mainBucketListFragment;
 
     public static final String EXTRA_BUCKET_DEFAULT_RANGE="extraBucketDefaultRange";
+    Boolean doubleBackToExitPressedOnce = false;
     @InjectView(R.id.content_frame)
     FrameLayout mContentFrame;
     @InjectView(R.id.container)
@@ -114,8 +113,9 @@ public class MainActivity extends BaseActionBarActivity {
         mActionbarMainToday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, TodayActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(MainActivity.this, TodayActivity.class);
+//                startActivity(intent);
+                goToday();
             }
         });
 
@@ -138,7 +138,9 @@ public class MainActivity extends BaseActionBarActivity {
 
         actionBarProfileViewHolder.mTxtProfile.setTypeface(getNanumBarunGothicFont());
 
+        // Drawer Menu(profile) Control
         mContainer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        mContainer.setFocusableInTouchMode(false); //for close drawer when press back button;
         mProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -233,10 +235,26 @@ public class MainActivity extends BaseActionBarActivity {
 
     @Override
     public void onBackPressed() {
-        if(mPopupNotice != null && mPopupNotice.isShowing()){
+//        Boolean doubleBackToExitPressedOnce = false;
+        if(mContainer.isDrawerOpen(Gravity.LEFT)){
+            mContainer.closeDrawer(Gravity.LEFT);
+        } else if(mPopupNotice != null && mPopupNotice.isShowing()){
             mPopupNotice.hide();
-        }else{
-            exit();
+        } else {
+            if(doubleBackToExitPressedOnce) {
+                exit();
+            }
+
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(new Runnable(){
+                @Override
+                public void run(){
+                    doubleBackToExitPressedOnce = false;
+                }
+            }, 2000);
+//            exit();
         }
     }
 

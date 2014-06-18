@@ -67,11 +67,13 @@
     <string name="privacy">개인정보 보호방침 보기</string>
     <string name="lbl_access_terms">이용약관</string>
     <string name="lbl_private">개인정보 보호방침</string>
-    <string name="regist_agreement">가입을 통해 이용약관과\n개인정보 보호정책에 동의 합니다.</string>
+    <!--<string name="regist_agreement">가입을 통해 이용약관과\n개인정보 보호정책에 동의 합니다.</string>-->
+    <string name="regist_agreement">가입과 함께 약관에 동의하신\n것으로 간주합니다. 약관보기</string>
     <string name="txt_facebook_login">페이스북으로 로그인하면\n친구들의 꿈도 볼 수 있어요!</string>
     <string name="txt_write_joined_email">가입한 이메일 주소를 적어주세요.</string>
     <string name="txt_btn_submit">전송</string>
     <string name="not_valid_email">올바르지 않은 이메일 형식입니다.</string>
+    <string name="login_failed">로그인 정보가 올바르지 않습니다.</string>
     <string name="user_agreement_contents">이용약관 블라블라</string>
     <string name="privacy_contents">개인정보보호방침</string>
     <string name="actionbar_main_title">꿈틀</string>

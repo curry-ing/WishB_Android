@@ -75,9 +75,9 @@ public class TodayActivity extends BaseActionBarActivity {
             }
         });*/
 
-        mActionbarMainTitle.setText("Wish Ballon");
+        mActionbarMainTitle.setText("Wish B.");
         mActionbarMainTitle.setTypeface(getNanumBarunGothicBoldFont());
-        mActionbarMainTitle.setTextSize(22);
+        mActionbarMainTitle.setTextSize(20);
         mActionbarMainTitle.setTextColor(Color.WHITE);
 
         mActionbarMainToday.setTypeface(getNanumBarunGothicBoldFont());
@@ -88,7 +88,8 @@ public class TodayActivity extends BaseActionBarActivity {
         mActionbarMainToday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+//                finish();
+                goMain();
             }
         });
     }
