@@ -233,6 +233,11 @@ public class TimelineConnector extends Connector<Post> {
         if(post.getImgUrl() == null){
             requestPost.set("img_id", "");
         }
+        if(post.getFbShare() == null){
+            requestPost.set("fb_share", "false");
+        } else {
+            requestPost.set("fb_share", post.getFbShare());
+        }
 
         return requestPost;
     }
