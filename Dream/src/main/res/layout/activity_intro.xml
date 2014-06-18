@@ -59,17 +59,13 @@
             android:text="@string/regist_agreement"
             android:id="@+id/intro_agreement_txt"
             android:gravity="center_horizontal"
-            android:shadowColor="#60000000"
-            android:shadowDx="0"
-            android:shadowDy="0"
-            android:shadowRadius="8"
             android:textAlignment="center"
             android:lineSpacingExtra="5dp"
             android:layout_marginTop="15dp" android:layout_gravity="center_horizontal"/>
-    <!--<Button android:id="@+id/fb_login_button" android:layout_width="wrap_content" android:layout_height="38dp"-->
-            <!--android:paddingLeft="32dp" android:paddingRight="32dp" android:layout_gravity="center_horizontal"-->
-            <!--android:layout_marginTop="11dp" android:background="@drawable/intro_fb_btn"/>-->
-
+    <!--android:shadowColor="#60000000"-->
+    <!--android:shadowDx="0"-->
+    <!--android:shadowDy="0"-->
+    <!--android:shadowRadius="8"-->
 
     <!--<LinearLayout-->
         <!--android:layout_width="match_parent"-->

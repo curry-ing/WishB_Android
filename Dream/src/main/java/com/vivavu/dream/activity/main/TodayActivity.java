@@ -137,7 +137,8 @@ public class TodayActivity extends BaseActionBarActivity {
         if(mPopupNotice != null && mPopupNotice.isShowing()){
             mPopupNotice.hide();
         }else{
-            finish();
+//            finish();
+            goMain();
         }
     }
 }

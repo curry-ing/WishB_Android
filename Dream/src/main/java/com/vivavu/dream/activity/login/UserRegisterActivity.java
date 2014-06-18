@@ -15,10 +15,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBar;
-import android.text.Editable;
-import android.text.SpannableString;
-import android.text.TextUtils;
-import android.text.TextWatcher;
+import android.text.*;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
@@ -151,11 +148,10 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
                 startActivity(intent);
             }
         };
-        agreementText.setSpan(new ForegroundColorSpan(Color.WHITE), 0, 6, 0);
-        agreementText.setSpan(agreement, 7, 11, 0);
-        agreementText.setSpan(new ForegroundColorSpan(Color.WHITE), 11, 13, 0);
-        agreementText.setSpan(privacy, 13, 22, 0);
-        agreementText.setSpan(new ForegroundColorSpan(Color.WHITE), 22, 31, 0);
+        agreementText.setSpan(new ForegroundColorSpan(Color.WHITE), 0, 26, 0);
+        agreementText.setSpan(agreement, 27, 31, 0);
+        agreementText.setSpan(new ForegroundColorSpan(Color.LTGRAY), 27, 31, 0);
+        agreementText.setSpan(new MyclickableSpan("test"), 27, 31, 0);
 
         mRegisterAgreementTxt.setMovementMethod(LinkMovementMethod.getInstance());
         mRegisterAgreementTxt.setText(agreementText, TextView.BufferType.SPANNABLE);
@@ -569,6 +565,22 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
             ResponseBodyWrapped<Integer> result = userInfoConnector.checkEmailExists(mRegisterEmail.getText().toString());
             Message message = handler.obtainMessage(result.getData());
             handler.sendMessage(message);
+        }
+    }
+
+    public class MyclickableSpan extends ClickableSpan {
+        String clicked;
+        public MyclickableSpan(String string){
+            super();
+            clicked = string;
+        }
+
+        public void onClick(View tv){
+            Toast.makeText(context, "test", Toast.LENGTH_LONG).show();
+        }
+
+        public void updateDrawState(TextPaint ds){
+            ds.setUnderlineText(false);
         }
     }
 }

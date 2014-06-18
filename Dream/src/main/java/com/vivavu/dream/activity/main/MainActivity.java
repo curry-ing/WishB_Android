@@ -51,6 +51,7 @@ public class MainActivity extends BaseActionBarActivity {
 
     public static final String EXTRA_BUCKET_DEFAULT_RANGE="extraBucketDefaultRange";
     Boolean doubleBackToExitPressedOnce = false;
+
     @InjectView(R.id.content_frame)
     FrameLayout mContentFrame;
     @InjectView(R.id.container)
