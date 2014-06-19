@@ -13,25 +13,18 @@
         android:src="@drawable/ic_previous"
         android:background="@null"
         android:id="@+id/menu_previous"
-        android:paddingLeft="15dp"
-        android:paddingRight="10dp"
-        android:layout_alignParentLeft="true"
+        style="@style/TextActionbarLeftButton"
         />
 
     <TextView
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center"
         android:id="@+id/txt_title"
         android:text="더보기"
         android:textAlignment="center"
-        android:textSize="25.0875sp"
-        android:maxLength="20"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:textColor="@android:color/white"
-        android:layout_centerHorizontal="true"
-        android:padding="0dp"
+        android:textColor="@color/default_text_color"
+        style="@style/TextBucketTitleStyle"
         />
 
     <ImageButton
@@ -40,9 +33,7 @@
         android:src="@drawable/ic_more"
         android:background="@null"
         android:id="@+id/menu_more"
-        android:paddingLeft="5dp"
-        android:paddingRight="21dp"
-        android:layout_alignParentRight="true"
         android:visibility="gone"
+        style="@style/TextActionbarRightButton"
         />
 </RelativeLayout>
