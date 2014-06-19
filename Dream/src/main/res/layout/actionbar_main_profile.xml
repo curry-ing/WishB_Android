@@ -8,20 +8,24 @@
     >
     <ImageButton
         android:layout_width="7dp"
-        android:layout_height="48dp"
+        android:layout_height="match_parent"
         android:src="@drawable/ic_profile_activie"
         android:background="@null"
         android:padding="0dp"
         />
     <ImageView android:layout_width="wrap_content"
-               android:layout_height="48dp"
-               android:id="@+id/profile"
-               android:text="today"
-               android:layout_alignParentLeft="true"
-               android:src="@drawable/mainview_profile"
-               android:layout_marginLeft="15dp"/>
+        android:layout_height="match_parent"
+        android:id="@+id/profile"
+        android:src="@drawable/mainview_profile"
+        android:text="today"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="15dp"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        style="@style/TextActionbarLeftButton"
+        />
     <TextView android:layout_width="wrap_content"
-              android:layout_height="48dp"
+              android:layout_height="match_parent"
               android:text="프로필"
               android:background="@null"
                 android:layout_toRightOf="@+id/profile"

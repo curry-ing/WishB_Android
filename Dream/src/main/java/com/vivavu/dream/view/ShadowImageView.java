@@ -65,6 +65,7 @@ public class ShadowImageView extends BaseImageView {
             shadowRadius = arr.getFloat(R.styleable.CustomeImageView_shadowRadius, 1.0f);
             addShadow(shadowRadius, shadowDx, shadowDy, shadowColor);
         }
+        expand = arr.getBoolean(R.styleable.CustomeImageView_expand, true);
 
         setProgressBarWidth(arr.getDimensionPixelSize(R.styleable.CustomeImageView_progressBarWidth, 2));
         setProgressBarColor(arr.getColor(R.styleable.CustomeImageView_progressBarColor, Color.WHITE));
@@ -152,6 +153,7 @@ public class ShadowImageView extends BaseImageView {
         Paint pnt = new Paint();
 
         //꽉찬 원형을 그림
+        pnt.setAntiAlias(true);
         pnt.setStyle(Paint.Style.FILL);
         pnt.setColor(Color.BLACK);
         canvas.drawOval(new RectF(0.0f + (getPaddingLeft() + progressBarWidth)

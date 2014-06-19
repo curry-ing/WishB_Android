@@ -90,6 +90,7 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
     @InjectView(R.id.txt_post_time)
     TextView mTxtPostTime;
 
+    boolean modFlag = false;
 
     private ProgressDialog progressDialog;
 
@@ -111,6 +112,9 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
 
         @Override
         public void afterTextChanged(Editable s) {
+            if(!s.toString().equals(post.getText())){
+                modFlag = true;
+            }
             if(s.toString().length() < 1){
                 post.setText(null);
             }else {
@@ -169,6 +173,8 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
         post = (Post) data.getSerializableExtra(TimelineActivity.extraKeyPost);
         if(post.getId() == null || post.getId() < 1) {
             post.setBucketId(bucket.getId());
+        } else {
+            mTxtPostText.setHint(null);
         }
 
         mTxtTitle.setTypeface(getNanumBarunGothicBoldFont());
@@ -202,6 +208,7 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                                 dialog.dismiss();
                                 break;
                             case 2:
+                                modFlag = true;
                                 post.setImgUrl(null);
                                 post.setPhoto(null);
                                 bindData(post);
@@ -289,7 +296,7 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
             @Override
             public void onClick(View v) {
                 setResult(RESULT_CANCELED);
-                finish();
+                confirm();
             }
         });
     }
@@ -318,6 +325,7 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
             case Code.ACT_ADD_BUCKET_TAKE_GALLERY:
                 if(resultCode == RESULT_OK){
                     if(data != null ) {
+                        modFlag = true;
                         mImageCaptureUri = data.getData();
                         showImage(mImageCaptureUri, mIvTimelineImage);
                     }
@@ -325,6 +333,7 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                 break;
             case Code.ACT_ADD_BUCKET_TAKE_CAMERA:
                 if(resultCode == RESULT_OK){
+                    modFlag = true;
                     showImage(mImageCaptureUri, mIvTimelineImage);
                 }
                 break;
@@ -371,15 +380,17 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
     }
 
     private void postSave() {
-        Post post = getPost();
-        NetworkThread networkThread = new NetworkThread(post);
-        Thread thread = new Thread(networkThread);
-        thread.start();
+        if(checkRequireElement()) {
+            Post post = getPost();
+            NetworkThread networkThread = new NetworkThread(post);
+            Thread thread = new Thread(networkThread);
+            thread.start();
+        }
     }
 
     public Post getPost() {
         post.setText(String.valueOf(mTxtPostText.getText()));
-        post.setTimestamp(DateUtils.getDateFromString(String.valueOf(mTxtPostDate.getText() + " " + mTxtPostTime), "yyyy.MM.dd HH:mm", new Date()));
+        post.setTimestamp(DateUtils.getDateFromString(String.valueOf(mTxtPostDate.getText() + " " + mTxtPostTime.getText()), "yyyy.MM.dd HH:mm", new Date()));
         return post;
     }
 
@@ -425,6 +436,38 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
         Intent intent = new Intent( Intent.ACTION_PICK ) ;
         intent.setType(MediaStore.Images.Media.CONTENT_TYPE) ;
         startActivityForResult( intent, Code.ACT_ADD_BUCKET_TAKE_GALLERY ) ;
+    }
+
+    public void confirm(){
+        if(modFlag) {
+            AlertDialog.Builder alertConfirm = new AlertDialog.Builder(this);
+            alertConfirm.setTitle("내용 변경 확인");
+            alertConfirm.setMessage("변경한 내용을 저장하시겠습니까?").setCancelable(false).setPositiveButton("예",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            postSave();
+                        }
+                    }
+            ).setNegativeButton("아니오",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                            return;
+                        }
+                    }
+            );
+            AlertDialog alert = alertConfirm.create();
+            alert.show();
+        } else {
+            finish();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        confirm();
     }
 
     private class NetworkThread implements Runnable{

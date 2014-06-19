@@ -1,10 +1,10 @@
 package com.vivavu.dream.activity.main;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.view.Gravity;
@@ -12,10 +12,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
+import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.bucket.BucketEditActivity;
 import com.vivavu.dream.activity.bucket.BucketViewActivity;
@@ -125,22 +132,7 @@ public class MainActivity extends BaseActionBarActivity {
             }
         });
 
-        String userProfileImgUrl = DreamApp.getInstance().getUser().getProfileImgUrl();
-        if (userProfileImgUrl != null && !userProfileImgUrl.isEmpty()){
-            Drawable avatar = new RoundedAvatarDrawable(ImageLoader.getInstance().loadImageSync(userProfileImgUrl,
-                                                        new ImageSize(AndroidUtils.getPixelFromDIP(null, 30),
-                                                                      AndroidUtils.getPixelFromDIP(null, 30))));
-
-            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(AndroidUtils.getPixelFromDIP(null, 30),
-                                                                             AndroidUtils.getPixelFromDIP(null, 30));
-            lp.setMargins(AndroidUtils.getPixelFromDIP(null, 15),
-                          AndroidUtils.getPixelFromDIP(null, 9), 0, 0);
-
-            mProfile.setLayoutParams(lp);
-            mProfile.setImageDrawable(avatar);
-            actionBarProfileViewHolder.mProfile.setLayoutParams(lp);
-            actionBarProfileViewHolder.mProfile.setImageDrawable(avatar);
-        }
+        updateProfileImg();
 
         actionBarProfileViewHolder.mTxtProfile.setTypeface(getNanumBarunGothicFont());
 
@@ -186,6 +178,31 @@ public class MainActivity extends BaseActionBarActivity {
             }
         });
 
+    }
+
+    public void updateProfileImg() {
+        final ActionBarProfileViewHolder actionBarProfileViewHolder = (ActionBarProfileViewHolder) customActionBarViewProfile.getTag();
+        String userProfileImgUrl = DreamApp.getInstance().getUser().getProfileImgUrl();
+        int pixelSize = getResources().getDimensionPixelSize(R.dimen.actionbar_profile_img_size);
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisc(true)
+                .considerExifParams(true)
+                .showImageForEmptyUri(R.drawable.mainview_profile)
+                .build();
+        ImageLoader.getInstance().loadImage(userProfileImgUrl, new ImageSize(pixelSize, pixelSize), options, new SimpleImageLoadingListener(){
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                if(loadedImage != null) {
+                    Drawable avatar = new RoundedAvatarDrawable(loadedImage);
+                    mProfile.setImageDrawable(avatar);
+                    actionBarProfileViewHolder.mProfile.setImageDrawable(avatar);
+                } else {
+                    mProfile.setImageResource(R.drawable.mainview_profile);
+                    actionBarProfileViewHolder.mProfile.setImageResource(R.drawable.mainview_profile);
+                }
+            }
+        });
     }
 
     @Override

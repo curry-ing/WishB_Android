@@ -13,10 +13,7 @@
         android:src="@drawable/ic_previous"
         android:background="@null"
         android:id="@+id/menu_previous"
-        android:paddingLeft="15dp"
-        android:paddingRight="10dp"
-        android:layout_gravity="left"
-        android:layout_alignParentLeft="true"
+        style="@style/TextActionbarLeftButton"
         />
     <TextView
         android:layout_width="wrap_content"
@@ -24,10 +21,6 @@
         android:id="@+id/txt_title"
         android:text="20's"
         android:textAlignment="center"
-        android:layout_centerHorizontal="true"
-        android:layout_toRightOf="@+id/menu_previous"
-        android:layout_toLeftOf="@+id/btn_today"
-
         style="@style/TextBucketTitleStyle"
         />
 
@@ -37,7 +30,6 @@
         android:id="@+id/btn_today"
         android:text="Today"
         android:textAlignment="center"
-        android:layout_alignParentRight="true"
         android:background="@null"
         style="@style/TextActionbarRightButton"
         />

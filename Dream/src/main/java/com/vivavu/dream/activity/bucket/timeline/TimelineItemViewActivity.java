@@ -11,7 +11,6 @@ import android.support.v7.widget.PopupMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -44,7 +43,7 @@ public class TimelineItemViewActivity extends BaseActionBarActivity{
     @InjectView(R.id.txt_post_date)
     TextView mTxtPostDate;
     @InjectView(R.id.btn_timeline_edit)
-    Button mBtnTimelineEdit;
+    ImageButton mBtnTimelineEdit;
     @InjectView(R.id.txt_post_text)
     TextView mTxtPostText;
     @InjectView(R.id.iv_timeline_image)
@@ -61,6 +60,8 @@ public class TimelineItemViewActivity extends BaseActionBarActivity{
     ImageButton mMenuMore;
 
     Post post;
+    @InjectView(R.id.txt_post_time)
+    TextView mTxtPostTime;
 
     private ProgressDialog progressDialog;
 
@@ -164,7 +165,8 @@ public class TimelineItemViewActivity extends BaseActionBarActivity{
 
     private void bindData(Post post) {
         mTxtPostText.setText(post.getText());
-        mTxtPostDate.setText(DateUtils.getDateString(post.getRegDt(), "yyyy.MM.dd HH:mm"));
+        mTxtPostDate.setText(DateUtils.getDateString(post.getRegDt(), "yyyy.MM.dd"));
+        mTxtPostTime.setText(DateUtils.getDateString(post.getRegDt(), "HH:mm"));
         ImageLoader.getInstance().displayImage(post.getImgUrl(), mIvTimelineImage, new SimpleImageLoadingListener(){
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {

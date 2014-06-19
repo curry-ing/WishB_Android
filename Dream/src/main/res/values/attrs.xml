@@ -13,5 +13,6 @@
         <attr name="foregroundResId" format="reference"></attr>
         <attr name="progressBarWidth" format="dimension"></attr>
         <attr name="progressBarColor" format="color"></attr>
+        <attr name="expand" format="boolean"></attr>
     </declare-styleable>
 </resources>

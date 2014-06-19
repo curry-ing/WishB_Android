@@ -13,10 +13,7 @@
         android:src="@drawable/ic_previous"
         android:background="@null"
         android:id="@+id/menu_previous"
-        android:paddingLeft="15dp"
-        android:paddingRight="10dp"
-        android:layout_gravity="left"
-        android:layout_alignParentLeft="true"
+        style="@style/TextActionbarLeftButton"
         />
 
     <TextView
@@ -27,8 +24,6 @@
         android:layout_centerHorizontal="true"
         android:layout_toRightOf="@+id/menu_previous"
         android:layout_toLeftOf="@+id/menu_save"
-        android:padding="0dp"
-
         style="@style/TextBucketTitleStyle"
         />
 
@@ -39,7 +34,6 @@
         android:id="@+id/menu_save"
         android:text="Save"
         android:textAlignment="center"
-        android:layout_alignParentRight="true"
         style="@style/TextActionbarRightButton"
         />
 </RelativeLayout>

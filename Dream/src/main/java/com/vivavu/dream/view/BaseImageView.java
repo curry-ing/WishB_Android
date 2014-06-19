@@ -39,6 +39,7 @@ public abstract class BaseImageView extends ImageView {
     protected boolean mReady;
     protected boolean mSetupPending;
     private int canvasSize;
+    protected boolean expand = true;
 
     public BaseImageView(Context context) {
         super(context);
@@ -103,8 +104,6 @@ public abstract class BaseImageView extends ImageView {
                         // Allocation onDraw but it's ok because it will not always be called.
                         bitmap = Bitmap.createBitmap(canvasSize, canvasSize, Bitmap.Config.ARGB_8888);
                         Canvas bitmapCanvas = new Canvas(bitmap);
-
-                        boolean expand = true;
 
                         if(expand || drawable.getIntrinsicWidth() > bitmapCanvas.getWidth() || drawable.getIntrinsicHeight() > bitmapCanvas.getHeight()){
                             drawable.setBounds(0, 0, bitmapCanvas.getWidth(), bitmapCanvas.getHeight());
@@ -220,4 +219,12 @@ public abstract class BaseImageView extends ImageView {
     }
 
     public abstract Bitmap getBitmap(int width, int height);
+
+    public boolean isExpand() {
+        return expand;
+    }
+
+    public void setExpand(boolean expand) {
+        this.expand = expand;
+    }
 }
