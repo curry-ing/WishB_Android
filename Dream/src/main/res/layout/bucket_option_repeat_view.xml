@@ -35,8 +35,8 @@
             android:layout_gravity="center_horizontal"
             android:gravity="center_vertical"
             android:id="@+id/layout_bucket_option_repeat_week"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
             android:paddingBottom="20dp"
             android:background="@drawable/bg_box_with_top_line"
             >

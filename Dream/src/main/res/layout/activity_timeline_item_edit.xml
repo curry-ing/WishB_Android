@@ -38,7 +38,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="date"
                     android:hint="2014.03.03"
-                    android:textSize="16.725sp"
+                    android:textSize="20sp"
                     android:id="@+id/txt_post_date"
                     android:typeface="sans"
                     android:textColor="#444444"
@@ -50,11 +50,12 @@
                     android:layout_height="wrap_content"
                     android:inputType="date"
                     android:hint="17:30"
-                    android:textSize="16.725sp"
+                    android:textSize="20sp"
                     android:id="@+id/txt_post_time"
                     android:typeface="sans"
                     android:textColor="#444444"
                     android:paddingLeft="4dp"
+                    android:layout_marginLeft="10dp"
                     android:background="@drawable/bg_timeline_write_timestamp"
                     />
                 </LinearLayout>
