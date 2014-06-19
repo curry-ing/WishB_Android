@@ -40,10 +40,8 @@ import com.vivavu.dream.repository.connector.UserInfoConnector;
 import com.vivavu.dream.util.ViewUnbindHelper;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -63,6 +61,7 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
 
     private int deviceDensityDpi;
     private String mUserBirthday;
+    private String mFromMonth, mToMonth;
 
     static public final int PROGRESS_BAR_BASELINE = 270;
     public static final String TAG = "DialogActivity";
@@ -134,16 +133,10 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
         this.mUserBirthday = DreamApp.getInstance().getUser().getBirthday();
 
         /* SET MAIN TITLE */
-        //Typeface typeface = Typeface.createFromAsset(context.getAssets(), "NanumBarunGothicBold.mp3");
-//        Shader textShader = new LinearGradient(2, 0, 4, 60, new int[]{Color.parseColor("#b4e391"),Color.parseColor("#61c419"),Color.parseColor("#b4e391")},
-//                new float[]{0, 3,1}, Shader.TileMode.MIRROR);
-//        holder.mBtnDecade.getPaint().setShader(textShader);
         holder.mBtnDecade.setTypeface(BaseActionBarActivity.getNanumBarunGothicBoldFont());
         holder.mBtnDecade.setTextSize(22);
         holder.mBtnDecade.setTextColor(Color.WHITE);
         holder.mBtnDecade.getPaint().setAntiAlias(true);
-//        holder.mBtnDecade.setCompoundDrawablesWithIntrinsicBounds(R.drawable.pencil,0,0,0);
-
 
         switch (pos){
             case 0:
@@ -171,7 +164,8 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
         if (title != null) {
             holder.mBtnDecade.setText(title+" ");
         } else {
-            holder.mBtnDecade.setText(bucketGroup.getRangeText()+" ");
+            String imsi = bucketGroup.getRangeText();
+            holder.mBtnDecade.setText(bucketGroup.getRangeText().equals("60대") ? "60대 이후" : bucketGroup.getRangeText()+" ");
         }
 
         holder.mBtnDecade.setOnClickListener(new View.OnClickListener() {
@@ -241,6 +235,44 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
 
         /* SET PROGRESS BAR */
         if (mUserBirthday != null && !mUserBirthday.isEmpty()) {
+            String s = mUserBirthday.substring(4, 6);
+            if (s.equals("01")) {
+                mFromMonth = "J A N  ";
+                mToMonth = "D E C  ";
+            } else if (s.equals("02")) {
+                mFromMonth = "F E B  ";
+                mToMonth = "J A N  ";
+            } else if (s.equals("03")) {
+                mFromMonth = "M A R  ";
+                mToMonth = "F E B  ";
+            } else if (s.equals("04")) {
+                mFromMonth = "A P R  ";
+                mToMonth = "M A R  ";
+            } else if (s.equals("05")) {
+                mFromMonth = "M A Y  ";
+                mToMonth = "A P R  ";
+            } else if (s.equals("06")) {
+                mFromMonth = "J U N  ";
+                mToMonth = "M A Y  ";
+            } else if (s.equals("07")) {
+                mFromMonth = "J U L  ";
+                mToMonth = "J U N  ";
+            } else if (s.equals("08")) {
+                mFromMonth = "A U G  ";
+                mToMonth = "J U L  ";
+            } else if (s.equals("09")) {
+                mFromMonth = "S E P  ";
+                mToMonth = "A U G  ";
+            } else if (s.equals("10")) {
+                mFromMonth = "O C T  ";
+                mToMonth = "S E P  ";
+            } else if (s.equals("11")) {
+                mFromMonth = "N O V  ";
+                mToMonth = "O C T  ";
+            } else if (s.equals("12")) {
+                mFromMonth = "D E C  ";
+                mToMonth = "N O V  ";
+            }
             if (pos > 0) {
                 holder.mMainProgress.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
                 Calendar cal = java.util.Calendar.getInstance();
@@ -252,15 +284,15 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
                 holder.mPeriod.setTypeface(periodTypeFace, Typeface.BOLD);
                 holder.mPeriod.setTextSize(25);
                 if (pos == 6) {
-                    holder.mPeriod.setText("J A N  " + String.valueOf(startY).charAt(0) + " "
+                    holder.mPeriod.setText(mFromMonth + String.valueOf(startY).charAt(0) + " "
                             + String.valueOf(startY).charAt(1) + " "
                             + String.valueOf(startY).charAt(2) + " "
                             + String.valueOf(startY).charAt(3) + "  ~");
                 } else {
-                    holder.mPeriod.setText("J A N  " + String.valueOf(startY).charAt(0) + " "
+                    holder.mPeriod.setText(mFromMonth + String.valueOf(startY).charAt(0) + " "
                             + String.valueOf(startY).charAt(1) + " "
                             + String.valueOf(startY).charAt(2) + " "
-                            + String.valueOf(startY).charAt(3) + "  -  D E C  "
+                            + String.valueOf(startY).charAt(3) + "  -  " + mToMonth
                             + String.valueOf(endY).charAt(0) + " "
                             + String.valueOf(endY).charAt(1) + " "
                             + String.valueOf(endY).charAt(2) + " "
@@ -285,7 +317,7 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
                 holder.mPeriod.setTextSize(25);
 //            holder.mMainProgress.setImageDrawable(new FanShapeDrawable(null, 0, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
                 holder.mMainProgress.setImageDrawable(new FanShapeDrawable(null, marking, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
-                holder.mPeriod.setText("J A N  " + mUserBirthday.substring(0, 1) + " "
+                holder.mPeriod.setText(mFromMonth + mUserBirthday.substring(0, 1) + " "
                         + mUserBirthday.substring(1, 2) + " "
                         + mUserBirthday.substring(2, 3) + " "
                         + mUserBirthday.substring(3, 4) + "  ~");

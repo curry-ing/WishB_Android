@@ -68,7 +68,7 @@
     <string name="lbl_access_terms">이용약관</string>
     <string name="lbl_private">개인정보 보호방침</string>
     <!--<string name="regist_agreement">가입을 통해 이용약관과\n개인정보 보호정책에 동의 합니다.</string>-->
-    <string name="regist_agreement">가입과 함께 약관에 동의하신\n것으로 간주합니다. 약관보기</string>
+    <string name="regist_agreement">가입과 함께 약관에 동의하신 것으로 간주합니다. 약관보기</string>
     <string name="txt_facebook_login">페이스북으로 로그인하면\n친구들의 꿈도 볼 수 있어요!</string>
     <string name="txt_write_joined_email">가입한 이메일 주소를 적어주세요.</string>
     <string name="txt_btn_submit">전송</string>
@@ -103,5 +103,6 @@
     <string name="txt_answer_for_email">답변받을 E-Mail</string>
     <string name="txt_send_email">보내기</string>
     <string name="email_info">chee1004@naver.com</string>
+    <string name="press_again_to_exit">\'뒤로\' 버튼을 한번 더 누르면 종료돼요.</string>
 
 </resources>

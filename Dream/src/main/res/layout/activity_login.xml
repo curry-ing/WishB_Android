@@ -211,19 +211,21 @@
     android:singleLine="true" android:paddingLeft="5dp" android:visibility="invisible"/>
 
     <Button android:id="@+id/sign_in_button"
-    android:layout_width="wrap_content"
+    android:layout_width="260dp"
     android:layout_height="38dp"
     android:layout_marginTop="30dp"
     android:paddingLeft="32dp"
     android:paddingRight="32dp"
-    android:layout_gravity="center" android:background="@drawable/login_inactive_btn" android:enabled="true"/>
+    android:layout_gravity="center" android:background="@drawable/btn_inactive" android:enabled="true"
+    android:textSize="15dp" android:text="로그인" android:textColor="@color/white"/>
 
     <Button
-    android:layout_width="wrap_content"
+    android:layout_width="260dp"
     android:layout_height="38dp"
     android:id="@+id/txt_forgot_password"
-    android:layout_gravity="center_horizontal" android:background="@drawable/login_forgetpw_btn"
-    android:layout_marginTop="12dp" android:enabled="true"/>
+    android:layout_gravity="center_horizontal" android:background="@drawable/btn_active"
+    android:layout_marginTop="12dp" android:enabled="true" android:text="비밀번호를 잊으셨나요?"
+    android:textColor="@color/white" android:textSize="15dp"/>
 
     </LinearLayout>
     <LinearLayout

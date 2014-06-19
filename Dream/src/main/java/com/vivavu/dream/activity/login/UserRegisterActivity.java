@@ -8,6 +8,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,6 +20,8 @@ import android.text.*;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -39,6 +42,7 @@ import com.vivavu.dream.util.ValidationUtils;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -127,8 +131,8 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
         mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
         setmRegisterTxtResponseInfo(mInvalidType = 0);
 
-        mRegisterAgreementTxt.setTypeface(NanumBold);
-        mRegisterAgreementTxt.setTextSize(15);
+        mRegisterAgreementTxt.setTypeface(getNanumBarunGothicFont());
+        mRegisterAgreementTxt.setTextSize(12);
 //        mRegisterAgreementTxt.setTextColor(Color.WHITE);
 
         SpannableString agreementText = new SpannableString(getResources().getString(R.string.regist_agreement));
@@ -150,8 +154,9 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
         };
         agreementText.setSpan(new ForegroundColorSpan(Color.WHITE), 0, 26, 0);
         agreementText.setSpan(agreement, 27, 31, 0);
-        agreementText.setSpan(new ForegroundColorSpan(Color.LTGRAY), 27, 31, 0);
+        agreementText.setSpan(new ForegroundColorSpan(Color.WHITE), 27, 31, 0);
         agreementText.setSpan(new MyclickableSpan("test"), 27, 31, 0);
+        agreementText.setSpan(new StyleSpan(Typeface.BOLD), 27, 31, 0);
 
         mRegisterAgreementTxt.setMovementMethod(LinkMovementMethod.getInstance());
         mRegisterAgreementTxt.setText(agreementText, TextView.BufferType.SPANNABLE);
@@ -387,62 +392,62 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
             case 0:
                 mRegisterTxtResponseInfo.setVisibility(View.INVISIBLE);
                 mRegisterTxtResponseInfo.setText("");
-                mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.register_inactive_btn));
+                mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
 //                mRegisterButton.setEnabled(false);
                 break;
             case 1:
                 mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
                 mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
                 mRegisterTxtResponseInfo.setText("알림:  이메일 주소가 입력되지 않았습니다.");
-                mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.register_inactive_btn));
+                mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
 //                mRegisterButton.setEnabled(false);
                 break;
             case 2:
                 mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
                 mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
                 mRegisterTxtResponseInfo.setText("알림:  패스워드가 입력되지 않았습니다.");
-                mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.register_inactive_btn));
+                mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
 //                mRegisterButton.setEnabled(false);
                 break;
             case 3:
                 mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
                 mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
                 mRegisterTxtResponseInfo.setText("알림:  올바르지 않은 이메일 형식입니다.");
-                mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.register_inactive_btn));
+                mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
 //                mRegisterButton.setEnabled(false);
                 break;
             case 4:
                 mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
                 mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
                 mRegisterTxtResponseInfo.setText("알림:  비밀번호(6자 이상)를 확인해 주세요.");
-                mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.register_inactive_btn));
+                mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
 //                mRegisterButton.setEnabled(false);
                 break;
             case 5:
                 mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
                 mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
                 mRegisterTxtResponseInfo.setText("알림:  가입하지 않은 이메일입니다.");
-                mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.register_inactive_btn));
+                mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
 //                mRegisterButton.setEnabled(false);
                 break;
             case 6:
                 mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
                 mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
                 mRegisterTxtResponseInfo.setText("알림:  오류가 발생했습니다. 다시 시도해주세요.");
-                mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.register_inactive_btn));
+                mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
 //                mRegisterButton.setEnabled(false);
                 break;
             case 7:
                 mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
                 mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
                 mRegisterTxtResponseInfo.setText("알림:  이미 가입된 이메일입니다.");
-                mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.register_inactive_btn));
+                mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
 //                mRegisterButton.setEnabled(false);
                 break;
             case 9:
                 mRegisterTxtResponseInfo.setVisibility(View.INVISIBLE);
                 mRegisterTxtResponseInfo.setText("");
-                mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.register_active_btn));
+                mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_active));
 //                mRegisterButton.setEnabled(true);
                 break;
 
@@ -569,16 +574,17 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
     }
 
     public class MyclickableSpan extends ClickableSpan {
-        String clicked;
         public MyclickableSpan(String string){
             super();
-            clicked = string;
         }
 
-        public void onClick(View tv){
+        @Override
+        public void onClick(View view){
             Toast.makeText(context, "test", Toast.LENGTH_LONG).show();
+
         }
 
+        @Override
         public void updateDrawState(TextPaint ds){
             ds.setUnderlineText(false);
         }

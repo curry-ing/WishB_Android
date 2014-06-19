@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.text.style.BulletSpan;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.facebook.Session;
@@ -261,6 +262,11 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
             ptSansFont = Typeface.createFromAsset(DreamApp.getInstance().getAssets(), "PT_SANS.ttf");
         }
         return ptSansFont;
+    }
+
+    public static void hideSoftKeyboard(){
+        final InputMethodManager imm = (InputMethodManager) DreamApp.getInstance().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
     }
 
     public class CheckLoginTesk extends AsyncTask<Void, Void, Void>{

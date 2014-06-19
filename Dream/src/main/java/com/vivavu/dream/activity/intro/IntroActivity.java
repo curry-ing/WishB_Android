@@ -5,6 +5,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,6 +16,7 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 import android.util.Base64;
 import android.util.Log;
@@ -92,9 +94,9 @@ public class IntroActivity extends BaseActionBarActivity {
 //        mIntroViewpagerIndicator.setViewPager(mPager);
         mRegisterButton.setTypeface(getNanumBarunGothicBoldFont());
         mSignInButton.setTypeface(getNanumBarunGothicBoldFont());
-        mIntroAgreementTxt.setTypeface(getNanumBarunGothicBoldFont());
+        mIntroAgreementTxt.setTypeface(getNanumBarunGothicFont());
         mIntroAgreementTxt.setTextColor(Color.WHITE);
-        mIntroAgreementTxt.setTextSize(15);
+        mIntroAgreementTxt.setTextSize(12);
 
         SpannableString agreementText = new SpannableString(getResources().getString(R.string.regist_agreement));
         ClickableSpan agreement = new ClickableSpan() {
@@ -111,10 +113,11 @@ public class IntroActivity extends BaseActionBarActivity {
                 startActivity(intent);
             }
         };
-        agreementText.setSpan(new ForegroundColorSpan(Color.WHITE), 0, 26, 0);
+        agreementText.setSpan(new ForegroundColorSpan(Color.GRAY), 0, 26, 0);
         agreementText.setSpan(agreement, 27, 31, 0);
-        agreementText.setSpan(new ForegroundColorSpan(Color.LTGRAY), 27, 31, 0);
+        agreementText.setSpan(new ForegroundColorSpan(Color.GRAY), 27, 31, 0);
         agreementText.setSpan(new MyclickableSpan("test"), 27, 31, 0);
+        agreementText.setSpan(new StyleSpan(Typeface.BOLD), 27, 31, 0);
 
         mIntroAgreementTxt.setMovementMethod(LinkMovementMethod.getInstance());
         mIntroAgreementTxt.setText(agreementText, TextView.BufferType.SPANNABLE);
@@ -131,18 +134,6 @@ public class IntroActivity extends BaseActionBarActivity {
                 goLogin();
             }
         });
-//        mBtnUserAgreement.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                goUserAgreement();
-//            }
-//        });
-//        mBtnPrivate.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                goPrivacy();
-//            }
-//        });
 
         AndroidUtils.getKeyHashes(this);
 

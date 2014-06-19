@@ -324,48 +324,48 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
             case 0:
                 mTxtResponseInfo.setVisibility(View.INVISIBLE);
                 mTxtResponseInfo.setText("");
-                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.login_inactive_btn));
+                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
                 break;
             case 1:
                 mTxtResponseInfo.setVisibility(View.VISIBLE);
                 mTxtResponseInfo.setTextColor(Color.WHITE);
                 mTxtResponseInfo.setText("알림:  이메일 주소가 입력되지 않았습니다.");
-                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.login_inactive_btn));
+                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
                 break;
             case 2:
                 mTxtResponseInfo.setVisibility(View.VISIBLE);
                 mTxtResponseInfo.setTextColor(Color.WHITE);
                 mTxtResponseInfo.setText("알림:  패스워드가 입력되지 않았습니다.");
-                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.login_inactive_btn));
+                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
                 break;
             case 3:
                 mTxtResponseInfo.setVisibility(View.VISIBLE);
                 mTxtResponseInfo.setTextColor(Color.WHITE);
                 mTxtResponseInfo.setText("알림:  올바르지 않은 이메일 형식입니다.");
-                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.login_inactive_btn));
+                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
                 break;
             case 4:
                 mTxtResponseInfo.setVisibility(View.VISIBLE);
                 mTxtResponseInfo.setTextColor(Color.WHITE);
                 mTxtResponseInfo.setText("알림:  비밀번호(6자 이상)를 확인해 주세요.");
-                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.login_inactive_btn));
+                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
                 break;
             case 5:
                 mTxtResponseInfo.setVisibility(View.VISIBLE);
                 mTxtResponseInfo.setTextColor(Color.WHITE);
                 mTxtResponseInfo.setText("알림:  가입하지 않은 이메일입니다.");
-                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.login_inactive_btn));
+                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
                 break;
             case 6:
                 mTxtResponseInfo.setVisibility(View.VISIBLE);
                 mTxtResponseInfo.setTextColor(Color.WHITE);
                 mTxtResponseInfo.setText("알림:  " + context.getResources().getString(R.string.login_failed));
-                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.login_inactive_btn));
+                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
                 break;
             case 9:
                 mTxtResponseInfo.setVisibility(View.INVISIBLE);
                 mTxtResponseInfo.setText("");
-                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.login_active_btn));
+                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.btn_active));
                 break;
 
         }

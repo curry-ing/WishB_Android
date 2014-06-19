@@ -70,12 +70,13 @@
 
         <Button
             android:id="@+id/findpw_send_btn"
-            android:layout_width="wrap_content"
+            android:layout_width="260dp"
             android:layout_height="38dp"
             android:layout_marginTop="30dp"
             android:paddingLeft="32dp"
             android:paddingRight="32dp"
-            android:layout_gravity="center" android:background="@drawable/findpw_send_inactive_btn" android:enabled="true"/>
+            android:layout_gravity="center" android:background="@drawable/btn_inactive" android:enabled="true"
+            android:text="전송" android:textColor="@color/white" android:textSize="15dp"/>
 
     </LinearLayout>
 </LinearLayout>

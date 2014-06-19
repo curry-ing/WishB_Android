@@ -101,10 +101,10 @@ public class ResetPasswordActivity extends BaseActionBarActivity {
                 mFindpwTxtResponseInfo.setText("");
                 if (!ValidationUtils.isValidEmail(mFindpwEmail)) {
                     mFindpwEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ing_icon, 0);
-                    mFindpwSendBtn.setBackground(getResources().getDrawable(R.drawable.findpw_send_inactive_btn));
+                    mFindpwSendBtn.setBackground(getResources().getDrawable(R.drawable.btn_inactive));
                 } else {
                     mFindpwEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ok_icon, 0);
-                    mFindpwSendBtn.setBackground(getResources().getDrawable(R.drawable.findpw_send_active_btn));
+                    mFindpwSendBtn.setBackground(getResources().getDrawable(R.drawable.btn_active));
                 }
             }
         });
@@ -113,10 +113,10 @@ public class ResetPasswordActivity extends BaseActionBarActivity {
 //            public boolean onKey(View view, int i, KeyEvent keyEvent) {
 //                if (!ValidationUtils.isValidEmail(mFindpwEmail)) {
 //                    mFindpwEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ing_icon, 0);
-//                    mFindpwSendBtn.setBackground(getResources().getDrawable(R.drawable.findpw_send_inactive_btn));
+//                    mFindpwSendBtn.setBackground(getResources().getDrawable(R.drawable.btn_inactive));
 //                } else {
 //                    mFindpwEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ok_icon, 0);
-//                    mFindpwSendBtn.setBackground(getResources().getDrawable(R.drawable.findpw_send_active_btn));
+//                    mFindpwSendBtn.setBackground(getResources().getDrawable(R.drawable.btn_active));
 //                }
 //                return false;
 //            }
@@ -143,7 +143,7 @@ public class ResetPasswordActivity extends BaseActionBarActivity {
             task.execute();
         } else {
             mFindpwEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_alert_icon, 0);
-            mFindpwSendBtn.setBackground(getResources().getDrawable(R.drawable.findpw_send_inactive_btn));
+            mFindpwSendBtn.setBackground(getResources().getDrawable(R.drawable.btn_inactive));
             mFindpwTxtResponseInfo.setText("알림:  올바르지 않은 이메일 형식입니다.");
         }
     }
@@ -167,12 +167,11 @@ public class ResetPasswordActivity extends BaseActionBarActivity {
 
             if(loginInfoResponseBodyWrapped != null && loginInfoResponseBodyWrapped.isSuccess()){
                 AlertDialog.Builder alert = new AlertDialog.Builder(ResetPasswordActivity.this);
-//                alert.setTitle("메일 발송 완료");
-//                alert.setMessage("\n비밀번호 변경 안내 메일을 발송했습니다.\n메일 내용을 확인 해주세요.");
                 alert.setMessage("\n" + context.getResources().getText(R.string.sent_reset_passwd_mail) + "\n");
                 alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        hideSoftKeyboard();
                         complete();
                     }
                 });
