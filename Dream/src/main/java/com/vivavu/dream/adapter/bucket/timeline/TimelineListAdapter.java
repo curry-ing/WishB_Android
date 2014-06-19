@@ -79,7 +79,7 @@ public class TimelineListAdapter extends BaseAdapter {
             public void run() {
                 if( post.getImgUrl() == null && finalViewHolder.mTxtPostText.getLineCount() == 5){
                     finalViewHolder.mBtnSeeMore.setVisibility(View.VISIBLE);
-                } else if(post.getImgUrl() != null && finalViewHolder.mTxtPostText.getLineCount() == 2){
+                } else if(post.getImgUrl() != null && finalViewHolder.mTxtPostText.getLineCount() == 3){
                     finalViewHolder.mBtnSeeMore.setVisibility(View.VISIBLE);
                 }
             }
