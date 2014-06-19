@@ -37,6 +37,7 @@
         app:shadowDx="1.0"
         app:shadowDy="2.0"
         app:shadowRadius="1.0"
+        app:expand="false"
         >
     </com.vivavu.dream.view.ShadowImageView>
 

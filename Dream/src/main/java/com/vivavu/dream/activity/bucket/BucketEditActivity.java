@@ -44,6 +44,7 @@ import com.vivavu.dream.repository.DataRepository;
 import com.vivavu.dream.repository.task.CustomAsyncTask;
 import com.vivavu.dream.util.AndroidUtils;
 import com.vivavu.dream.util.DateUtils;
+import com.vivavu.dream.util.FileUtils;
 import com.vivavu.dream.util.ImageUtil;
 import com.vivavu.dream.util.ValidationUtils;
 import com.vivavu.dream.view.ShadowImageView;
@@ -124,7 +125,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
                     Intent intent = new Intent();
                     intent.putExtra(RESULT_EXTRA_BUCKET_ID, (Integer) bucket.getId());
                     intent.putExtra(RESULT_EXTRA_BUCKET, bucket);
-                    intent.putExtra(RESULT_EXTRA_BUCKET_RANGE, bucket.getRange()==null ? 0 : Integer.valueOf(bucket.getRange()));
+                    intent.putExtra(RESULT_EXTRA_BUCKET_RANGE, bucket.getRange() == null ? 0 : Integer.valueOf(bucket.getRange()));
                     setResult(RESULT_OK, intent);
                     finish();
                     break;
@@ -320,6 +321,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
                                 break;
                             case 2:
                                 modFlag = true;
+                                FileUtils.deleteFile(bucket.getFile());
                                 bucket.setFile(null);
                                 bucket.setCvrImgId(null);
                                 bucket.setCvrImgUrl(null);
@@ -404,7 +406,8 @@ public class BucketEditActivity extends BaseActionBarActivity {
                     .cacheInMemory(true)
                     .cacheOnDisc(true)
                     .considerExifParams(true)
-                    .showImageForEmptyUri(R.drawable.ic_bucket_empty)
+                    .showImageForEmptyUri(R.drawable.ic_camera_big)
+                    .showImageOnFail(R.drawable.ic_picture_big)
                     .build();
             ImageLoader.getInstance().displayImage(bucket.getCvrImgUrl(), mBucketImg, options);
         }
@@ -540,6 +543,9 @@ public class BucketEditActivity extends BaseActionBarActivity {
 
         @Override
         public void afterTextChanged(Editable s) {
+            if(!s.toString().equals(bucket.getTitle())){
+                modFlag = true;
+            }
             if(s.toString().length() < 1){
                 bucket.setTitle(null);
             }else {
@@ -638,6 +644,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
                 if(bucket != null){
                     DataRepository.saveBucket(bucket);
                     // 파일 전송 후 해제 시킴
+                    FileUtils.deleteFile(BucketEditActivity.this.bucket.getFile());
                     BucketEditActivity.this.bucket.setFile(null);
                     Message message = handler.obtainMessage(SEND_DATA_END, bucket);
                     handler.sendMessage(message);
@@ -711,5 +718,12 @@ public class BucketEditActivity extends BaseActionBarActivity {
     protected void onResume() {
         super.onResume();
         mBucketInputTitle.clearFocus();
+    }
+
+    @Override
+    public void finish() {
+        FileUtils.deleteFile(bucket.getFile());
+        bucket.setFile(null);
+        super.finish();
     }
 }

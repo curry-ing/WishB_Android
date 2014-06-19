@@ -32,6 +32,7 @@ import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.user.User;
 import com.vivavu.dream.repository.connector.UserInfoConnector;
 import com.vivavu.dream.util.AndroidUtils;
+import com.vivavu.dream.util.FileUtils;
 import com.vivavu.dream.util.ImageUtil;
 import com.vivavu.dream.view.ShadowImageView;
 
@@ -357,7 +358,10 @@ public class LeftMenuDrawerFragment extends Fragment {
                 handler.sendEmptyMessage(SEND_DATA_ERROR);
                 return;
             }
+
+            FileUtils.deleteFile(user.getPhoto());
             user.setPhoto(null);
+
             Message message = handler.obtainMessage(SEND_DATA_END, responseBodyWrapped.getData());
             handler.sendMessage(message);
         }

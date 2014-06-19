@@ -61,4 +61,14 @@ public class FileUtils {
         String filename = pathSegments.get(pathSegments.size()-1);
         return filename;
     }
+
+    public static boolean deleteFile(File file){
+        boolean returnValue = false;
+        if(file != null){
+            if(file.exists() && file.isFile()){
+                returnValue = file.delete();
+            }
+        }
+        return returnValue;
+    }
 }
