@@ -20,6 +20,9 @@
         android:text="today"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="15dp"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        style="@style/TextActionbarLeftButton"
         />
     <TextView android:layout_width="wrap_content"
               android:layout_height="match_parent"

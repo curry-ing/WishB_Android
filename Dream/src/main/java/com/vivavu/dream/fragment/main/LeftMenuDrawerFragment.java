@@ -197,6 +197,12 @@ public class LeftMenuDrawerFragment extends Fragment {
                     .showImageForEmptyUri(R.drawable.ic_profile_empty)
                     .build();
             ImageLoader.getInstance().displayImage(DreamApp.getInstance().getUser().getProfileImgUrl(), mMainLeftMenuBtnProfile, options);
+
+            if(getActivity() instanceof MainActivity) {
+                MainActivity activity = (MainActivity) getActivity();
+                activity.updateProfileImg();
+            }
+
         }
     }
 

@@ -8,4 +8,5 @@
     <dimen name="subview_item_height">110dp</dimen>
     <dimen name="sub_view_item_padding">20dp</dimen>
     <dimen name="actionbar_title_text_size">25.0875sp</dimen>
+    <dimen name="actionbar_profile_img_size">21dp</dimen>
 </resources>
