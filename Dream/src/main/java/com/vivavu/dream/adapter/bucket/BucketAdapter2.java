@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
@@ -40,8 +41,10 @@ import com.vivavu.dream.repository.connector.UserInfoConnector;
 import com.vivavu.dream.util.ViewUnbindHelper;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -125,6 +128,11 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
     @Override
     public boolean isViewFromObject(View view, Object object){
         return (view == object);
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -441,6 +449,15 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
             }
 
             return responseBodyWrapped;
+        }
+
+        @Override
+        protected void onPostExecute(ResponseBodyWrapped<User> userResponseBodyWrapped) {
+            if(userResponseBodyWrapped.isSuccess()){
+                DreamApp.getInstance().setUser(userResponseBodyWrapped.getData());
+            } else {
+                Toast.makeText(BucketAdapter2.this.context, "수정 실패", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

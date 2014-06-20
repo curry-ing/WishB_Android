@@ -47,6 +47,7 @@ public class BucketGroupViewActivity extends BaseActionBarActivity {
 
     String groupRange;
     BucketListAdapter bucketListAdapter;
+    boolean dataModifyFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,17 +159,22 @@ public class BucketGroupViewActivity extends BaseActionBarActivity {
                 List<Bucket> bucketList = DataRepository.listBucketByRange(groupRange);
                 bucketListAdapter.setList(bucketList);
                 bucketListAdapter.notifyDataSetChanged();
+                setResult(RESULT_USER_DATA_MODIFIED);
+                dataModifyFlag = true;
             } else if(resultCode == RESULT_USER_DATA_UPDATED){
                 List<Bucket> bucketList = DataRepository.listBucketByRange(groupRange);
                 bucketListAdapter.setList(bucketList);
                 bucketListAdapter.notifyDataSetChanged();
+                setResult(RESULT_USER_DATA_MODIFIED);
+                dataModifyFlag = true;
             }
         }
 
         if(requestCode == REQUEST_BUCKET_ADD){
             if(resultCode == RESULT_OK){
                 Integer bucketRange = data.getIntExtra(BucketEditActivity.RESULT_EXTRA_BUCKET_RANGE, -1);
-                setResult(RESULT_OK, data);
+                setResult( dataModifyFlag ? RESULT_USER_DATA_MODIFIED : RESULT_OK, data);
+
                 if (bucketRange != null && bucketRange > 0) {
                     groupRange = String.valueOf(bucketRange);
                 } else {

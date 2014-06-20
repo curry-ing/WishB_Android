@@ -8,7 +8,6 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.text.style.BulletSpan;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -37,6 +36,7 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
     protected IntentFilter intentFilterWifi;
     public static final int RESULT_USER_DATA_DELETED = RESULT_FIRST_USER + 0;
     public static final int RESULT_USER_DATA_UPDATED = RESULT_FIRST_USER + 1;
+    public static final int RESULT_USER_DATA_MODIFIED = RESULT_FIRST_USER + 2;
     public static Typeface denseRegularFont = null;
     public static Typeface nanumBarunGothicFont = null;
     public static Typeface nanumBarunGothicBoldFont = null;
