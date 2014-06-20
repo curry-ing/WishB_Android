@@ -251,73 +251,41 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
         private int currPage;
 
         @Override
-        public void onPageSelected(int position){
+        public void onPageSelected(final int position){
             BitmapDrawable toBg = null;
             if(position == 0) {
                 toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg0);
-//                String imgUri = "drawable://" + R.drawable.mainview_bg0;
-//                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             } else if (position == 1) {
                 toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg1);
-//                String imgUri = "drawable://" + R.drawable.mainview_bg1;
-//                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             } else if (position == 2) {
                 toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg2);
-//                String imgUri = "drawable://" + R.drawable.mainview_bg2;
-//                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             } else if (position == 3) {
                 toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg3);
-//                String imgUri = "drawable://" + R.drawable.mainview_bg3;
-//                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             } else if (position == 4) {
                 toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg4);
-//                String imgUri = "drawable://" + R.drawable.mainview_bg4;
-//                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             } else if (position == 5) {
                 toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg5);
-//                String imgUri = "drawable://" + R.drawable.mainview_bg5;
-//                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             } else if (position == 6) {
                 toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg6);
-//                String imgUri = "drawable://" + R.drawable.mainview_bg6;
-//                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             } else {
                 toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg0);
-//                String imgUri = "drawable://" + R.drawable.mainview_bg0;
-//                toBg = ImageLoader.getInstance().loadImageSync(imgUri, new ImageSize(720, 1233));
             }
             if ((position+1)%2 == 1 ) {
                 mMainPageBg0.setAlpha(0.5f);
-                mMainPageBg0.setVisibility(View.VISIBLE);
+//                mMainPageBg0.setVisibility(View.VISIBLE);
                 mMainPageBg0.setBackground(toBg);
-//                mMainPageBg0.setImageDrawable(new BitmapDrawable(getResources(),toBg));
 
                 mMainPageBg0.animate().alpha(1f).setDuration(mShortAnimationDuration).setListener(null);
-                mMainPageBg1.animate().alpha(0.5f).setDuration(mShortAnimationDuration).setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        mMainPageBg1.setVisibility(View.GONE);
-//                        AndroidUtils.recycleImage(mMainPageBg1);
-                    }
-                });
+                mMainPageBg1.animate().alpha(0f).setDuration(mShortAnimationDuration).setListener(null);
             } else {
                 mMainPageBg1.setAlpha(0.5f);
-                mMainPageBg1.setVisibility(View.VISIBLE);
+//                mMainPageBg1.setVisibility(View.VISIBLE);
                 mMainPageBg1.setBackground(toBg);
-//                mMainPageBg1.setImageDrawable(new BitmapDrawable(getResources(), toBg));
 
                 mMainPageBg1.animate().alpha(1f).setDuration(mShortAnimationDuration).setListener(null);
-                mMainPageBg0.animate().alpha(0.5f).setDuration(mShortAnimationDuration).setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        mMainPageBg0.setVisibility(View.GONE);
-                    }
-                });
+                mMainPageBg0.animate().alpha(0f).setDuration(mShortAnimationDuration).setListener(null);
             }
 
-//            mMainProgressBar.setImageDrawable(new MyDrawable());
-
-//            mMainProgress.addView(new DrawView(getActivity()));
             currPage = position;
             MainBucketListFragment.this.currentPage = position;
         }

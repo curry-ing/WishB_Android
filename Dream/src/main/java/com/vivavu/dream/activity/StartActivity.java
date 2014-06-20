@@ -6,6 +6,9 @@ import android.os.Message;
 import android.os.StrictMode;
 import android.os.Handler;
 
+import android.widget.TextView;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import com.vivavu.dream.R;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.Code;
@@ -15,14 +18,6 @@ import com.vivavu.dream.common.Code;
  * Created by yuja on 14. 2. 10.
  */
 public class StartActivity extends BaseActionBarActivity {
-
-//    Handler handler = new Handler(){
-//        @Override
-//        public void handleMessage(Message msg) {
-//            super.handleMessage(msg);
-//        }
-//    };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
