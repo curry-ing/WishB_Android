@@ -178,9 +178,6 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
 
         /* SET MAIN IMAGES */
         int cnt = bucketGroup.getCount();
-        if (cnt > 4) {
-            cnt = 4;
-        }
         if (cnt > 0) {
             for (int i=0; i<cnt; i++){
                 if(bucketGroup.getBukets().get(i).getCvrImgUrl() != null) {
@@ -188,45 +185,71 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
                 }
             }
         }
-        if(mainImages.size()==0){
-            mainImages.add(BitmapFactory.decodeResource(DreamApp.getInstance().getResources(), R.drawable.uplogo));
+//        if (cnt > 4) {
+//            cnt = 4;
+//        }
+        if(mainImages.size() == 0){
+            switch(pos){
+                case 0:
+                    mainImages.add(BitmapFactory.decodeResource(DreamApp.getInstance().getResources(), R.drawable.main_default_00));
+                    break;
+                case 1:
+                    mainImages.add(BitmapFactory.decodeResource(DreamApp.getInstance().getResources(), R.drawable.main_default_01));
+                    break;
+                case 2:
+                    mainImages.add(BitmapFactory.decodeResource(DreamApp.getInstance().getResources(), R.drawable.main_default_02));
+                    break;
+                case 3:
+                    mainImages.add(BitmapFactory.decodeResource(DreamApp.getInstance().getResources(), R.drawable.main_default_03));
+                    break;
+                case 4:
+                    mainImages.add(BitmapFactory.decodeResource(DreamApp.getInstance().getResources(), R.drawable.main_default_04));
+                    break;
+                case 5:
+                    mainImages.add(BitmapFactory.decodeResource(DreamApp.getInstance().getResources(), R.drawable.main_default_05));
+                    break;
+                case 6:
+                    mainImages.add(BitmapFactory.decodeResource(DreamApp.getInstance().getResources(), R.drawable.main_default_06));
+                    break;
+            }
         } else {
             Collections.shuffle(mainImages);
         }
-        for (int j=0; j<mainImages.size(); j++){
+        int imgCnt = mainImages.size() > 4 ? 4 : mainImages.size();
+        for (int j=0; j < imgCnt; j++){
             switch (j){
                 case 0:
                     holder.mMainImage1.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                    holder.mMainImage1.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi, pos));
+                    holder.mMainImage1.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, imgCnt, deviceDensityDpi, pos));
                     break;
                 case 1:
                     holder.mMainImage2.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                    holder.mMainImage2.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi, pos));
+                    holder.mMainImage2.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, imgCnt, deviceDensityDpi, pos));
                     break;
                 case 2:
                     holder.mMainImage3.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                    holder.mMainImage3.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi, pos));
+                    holder.mMainImage3.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, imgCnt, deviceDensityDpi, pos));
                     break;
                 case 3:
                     holder.mMainImage4.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                    holder.mMainImage4.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi, pos));
+                    holder.mMainImage4.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, imgCnt, deviceDensityDpi, pos));
                     break;
-                case 4:
-                    holder.mMainImage5.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                    holder.mMainImage5.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi, pos));
-                    break;
-                case 5:
-                    holder.mMainImage6.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                    holder.mMainImage6.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi, pos));
-                    break;
-                case 6:
-                    holder.mMainImage7.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                    holder.mMainImage7.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi, pos));
-                    break;
-                case 7:
-                    holder.mMainImage8.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                    holder.mMainImage8.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi, pos));
-                    break;
+//                case 4:
+//                    holder.mMainImage5.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+//                    holder.mMainImage5.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi, pos));
+//                    break;
+//                case 5:
+//                    holder.mMainImage6.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+//                    holder.mMainImage6.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi, pos));
+//                    break;
+//                case 6:
+//                    holder.mMainImage7.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+//                    holder.mMainImage7.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi, pos));
+//                    break;
+//                case 7:
+//                    holder.mMainImage8.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+//                    holder.mMainImage8.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi, pos));
+//                    break;
             }
 //            holder.mProgressOverlay.setImageDrawable(new MyDrawable());
         }

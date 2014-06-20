@@ -43,8 +43,8 @@ public class MainActivity extends BaseActionBarActivity {
 
     @InjectView(R.id.btn_add_bucket)
     Button mBtnAddBucket;
-    @InjectView(R.id.actionbar_main_title)
-    TextView mActionbarMainTitle;
+//    @InjectView(R.id.actionbar_main_title)
+//    TextView mActionbarMainTitle;
     @InjectView(R.id.actionbar_main_today)
     TextView mActionbarMainToday;
 
@@ -119,8 +119,8 @@ public class MainActivity extends BaseActionBarActivity {
             }
         });*/
 
-        mActionbarMainTitle.setText("Wish B.");
-        mActionbarMainTitle.setTypeface(getNanumBarunGothicBoldFont());
+//        mActionbarMainTitle.setText("Wish B.");
+//        mActionbarMainTitle.setTypeface(getNanumBarunGothicBoldFont());
         mActionbarMainToday.setTypeface(getNanumBarunGothicBoldFont());
 
         mActionbarMainToday.setOnClickListener(new View.OnClickListener() {
