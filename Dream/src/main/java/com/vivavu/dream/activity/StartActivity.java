@@ -2,13 +2,8 @@ package com.vivavu.dream.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Message;
 import android.os.StrictMode;
-import android.os.Handler;
 
-import android.widget.TextView;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 import com.vivavu.dream.R;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.Code;

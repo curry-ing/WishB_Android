@@ -1,7 +1,5 @@
 package com.vivavu.dream.fragment.main;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
