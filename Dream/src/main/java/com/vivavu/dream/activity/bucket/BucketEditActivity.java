@@ -254,7 +254,14 @@ public class BucketEditActivity extends BaseActionBarActivity {
                     String path = AndroidUtils.convertContentsToFileSchema(DreamApp.getInstance(), data.getDataString());
                     File f = new File(path);
                     if(f.exists() && f.isFile()){
-                        ImageLoader.getInstance().displayImage(data.getDataString(), mBucketImg);
+                        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                                .cacheInMemory(true)
+                                .cacheOnDisc(true)
+                                .considerExifParams(true)
+                                .showImageForEmptyUri(R.drawable.ic_camera_big)
+                                .showImageOnFail(R.drawable.ic_picture_big)
+                                .build();
+                        ImageLoader.getInstance().displayImage(data.getDataString(), mBucketImg, options);
                         bucket.setFile(f);
                     }
                 }

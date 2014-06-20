@@ -51,6 +51,7 @@ public class AndroidUtils {
     public static void showSoftInputFromWindow(Context context, View view){
         InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
         return;
     }
 
