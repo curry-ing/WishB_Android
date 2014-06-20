@@ -102,7 +102,7 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+            // count 처음 입력된
         }
 
         @Override
@@ -179,9 +179,9 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
 
         mTxtTitle.setTypeface(getNanumBarunGothicBoldFont());
         mTxtPostText.setTypeface(getNanumBarunGothicFont());
-        mTxtPostText.addTextChangedListener(textWatcherInput);
         bindData(bucket);
         bindData(post);
+        mTxtPostText.addTextChangedListener(textWatcherInput);// 순서 중요. 데이터가 bind 된 이후 해야 변경사항 체크 가
 
         checkRequireElement();
 
@@ -240,6 +240,8 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         // monthOfYear가 -1 되어 들어옴
                         mTxtPostDate.setText(String.format("%4d.%02d.%02d", year, monthOfYear+1, dayOfMonth ));
+                        modFlag = true;
+                        checkRequireElement();
                     }
                 };
                 Calendar calendar = Calendar.getInstance();
@@ -259,6 +261,8 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         mTxtPostTime.setText(String.format("%02d:%02d", hourOfDay, minute));
+                        modFlag = true;
+                        checkRequireElement();
                     }
                 };
                 Calendar calendar = Calendar.getInstance();
@@ -354,7 +358,7 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
     }
 
     private boolean checkRequireElement(){
-        if (post != null && ( post.getText() != null || post.getPhoto() != null) ) {
+        if (post != null && modFlag && ( post.getText() != null || post.getPhoto() != null || post.getImgUrl() != null) ) {
             mMenuSave.setVisibility(View.VISIBLE);
             return true;
         }else{
@@ -423,7 +427,7 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
     }
 
     public void confirm(){
-        if(modFlag) {
+        if(checkRequireElement()) {
             AlertDialog.Builder alertConfirm = new AlertDialog.Builder(this);
             alertConfirm.setTitle("내용 변경 확인");
             alertConfirm.setMessage("변경한 내용을 저장하시겠습니까?").setCancelable(false).setPositiveButton("예",
