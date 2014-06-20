@@ -7,6 +7,8 @@ import android.media.ExifInterface;
 import android.os.Environment;
 import android.util.Log;
 
+import com.vivavu.dream.common.DreamApp;
+
 import org.springframework.core.io.ByteArrayResource;
 
 import java.io.ByteArrayOutputStream;
@@ -29,6 +31,20 @@ public class ImageUtil {
         String imageFileName = prefix + timeStamp + "_";
         File storageDir = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        return image;
+    }
+
+    public static File createImageFileInInternalStorage() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = timeStamp + "_";
+        File storageDir = DreamApp.getInstance().getFilesDir();
+
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
                 ".jpg",         /* suffix */

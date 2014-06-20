@@ -235,6 +235,7 @@ public class LeftMenuDrawerFragment extends Fragment {
                 handler.sendEmptyMessage(SEND_DATA_START);
                 Thread thread = new Thread(new UserModifyThread(user));
                 thread.start();
+                AndroidUtils.hideSoftInputFromWindow(DreamApp.getInstance(), input);
 
             }
         });
@@ -243,6 +244,7 @@ public class LeftMenuDrawerFragment extends Fragment {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         // Canceled.
+                        AndroidUtils.hideSoftInputFromWindow(DreamApp.getInstance(), input);
                     }
                 });
 
@@ -337,12 +339,13 @@ public class LeftMenuDrawerFragment extends Fragment {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(mImageCaptureUri, "image/*");
 
-        intent.putExtra("outputX", 400);
-        intent.putExtra("outputY", 400);
+        intent.putExtra("outputX", 540);
+        intent.putExtra("outputY", 540);
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
         intent.putExtra("scale", true);
         intent.putExtra("return-data", false);
+        intent.putExtra("output", mImageCaptureUri);
         startActivityForResult(intent, Code.ACT_ADD_BUCKET_CROP_FROM_CAMERA);
     }
 

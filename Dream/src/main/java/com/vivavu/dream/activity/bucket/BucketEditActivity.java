@@ -616,8 +616,8 @@ public class BucketEditActivity extends BaseActionBarActivity {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(mImageCaptureUri, "image/*");
 
-        intent.putExtra("outputX", 400);
-        intent.putExtra("outputY", 400);
+        intent.putExtra("outputX", 540);
+        intent.putExtra("outputY", 540);
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
         intent.putExtra("scale", true);

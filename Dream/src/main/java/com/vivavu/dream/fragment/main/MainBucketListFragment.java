@@ -159,10 +159,11 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
                     if (bucketRange != null && bucketRange > 0) {
                         mMainPager.setCurrentItem(bucketRange / 10, false);
                     }
+                    handler.post(new DataThread());
                 }
                 break;
             case Code.ACT_VIEW_BUCKET_GROUP:
-                if(resultCode == Activity.RESULT_OK) {
+                if(resultCode == Activity.RESULT_OK && resultCode == BaseActionBarActivity.RESULT_USER_DATA_MODIFIED) {
                     Integer bucketRange = data.getIntExtra(BucketEditActivity.RESULT_EXTRA_BUCKET_RANGE, -1);
 
                     if (bucketRange != null && bucketRange > 0) {
@@ -170,9 +171,9 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
                     } else if(bucketRange < 0 ){
                         mMainPager.setCurrentItem(0, false);
                     }
-                } else if(resultCode == BaseActionBarActivity.RESULT_USER_DATA_MODIFIED) {
-
-                    handler.post(new DataThread());
+                    if (resultCode == BaseActionBarActivity.RESULT_USER_DATA_MODIFIED) {
+                        handler.post(new DataThread());
+                    }
                 }
                 break;
         }

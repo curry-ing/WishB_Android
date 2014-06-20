@@ -40,6 +40,7 @@ public class AndroidUtils {
     public static void hideSoftInputFromWindow(Context context, View view){
         InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
         return;
     }
 

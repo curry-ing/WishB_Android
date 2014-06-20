@@ -1,6 +1,10 @@
 package com.vivavu.dream.util;
 
+import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
+
+import com.vivavu.dream.common.DreamApp;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -67,6 +71,20 @@ public class FileUtils {
         if(file != null){
             if(file.exists() && file.isFile()){
                 returnValue = file.delete();
+                if(returnValue){
+                    Uri contentUri = Uri.fromFile(file.getParentFile());
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                        mediaScanIntent.setData(contentUri);
+                        DreamApp.getInstance().sendBroadcast(mediaScanIntent);
+                    } else {
+                        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_MOUNTED);
+                        mediaScanIntent.setData(contentUri);
+                        DreamApp.getInstance().sendBroadcast(new Intent(mediaScanIntent));
+                    }
+                }
+
+
             }
         }
         return returnValue;

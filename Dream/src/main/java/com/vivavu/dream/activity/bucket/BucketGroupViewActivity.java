@@ -173,7 +173,7 @@ public class BucketGroupViewActivity extends BaseActionBarActivity {
         if(requestCode == REQUEST_BUCKET_ADD){
             if(resultCode == RESULT_OK){
                 Integer bucketRange = data.getIntExtra(BucketEditActivity.RESULT_EXTRA_BUCKET_RANGE, -1);
-                setResult( dataModifyFlag ? RESULT_USER_DATA_MODIFIED : RESULT_OK, data);
+                setResult( RESULT_USER_DATA_MODIFIED, data);
 
                 if (bucketRange != null && bucketRange > 0) {
                     groupRange = String.valueOf(bucketRange);
