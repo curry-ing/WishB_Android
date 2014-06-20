@@ -7,11 +7,12 @@
     android:gravity="center_vertical"
     android:background="@color/action_bar_main_view_background"
     >
-    <ImageView android:layout_width="wrap_content"
+    <ImageButton
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:id="@+id/profile"
-        android:text="today"
-        android:src="@drawable/mainview_profile"
+        android:src="@drawable/ic_previous"
+        android:background="@null"
+        android:id="@+id/menu_previous"
         style="@style/TextActionbarLeftButton"
         />
 
@@ -22,13 +23,5 @@
         style="@style/WishbActionbarLogStyle"
         android:src="@drawable/logo_white_title"
     />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:id="@+id/actionbar_main_today"
-        android:text="Today"
-        android:background="@null"
-        android:layout_alignParentRight="true"
-        style="@style/TextActionbarRightButton"
-        />
+
 </RelativeLayout>

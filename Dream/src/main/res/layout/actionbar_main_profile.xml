@@ -2,9 +2,9 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="fill_parent"
-    android:layout_height="match_parent"
+    android:layout_height="@dimen/actionbar_height"
     android:gravity="center_vertical"
-    android:background="#FF333333"
+    android:background="@color/action_bar_main_view_background"
     >
     <ImageButton
         android:layout_width="7dp"
@@ -25,10 +25,10 @@
         style="@style/TextActionbarLeftButton"
         />
     <TextView android:layout_width="wrap_content"
-              android:layout_height="match_parent"
-              android:text="프로필"
-              android:background="@null"
-                android:layout_toRightOf="@+id/profile"
+        android:layout_height="match_parent"
+        android:text="프로필"
+        android:background="@null"
+        android:layout_toRightOf="@+id/profile"
         android:id="@+id/txt_profile"
         android:layout_marginLeft="5dp"
         android:gravity="center_vertical"

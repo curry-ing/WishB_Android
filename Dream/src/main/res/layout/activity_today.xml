@@ -1,49 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/intro_bg"
-    tools:context="com.vivavu.dream.activity.main.MainActivity"
-    tools:ignore="MergeRootFrame"
->
-
-    <RelativeLayout
+    >
+    <FrameLayout
+        android:id="@+id/content_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/abc_action_bar_default_height"
         >
-        <FrameLayout
-            android:id="@+id/content_frame"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+
+    </FrameLayout>
+</RelativeLayout>
 
 
-        </FrameLayout>
-        <Button
-            android:layout_width="38dp"
-            android:layout_height="38dp"
-            android:id="@+id/btn_add_bucket"
-            android:shadowColor="#AA000000"
-            android:shadowDx="2"
-            android:shadowDy="2"
-            android:shadowRadius="2"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true" android:background="@drawable/btn_add"
-            android:layout_marginRight="14dp" android:layout_marginBottom="22dp"
-            android:visibility="gone"
-            />
-        </RelativeLayout>
-
-
-    <fragment
-        android:id="@+id/main_left_menu"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:name="com.vivavu.dream.fragment.main.LeftMenuDrawerFragment"
-        tools:layout="@layout/fragment_main_left_menu"></fragment>
-
-</android.support.v4.widget.DrawerLayout>

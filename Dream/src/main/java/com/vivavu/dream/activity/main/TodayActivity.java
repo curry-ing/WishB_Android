@@ -1,14 +1,13 @@
 package com.vivavu.dream.activity.main;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.bucket.BucketEditActivity;
@@ -24,17 +23,16 @@ import butterknife.InjectView;
  * Created by yuja on 2014-03-21.
  */
 public class TodayActivity extends BaseActionBarActivity {
-    @InjectView(R.id.btn_add_bucket)
-    Button mBtnAddBucket;
     @InjectView(R.id.actionbar_main_title)
-    TextView mActionbarMainTitle;
-    @InjectView(R.id.actionbar_main_today)
-    TextView mActionbarMainToday;
+    ImageView mActionbarMainTitle;
+    @InjectView(R.id.menu_previous)
+    ImageButton mMenuPrevious;
 
     View noticeView;
     CustomPopupWindow mPopupNotice;
 
     MainTodayDailyFragment mainTodayDailyFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +43,7 @@ public class TodayActivity extends BaseActionBarActivity {
         actionBar.setDisplayShowHomeEnabled(false);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setCustomView(R.layout.actionbar_main);
+        actionBar.setCustomView(R.layout.actionbar_today);
 
         ButterKnife.inject(this);
 
@@ -58,9 +56,14 @@ public class TodayActivity extends BaseActionBarActivity {
 
         noticeView = getLayoutInflater().inflate(R.layout.actionbar_notice, null);
         mPopupNotice = AndroidUtils.makePopupWindow(noticeView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        mMenuPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                //or goMain();
+            }
+        });
         //mPopupNotice.setAnimationStyle(R.style.AnimationPopup);
-        mBtnAddBucket.setOnClickListener(this);
-        mBtnAddBucket.setVisibility(View.GONE);
         /*mActionbarMainNotice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,12 +78,7 @@ public class TodayActivity extends BaseActionBarActivity {
             }
         });*/
 
-        mActionbarMainTitle.setText("Wish B.");
-        mActionbarMainTitle.setTypeface(getNanumBarunGothicBoldFont());
-        mActionbarMainTitle.setTextSize(20);
-        mActionbarMainTitle.setTextColor(Color.WHITE);
-
-        mActionbarMainToday.setTypeface(getNanumBarunGothicBoldFont());
+/*        mActionbarMainToday.setTypeface(getNanumBarunGothicBoldFont());
         mActionbarMainToday.setTextColor(Color.WHITE);
         mActionbarMainToday.setTextSize(14);
 
@@ -91,7 +89,7 @@ public class TodayActivity extends BaseActionBarActivity {
 //                finish();
                 goMain();
             }
-        });
+        });*/
     }
 
     @Override

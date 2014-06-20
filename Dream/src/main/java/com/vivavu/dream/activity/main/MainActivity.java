@@ -44,7 +44,7 @@ public class MainActivity extends BaseActionBarActivity {
     @InjectView(R.id.btn_add_bucket)
     Button mBtnAddBucket;
     @InjectView(R.id.actionbar_main_title)
-    TextView mActionbarMainTitle;
+    ImageView mActionbarMainTitle;
     @InjectView(R.id.actionbar_main_today)
     TextView mActionbarMainToday;
 
@@ -119,8 +119,6 @@ public class MainActivity extends BaseActionBarActivity {
             }
         });*/
 
-        mActionbarMainTitle.setText("Wish B.");
-        mActionbarMainTitle.setTypeface(getNanumBarunGothicBoldFont());
         mActionbarMainToday.setTypeface(getNanumBarunGothicBoldFont());
 
         mActionbarMainToday.setOnClickListener(new View.OnClickListener() {
@@ -138,6 +136,7 @@ public class MainActivity extends BaseActionBarActivity {
 
         // Drawer Menu(profile) Control
         mContainer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        mContainer.setScrimColor(getResources().getColor(R.color.transparent));
         mContainer.setFocusableInTouchMode(false); //for close drawer when press back button;
         mProfile.setOnClickListener(new View.OnClickListener() {
             @Override
