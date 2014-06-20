@@ -21,6 +21,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.bucket.TimelineActivity;
+import com.vivavu.dream.activity.image.ImageViewActivity;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.bucket.Bucket;
@@ -123,6 +124,15 @@ public class TimelineItemViewActivity extends BaseActionBarActivity{
             @Override
             public void onClick(View v) {
                 goEdit();
+            }
+        });
+        mIvTimelineImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(TimelineItemViewActivity.this, ImageViewActivity.class);
+                intent.putExtra(ImageViewActivity.IMAGE_VIEW_DATA_KEY, post.getImgUrl());
+                startActivity(intent);
             }
         });
         mMenuPrevious.setOnClickListener(new View.OnClickListener() {
