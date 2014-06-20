@@ -12,8 +12,8 @@ import java.util.Date;
 public class Post implements Serializable, Comparable<Post> {
     @SerializedName("id")
     protected Integer id;
-    @SerializedName("timestamp")
-    protected Date timestamp;
+    @SerializedName("content_dt")
+    protected Date contentDt;
     @SerializedName("user_id")
     protected Integer userId;
     @SerializedName("bucket_id")
@@ -42,7 +42,7 @@ public class Post implements Serializable, Comparable<Post> {
     protected String fbShare;
 
     public Post(Date date) {
-        this.timestamp = date;
+        this.contentDt = date;
     }
 
     public Integer getId() {
@@ -53,12 +53,12 @@ public class Post implements Serializable, Comparable<Post> {
         this.id = id;
     }
 
-    public Date getTimestamp() {
-        return timestamp;
+    public Date getContentDt() {
+        return contentDt;
     }
 
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
+    public void setContentDt(Date contentDt) {
+        this.contentDt = contentDt;
     }
 
     public Integer getUserId() {
@@ -172,7 +172,7 @@ public class Post implements Serializable, Comparable<Post> {
             return false;
         if (regDt != null ? !regDt.equals(post.regDt) : post.regDt != null) return false;
         if (text != null ? !text.equals(post.text) : post.text != null) return false;
-        if (timestamp != null ? !timestamp.equals(post.timestamp) : post.timestamp != null)
+        if (contentDt != null ? !contentDt.equals(post.contentDt) : post.contentDt != null)
             return false;
         if (url1 != null ? !url1.equals(post.url1) : post.url1 != null) return false;
         if (url2 != null ? !url2.equals(post.url2) : post.url2 != null) return false;
@@ -185,7 +185,7 @@ public class Post implements Serializable, Comparable<Post> {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (timestamp != null ? timestamp.hashCode() : 0);
+        result = 31 * result + (contentDt != null ? contentDt.hashCode() : 0);
         result = 31 * result + (userId != null ? userId.hashCode() : 0);
         result = 31 * result + (bucketId != null ? bucketId.hashCode() : 0);
         result = 31 * result + (text != null ? text.hashCode() : 0);
@@ -202,7 +202,7 @@ public class Post implements Serializable, Comparable<Post> {
     public String toString() {
         return "Post{" +
                 "id=" + id +
-                ", timestamp=" + timestamp +
+                ", contentDt=" + contentDt +
                 ", userId=" + userId +
                 ", bucketId=" + bucketId +
                 ", text='" + text + '\'' +

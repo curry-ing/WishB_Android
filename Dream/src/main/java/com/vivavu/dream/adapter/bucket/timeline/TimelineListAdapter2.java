@@ -64,7 +64,7 @@ public class TimelineListAdapter2 extends BaseAdapter {
         }*/
         Post post = (Post) getItem(position);
         viewHolder.mTxtPostText.setText(post.getText());
-        //viewHolder.mTxtPostDate.setText(DateUtils.getDateString(post.getTimestamp(), "yyyy.MM.dd HH:mm"));//Todo:타임스템프로 바꿔야함
+        //viewHolder.mTxtPostDate.setText(DateUtils.getDateString(post.getContentDt(), "yyyy.MM.dd HH:mm"));//Todo:타임스템프로 바꿔야함
         viewHolder.mTxtPostDate.setText(DateUtils.getDateString(post.getRegDt(), "yyyy.MM.dd HH:mm"));
 
         ImageLoader.getInstance().displayImage(post.getImgUrl(), viewHolder.mIvTimelineImage, new SimpleImageLoadingListener(){

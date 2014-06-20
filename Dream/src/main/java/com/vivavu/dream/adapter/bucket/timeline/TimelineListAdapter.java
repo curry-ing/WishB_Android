@@ -70,7 +70,7 @@ public class TimelineListAdapter extends BaseAdapter {
         }
         final Post post = (Post) getItem(position);
         viewHolder.mTxtPostText.setText(post.getText());
-        viewHolder.mTxtPostDate.setText(DateUtils.getDateString(post.getRegDt(), "yyyy.MM.dd HH:mm"));
+        viewHolder.mTxtPostDate.setText(DateUtils.getDateString(post.getContentDt(), "yyyy.MM.dd HH:mm"));
         viewHolder.mTxtPostText.setTypeface(BaseActionBarActivity.getNanumBarunGothicFont());
         viewHolder.mBtnSeeMore.setVisibility(View.INVISIBLE);
         final ButterknifeViewHolder finalViewHolder = viewHolder;

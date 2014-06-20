@@ -12,6 +12,7 @@ import com.vivavu.dream.model.bucket.timeline.Post;
 import com.vivavu.dream.model.bucket.timeline.Timeline;
 import com.vivavu.dream.model.bucket.timeline.TimelineMetaInfo;
 import com.vivavu.dream.repository.Connector;
+import com.vivavu.dream.util.DateUtils;
 import com.vivavu.dream.util.ImageUtil;
 import com.vivavu.dream.util.JsonFactory;
 import com.vivavu.dream.util.RestTemplateUtils;
@@ -229,6 +230,9 @@ public class TimelineConnector extends Connector<Post> {
         if(post.getPhoto() != null && post.getPhoto().isFile()){
             ByteArrayResource byteArrayResource = ImageUtil.convertImageFileToByteArrayResource(post.getPhoto(), 1024, 1024, 70);
             requestPost.add("photo", byteArrayResource);
+        }
+        if(post.getContentDt() != null){
+            requestPost.set("content_dt", DateUtils.getDateString(post.getContentDt(), "yyyy-MM-dd HH:mm:ss") );
         }
         if(post.getImgUrl() == null){
             requestPost.set("img_id", "");

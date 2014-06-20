@@ -259,8 +259,8 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                     }
                 };
                 Calendar calendar = Calendar.getInstance();
-                if(post.getTimestamp() != null) {
-                    calendar.setTime(post.getTimestamp());
+                if(post.getContentDt() != null) {
+                    calendar.setTime(post.getContentDt());
                 }
 
                 DatePickerDialog dialog = new DatePickerDialog(TimelineItemEditActivity.this, listener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
@@ -278,8 +278,8 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                     }
                 };
                 Calendar calendar = Calendar.getInstance();
-                if(post.getTimestamp() != null) {
-                    calendar.setTime(post.getTimestamp());
+                if(post.getContentDt() != null) {
+                    calendar.setTime(post.getContentDt());
                 }
                 TimePickerDialog dialog = new TimePickerDialog(TimelineItemEditActivity.this, listener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true );
                 dialog.show();
@@ -303,8 +303,8 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
 
     private void bindData(Post post) {
         mTxtPostText.setText(post.getText());
-        mTxtPostDate.setText(DateUtils.getDateString(post.getTimestamp(), "yyyy.MM.dd", new Date()));
-        mTxtPostTime.setText(DateUtils.getDateString(post.getTimestamp(), "HH:mm", new Date()));
+        mTxtPostDate.setText(DateUtils.getDateString(post.getContentDt(), "yyyy.MM.dd", new Date()));
+        mTxtPostTime.setText(DateUtils.getDateString(post.getContentDt(), "HH:mm", new Date()));
         ImageLoader.getInstance().displayImage(post.getImgUrl(), mIvTimelineImage, new SimpleImageLoadingListener(){
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
@@ -390,7 +390,7 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
 
     public Post getPost() {
         post.setText(String.valueOf(mTxtPostText.getText()));
-        post.setTimestamp(DateUtils.getDateFromString(String.valueOf(mTxtPostDate.getText() + " " + mTxtPostTime.getText()), "yyyy.MM.dd HH:mm", new Date()));
+        post.setContentDt(DateUtils.getDateFromString(String.valueOf(mTxtPostDate.getText() + " " + mTxtPostTime.getText()), "yyyy.MM.dd HH:mm", new Date()));
         return post;
     }
 

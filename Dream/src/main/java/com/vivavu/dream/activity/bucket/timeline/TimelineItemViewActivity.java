@@ -165,8 +165,8 @@ public class TimelineItemViewActivity extends BaseActionBarActivity{
 
     private void bindData(Post post) {
         mTxtPostText.setText(post.getText());
-        mTxtPostDate.setText(DateUtils.getDateString(post.getRegDt(), "yyyy.MM.dd"));
-        mTxtPostTime.setText(DateUtils.getDateString(post.getRegDt(), "HH:mm"));
+        mTxtPostDate.setText(DateUtils.getDateString(post.getContentDt(), "yyyy.MM.dd"));
+        mTxtPostTime.setText(DateUtils.getDateString(post.getContentDt(), "HH:mm"));
         ImageLoader.getInstance().displayImage(post.getImgUrl(), mIvTimelineImage, new SimpleImageLoadingListener(){
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
