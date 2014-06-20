@@ -70,6 +70,11 @@ public class TimelineListAdapter extends BaseAdapter {
         }
         final Post post = (Post) getItem(position);
         viewHolder.mTxtPostText.setText(post.getText());
+        if(post.getImgUrl() == null){
+            viewHolder.mTxtPostText.setMaxLines(5);
+        } else {
+            viewHolder.mTxtPostText.setMaxLines(3);
+        }
         viewHolder.mTxtPostDate.setText(DateUtils.getDateString(post.getContentDt(), "yyyy.MM.dd HH:mm"));
         viewHolder.mTxtPostText.setTypeface(BaseActionBarActivity.getNanumBarunGothicFont());
         viewHolder.mBtnSeeMore.setVisibility(View.INVISIBLE);

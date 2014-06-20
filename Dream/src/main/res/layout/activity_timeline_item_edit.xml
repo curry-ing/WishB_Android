@@ -96,7 +96,7 @@
             android:layout_width="33dp"
             android:layout_height="33dp"
             android:id="@+id/btn_post_facebook"
-            android:background="@drawable/ic_facebook_release"
+            android:background="@drawable/ic_facebook"
             android:layout_marginRight="12.5dp"
             />
         <Button

@@ -222,29 +222,13 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                 ab.show();
             }
         });
+        mBtnPostFacebook.setSelected(post.getFbFeedId() != null);
         mBtnPostFacebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                final String[] items = FacebookShareType.descriptions();
-
-                AlertDialog.Builder ab = new AlertDialog.Builder(TimelineItemEditActivity.this);
-                ab.setTitle("선택");
-                FacebookShareType fsType = FacebookShareType.fromCode(post.getFbShare());
-                ab.setSingleChoiceItems(items, fsType.ordinal(), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        FacebookShareType selectedType = FacebookShareType.fromCode(items[which]);
-                        post.setFbShare(selectedType.getCode());
-                        if (selectedType != FacebookShareType.NONE) {
-                            mBtnPostFacebook.setSelected(true);
-                        } else {
-                            mBtnPostFacebook.setSelected(false);
-                        }
-                        dialog.dismiss();
-                    }
-                });
-                ab.show();
+                boolean flag = !mBtnPostFacebook.isSelected();
+                mBtnPostFacebook.setSelected(flag);
+                post.setFbShare( flag ? FacebookShareType.SELF.getCode() : FacebookShareType.NONE.getCode());
             }
         });
 

@@ -41,6 +41,9 @@ public class Post implements Serializable, Comparable<Post> {
     @SerializedName("fb_share")
     protected String fbShare;
 
+    @SerializedName("fb_feed_id")
+    protected String fbFeedId;
+
     public Post(Date date) {
         this.contentDt = date;
     }
@@ -155,6 +158,14 @@ public class Post implements Serializable, Comparable<Post> {
 
     public void setFbShare(String fbShare) {
         this.fbShare = fbShare;
+    }
+
+    public String getFbFeedId() {
+        return fbFeedId;
+    }
+
+    public void setFbFeedId(String fbFeedId) {
+        this.fbFeedId = fbFeedId;
     }
 
     @Override
