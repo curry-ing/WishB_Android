@@ -261,7 +261,17 @@ public class BucketEditActivity extends BaseActionBarActivity {
                                 .showImageForEmptyUri(R.drawable.ic_camera_big)
                                 .showImageOnFail(R.drawable.ic_picture_big)
                                 .build();
-                        ImageLoader.getInstance().displayImage(data.getDataString(), mBucketImg, options);
+                        ImageLoader.getInstance().displayImage(data.getDataString(), mBucketImg, options, new SimpleImageLoadingListener(){
+                            @Override
+                            public void onLoadingStarted(String imageUri, View view) {
+                                mBucketImg.setExpand(false);
+                            }
+
+                            @Override
+                            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                                mBucketImg.setExpand(loadedImage != null);
+                            }
+                        });
                         bucket.setFile(f);
                     }
                 }
@@ -416,7 +426,18 @@ public class BucketEditActivity extends BaseActionBarActivity {
                     .showImageForEmptyUri(R.drawable.ic_camera_big)
                     .showImageOnFail(R.drawable.ic_picture_big)
                     .build();
-            ImageLoader.getInstance().displayImage(bucket.getCvrImgUrl(), mBucketImg, options);
+            ImageLoader.getInstance().displayImage(bucket.getCvrImgUrl(), mBucketImg, options, new SimpleImageLoadingListener(){
+                @Override
+                public void onLoadingStarted(String imageUri, View view) {
+                    mBucketImg.setExpand(false);
+                }
+
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    mBucketImg.setExpand(loadedImage != null);
+                }
+
+            });
         }
 
         if (bucket.getDeadline() != null) {

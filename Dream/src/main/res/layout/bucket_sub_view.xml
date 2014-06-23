@@ -10,6 +10,7 @@
         android:id="@+id/grid_bucket_list"
         android:gravity="center"
         android:numColumns="2"
+        android:listSelector="@color/transparent"
         />
 
     <Button
