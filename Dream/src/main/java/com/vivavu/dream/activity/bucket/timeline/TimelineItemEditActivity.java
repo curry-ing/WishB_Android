@@ -43,6 +43,7 @@ import com.vivavu.dream.repository.connector.TimelineConnector;
 import com.vivavu.dream.util.AndroidUtils;
 import com.vivavu.dream.util.DateUtils;
 import com.vivavu.dream.util.ImageUtil;
+import com.vivavu.dream.view.ShadowImageView;
 
 import java.io.File;
 import java.io.IOException;
@@ -91,6 +92,8 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
     TextView mTxtPostTime;
 
     boolean modFlag = false;
+    @InjectView(R.id.btn_timeline_attach)
+    ShadowImageView mBtnTimelineAttach;
 
     private ProgressDialog progressDialog;
 
@@ -192,6 +195,40 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
         mBtnPostCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final String items[] = {"카메라", "겔러리"};
+                AlertDialog.Builder ab = new AlertDialog.Builder(TimelineItemEditActivity.this);
+                ab.setTitle("선택");
+                ab.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                doTakePhotoAction();
+                                dialog.dismiss();
+                                break;
+                            case 1:
+                                doTakeAlbumAction();
+                                dialog.dismiss();
+                                break;
+                            case 2:
+                                modFlag = true;
+                                post.setImgUrl(null);
+                                post.setPhoto(null);
+                                bindData(post);
+                                dialog.dismiss();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                });
+                ab.show();
+            }
+        });
+
+        mBtnTimelineAttach.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 final String items[] = {"카메라", "겔러리", "이미지삭제"};
                 AlertDialog.Builder ab = new AlertDialog.Builder(TimelineItemEditActivity.this);
                 ab.setTitle("선택");
@@ -222,10 +259,13 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                 ab.show();
             }
         });
+
         mBtnPostFacebook.setSelected(post.getFbFeedId() != null);
         mBtnPostFacebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                modFlag = true;
+                checkRequireElement();
                 boolean flag = !mBtnPostFacebook.isSelected();
                 mBtnPostFacebook.setSelected(flag);
                 post.setFbShare( flag ? FacebookShareType.SELF.getCode() : FacebookShareType.NONE.getCode());
@@ -293,17 +333,20 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
         mTxtPostText.setText(post.getText());
         mTxtPostDate.setText(DateUtils.getDateString(post.getContentDt(), "yyyy.MM.dd", new Date()));
         mTxtPostTime.setText(DateUtils.getDateString(post.getContentDt(), "HH:mm", new Date()));
-        ImageLoader.getInstance().displayImage(post.getImgUrl(), mIvTimelineImage, new SimpleImageLoadingListener(){
+        ImageLoader.getInstance().displayImage(post.getImgUrl(), mBtnTimelineAttach, new SimpleImageLoadingListener(){
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                 // 이미지가 없을 경우에는 imageview 자체를 안보여줌
                 if(loadedImage != null) {
                     view.setVisibility(View.VISIBLE);
+                    mBtnPostCamera.setVisibility(View.GONE);
                 }else {
                     view.setVisibility(View.GONE);
+                    mBtnPostCamera.setVisibility(View.VISIBLE);
                 }
             }
         });
+        checkRequireElement();
     }
 
     @Override
@@ -315,14 +358,14 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                     if(data != null ) {
                         modFlag = true;
                         mImageCaptureUri = data.getData();
-                        showImage(mImageCaptureUri, mIvTimelineImage);
+                        showImage(mImageCaptureUri, mBtnTimelineAttach);
                     }
                 }
                 break;
             case Code.ACT_ADD_BUCKET_TAKE_CAMERA:
                 if(resultCode == RESULT_OK){
                     modFlag = true;
-                    showImage(mImageCaptureUri, mIvTimelineImage);
+                    showImage(mImageCaptureUri, mBtnTimelineAttach);
                 }
                 break;
         }
@@ -346,8 +389,10 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                         // 이미지가 없을 경우에는 imageview 자체를 안보여줌
                         if(loadedImage != null) {
                             view.setVisibility(View.VISIBLE);
+                            mBtnPostCamera.setVisibility(View.GONE);
                         }else {
                             view.setVisibility(View.GONE);
+                            mBtnPostCamera.setVisibility(View.VISIBLE);
                         }
                     }
                 });
@@ -358,7 +403,7 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
     }
 
     private boolean checkRequireElement(){
-        if (post != null && modFlag && ( post.getText() != null || post.getPhoto() != null || post.getImgUrl() != null) ) {
+        if (post != null && modFlag && ( post.getText() != null ) ) {
             mMenuSave.setVisibility(View.VISIBLE);
             return true;
         }else{
