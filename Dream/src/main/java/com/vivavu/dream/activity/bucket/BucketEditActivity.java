@@ -254,7 +254,24 @@ public class BucketEditActivity extends BaseActionBarActivity {
                     String path = AndroidUtils.convertContentsToFileSchema(DreamApp.getInstance(), data.getDataString());
                     File f = new File(path);
                     if(f.exists() && f.isFile()){
-                        ImageLoader.getInstance().displayImage(data.getDataString(), mBucketImg);
+                        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                                .cacheInMemory(true)
+                                .cacheOnDisc(true)
+                                .considerExifParams(true)
+                                .showImageForEmptyUri(R.drawable.ic_camera_big)
+                                .showImageOnFail(R.drawable.ic_picture_big)
+                                .build();
+                        ImageLoader.getInstance().displayImage(data.getDataString(), mBucketImg, options, new SimpleImageLoadingListener(){
+                            @Override
+                            public void onLoadingStarted(String imageUri, View view) {
+                                mBucketImg.setExpand(false);
+                            }
+
+                            @Override
+                            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                                mBucketImg.setExpand(loadedImage != null);
+                            }
+                        });
                         bucket.setFile(f);
                     }
                 }
@@ -409,7 +426,18 @@ public class BucketEditActivity extends BaseActionBarActivity {
                     .showImageForEmptyUri(R.drawable.ic_camera_big)
                     .showImageOnFail(R.drawable.ic_picture_big)
                     .build();
-            ImageLoader.getInstance().displayImage(bucket.getCvrImgUrl(), mBucketImg, options);
+            ImageLoader.getInstance().displayImage(bucket.getCvrImgUrl(), mBucketImg, options, new SimpleImageLoadingListener(){
+                @Override
+                public void onLoadingStarted(String imageUri, View view) {
+                    mBucketImg.setExpand(false);
+                }
+
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    mBucketImg.setExpand(loadedImage != null);
+                }
+
+            });
         }
 
         if (bucket.getDeadline() != null) {
@@ -609,8 +637,8 @@ public class BucketEditActivity extends BaseActionBarActivity {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(mImageCaptureUri, "image/*");
 
-        intent.putExtra("outputX", 400);
-        intent.putExtra("outputY", 400);
+        intent.putExtra("outputX", 540);
+        intent.putExtra("outputY", 540);
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
         intent.putExtra("scale", true);

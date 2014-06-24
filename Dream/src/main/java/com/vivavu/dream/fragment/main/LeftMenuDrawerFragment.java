@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -149,6 +150,9 @@ public class LeftMenuDrawerFragment extends Fragment {
                             case 2:
                                 User user = DreamApp.getInstance().getUser();
                                 user.setProfileImgUrl(null);
+                                // 사진을 찍고 그냥
+                                FileUtils.deleteFile(user.getPhoto());
+                                user.setPhoto(null);
                                 handler.sendEmptyMessage(SEND_DATA_START);
                                 Thread thread = new Thread(new UserModifyThread(user));
                                 thread.start();
@@ -216,7 +220,11 @@ public class LeftMenuDrawerFragment extends Fragment {
         // Set an EditText view to get user input
         final EditText input = new EditText(getActivity());
         alert.setView(input);
+        input.setFilters(new InputFilter[] {new InputFilter.LengthFilter(64)});
+        input.setSingleLine();
         input.setText(mMainLeftMenuTxtName.getText());
+        input.selectAll();
+
         alert.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 String value = input.getText().toString();
@@ -227,6 +235,7 @@ public class LeftMenuDrawerFragment extends Fragment {
                 handler.sendEmptyMessage(SEND_DATA_START);
                 Thread thread = new Thread(new UserModifyThread(user));
                 thread.start();
+                AndroidUtils.hideSoftInputFromWindow(DreamApp.getInstance(), input);
 
             }
         });
@@ -235,10 +244,12 @@ public class LeftMenuDrawerFragment extends Fragment {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         // Canceled.
+                        AndroidUtils.hideSoftInputFromWindow(DreamApp.getInstance(), input);
                     }
                 });
 
         alert.show();
+        AndroidUtils.showSoftInputFromWindow(getActivity(), input);
     }
 
     @Override
@@ -269,7 +280,7 @@ public class LeftMenuDrawerFragment extends Fragment {
                                 .considerExifParams(true)
                                 .showImageForEmptyUri(R.drawable.ic_profile_empty)
                                 .build();
-                        ImageLoader.getInstance().displayImage(data.getDataString(), mMainLeftMenuBtnProfile);
+                        ImageLoader.getInstance().displayImage(data.getDataString(), mMainLeftMenuBtnProfile, options);
                         User user = DreamApp.getInstance().getUser();
                         user.setPhoto(f);
                         handler.sendEmptyMessage(SEND_DATA_START);
@@ -328,12 +339,13 @@ public class LeftMenuDrawerFragment extends Fragment {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(mImageCaptureUri, "image/*");
 
-        intent.putExtra("outputX", 400);
-        intent.putExtra("outputY", 400);
+        intent.putExtra("outputX", 540);
+        intent.putExtra("outputY", 540);
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
         intent.putExtra("scale", true);
         intent.putExtra("return-data", false);
+        intent.putExtra("output", mImageCaptureUri);
         startActivityForResult(intent, Code.ACT_ADD_BUCKET_CROP_FROM_CAMERA);
     }
 

@@ -8,7 +8,6 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.text.style.BulletSpan;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -22,6 +21,7 @@ import com.vivavu.dream.activity.main.MainActivity;
 import com.vivavu.dream.activity.main.TodayActivity;
 import com.vivavu.dream.model.BaseInfo;
 import com.vivavu.dream.model.ResponseBodyWrapped;
+import com.vivavu.dream.repository.DataRepository;
 import com.vivavu.dream.repository.connector.UserInfoConnector;
 import com.vivavu.dream.util.AndroidUtils;
 import com.vivavu.dream.util.FacebookUtils;
@@ -35,8 +35,10 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
     protected NetworkChangeReceiver networkChangeReceiver;
     protected IntentFilter intentFilterChange;
     protected IntentFilter intentFilterWifi;
+    public static final String EXTRA_KEY_FROM_ALARM = "fromAlarm";
     public static final int RESULT_USER_DATA_DELETED = RESULT_FIRST_USER + 0;
     public static final int RESULT_USER_DATA_UPDATED = RESULT_FIRST_USER + 1;
+    public static final int RESULT_USER_DATA_MODIFIED = RESULT_FIRST_USER + 2;
     public static Typeface denseRegularFont = null;
     public static Typeface nanumBarunGothicFont = null;
     public static Typeface nanumBarunGothicBoldFont = null;
@@ -128,9 +130,15 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
+
     public void goToday(){
+        goToday(false);
+    }
+
+    public void goToday(boolean fromAlarm){
         Intent intent = new Intent();
         intent.setClass(this, TodayActivity.class);
+        intent.putExtra(EXTRA_KEY_FROM_ALARM, fromAlarm);
         startActivity(intent);
     }
     public void checkAppExit() {
@@ -150,7 +158,7 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
 
         if(checkLogin()){
             if (goToday){
-                goToday();
+                goToday(goToday);
             } else {
                 goMain();
             }
@@ -172,6 +180,7 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
                     context.setUser(baseInfo);
                     context.setUsername(baseInfo.getUsername());
                     context.setLogin(true);
+                    DataRepository.deleteBucketsNotEqualUserId(baseInfo.getId());//로그인 사용자 이외의 데이터 삭제
                     return true;
                 }else{
                     //로그인 에러시에 강제로 로그아웃 시켜서 무한루프에 안들어가도록 함
@@ -185,6 +194,7 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
     }
 
     public void logout(){
+        DataRepository.clearDb();
         context.logout();
 
         Session session = Session.getActiveSession();

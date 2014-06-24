@@ -21,6 +21,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.bucket.TimelineActivity;
+import com.vivavu.dream.activity.image.ImageViewActivity;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.bucket.Bucket;
@@ -125,6 +126,15 @@ public class TimelineItemViewActivity extends BaseActionBarActivity{
                 goEdit();
             }
         });
+        mIvTimelineImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(TimelineItemViewActivity.this, ImageViewActivity.class);
+                intent.putExtra(ImageViewActivity.IMAGE_VIEW_DATA_KEY, post.getImgUrl());
+                startActivity(intent);
+            }
+        });
         mMenuPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -165,8 +175,8 @@ public class TimelineItemViewActivity extends BaseActionBarActivity{
 
     private void bindData(Post post) {
         mTxtPostText.setText(post.getText());
-        mTxtPostDate.setText(DateUtils.getDateString(post.getRegDt(), "yyyy.MM.dd"));
-        mTxtPostTime.setText(DateUtils.getDateString(post.getRegDt(), "HH:mm"));
+        mTxtPostDate.setText(DateUtils.getDateString(post.getContentDt(), "yyyy.MM.dd"));
+        mTxtPostTime.setText(DateUtils.getDateString(post.getContentDt(), "HH:mm"));
         ImageLoader.getInstance().displayImage(post.getImgUrl(), mIvTimelineImage, new SimpleImageLoadingListener(){
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {

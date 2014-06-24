@@ -1,7 +1,5 @@
 package com.vivavu.dream.fragment.main;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -20,6 +18,7 @@ import android.widget.ImageView;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.bucket.BucketEditActivity;
 import com.vivavu.dream.adapter.bucket.BucketAdapter2;
+import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.Code;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.fragment.CustomBaseFragment;
@@ -59,7 +58,7 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
 
     private int i = 0;
     private float mX;
-
+    protected int currentPage = -1;
 
     @InjectView(R.id.main_pager)
     ViewPager mMainPager;
@@ -107,13 +106,14 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Thread thread = new Thread(new NetworkThread());
-        thread.start();
         final View rootView = inflater.inflate(R.layout.main_row, container, false);
         ButterKnife.inject(this, rootView);
 
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage("진행중");
+
+        Thread thread = new Thread(new NetworkThread());
+        thread.start();
 
         return rootView;
     }
@@ -124,15 +124,15 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
         bucketAdapter2 = new BucketAdapter2(this, bucketGroupList);
         mMainPager.setAdapter(bucketAdapter2);
 //        int age = DreamApp.getInstance().getUser().getUserAge();
-        if (DreamApp.getInstance().getUser().getUserAge() == 0) {
-            mMainPager.setCurrentItem(0);
+        if (currentPage < 0 && DreamApp.getInstance().getUser().getUserAge() == 0) {
+            currentPage = 0;
             mMainPageBg0.setBackground((BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg0));
-        } else {
-            mMainPager.setCurrentItem(getInstance().getUser().getUserAge() / 10);
+        } else if(currentPage < 0 ) {
+            currentPage = getInstance().getUser().getUserAge() / 10;
         }
         mMainPager.setOnPageChangeListener(new MainViewPageChangeListener());
+        mMainPager.setCurrentItem(currentPage, false);
         mMainPager.setOffscreenPageLimit(OFF_SCREEN_PAGE_LIMIT);
-//        mMainPager.setPageTransformer(true, new DepthPageTransformer());
         mShortAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
         mMediumAnimationDuration = getResources().getInteger(android.R.integer.config_mediumAnimTime);
         mLongAnimationDuration = getResources().getInteger(android.R.integer.config_longAnimTime);
@@ -159,16 +159,20 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
                     if (bucketRange != null && bucketRange > 0) {
                         mMainPager.setCurrentItem(bucketRange / 10, false);
                     }
+                    handler.post(new DataThread());
                 }
                 break;
             case Code.ACT_VIEW_BUCKET_GROUP:
-                if(resultCode == Activity.RESULT_OK) {
+                if(resultCode == Activity.RESULT_OK && resultCode == BaseActionBarActivity.RESULT_USER_DATA_MODIFIED) {
                     Integer bucketRange = data.getIntExtra(BucketEditActivity.RESULT_EXTRA_BUCKET_RANGE, -1);
 
                     if (bucketRange != null && bucketRange > 0) {
                         mMainPager.setCurrentItem(bucketRange / 10, false);
                     } else if(bucketRange < 0 ){
                         mMainPager.setCurrentItem(0, false);
+                    }
+                    if (resultCode == BaseActionBarActivity.RESULT_USER_DATA_MODIFIED) {
+                        handler.post(new DataThread());
                     }
                 }
                 break;
@@ -183,12 +187,15 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
         }
         bucketAdapter2.setBucketGroupList(bucketGroupList);
         bucketAdapter2.notifyDataSetChanged();
-        if (DreamApp.getInstance().getUser().getUserAge() == 0) {
-            mMainPager.setCurrentItem(0);
+        if (currentPage < 0 && DreamApp.getInstance().getUser().getUserAge() == 0) {
+            currentPage= 0;
+
             mMainPageBg0.setBackground((BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg0));
-        } else {
-            mMainPager.setCurrentItem(getInstance().getUser().getUserAge() / 10);
+        } else if(currentPage < 0 ){
+            currentPage = getInstance().getUser().getUserAge() / 10;
         }
+
+        mMainPager.setCurrentItem(currentPage);
     }
 
     @Override
@@ -279,6 +286,7 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
             }
 
             currPage = position;
+            MainBucketListFragment.this.currentPage = position;
         }
 
         public final int getCurrPage(){

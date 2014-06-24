@@ -131,7 +131,9 @@ public class DataRepository {
     public static DatabaseHelper getDatabaseHelper() {
         if(databaseHelper == null){
             databaseHelper = new DatabaseHelper(getContext());
-            deleteBucketsNotEqualUserId(getContext().getUser().getId());
+            if(getContext().getUser() != null) {
+                deleteBucketsNotEqualUserId(getContext().getUser().getId());
+            }
         }
         return databaseHelper;
     }
@@ -171,6 +173,17 @@ public class DataRepository {
         try {
             Where<Bucket, Integer> where = deleteBuilder.where();
             where.ne("userId", userId);
+            deleteBuilder.delete();
+        } catch (SQLException e) {
+            Log.e("dream", e.getMessage());
+        }
+    }
+
+    public static void deleteBucketsEqualUserId(int userId){
+        DeleteBuilder<Bucket,Integer> deleteBuilder = getDatabaseHelper().getBucketRuntimeDao().deleteBuilder();
+        try {
+            Where<Bucket, Integer> where = deleteBuilder.where();
+            where.eq("userId", userId);
             deleteBuilder.delete();
         } catch (SQLException e) {
             Log.e("dream", e.getMessage());
@@ -458,5 +471,19 @@ public class DataRepository {
         }
 
         return list;
+    }
+
+    public static void clearDb(){
+        DeleteBuilder<TodayGroup,Date> deleteBuilder = getDatabaseHelper().getTodayGroupRuntimeDao().deleteBuilder();
+        DeleteBuilder<Bucket, Integer> bucketDeleteBuilder = getDatabaseHelper().getBucketRuntimeDao().deleteBuilder();
+        DeleteBuilder<Today, Integer> todayDeleteBuilder = getDatabaseHelper().getTodayRuntimeDao().deleteBuilder();
+        try {
+            deleteBuilder.delete();
+            bucketDeleteBuilder.delete();
+            todayDeleteBuilder.delete();
+        } catch (SQLException e) {
+            Log.e("dream", e.getMessage());
+        }
+
     }
 }

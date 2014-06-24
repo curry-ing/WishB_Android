@@ -43,6 +43,7 @@ import com.vivavu.dream.repository.connector.TimelineConnector;
 import com.vivavu.dream.util.AndroidUtils;
 import com.vivavu.dream.util.DateUtils;
 import com.vivavu.dream.util.ImageUtil;
+import com.vivavu.dream.view.ShadowImageView;
 
 import java.io.File;
 import java.io.IOException;
@@ -91,6 +92,8 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
     TextView mTxtPostTime;
 
     boolean modFlag = false;
+    @InjectView(R.id.btn_timeline_attach)
+    ShadowImageView mBtnTimelineAttach;
 
     private ProgressDialog progressDialog;
 
@@ -102,7 +105,7 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+            // count 처음 입력된
         }
 
         @Override
@@ -179,9 +182,9 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
 
         mTxtTitle.setTypeface(getNanumBarunGothicBoldFont());
         mTxtPostText.setTypeface(getNanumBarunGothicFont());
-        mTxtPostText.addTextChangedListener(textWatcherInput);
         bindData(bucket);
         bindData(post);
+        mTxtPostText.addTextChangedListener(textWatcherInput);// 순서 중요. 데이터가 bind 된 이후 해야 변경사항 체크 가
 
         checkRequireElement();
 
@@ -190,6 +193,40 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
 
     private void initEvent() {
         mBtnPostCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String items[] = {"카메라", "겔러리"};
+                AlertDialog.Builder ab = new AlertDialog.Builder(TimelineItemEditActivity.this);
+                ab.setTitle("선택");
+                ab.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                doTakePhotoAction();
+                                dialog.dismiss();
+                                break;
+                            case 1:
+                                doTakeAlbumAction();
+                                dialog.dismiss();
+                                break;
+                            case 2:
+                                modFlag = true;
+                                post.setImgUrl(null);
+                                post.setPhoto(null);
+                                bindData(post);
+                                dialog.dismiss();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                });
+                ab.show();
+            }
+        });
+
+        mBtnTimelineAttach.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final String items[] = {"카메라", "겔러리", "이미지삭제"};
@@ -222,29 +259,16 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                 ab.show();
             }
         });
+
+        mBtnPostFacebook.setSelected(post.getFbFeedId() != null);
         mBtnPostFacebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                final String[] items = FacebookShareType.descriptions();
-
-                AlertDialog.Builder ab = new AlertDialog.Builder(TimelineItemEditActivity.this);
-                ab.setTitle("선택");
-                FacebookShareType fsType = FacebookShareType.fromCode(post.getFbShare());
-                ab.setSingleChoiceItems(items, fsType.ordinal(), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        FacebookShareType selectedType = FacebookShareType.fromCode(items[which]);
-                        post.setFbShare(selectedType.getCode());
-                        if (selectedType != FacebookShareType.NONE) {
-                            mBtnPostFacebook.setSelected(true);
-                        } else {
-                            mBtnPostFacebook.setSelected(false);
-                        }
-                        dialog.dismiss();
-                    }
-                });
-                ab.show();
+                modFlag = true;
+                checkRequireElement();
+                boolean flag = !mBtnPostFacebook.isSelected();
+                mBtnPostFacebook.setSelected(flag);
+                post.setFbShare( flag ? FacebookShareType.SELF.getCode() : FacebookShareType.NONE.getCode());
             }
         });
 
@@ -256,11 +280,13 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         // monthOfYear가 -1 되어 들어옴
                         mTxtPostDate.setText(String.format("%4d.%02d.%02d", year, monthOfYear+1, dayOfMonth ));
+                        modFlag = true;
+                        checkRequireElement();
                     }
                 };
                 Calendar calendar = Calendar.getInstance();
-                if(post.getTimestamp() != null) {
-                    calendar.setTime(post.getTimestamp());
+                if(post.getContentDt() != null) {
+                    calendar.setTime(post.getContentDt());
                 }
 
                 DatePickerDialog dialog = new DatePickerDialog(TimelineItemEditActivity.this, listener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
@@ -275,11 +301,13 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         mTxtPostTime.setText(String.format("%02d:%02d", hourOfDay, minute));
+                        modFlag = true;
+                        checkRequireElement();
                     }
                 };
                 Calendar calendar = Calendar.getInstance();
-                if(post.getTimestamp() != null) {
-                    calendar.setTime(post.getTimestamp());
+                if(post.getContentDt() != null) {
+                    calendar.setTime(post.getContentDt());
                 }
                 TimePickerDialog dialog = new TimePickerDialog(TimelineItemEditActivity.this, listener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true );
                 dialog.show();
@@ -303,19 +331,22 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
 
     private void bindData(Post post) {
         mTxtPostText.setText(post.getText());
-        mTxtPostDate.setText(DateUtils.getDateString(post.getTimestamp(), "yyyy.MM.dd", new Date()));
-        mTxtPostTime.setText(DateUtils.getDateString(post.getTimestamp(), "HH:mm", new Date()));
-        ImageLoader.getInstance().displayImage(post.getImgUrl(), mIvTimelineImage, new SimpleImageLoadingListener(){
+        mTxtPostDate.setText(DateUtils.getDateString(post.getContentDt(), "yyyy.MM.dd", new Date()));
+        mTxtPostTime.setText(DateUtils.getDateString(post.getContentDt(), "HH:mm", new Date()));
+        ImageLoader.getInstance().displayImage(post.getImgUrl(), mBtnTimelineAttach, new SimpleImageLoadingListener(){
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                 // 이미지가 없을 경우에는 imageview 자체를 안보여줌
                 if(loadedImage != null) {
                     view.setVisibility(View.VISIBLE);
+                    mBtnPostCamera.setVisibility(View.GONE);
                 }else {
                     view.setVisibility(View.GONE);
+                    mBtnPostCamera.setVisibility(View.VISIBLE);
                 }
             }
         });
+        checkRequireElement();
     }
 
     @Override
@@ -327,14 +358,14 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                     if(data != null ) {
                         modFlag = true;
                         mImageCaptureUri = data.getData();
-                        showImage(mImageCaptureUri, mIvTimelineImage);
+                        showImage(mImageCaptureUri, mBtnTimelineAttach);
                     }
                 }
                 break;
             case Code.ACT_ADD_BUCKET_TAKE_CAMERA:
                 if(resultCode == RESULT_OK){
                     modFlag = true;
-                    showImage(mImageCaptureUri, mIvTimelineImage);
+                    showImage(mImageCaptureUri, mBtnTimelineAttach);
                 }
                 break;
         }
@@ -358,8 +389,10 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                         // 이미지가 없을 경우에는 imageview 자체를 안보여줌
                         if(loadedImage != null) {
                             view.setVisibility(View.VISIBLE);
+                            mBtnPostCamera.setVisibility(View.GONE);
                         }else {
                             view.setVisibility(View.GONE);
+                            mBtnPostCamera.setVisibility(View.VISIBLE);
                         }
                     }
                 });
@@ -370,7 +403,7 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
     }
 
     private boolean checkRequireElement(){
-        if (post != null && ( post.getText() != null || post.getPhoto() != null) ) {
+        if (post != null && modFlag && ( post.getText() != null ) ) {
             mMenuSave.setVisibility(View.VISIBLE);
             return true;
         }else{
@@ -390,7 +423,7 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
 
     public Post getPost() {
         post.setText(String.valueOf(mTxtPostText.getText()));
-        post.setTimestamp(DateUtils.getDateFromString(String.valueOf(mTxtPostDate.getText() + " " + mTxtPostTime.getText()), "yyyy.MM.dd HH:mm", new Date()));
+        post.setContentDt(DateUtils.getDateFromString(String.valueOf(mTxtPostDate.getText() + " " + mTxtPostTime.getText()), "yyyy.MM.dd HH:mm", new Date()));
         return post;
     }
 
@@ -439,7 +472,7 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
     }
 
     public void confirm(){
-        if(modFlag) {
+        if(checkRequireElement()) {
             AlertDialog.Builder alertConfirm = new AlertDialog.Builder(this);
             alertConfirm.setTitle("내용 변경 확인");
             alertConfirm.setMessage("변경한 내용을 저장하시겠습니까?").setCancelable(false).setPositiveButton("예",
