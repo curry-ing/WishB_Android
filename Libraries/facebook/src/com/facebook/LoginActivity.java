@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.View;
 import com.facebook.android.R;
 
+
 /**
  * This Activity is a necessary part of the overall Facebook login process
  * but is not meant to be used directly. Add this activity to your
@@ -80,7 +81,7 @@ public class LoginActivity extends Activity {
 
             @Override
             public void onBackgroundProcessingStopped() {
-                findViewById(R.id.com_facebook_login_activity_progress_bar).setVisibility(View.GONE);
+                findViewById(R.id.com_facebook_login_activity_progress_bar).setVisibility(View.INVISIBLE);
             }
         });
     }
@@ -97,6 +98,8 @@ public class LoginActivity extends Activity {
         Intent resultIntent = new Intent();
         resultIntent.putExtras(bundle);
         setResult(resultCode, resultIntent);
+//        resultIntent.setClassName("com.vivavu.dream", "com.vivavu.dream.activity.main.MainActivity");
+//        startActivity(resultIntent);
 
         finish();
     }
@@ -122,7 +125,7 @@ public class LoginActivity extends Activity {
         super.onPause();
 
         authorizationClient.cancelCurrentHandler();
-        findViewById(R.id.com_facebook_login_activity_progress_bar).setVisibility(View.GONE);
+        findViewById(R.id.com_facebook_login_activity_progress_bar).setVisibility(View.INVISIBLE);
     }
 
     @Override
