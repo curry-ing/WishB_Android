@@ -98,6 +98,7 @@
         </activity>
         <activity
             android:name=".activity.main.MainActivity"
+            android:hardwareAccelerated="false"
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait" >
         </activity>

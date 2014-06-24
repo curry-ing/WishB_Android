@@ -32,7 +32,7 @@ public class TodayActivity extends BaseActionBarActivity {
     CustomPopupWindow mPopupNotice;
 
     MainTodayDailyFragment mainTodayDailyFragment;
-
+    protected boolean fromAlarm = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +47,9 @@ public class TodayActivity extends BaseActionBarActivity {
 
         ButterKnife.inject(this);
 
+        Intent intent = getIntent();
+        fromAlarm = intent.getBooleanExtra(BaseActionBarActivity.EXTRA_KEY_FROM_ALARM, false);
+        intent.putExtra(BaseActionBarActivity.EXTRA_KEY_FROM_ALARM, false);
         if (savedInstanceState == null) {
             mainTodayDailyFragment = new MainTodayDailyFragment();
             getSupportFragmentManager().beginTransaction()
@@ -59,7 +62,8 @@ public class TodayActivity extends BaseActionBarActivity {
         mMenuPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                onBackPressed();
+                //finish();
                 //or goMain();
             }
         });
@@ -135,8 +139,13 @@ public class TodayActivity extends BaseActionBarActivity {
         if(mPopupNotice != null && mPopupNotice.isShowing()){
             mPopupNotice.hide();
         }else{
-//            finish();
-            goMain();
+            if(fromAlarm){
+                exit();
+            } else {
+                setResult(RESULT_OK);
+                finish();
+            }
+            //goMain();
         }
     }
 }
