@@ -6,9 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.view.Window;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -40,6 +42,7 @@ import com.vivavu.dream.repository.connector.TimelineConnector;
 import com.vivavu.dream.util.DateUtils;
 import com.vivavu.dream.view.ShadowImageView;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -113,6 +116,8 @@ public class TimelineActivity extends BaseActionBarActivity {
     View mBtnBucketOptionWeek;
     @InjectView(R.id.txt_bucket_option_repeat_cnt)
     TextView mTxtBucketOptionRepeatCnt;
+    @InjectView(R.id.swipe_refresh_layout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     private ProgressDialog progressDialog;
     private static final int FETCH_DATA_START = 0;
@@ -122,6 +127,10 @@ public class TimelineActivity extends BaseActionBarActivity {
     private static final int UPDATE_BUCKET_DATA_FAIL = 4;
 
     private Timeline timeline;
+    protected TimelineThread timelineThread;
+    boolean lastitemVisibleFlag = false;        //화면에 리스트의 마지막 아이템이 보여지는지 체크
+    private Integer lastPageNum = 1;
+    protected  List<Post> timelineList;
 
     protected final Handler handler = new Handler() {
         @Override
@@ -135,9 +144,11 @@ public class TimelineActivity extends BaseActionBarActivity {
                     List<Post> dataList = timeline.getTimelineData();
                     initTimelineContents(dataList);
                     progressDialog.dismiss();
+                    mSwipeRefreshLayout.setRefreshing(false);
                     break;
                 case FETCH_DATA_FAIL:
                     progressDialog.dismiss();
+                    mSwipeRefreshLayout.setRefreshing(false);
                     break;
                 case UPDATE_BUCKET_DATA_SUCCESS:
                     bucket = (Bucket) msg.obj;
@@ -182,19 +193,61 @@ public class TimelineActivity extends BaseActionBarActivity {
         bindData(bucket);
         timelineMetaInfo = new TimelineMetaInfo();
         initEvent();
+        timelineThread = new TimelineThread();
 
-        Thread thread = new Thread(new TimelineThread());
+        timelineList = new ArrayList<Post>();
+
+        mSwipeRefreshLayout.setColorScheme(R.color.progress_10, R.color.progress_20, R.color.progress_30, R.color.progress_40);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // 새로고침 이벤트가 발생할 경우 수행되는 코드.
+                timelineThread.setPage(1);
+                Thread thread = new Thread(timelineThread);
+                thread.start();
+            }
+        });
+
+        mListTimeline.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                //OnScrollListener.SCROLL_STATE_IDLE은 스크롤이 이동하다가 멈추었을때 발생되는 스크롤 상태입니다.
+                //즉 스크롤이 바닦에 닿아 멈춘 상태에 처리를 하겠다는 뜻
+                if(scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && lastitemVisibleFlag) {
+                    //TODO 화면이 바닦에 닿을때 처리
+                    // 맨 밑으로 내려가면 데이터를 더 들고오게 한다.
+                    mSwipeRefreshLayout.setRefreshing(true);
+                    timelineThread.setPage(lastPageNum + 1);
+                    Thread thread = new Thread(timelineThread);
+                    thread.start();
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                //현재 화면에 보이는 첫번째 리스트 아이템의 번호(firstVisibleItem) + 현재 화면에 보이는 리스트 아이템의 갯수(visibleItemCount)가 리스트 전체의 갯수(totalItemCount) -1 보다 크거나 같을때
+                lastitemVisibleFlag = (totalItemCount > 0) && (firstVisibleItem + visibleItemCount >= totalItemCount);
+
+            }
+        });
+
+        Thread thread = new Thread(timelineThread);
         thread.start();
     }
 
     private void initTimelineContents(List<Post> dataList) {
+        if(lastPageNum == 1){
+            timelineList.clear();
+        }
+        timelineList.addAll(dataList);
+
         if(timelineListAdapter == null) {
             timelineListAdapter = new TimelineListAdapter(this);
             mListTimeline.setAdapter(timelineListAdapter);
         }
         timelineMetaInfo.setBucketId(bucket.getId());
         timelineListAdapter.setTimelineMetaInfo(timelineMetaInfo);
-        timelineListAdapter.setPostList(dataList);
+        timelineListAdapter.setPostList(timelineList);
         timelineListAdapter.notifyDataSetChanged();
     }
 
@@ -395,19 +448,29 @@ public class TimelineActivity extends BaseActionBarActivity {
     }
 
     private class TimelineThread implements Runnable{
+        private Integer page = 1;
         @Override
         public void run() {
             handler.sendEmptyMessage(FETCH_DATA_START);
 
             TimelineConnector timelineConnector = new TimelineConnector();
-            ResponseBodyWrapped<Timeline> result = timelineConnector.getTimelineAll(bucket.getId());
+            ResponseBodyWrapped<Timeline> result = timelineConnector.getTimelineWithPage(bucket.getId(), page);
 
             if(result.isSuccess()) {
+                lastPageNum = page;
                 Message message = handler.obtainMessage(FETCH_DATA_SUCCESS, result.getData());
                 handler.sendMessage(message);
             }else {
                 handler.sendEmptyMessage(FETCH_DATA_FAIL);
             }
+        }
+
+        public Integer getPage() {
+            return page;
+        }
+
+        public void setPage(Integer page) {
+            this.page = page;
         }
     }
 

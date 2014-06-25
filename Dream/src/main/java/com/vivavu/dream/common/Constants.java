@@ -38,6 +38,7 @@ public class Constants {
     static public String apiBaseInfo = baseUrl+"api/resource";
 
     static public String apiTimeline = baseUrl+"api/bucket/{bucketId}/timeline";
+    static public String apiTimelineWithPage = baseUrl+"api/bucket/{bucketId}/timeline?page={page}";
     static public String apiTimelineForDate = baseUrl+"api/bucket/{bucketId}/timeline?date={date}";
     static public String apiTimelineInfo = baseUrl+"api/content/{postId}";
     static public String apiTimelineMetaInfo = baseUrl+"api/bucket/{bucketId}/timeline/exists";
