@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
+    <ProgressBar android:indeterminate="true"
+                 android:layout_width="wrap_content"
+                 android:layout_height="50dip"
+                 android:id="@+id/fb_login_progress_bar"
+                 android:layout_centerInParent="true"
+                 android:visibility="gone"
+                 android:indeterminateOnly="true"
+            />
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -41,6 +49,6 @@
             android:id="@+id/authButton"
             android:layout_marginTop="10dp"
             fb:login_text="페이스북으로 순식간에 로그인"
-            fb:logout_text="" android:background="#ff627aad"/>
+            fb:logout_text="페이스북으로 순식간에 로그인" android:background="#ff627aad"/>
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>

@@ -7,9 +7,11 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.facebook.Session;
@@ -26,7 +28,9 @@ import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.SecureToken;
 import com.vivavu.dream.repository.connector.UserInfoConnector;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -42,6 +46,8 @@ public class FacebookLoginFragment extends CustomBaseFragment {
     LoginButton mAuthButton;
     @InjectView(R.id.txt_facebook_login_explain)
     TextView mTxtFacebookLoginExplain;
+    @InjectView(R.id.fb_login_progress_bar)
+    ProgressBar mFbLoginProgressBar;
     private UiLifecycleHelper uiHelper;
 //    private ProgressDialog progressDialog;
 
@@ -116,9 +122,9 @@ public class FacebookLoginFragment extends CustomBaseFragment {
         super.onActivityResult(requestCode, resultCode, data);
         uiHelper.onActivityResult(requestCode, resultCode, data);
 
+//        mAuthButton.setVisibility(View.GONE);
         if (requestCode == Session.DEFAULT_AUTHORIZE_ACTIVITY_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                Session ss = Session.getActiveSession();
                 LoginInfo loginInfo = new LoginInfo();
                 loginInfo.setEmail(Session.getActiveSession().getAccessToken());
                 loginInfo.setPassword("facebook");
@@ -131,6 +137,12 @@ public class FacebookLoginFragment extends CustomBaseFragment {
                     activity.setResult(Activity.RESULT_OK);
                     activity.finish();
                 }*/
+                Session session = Session.getActiveSession();
+                if (!session.getPermissions().contains("publish_actions")){
+                    Session.NewPermissionsRequest newPermissionsRequest =
+                            new Session.NewPermissionsRequest(this, Arrays.asList("publish_actions"));
+                    session.requestNewPublishPermissions(newPermissionsRequest);
+                }
             }
             return;
         }
@@ -191,6 +203,7 @@ public class FacebookLoginFragment extends CustomBaseFragment {
                 Session session = Session.getActiveSession();
                 if (session != null && (session.isOpened() || session.isClosed())) {
                     Session.getActiveSession().closeAndClearTokenInformation();
+
                 }
                 getActivity().setResult(Activity.RESULT_OK);
                 getActivity().finish();
@@ -221,11 +234,13 @@ public class FacebookLoginFragment extends CustomBaseFragment {
 
     private void showProgress(boolean b) {
         if(b) {
+//            mFbLoginProgressBar.setVisibility(View.VISIBLE);
 //            progressDialog.show();
-            mAuthButton.setVisibility(View.GONE);
+//            mAuthButton.setVisibility(View.GONE);
         }else {
+//            mFbLoginProgressBar.setVisibility(View.GONE);
 //            progressDialog.dismiss();
-            mAuthButton.setVisibility(View.VISIBLE);
+//            mAuthButton.setVisibility(View.VISIBLE);
         }
     }
 }
