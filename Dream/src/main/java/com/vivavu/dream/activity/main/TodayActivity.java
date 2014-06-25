@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.bucket.BucketEditActivity;
 import com.vivavu.dream.common.BaseActionBarActivity;
-import com.vivavu.dream.fragment.main.MainTodayDailyFragment;
+import com.vivavu.dream.fragment.main.TodayListFragment;
 import com.vivavu.dream.util.AndroidUtils;
 import com.vivavu.dream.view.CustomPopupWindow;
 
@@ -31,7 +31,7 @@ public class TodayActivity extends BaseActionBarActivity {
     View noticeView;
     CustomPopupWindow mPopupNotice;
 
-    MainTodayDailyFragment mainTodayDailyFragment;
+    TodayListFragment todayListFragment;
     protected boolean fromAlarm = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +51,9 @@ public class TodayActivity extends BaseActionBarActivity {
         fromAlarm = intent.getBooleanExtra(BaseActionBarActivity.EXTRA_KEY_FROM_ALARM, false);
         intent.putExtra(BaseActionBarActivity.EXTRA_KEY_FROM_ALARM, false);
         if (savedInstanceState == null) {
-            mainTodayDailyFragment = new MainTodayDailyFragment();
+            todayListFragment = new TodayListFragment();
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.content_frame, mainTodayDailyFragment, mainTodayDailyFragment.TAG)
+                    .add(R.id.content_frame, todayListFragment, todayListFragment.TAG)
                     .commit();
         }
 

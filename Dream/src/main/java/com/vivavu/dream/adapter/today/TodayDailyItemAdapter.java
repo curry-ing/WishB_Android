@@ -114,6 +114,14 @@ public class TodayDailyItemAdapter extends BaseAdapter implements View.OnClickLi
 
     }
 
+    public List<Today> getTodayList() {
+        return todayList;
+    }
+
+    public void setTodayList(List<Today> todayList) {
+        this.todayList = todayList;
+    }
+
     /**
      * This class contains all butterknife-injected Views & Layouts from layout file 'null'
      * for easy to all layout elements.

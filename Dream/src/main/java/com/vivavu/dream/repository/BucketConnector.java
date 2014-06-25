@@ -9,7 +9,7 @@ import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.common.RestTemplateFactory;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.bucket.Bucket;
-import com.vivavu.dream.model.bucket.Today;
+import com.vivavu.dream.model.bucket.TodayPager;
 import com.vivavu.dream.util.DateUtils;
 import com.vivavu.dream.util.ImageUtil;
 import com.vivavu.dream.util.JsonFactory;
@@ -199,31 +199,27 @@ public class BucketConnector {
         return result;
     }
 
-    public ResponseBodyWrapped<List<Today>> getTodayList(String lastTodayDate){
+    public ResponseBodyWrapped<TodayPager> getTodayList(Integer page){
         RestTemplate restTemplate = RestTemplateFactory.getInstance();
         HttpHeaders requestHeaders = getBasicAuthHeader(getContext());
         HttpEntity request = new HttpEntity<String>(requestHeaders);
         ResponseEntity<String> resultString = null;
-        StringBuffer url = new StringBuffer(Constants.apiPlanList);
-        if(lastTodayDate != null){
-            url.append("?fdate=");
-            url.append(lastTodayDate);
+        if(page == null || page < 1){
+            page = 1;
         }
         try {
-            resultString = restTemplate.exchange(url.toString(), HttpMethod.GET, request, String.class, getContext().getUser().getId());
+            resultString = restTemplate.exchange(Constants.apiTodayListWithPage, HttpMethod.GET, request, String.class, getContext().getUser().getId(), page);
+
         } catch (RestClientException e) {
             Log.e("dream", e.toString());
         }
 
-        ResponseBodyWrapped<List<Today>> result = new ResponseBodyWrapped<List<Today>>("error", String.valueOf(resultString.getStatusCode()), new ArrayList<Today>());
+        ResponseBodyWrapped<TodayPager> result = new ResponseBodyWrapped<TodayPager>("error", String.valueOf(resultString.getStatusCode()), new TodayPager());
 
         if(RestTemplateUtils.isAvailableParseToJson(resultString)){
             Gson gson = JsonFactory.getInstance();
-            //Type type = new TypeToken<ResponseBodyWrapped<List<Today>>>(){}.getType();
-            //result = gson.fromJson((String) resultString.getBody(), type);
-            Type type = new TypeToken<ResponseBodyWrapped<List<Today>>>(){}.getType();
+            Type type = new TypeToken<ResponseBodyWrapped<TodayPager>>(){}.getType();
             result  = gson.fromJson((String) resultString.getBody(), type);
-
         }
 
         return result;

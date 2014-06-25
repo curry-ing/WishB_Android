@@ -298,6 +298,23 @@ public class DataRepository {
         }
     }
 
+    public static List<Today> listToday(){
+        List<Today> list = null;
+        QueryBuilder<Today, Integer> todayQueryBuilder = getDatabaseHelper().getTodayRuntimeDao().queryBuilder();
+
+        todayQueryBuilder.orderBy("deadline", true);
+        todayQueryBuilder.orderBy("id", true);
+
+        try {
+            list = todayQueryBuilder.query();
+        } catch (SQLException e) {
+            Log.e("dream", e.getMessage());
+            list = new ArrayList<Today>();
+        }
+
+        return list;
+    }
+
     public static List<TodayGroup> listTodayGroupAndTodayData(){
          List<TodayGroup> todayGroups = null;
         try {
@@ -368,22 +385,6 @@ public class DataRepository {
         }
 
         return today;
-    }
-
-    public static Date firstTodayDate(){
-        QueryBuilder<TodayGroup, Date> todayGroupIntegerQueryBuilder = getDatabaseHelper().getTodayGroupRuntimeDao().queryBuilder();
-        todayGroupIntegerQueryBuilder.orderBy("date", true);
-        TodayGroup today = null;
-        try {
-            today = todayGroupIntegerQueryBuilder.queryForFirst();
-        } catch (SQLException e) {
-            Log.e(TAG, e.getMessage());
-        }
-        if(today == null) {
-            return new Date();
-        }else{
-            return today.getDate();
-        }
     }
 
     public static Date lastTodayDate(){

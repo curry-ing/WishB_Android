@@ -59,9 +59,6 @@
             android:name=".activity.login.PrivacyActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.main.TodayCalendarActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activity.login.UserRegisterActivity"
             android:label="register"
             android:screenOrientation="portrait" >
