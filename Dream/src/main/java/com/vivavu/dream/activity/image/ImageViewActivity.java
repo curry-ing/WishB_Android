@@ -3,11 +3,12 @@ package com.vivavu.dream.activity.image;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vivavu.dream.R;
-import com.vivavu.dream.common.BaseActionBarActivity;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -15,7 +16,7 @@ import butterknife.InjectView;
 /**
  * Created by yuja on 2014-06-20.
  */
-public class ImageViewActivity extends BaseActionBarActivity {
+public class ImageViewActivity extends ActionBarActivity {
     @InjectView(R.id.image_view)
     ImageView mImageView;
 
@@ -24,6 +25,7 @@ public class ImageViewActivity extends BaseActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_view);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
         ButterKnife.inject(this);
