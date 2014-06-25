@@ -132,7 +132,7 @@ public class LeftMenuDrawerFragment extends Fragment {
         mMainLeftMenuBtnProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String items[] = {"카메라", "겔러리", "이미지삭제"};
+                final String items[] = {"카메라", "갤러리", "이미지삭제"};
                 AlertDialog.Builder ab = new AlertDialog.Builder(getActivity());
                 ab.setTitle("선택");
                 ab.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
@@ -308,7 +308,7 @@ public class LeftMenuDrawerFragment extends Fragment {
             // Create the File where the photo should go
             File photoFile = null;
             try {
-                photoFile = ImageUtil.createImageFile(); // 겔러리에 저장될 파일을 생성해놓음
+                photoFile = ImageUtil.createImageFile(); // 갤러리에 저장될 파일을 생성해놓음
                 mImageCaptureUri = Uri.fromFile(photoFile); // 파일명 가져오기
             } catch (IOException ex) {
                 Log.e(LeftMenuDrawerFragment.class.getSimpleName(), ex.getMessage());
