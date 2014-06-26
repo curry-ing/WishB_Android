@@ -163,13 +163,15 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
                 }
                 break;
             case Code.ACT_VIEW_BUCKET_GROUP:
-                if(resultCode == Activity.RESULT_OK && resultCode == BaseActionBarActivity.RESULT_USER_DATA_MODIFIED) {
-                    Integer bucketRange = data.getIntExtra(BucketEditActivity.RESULT_EXTRA_BUCKET_RANGE, -1);
+                if(resultCode == Activity.RESULT_OK || resultCode == BaseActionBarActivity.RESULT_USER_DATA_MODIFIED) {
+                    if(data != null) {
+                        Integer bucketRange = data.getIntExtra(BucketEditActivity.RESULT_EXTRA_BUCKET_RANGE, -1);
 
-                    if (bucketRange != null && bucketRange > 0) {
-                        mMainPager.setCurrentItem(bucketRange / 10, false);
-                    } else if(bucketRange < 0 ){
-                        mMainPager.setCurrentItem(0, false);
+                        if (bucketRange != null && bucketRange > 0) {
+                            mMainPager.setCurrentItem(bucketRange / 10, false);
+                        } else if (bucketRange < 0) {
+                            mMainPager.setCurrentItem(0, false);
+                        }
                     }
                     if (resultCode == BaseActionBarActivity.RESULT_USER_DATA_MODIFIED) {
                         handler.post(new DataThread());
