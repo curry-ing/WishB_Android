@@ -1,7 +1,6 @@
 package com.vivavu.dream.activity.bucket;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -119,7 +118,6 @@ public class TimelineActivity extends BaseActionBarActivity {
     @InjectView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private ProgressDialog progressDialog;
     private static final int FETCH_DATA_START = 0;
     private static final int FETCH_DATA_SUCCESS = 1;
     private static final int FETCH_DATA_FAIL = 2;

@@ -1,6 +1,5 @@
 package com.vivavu.dream.fragment.main;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -45,7 +44,6 @@ public class TodayListFragment extends CustomBaseFragment {
     SwipeRefreshLayout mSwipeRefreshLayout;
 
     private List<Today> todayGroupList;
-    private ProgressDialog progressDialog;
 
     boolean lastitemVisibleFlag = false;        //화면에 리스트의 마지막 아이템이 보여지는지 체크
     private Integer lastPageNum = 1;
@@ -56,11 +54,9 @@ public class TodayListFragment extends CustomBaseFragment {
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case SEND_REFRESH_START:
-                    progressDialog.show();
                     break;
                 case SEND_BUKET_LIST_UPDATE:
                     updateContents((List<Today>) msg.obj);
-                    progressDialog.dismiss();
                     mSwipeRefreshLayout.setRefreshing(false);
                     break;
             }
@@ -78,8 +74,6 @@ public class TodayListFragment extends CustomBaseFragment {
         final View rootView = inflater.inflate(R.layout.fragment_today_list, container, false);
         ButterKnife.inject(this, rootView);
 
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setMessage("진행중");
         networkThread = new NetworkThread();
         mSwipeRefreshLayout.setColorScheme(R.color.progress_10, R.color.progress_20, R.color.progress_30, R.color.progress_40);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
