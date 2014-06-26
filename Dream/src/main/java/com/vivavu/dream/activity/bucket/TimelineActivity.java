@@ -137,23 +137,19 @@ public class TimelineActivity extends BaseActionBarActivity {
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case FETCH_DATA_START:
-                    progressDialog.show();
                     break;
                 case FETCH_DATA_SUCCESS:
                     timeline = (Timeline) msg.obj;
                     List<Post> dataList = timeline.getTimelineData();
                     initTimelineContents(dataList);
-                    progressDialog.dismiss();
                     mSwipeRefreshLayout.setRefreshing(false);
                     break;
                 case FETCH_DATA_FAIL:
-                    progressDialog.dismiss();
                     mSwipeRefreshLayout.setRefreshing(false);
                     break;
                 case UPDATE_BUCKET_DATA_SUCCESS:
                     bucket = (Bucket) msg.obj;
                     bindData(bucket);
-                    progressDialog.dismiss();
                     break;
                 case UPDATE_BUCKET_DATA_FAIL:
                     Toast.makeText(TimelineActivity.this, "버킷 정보 갱신에 실패하였습니다.", Toast.LENGTH_SHORT ).show();
@@ -176,9 +172,6 @@ public class TimelineActivity extends BaseActionBarActivity {
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setCustomView(R.layout.actionbar_timeline);
 */
-
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("진행중");
 
         ButterKnife.inject(this);
 
