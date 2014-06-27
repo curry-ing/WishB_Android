@@ -560,8 +560,9 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
 
                 /* Set Notifications On */
                 AlarmManagerBroadcastReceiver alarm = new AlarmManagerBroadcastReceiver();
-                alarm.SetAlarm(context, 1, true, 23);
-                alarm.SetAlarm(context, 2, true, 11);
+                alarm.setEverydayAlarm(context, true, 0);
+//                alarm.SetAlarm(context, 1, true, 23, 0);
+//                alarm.SetAlarm(context, 2, true, 11, 0);
 
                 setResult(RESULT_OK);
                 finish();

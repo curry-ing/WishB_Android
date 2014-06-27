@@ -3,10 +3,12 @@ package com.vivavu.dream.facebook.fragment;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -195,10 +197,21 @@ public class FacebookLoginFragment extends CustomBaseFragment {
                 DreamApp.getInstance().setTokenType("unused");
                 DreamApp.getInstance().saveAppDefaultInfo();
 
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+                Boolean good_morning_alarm_on = sharedPreferences.getBoolean("notification_good_morning_alarm", true);
+                Boolean good_night_alarm_on = sharedPreferences.getBoolean("notification_good_night_alarm", true);
+                String good_morning_alarm_time = sharedPreferences.getString("notifications_time_morning", null);
+                String good_night_alarm_time = sharedPreferences.getString("notifications_time_night", null);
+                Integer good_morning_alarm_hour = Integer.parseInt(good_morning_alarm_time.split(":")[0]);
+                Integer good_morning_alarm_min = Integer.parseInt(good_morning_alarm_time.split(":")[1]);
+                Integer good_night_alarm_hour = Integer.parseInt(good_night_alarm_time.split(":")[0]);
+                Integer good_night_alarm_min = Integer.parseInt(good_night_alarm_time.split(":")[1]);
+
                 /* Set Notifications On */
                 AlarmManagerBroadcastReceiver alarm = new AlarmManagerBroadcastReceiver();
-                alarm.SetAlarm(context, 1, true, 23);
-                alarm.SetAlarm(context, 2, true, 11);
+//                alarm.SetAlarm(context, 1, good_morning_alarm_on, good_morning_alarm_hour, good_morning_alarm_min);
+//                alarm.SetAlarm(context, 2, good_night_alarm_on, good_night_alarm_hour, good_night_alarm_min);
+                alarm.setEverydayAlarm(context, true, 0);
 
                 Session session = Session.getActiveSession();
                 if (session != null && (session.isOpened() || session.isClosed())) {

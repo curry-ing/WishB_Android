@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 /**
  * Created by yuja on 2014-06-11.
@@ -20,6 +21,7 @@ public class TimePickerDialogPreference extends DialogPreference {
     protected boolean is24HourFormat;
     protected TimePicker picker=null;
     protected TextView timeDisplay;
+    public static final int TIME_PICKER_INTERVAL=15;
 
     public TimePickerDialogPreference(Context ctxt) {
         this(ctxt, null);
@@ -60,6 +62,7 @@ public class TimePickerDialogPreference extends DialogPreference {
     @Override
     protected void onBindDialogView(View v) {
         super.onBindDialogView(v);
+//        picker.setIs24HourView(true);
         picker.setIs24HourView(is24HourFormat);
         picker.setCurrentHour(lastHour);
         picker.setCurrentMinute(lastMinute);
@@ -89,7 +92,8 @@ public class TimePickerDialogPreference extends DialogPreference {
             lastHour=picker.getCurrentHour();
             lastMinute=picker.getCurrentMinute();
 
-            String time=String.valueOf(lastHour)+":"+String.valueOf(lastMinute);
+            String time=String.valueOf(lastHour)+":"+String.format("%02d",lastMinute);
+            Toast.makeText(getContext(), "알람 시간이 변경되었습니다.", Toast.LENGTH_SHORT).show();
 
             if (callChangeListener(time)) {
                 persistString(time);
@@ -131,4 +135,6 @@ public class TimePickerDialogPreference extends DialogPreference {
         lastHour=Integer.parseInt(timeParts[0]);
         lastMinute=Integer.parseInt(timeParts[1]);;
     }
+
+
 }

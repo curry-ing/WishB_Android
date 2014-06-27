@@ -43,4 +43,10 @@
     <string name="pref_header_notifications_time">알림시간설정</string>
     <string name="pref_title_notifications_time_start">시작시간</string>
     <string name="pref_title_notifications_time_end">종료시간</string>
+    <string name="pref_title_notifications_time">설정시간</string>
+
+    <string name="pref_header_good_morning_alarm">굿모닝 알람</string>
+    <string name="pref_set_good_morning_alarm">굿모닝 알람 설정</string>
+    <string name="pref_header_good_night_alarm">굿나잇 알람</string>
+    <string name="pref_set_good_night_alarm">굿나잇 알람 설정</string>
 </resources>
