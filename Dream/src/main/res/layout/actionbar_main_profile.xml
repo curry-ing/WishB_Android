@@ -17,7 +17,7 @@
         android:layout_height="match_parent"
         android:id="@+id/profile"
         android:src="@drawable/mainview_profile"
-        android:text="today"
+        android:text="@string/today"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="15dp"
         android:paddingLeft="0dp"
@@ -26,7 +26,7 @@
         />
     <TextView android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:text="프로필"
+        android:text="@string/profile"
         android:background="@null"
         android:layout_toRightOf="@+id/profile"
         android:id="@+id/txt_profile"

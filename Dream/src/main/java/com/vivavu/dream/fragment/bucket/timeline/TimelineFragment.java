@@ -88,7 +88,7 @@ public class TimelineFragment extends CustomBaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setMessage("진행중");
+        progressDialog.setMessage(getString(R.string.in_progress));
     }
 
     @Override

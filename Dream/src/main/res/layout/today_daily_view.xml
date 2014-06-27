@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/btn_date"
-        android:text="@string/actionbar_main_today"
+        android:text="@string/today"
         android:background="@drawable/bg_timeline_view_timestamp"
         android:textColor="@color/default_text_color"
         android:layout_marginTop="5dp"

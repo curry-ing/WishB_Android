@@ -53,7 +53,7 @@ public class ValidationUtils {
 
         // Check for a valid email address.
         if (!isNotEmpty(value)) {
-            view.setError(context.getString(R.string.error_field_required));
+            view.setError(context.getString(R.string.email_required));
             return false;
         }
 

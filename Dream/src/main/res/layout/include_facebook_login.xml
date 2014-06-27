@@ -48,7 +48,7 @@
             android:layout_gravity="center"
             android:id="@+id/authButton"
             android:layout_marginTop="10dp"
-            fb:login_text="페이스북으로 순식간에 로그인"
-            fb:logout_text="페이스북으로 순식간에 로그인" android:background="#ff627aad"/>
+            fb:login_text="@string/login_with_facebook"
+            fb:logout_text="@string/login_with_facebook" android:background="#ff627aad"/>
     </LinearLayout>
 </RelativeLayout>

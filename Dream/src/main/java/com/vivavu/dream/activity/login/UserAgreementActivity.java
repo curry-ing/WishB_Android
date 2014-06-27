@@ -38,7 +38,7 @@ public class UserAgreementActivity extends BaseActionBarActivity {
         actionBar.setCustomView(R.layout.actionbar_more);
 
         ButterKnife.inject(this);
-        mTxtContents.setText(getString(R.string.user_agreement_contents));
+        mTxtContents.setText(getString(R.string.notice_test));
         //Intent data = getIntent();
         mTxtTitle.setText(getString(R.string.lbl_access_terms));
         mMenuPrevious.setOnClickListener(new View.OnClickListener() {

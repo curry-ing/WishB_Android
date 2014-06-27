@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+import com.vivavu.dream.R;
 
 /**
  * Created by yuja on 2014-06-11.
@@ -93,7 +94,7 @@ public class TimePickerDialogPreference extends DialogPreference {
             lastMinute=picker.getCurrentMinute();
 
             String time=String.valueOf(lastHour)+":"+String.format("%02d",lastMinute);
-            Toast.makeText(getContext(), "알람 시간이 변경되었습니다.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.changed_alarm_time, Toast.LENGTH_SHORT).show();
 
             if (callChangeListener(time)) {
                 persistString(time);

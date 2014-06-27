@@ -108,9 +108,9 @@ public class AlertSettingsActivity extends PreferenceActivity {
             public boolean onPreferenceChange(Preference preference, Object value) {
 
                 if ((Boolean)value) {
-                    Toast.makeText(getBaseContext(), "굿모닝 알람이 설정되었습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), R.string.set_good_morning_alarm, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getBaseContext(), "굿모닝 알람이 해제되었습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), R.string.unset_good_morning_alarm, Toast.LENGTH_SHORT).show();
                 }
                 alarm.setEverydayAlarm(getBaseContext(), true, 1);
                 return true;
@@ -122,9 +122,9 @@ public class AlertSettingsActivity extends PreferenceActivity {
             public boolean onPreferenceChange(Preference preference, Object value) {
 
                 if ((Boolean)value) {
-                    Toast.makeText(getBaseContext(), "굿나잇 알람이 설정되었습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), R.string.set_good_night_alarm, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getBaseContext(), "굿나잇 알람이 해제되었습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), R.string.unset_good_night_alarm, Toast.LENGTH_SHORT).show();
                 }
                 alarm.setEverydayAlarm(getBaseContext(), true, 2);
                 return true;

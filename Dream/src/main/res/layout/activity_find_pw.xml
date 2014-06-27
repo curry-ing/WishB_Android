@@ -6,28 +6,6 @@
     android:orientation="vertical"
     android:background="@drawable/register_login_bg">
 
-    <!-- Login progress -->
-    <!--<LinearLayout android:id="@+id/login_status"-->
-        <!--android:visibility="gone"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:gravity="center_horizontal"-->
-        <!--android:orientation="vertical">-->
-        <!--<ProgressBar style="?android:attr/progressBarStyleLarge"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginBottom="8dp"/>-->
-        <!--<TextView-->
-            <!--android:id="@+id/login_status_message"-->
-            <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
-            <!--android:fontFamily="sans-serif-light"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginBottom="16dp"-->
-            <!--android:text="@string/login_progress_signing_in" />-->
-    <!--</LinearLayout>-->
-
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="280dp"
@@ -37,7 +15,9 @@
         <ImageView
                 android:layout_width="35dp"
                 android:layout_height="41dp"
-                android:id="@+id/login_id_icon" android:src="@drawable/login_id_icon" android:contentDescription=""
+                android:id="@+id/login_id_icon"
+                android:src="@drawable/login_id_icon"
+                android:contentDescription=""
                 android:layout_gravity="top"/>
         <EditText
                 android:id="@+id/findpw_email"
@@ -59,14 +39,20 @@
         <TextView
             android:layout_width="280dp"
             android:layout_height="wrap_content"
-            android:text="@string/txt_write_joined_email"
+            android:text=""
             android:id="@+id/findpw_txt_response_info"
             android:editable="false"
             android:enabled="true"
             android:focusable="false"
-            android:layout_gravity="center_horizontal" android:layout_marginTop="40dp"
-            android:typeface="sans" android:textSize="16dp" android:textStyle="bold"
-            android:singleLine="true" android:paddingLeft="5dp" android:visibility="visible" android:gravity="fill_horizontal|left"/>
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="40dp"
+            android:typeface="sans"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:singleLine="true"
+            android:paddingLeft="5dp"
+            android:visibility="visible"
+            android:gravity="fill_horizontal|left"/>
 
         <Button
             android:id="@+id/findpw_send_btn"
@@ -75,8 +61,12 @@
             android:layout_marginTop="30dp"
             android:paddingLeft="32dp"
             android:paddingRight="32dp"
-            android:layout_gravity="center" android:background="@drawable/btn_inactive" android:enabled="true"
-            android:text="전송" android:textColor="@color/white" android:textSize="15dp"/>
+            android:layout_gravity="center"
+            android:background="@drawable/btn_inactive"
+            android:enabled="true"
+            android:text="@string/send_reset_passwd_mail"
+            android:textColor="@color/white"
+            android:textSize="15sp"/>
 
     </LinearLayout>
 </LinearLayout>

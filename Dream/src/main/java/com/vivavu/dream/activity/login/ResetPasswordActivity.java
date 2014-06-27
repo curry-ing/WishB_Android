@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -56,9 +55,8 @@ public class ResetPasswordActivity extends BaseActionBarActivity {
 
         ButterKnife.inject(this);
 
-//        Typeface NanumGothic = Typeface.createFromAsset(context.getAssets(), "NanumBarunGothic.mp3");
         Typeface NanumBold = Typeface.createFromAsset(context.getAssets(), "NanumBarunGothicBold.mp3");
-        mActionbarLoginTitle.setText("비밀번호 찾기");
+        mActionbarLoginTitle.setText(getText(R.string.find_passwd));
         mActionbarLoginTitle.setTypeface(NanumBold);
         mActionbarLoginTitle.setTextSize(20);
         mActionbarLoginTitle.setTextColor(Color.WHITE);
@@ -75,11 +73,11 @@ public class ResetPasswordActivity extends BaseActionBarActivity {
             public void onFocusChange(View view, boolean b) {
                 if (b){
                     mFindpwEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ing_icon, 0);
-                    mFindpwTxtResponseInfo.setText("가입한 이메일 주소를 적어주세요.");
+                    mFindpwTxtResponseInfo.setText(getString(R.string.notify) + getString(R.string.enter_registered_email));
                 } else {
                     if (!ValidationUtils.isValidEmail(mFindpwEmail)) {
                         mFindpwEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_alert_icon, 0);
-                        mFindpwTxtResponseInfo.setText("올바르지 않은 이메일 형식입니다.");
+                        mFindpwTxtResponseInfo.setText(getString(R.string.notify) + getString(R.string.email_not_valid));
                     }
                 }
             }
@@ -144,7 +142,7 @@ public class ResetPasswordActivity extends BaseActionBarActivity {
         } else {
             mFindpwEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_alert_icon, 0);
             mFindpwSendBtn.setBackground(getResources().getDrawable(R.drawable.btn_inactive));
-            mFindpwTxtResponseInfo.setText("알림:  올바르지 않은 이메일 형식입니다.");
+            mFindpwTxtResponseInfo.setText(getString(R.string.notify) + getString(R.string.email_not_valid));
         }
     }
 
@@ -167,8 +165,8 @@ public class ResetPasswordActivity extends BaseActionBarActivity {
 
             if(loginInfoResponseBodyWrapped != null && loginInfoResponseBodyWrapped.isSuccess()){
                 AlertDialog.Builder alert = new AlertDialog.Builder(ResetPasswordActivity.this);
-                alert.setMessage("\n" + context.getResources().getText(R.string.sent_reset_passwd_mail) + "\n");
-                alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                alert.setMessage("\n" + getString(R.string.sent_reset_passwd_mail) + "\n");
+                alert.setPositiveButton(getString(R.string.btn_confirm), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         hideSoftKeyboard();
@@ -187,7 +185,7 @@ public class ResetPasswordActivity extends BaseActionBarActivity {
             }else{
 //                mFindpwTxtResponseInfo.setText(loginInfoResponseBodyWrapped.getDescription());
                 mFindpwEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_alert_icon, 0);
-                mFindpwTxtResponseInfo.setText("알림:  " + context.getResources().getString(R.string.unregistered_email) );
+                mFindpwTxtResponseInfo.setText(getString(R.string.notify) + getString(R.string.email_unregistered) );
             }
         }
     }

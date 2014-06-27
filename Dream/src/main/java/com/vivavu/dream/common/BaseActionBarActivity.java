@@ -36,7 +36,7 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
     protected IntentFilter intentFilterChange;
     protected IntentFilter intentFilterWifi;
     public static final String EXTRA_KEY_FROM_ALARM = "fromAlarm";
-    public static final int RESULT_USER_DATA_DELETED = RESULT_FIRST_USER + 0;
+    public static final int RESULT_USER_DATA_DELETED = RESULT_FIRST_USER;
     public static final int RESULT_USER_DATA_UPDATED = RESULT_FIRST_USER + 1;
     public static final int RESULT_USER_DATA_MODIFIED = RESULT_FIRST_USER + 2;
     public static Typeface denseRegularFont = null;
@@ -158,7 +158,7 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
 
         if(checkLogin()){
             if (goToday){
-                goToday(goToday);
+                goToday(true);
             } else {
                 goMain();
             }
@@ -171,7 +171,7 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
         if(!checkNetwork()){
             return false;
         }
-        if(context.isLogin() == false || FacebookUtils.isOpen()){
+        if(!context.isLogin() || FacebookUtils.isOpen()){
             if(context.hasValidToken()){
                 UserInfoConnector userInfoConnector = new UserInfoConnector();
                 ResponseBodyWrapped<BaseInfo> response = userInfoConnector.getBaseInfo();
@@ -279,7 +279,7 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
     }
 
-    public class CheckLoginTesk extends AsyncTask<Void, Void, Void>{
+    public class CheckLoginTask extends AsyncTask<Void, Void, Void>{
 
         @Override
         protected Void doInBackground(Void... voids) {

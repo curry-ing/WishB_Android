@@ -1,14 +1,12 @@
 package com.vivavu.dream.activity.login;
 
 import android.app.LoaderManager;
-import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,18 +19,15 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 
 import com.vivavu.dream.R;
 import com.vivavu.dream.common.BaseActionBarActivity;
-import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.model.LoginInfo;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.SecureToken;
@@ -42,7 +37,6 @@ import com.vivavu.dream.util.ValidationUtils;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -398,49 +392,49 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
             case 1:
                 mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
                 mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
-                mRegisterTxtResponseInfo.setText("알림:  이메일 주소가 입력되지 않았습니다.");
+                mRegisterTxtResponseInfo.setText(getString(R.string.notify) + getString(R.string.email_required));
                 mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
 //                mRegisterButton.setEnabled(false);
                 break;
             case 2:
                 mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
                 mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
-                mRegisterTxtResponseInfo.setText("알림:  패스워드가 입력되지 않았습니다.");
+                mRegisterTxtResponseInfo.setText(getString(R.string.notify) + getString(R.string.passwd_required));
                 mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
 //                mRegisterButton.setEnabled(false);
                 break;
             case 3:
                 mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
                 mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
-                mRegisterTxtResponseInfo.setText("알림:  올바르지 않은 이메일 형식입니다.");
+                mRegisterTxtResponseInfo.setText(getString(R.string.notify) + getString(R.string.email_not_valid));
                 mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
 //                mRegisterButton.setEnabled(false);
                 break;
             case 4:
                 mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
                 mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
-                mRegisterTxtResponseInfo.setText("알림:  비밀번호(6자 이상)를 확인해 주세요.");
+                mRegisterTxtResponseInfo.setText(getString(R.string.notify) + getString(R.string.passwd_not_valid));
                 mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
 //                mRegisterButton.setEnabled(false);
                 break;
             case 5:
                 mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
                 mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
-                mRegisterTxtResponseInfo.setText("알림:  가입하지 않은 이메일입니다.");
+                mRegisterTxtResponseInfo.setText(getString(R.string.notify) + getString(R.string.email_unregistered));
                 mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
 //                mRegisterButton.setEnabled(false);
                 break;
             case 6:
                 mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
                 mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
-                mRegisterTxtResponseInfo.setText("알림:  오류가 발생했습니다. 다시 시도해주세요.");
+                mRegisterTxtResponseInfo.setText(getString(R.string.notify) + getString(R.string.register_failed));
                 mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
 //                mRegisterButton.setEnabled(false);
                 break;
             case 7:
                 mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
                 mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
-                mRegisterTxtResponseInfo.setText("알림:  이미 가입된 이메일입니다.");
+                mRegisterTxtResponseInfo.setText(getString(R.string.notify) + getString(R.string.email_already_registered));
                 mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
 //                mRegisterButton.setEnabled(false);
                 break;

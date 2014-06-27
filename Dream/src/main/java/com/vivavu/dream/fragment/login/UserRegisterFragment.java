@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ScrollView;
 
 import com.vivavu.dream.R;
 import com.vivavu.dream.common.DreamApp;
@@ -74,11 +73,11 @@ public class UserRegisterFragment extends CustomProgressFragment {
 
         // Check for a valid password.
         if (TextUtils.isEmpty(mPasswordValue)) {
-            mPassword.setError(getString(R.string.error_field_required));
+            mPassword.setError(getString(R.string.passwd_required));
             focusView = mPassword;
             cancel = true;
         } else if (mPasswordValue.length() < 4) {
-            mPassword.setError(getString(R.string.error_invalid_password));
+            mPassword.setError(getString(R.string.passwd_not_valid));
             focusView = mPassword;
             cancel = true;
 //        } else if (!mPasswordValue.equals(mPasswordDupValue)){
@@ -89,11 +88,11 @@ public class UserRegisterFragment extends CustomProgressFragment {
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(mEmailValue)) {
-            mEmail.setError(getString(R.string.error_field_required));
+            mEmail.setError(getString(R.string.email_required));
             focusView = mEmail;
             cancel = true;
         } else if (!mEmailValue.contains("@")) {
-            mEmail.setError(getString(R.string.error_invalid_email));
+            mEmail.setError(getString(R.string.email_not_valid));
             focusView = mEmail;
             cancel = true;
         }
@@ -151,7 +150,7 @@ public class UserRegisterFragment extends CustomProgressFragment {
             } else {
                 this.cancel(false);
                 DreamApp.getInstance().setLogin(false);
-                mPassword.setError(getString(R.string.error_incorrect_password));
+                mPassword.setError(getString(R.string.register_failed));
                 mPassword.requestFocus();
             }
         }

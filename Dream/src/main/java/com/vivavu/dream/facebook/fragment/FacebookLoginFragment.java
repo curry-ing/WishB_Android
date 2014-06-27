@@ -92,7 +92,7 @@ public class FacebookLoginFragment extends CustomBaseFragment {
         uiHelper.onCreate(savedInstanceState);
 
 //        progressDialog = new ProgressDialog(getActivity());
-//        progressDialog.setMessage("진행중");
+//        progressDialog.setMessage(getString(R.string.in_progress));
     }
 
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
@@ -197,20 +197,8 @@ public class FacebookLoginFragment extends CustomBaseFragment {
                 DreamApp.getInstance().setTokenType("unused");
                 DreamApp.getInstance().saveAppDefaultInfo();
 
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-                Boolean good_morning_alarm_on = sharedPreferences.getBoolean("notification_good_morning_alarm", true);
-                Boolean good_night_alarm_on = sharedPreferences.getBoolean("notification_good_night_alarm", true);
-                String good_morning_alarm_time = sharedPreferences.getString("notifications_time_morning", null);
-                String good_night_alarm_time = sharedPreferences.getString("notifications_time_night", null);
-                Integer good_morning_alarm_hour = Integer.parseInt(good_morning_alarm_time.split(":")[0]);
-                Integer good_morning_alarm_min = Integer.parseInt(good_morning_alarm_time.split(":")[1]);
-                Integer good_night_alarm_hour = Integer.parseInt(good_night_alarm_time.split(":")[0]);
-                Integer good_night_alarm_min = Integer.parseInt(good_night_alarm_time.split(":")[1]);
-
                 /* Set Notifications On */
                 AlarmManagerBroadcastReceiver alarm = new AlarmManagerBroadcastReceiver();
-//                alarm.SetAlarm(context, 1, good_morning_alarm_on, good_morning_alarm_hour, good_morning_alarm_min);
-//                alarm.SetAlarm(context, 2, good_night_alarm_on, good_night_alarm_hour, good_night_alarm_min);
                 alarm.setEverydayAlarm(context, true, 0);
 
                 Session session = Session.getActiveSession();

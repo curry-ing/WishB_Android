@@ -84,13 +84,13 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver{
 
         Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         if (type == 1) {
-            NotificationTicker.append("Wish B: Good Morning!");
-            NotificationTitle.append("오늘 하루도 화이팅!");
-            NotificationContent.append("오늘, " + buckets.size() + "개의 열기구에 불을 지펴보세요.");
+            NotificationTicker.append(context.getResources().getString(R.string.good_morning_alarm_ticker));
+            NotificationTitle.append(context.getResources().getString(R.string.good_morning_alarm_title));
+            NotificationContent.append(String.format(context.getResources().getString(R.string.good_morning_alarm_content), buckets.size()));
         } else if (type == 2) {
-            NotificationTicker.append("Wish B: Evening!!!");
-            NotificationTitle.append("수고했어요. 오늘도!");
-            NotificationContent.append(buckets.size() + "개의 열기구를 확인해보세요.");
+            NotificationTicker.append(context.getResources().getString(R.string.good_night_alarm_ticker));
+            NotificationTitle.append(context.getResources().getString(R.string.good_night_alarm_title));
+            NotificationContent.append(String.format(context.getResources().getString(R.string.good_night_alarm_content),buckets.size()));
         }
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)

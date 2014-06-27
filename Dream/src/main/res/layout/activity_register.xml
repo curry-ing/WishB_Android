@@ -76,7 +76,7 @@
                 android:layout_height="41dp"
                 android:hint="@string/prompt_password"
                 android:inputType="textPassword"
-                android:imeActionLabel="@string/action_sign_in_short"
+                android:imeActionLabel="@string/login"
                 android:imeActionId="@+id/login"
                 android:imeOptions="actionUnspecified" android:background="@drawable/login_edittext_bg"
                 android:layout_marginLeft="1dp"
@@ -91,7 +91,7 @@
         <TextView
                 android:layout_width="280dp"
                 android:layout_height="wrap_content"
-                android:text="알림:  비밀번호를 입력해 주세요!"
+                android:text=""
                 android:id="@+id/register_txt_response_info"
                 android:editable="false"
                 android:enabled="true"
@@ -107,7 +107,7 @@
                 android:paddingLeft="32dp"
                 android:paddingRight="32dp"
                 android:layout_gravity="center" android:background="@drawable/btn_inactive" android:enabled="true"
-                android:text="가입완료" android:textColor="@color/white" android:textSize="15dp"/>
+                android:text="@string/register_completed" android:textColor="@color/white" android:textSize="15dp"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

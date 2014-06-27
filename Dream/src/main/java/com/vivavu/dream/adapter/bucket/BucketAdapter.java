@@ -52,27 +52,25 @@ import butterknife.InjectView;
 /**
  * Created by masunghoon on 4/20/14.
  */
-public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener{
+public class BucketAdapter extends PagerAdapter implements View.OnClickListener{
 
     private Context context;
     private Fragment fragment;
     private LayoutInflater mInflater;
     private List<BucketGroup> bucketGroupList;
-    private List<Bitmap> mainImages;
+    protected List<Bitmap> mainImages;
 
     private String title;
 
     private int deviceDensityDpi;
-    private String mUserBirthday;
     private String mFromMonth, mToMonth;
 
     static public final int PROGRESS_BAR_BASELINE = 270;
     public static final String TAG = "DialogActivity";
-    public static final int DLG_EXAMPLE1 = 0;
     public static final int TEXT_ID = 0;
 
 
-    public BucketAdapter2 (Fragment fragment, List<BucketGroup> bucketGroupList) {
+    public BucketAdapter(Fragment fragment, List<BucketGroup> bucketGroupList) {
         this.context = fragment.getActivity();
         this.fragment = fragment;
         this.mInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -86,12 +84,12 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
 
     }
 
-    public BucketAdapter2 (Fragment fragment) {
-        this.context = fragment.getActivity();
-        this.fragment = fragment;
-        this.mInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        this.bucketGroupList = new ArrayList<BucketGroup>();
-    }
+//    public BucketAdapter(Fragment fragment) {
+//        this.context = fragment.getActivity();
+//        this.fragment = fragment;
+//        this.mInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        this.bucketGroupList = new ArrayList<BucketGroup>();
+//    }
 
     @Override
     public Object instantiateItem(ViewGroup container, int position){
@@ -138,7 +136,7 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public void init(final ButterknifeViewHolder holder, BucketGroup bucketGroup, final int pos) throws IOException {
         this.mainImages = new ArrayList<Bitmap>();
-        this.mUserBirthday = DreamApp.getInstance().getUser().getBirthday();
+        String mUserBirthday = DreamApp.getInstance().getUser().getBirthday();
 
         /* SET MAIN TITLE */
         holder.mBtnDecade.setTypeface(BaseActionBarActivity.getNanumBarunGothicBoldFont());
@@ -172,8 +170,7 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
         if (title != null) {
             holder.mBtnDecade.setText(title+" ");
         } else {
-            String imsi = bucketGroup.getRangeText();
-            holder.mBtnDecade.setText(bucketGroup.getRangeText().equals("60대") ? "60대 이후" : bucketGroup.getRangeText()+" ");
+            holder.mBtnDecade.setText(bucketGroup.getRangeText().equals("60대") ? context.getString(R.string.after_sixties) : bucketGroup.getRangeText()+" ");
         }
 
         holder.mBtnDecade.setOnClickListener(new View.OnClickListener() {
@@ -259,7 +256,6 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
 //                    holder.mMainImage8.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, mainImages.size(), deviceDensityDpi, pos));
 //                    break;
             }
-//            holder.mProgressOverlay.setImageDrawable(new MyDrawable());
         }
         mainImages.clear();
 
@@ -268,48 +264,48 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
         if (mUserBirthday != null && !mUserBirthday.isEmpty()) {
             String s = mUserBirthday.substring(4, 6);
             if (s.equals("01")) {
-                mFromMonth = "J A N  ";
-                mToMonth = "D E C  ";
+                mFromMonth = context.getString(R.string.jan);
+                mToMonth = context.getString(R.string.dec);
             } else if (s.equals("02")) {
-                mFromMonth = "F E B  ";
-                mToMonth = "J A N  ";
+                mFromMonth = context.getString(R.string.feb);
+                mToMonth = context.getString(R.string.jan);
             } else if (s.equals("03")) {
-                mFromMonth = "M A R  ";
-                mToMonth = "F E B  ";
+                mFromMonth = context.getString(R.string.mar);
+                mToMonth = context.getString(R.string.feb);
             } else if (s.equals("04")) {
-                mFromMonth = "A P R  ";
-                mToMonth = "M A R  ";
+                mFromMonth = context.getString(R.string.apr);
+                mToMonth = context.getString(R.string.mar);
             } else if (s.equals("05")) {
-                mFromMonth = "M A Y  ";
-                mToMonth = "A P R  ";
+                mFromMonth = context.getString(R.string.may);
+                mToMonth = context.getString(R.string.apr);
             } else if (s.equals("06")) {
-                mFromMonth = "J U N  ";
-                mToMonth = "M A Y  ";
+                mFromMonth = context.getString(R.string.jun);
+                mToMonth = context.getString(R.string.may);
             } else if (s.equals("07")) {
-                mFromMonth = "J U L  ";
-                mToMonth = "J U N  ";
+                mFromMonth = context.getString(R.string.jul);
+                mToMonth = context.getString(R.string.jun);
             } else if (s.equals("08")) {
-                mFromMonth = "A U G  ";
-                mToMonth = "J U L  ";
+                mFromMonth = context.getString(R.string.aug);
+                mToMonth = context.getString(R.string.jul);
             } else if (s.equals("09")) {
-                mFromMonth = "S E P  ";
-                mToMonth = "A U G  ";
+                mFromMonth = context.getString(R.string.sep);
+                mToMonth = context.getString(R.string.aug);
             } else if (s.equals("10")) {
-                mFromMonth = "O C T  ";
-                mToMonth = "S E P  ";
+                mFromMonth = context.getString(R.string.oct);
+                mToMonth = context.getString(R.string.sep);
             } else if (s.equals("11")) {
-                mFromMonth = "N O V  ";
-                mToMonth = "O C T  ";
+                mFromMonth = context.getString(R.string.nov);
+                mToMonth = context.getString(R.string.oct);
             } else if (s.equals("12")) {
-                mFromMonth = "D E C  ";
-                mToMonth = "N O V  ";
+                mFromMonth = context.getString(R.string.dec);
+                mToMonth = context.getString(R.string.nov);
             }
             if (pos > 0) {
                 holder.mMainProgress.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
                 Calendar cal = java.util.Calendar.getInstance();
                 int startY = Integer.parseInt(mUserBirthday.substring(0, 4)) + (pos * 10) - 1;
                 int endY = Integer.parseInt(mUserBirthday.substring(0, 4)) + ((pos + 1) * 10 - 1) - 1;
-                int thisY = cal.get(cal.YEAR);
+                int thisY = cal.get(Calendar.YEAR);
 
                 Typeface periodTypeFace = Typeface.createFromAsset(context.getAssets(), "Dense-Regular.mp3");
                 holder.mPeriod.setTypeface(periodTypeFace, Typeface.BOLD);
@@ -336,17 +332,15 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
                 } else if (thisY < startY) {
                     holder.mMainProgress.setImageDrawable(new FanShapeDrawable(null, 0, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
                 } else {
-                    int marking = (((DreamApp.getInstance().getUser().getUserAge() % 10) * 365) + cal.get(cal.DAY_OF_YEAR)) / 10;
+                    int marking = (((DreamApp.getInstance().getUser().getUserAge() % 10) * 365) + cal.get(Calendar.DAY_OF_YEAR)) / 10;
                     holder.mMainProgress.setImageDrawable(new FanShapeDrawable(null, marking, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
                 }
             } else {
                 holder.mMainProgress.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
                 int marking = (int) ((float) DreamApp.getInstance().getUser().getUserAge() / 100 * 360);
 
-                Typeface periodTypeFace = Typeface.createFromAsset(context.getAssets(), "Dense-Regular.mp3");
                 holder.mPeriod.setTypeface(BaseActionBarActivity.getDenseRegularFont(), Typeface.BOLD);
                 holder.mPeriod.setTextSize(25);
-//            holder.mMainProgress.setImageDrawable(new FanShapeDrawable(null, 0, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
                 holder.mMainProgress.setImageDrawable(new FanShapeDrawable(null, marking, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
                 holder.mPeriod.setText(mFromMonth + mUserBirthday.substring(0, 1) + " "
                         + mUserBirthday.substring(1, 2) + " "
@@ -390,12 +384,12 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
     private void createExampleDialog(final ButterknifeViewHolder holder, final int pos){
         final InputMethodManager imm = (InputMethodManager) DreamApp.getInstance().getSystemService(Context.INPUT_METHOD_SERVICE);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        if (!(pos == 0)) {
-            builder.setTitle("Wish B: 당신의 " + pos * 10 + "대");
-            builder.setMessage("어떤 10년을 보내고 싶으세요?");
+        if (pos != 0) {
+            builder.setTitle(String.format(context.getString(R.string.mainview_decade_set_title), pos*10));
+            builder.setMessage(context.getString(R.string.mainview_decade_set_message));
         } else {
-            builder.setTitle("Wish B.");
-            builder.setMessage("어떤 인생을 꿈꾸시나요?");
+            builder.setTitle(context.getString(R.string.mainview_life_set_title));
+            builder.setMessage(context.getString(R.string.mainview_life_set_message));
         }
 
         final EditText input = new EditText(context);
@@ -405,24 +399,21 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
         builder.setView(input);
         input.setText(holder.mBtnDecade.getText());
         input.selectAll();
-//        input.setSelection(holder.mBtnDecade.getText().length());
 
-        builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(context.getString(R.string.save), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 String titleValue = input.getText().toString();
                 holder.mBtnDecade.setText(titleValue);
                 imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);  //Hide soft keyboard
                 saveUser(titleValue, pos);
-                return;
             }
         });
 
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);   //Hide soft keyboard
-                return;
             }
         });
 
@@ -479,7 +470,7 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
             if(userResponseBodyWrapped.isSuccess()){
                 DreamApp.getInstance().setUser(userResponseBodyWrapped.getData());
             } else {
-                Toast.makeText(BucketAdapter2.this.context, "수정 실패", Toast.LENGTH_SHORT).show();
+                Toast.makeText(BucketAdapter.this.context, R.string.modification_failed, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -497,12 +488,12 @@ public class BucketAdapter2 extends PagerAdapter implements View.OnClickListener
         ImageView mMainImage3;
         @InjectView(R.id.main_image4)
         ImageView mMainImage4;
-        @InjectView(R.id.main_image5)
-        ImageView mMainImage5;
-        @InjectView(R.id.main_image6)
-        ImageView mMainImage6;
-        @InjectView(R.id.main_image7)
-        ImageView mMainImage7;
+//        @InjectView(R.id.main_image5)
+//        ImageView mMainImage5;
+//        @InjectView(R.id.main_image6)
+//        ImageView mMainImage6;
+//        @InjectView(R.id.main_image7)
+//        ImageView mMainImage7;
         @InjectView(R.id.main_image8)
         ImageView mMainImage8;
         @InjectView(R.id.progress_bar)

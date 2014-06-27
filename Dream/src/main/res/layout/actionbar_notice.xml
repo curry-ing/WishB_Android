@@ -12,7 +12,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="알림알림알림알림"
+        android:text="@string/notice_test"
         />
     <ListView
         android:layout_width="match_parent"

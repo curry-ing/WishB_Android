@@ -10,25 +10,24 @@
     <ImageView android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:id="@+id/profile"
-        android:text="today"
+        android:text="@string/today"
         android:src="@drawable/mainview_profile"
-        style="@style/TextActionbarLeftButton"
-        />
+        style="@style/TextActionbarLeftButton" />
 
     <ImageView android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/actionbar_main_title"
         android:gravity="center"
         style="@style/WishbActionbarLogStyle"
-        android:src="@drawable/logo_white_title"
-    />
+        android:src="@drawable/logo_white_title" />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:id="@+id/actionbar_main_today"
-        android:text="Today"
+        android:text="@string/today"
         android:background="@null"
         android:layout_alignParentRight="true"
-        style="@style/TextActionbarRightButton"
-        />
+        style="@style/TextActionbarRightButton" />
+
 </RelativeLayout>

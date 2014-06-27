@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Mainview Title & desc-->
+    <string name="jan">"J A N  "</string>
+    <string name="feb">"F E B  "</string>
+    <string name="mar">"M A R  "</string>
+    <string name="apr">"A P R  "</string>
+    <string name="may">"M A Y  "</string>
+    <string name="jun">"J U N  "</string>
+    <string name="jul">"J U L  "</string>
+    <string name="aug">"A U G  "</string>
+    <string name="sep">"S E P  "</string>
+    <string name="oct">"O C T  "</string>
+    <string name="nov">"N O V  "</string>
+    <string name="dec">"D E C  "</string>
+
+    <string name="after_sixties">60대 이후</string>
+
+    <!--Title Modify Dialog-->
+    <string name="mainview_life_set_title">Wish B.</string>
+    <string name="mainview_life_set_message">어떤 인생을 꿈꾸시나요?</string>
+    <string name="mainview_decade_set_title">Wish B: 당신의 %d대</string>
+    <string name="mainview_decade_set_message">어떤 10년을 보내고 싶으세요?</string>
+
+    <!--Common-->
+    <string name="press_again_to_exit">\'뒤로\' 버튼을 한번 더 누르면 종료돼요.</string>
+    <string name="modification_failed">수정에 실패하였습니다.</string>
+</resources>

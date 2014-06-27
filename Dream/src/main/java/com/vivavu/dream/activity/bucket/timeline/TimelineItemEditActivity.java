@@ -167,7 +167,7 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
         actionBar.setDisplayShowCustomEnabled(true);
 
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("진행중");
+        progressDialog.setMessage(getString(R.string.in_progress));
 
         ButterKnife.inject(this);
 

@@ -1,7 +1,5 @@
 package com.vivavu.dream.activity.login;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -23,7 +21,6 @@ import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Patterns;
 import android.view.*;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -38,22 +35,14 @@ import com.vivavu.dream.common.Code;
 import com.vivavu.dream.model.LoginInfo;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.SecureToken;
-import com.vivavu.dream.model.Status;
-import com.vivavu.dream.model.bucket.Bucket;
-import com.vivavu.dream.model.bucket.timeline.TimelineMetaInfo;
-import com.vivavu.dream.repository.BucketConnector;
-import com.vivavu.dream.repository.DataRepository;
-import com.vivavu.dream.repository.connector.TimelineConnector;
 import com.vivavu.dream.repository.connector.UserInfoConnector;
 import com.vivavu.dream.util.ValidationUtils;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
@@ -136,7 +125,7 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
         ButterKnife.inject(this);
 
         Typeface NanumBold = Typeface.createFromAsset(context.getAssets(), "NanumBarunGothicBold.mp3");
-        mActionbarLoginTitle.setText("로그인");
+        mActionbarLoginTitle.setText(getString(R.string.login));
         mActionbarLoginTitle.setTypeface(NanumBold);
         mActionbarLoginTitle.setTextSize(20);
         mActionbarLoginTitle.setTextColor(Color.WHITE);
@@ -329,37 +318,37 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
             case 1:
                 mTxtResponseInfo.setVisibility(View.VISIBLE);
                 mTxtResponseInfo.setTextColor(Color.WHITE);
-                mTxtResponseInfo.setText("알림:  이메일 주소가 입력되지 않았습니다.");
+                mTxtResponseInfo.setText(getString(R.string.notify) + getString(R.string.email_required));
                 mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
                 break;
             case 2:
                 mTxtResponseInfo.setVisibility(View.VISIBLE);
                 mTxtResponseInfo.setTextColor(Color.WHITE);
-                mTxtResponseInfo.setText("알림:  패스워드가 입력되지 않았습니다.");
+                mTxtResponseInfo.setText(getString(R.string.notify) + getString(R.string.passwd_required));
                 mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
                 break;
             case 3:
                 mTxtResponseInfo.setVisibility(View.VISIBLE);
                 mTxtResponseInfo.setTextColor(Color.WHITE);
-                mTxtResponseInfo.setText("알림:  올바르지 않은 이메일 형식입니다.");
+                mTxtResponseInfo.setText(getString(R.string.notify) + getString(R.string.email_not_valid));
                 mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
                 break;
             case 4:
                 mTxtResponseInfo.setVisibility(View.VISIBLE);
                 mTxtResponseInfo.setTextColor(Color.WHITE);
-                mTxtResponseInfo.setText("알림:  비밀번호(6자 이상)를 확인해 주세요.");
+                mTxtResponseInfo.setText(getString(R.string.notify) + getString(R.string.passwd_not_valid));
                 mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
                 break;
             case 5:
                 mTxtResponseInfo.setVisibility(View.VISIBLE);
                 mTxtResponseInfo.setTextColor(Color.WHITE);
-                mTxtResponseInfo.setText("알림:  가입하지 않은 이메일입니다.");
+                mTxtResponseInfo.setText(getString(R.string.notify) + getString(R.string.email_unregistered));
                 mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
                 break;
             case 6:
                 mTxtResponseInfo.setVisibility(View.VISIBLE);
                 mTxtResponseInfo.setTextColor(Color.WHITE);
-                mTxtResponseInfo.setText("알림:  " + context.getResources().getString(R.string.login_failed));
+                mTxtResponseInfo.setText(getString(R.string.notify) + getResources().getString(R.string.login_failed));
                 mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
                 break;
             case 9:

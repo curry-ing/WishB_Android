@@ -2,6 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="${packageName}.${activityClass}">
     <item android:id="@+id/action_forgot_password"
-        android:title="@string/action_forgot_password"
+        android:title="@string/forgot_passwd"
         android:showAsAction="never" />
 </menu>

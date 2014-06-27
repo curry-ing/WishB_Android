@@ -26,8 +26,6 @@
     <string name="main_btn_refresh">새로고침</string>
     <string name="main_menu_refresh_bucket_list">새로고침</string>
     <string name="main_menu_login">로그인</string>
-    <string name="save">저장</string>
-    <string name="cancel">취소</string>
     <string name="main_left_menu_setting">설정</string>
     <string name="main_left_menu_notice">공지사항</string>
     <string name="main_left_menu_update">업데이트</string>
@@ -67,24 +65,17 @@
     <string name="privacy">개인정보 보호방침 보기</string>
     <string name="lbl_access_terms">이용약관</string>
     <string name="lbl_private">개인정보 보호방침</string>
-    <!--<string name="regist_agreement">가입을 통해 이용약관과\n개인정보 보호정책에 동의 합니다.</string>-->
-    <string name="regist_agreement">가입과 함께 약관에 동의하신 것으로 간주합니다. 약관보기</string>
-    <string name="txt_facebook_login">페이스북으로 로그인하면\n친구들의 꿈도 볼 수 있어요!</string>
-    <string name="txt_write_joined_email">가입한 이메일 주소를 적어주세요.</string>
     <string name="txt_btn_submit">전송</string>
     <string name="not_valid_email">올바르지 않은 이메일 형식입니다.</string>
-    <string name="login_failed">로그인 정보가 올바르지 않습니다.</string>
     <string name="user_agreement_contents">이용약관 블라블라</string>
     <string name="privacy_contents">개인정보보호방침</string>
     <string name="actionbar_main_title">꿈틀</string>
-    <string name="actionbar_main_today">Today</string>
     <string name="actionbar_main_notice">알림</string>
     <string name="bucket_status_achievement">달성</string>
     <string name="bucket_status_seal">봉인</string>
     <string name="bucket_status_delete">삭제</string>
     <string name="bucket_option_note_hint">노트를 입력하세요</string>
     <string name="no_network_connection_toast">네트워크에 연결할 수 없습니다.</string>
-    <string name="today">Today</string>
     <string name="invalid_selected_date">데이터가 없는 날짜입니다. 다시 선택해주세요.</string>
     <string name="complete">달성</string>
     <string name="menu_edit">수정</string>
@@ -103,7 +94,17 @@
     <string name="txt_answer_for_email">답변받을 E-Mail</string>
     <string name="txt_send_email">보내기</string>
     <string name="email_info">chee1004@naver.com</string>
-    <string name="press_again_to_exit">\'뒤로\' 버튼을 한번 더 누르면 종료돼요.</string>
     <string name="more">더보기</string>
+    <string name="notice_test">알림알림알림알림알\n수박수박수박수박수</string>
+
+    <!--Common-->
+    <string name="save">저장</string>
+    <string name="cancel">취소</string>
+    <string name="in_progress">진행중</string>
+
+    <!--Action Bar-->
+    <string name="profile">프로필</string>
+    <string name="today">Today</string>
+
 
 </resources>
