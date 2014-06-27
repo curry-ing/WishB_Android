@@ -1,7 +1,10 @@
 package com.vivavu.dream.broadcastReceiver;
 
 import android.annotation.TargetApi;
-import android.app.*;
+import android.app.AlarmManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,23 +13,25 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.*;
-import android.preference.Preference;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
-import android.widget.Toast;
+
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.StartActivity;
-import com.vivavu.dream.activity.main.MainActivity;
-import com.vivavu.dream.common.Code;
-import com.vivavu.dream.drawable.RoundedAvatarDrawable;
 import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.repository.DataRepository;
 
-import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by masunghoon on 6/10/14.
@@ -124,8 +129,8 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver{
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         Boolean good_morning_alarm_on = sharedPreferences.getBoolean("notification_good_morning_alarm", true);
         Boolean good_night_alarm_on = sharedPreferences.getBoolean("notification_good_night_alarm", true);
-        String good_morning_alarm_time = sharedPreferences.getString("notifications_time_morning", null);
-        String good_night_alarm_time = sharedPreferences.getString("notifications_time_night", null);
+        String good_morning_alarm_time = sharedPreferences.getString("notifications_time_morning", "08:00");
+        String good_night_alarm_time = sharedPreferences.getString("notifications_time_night", "20:00");
         Integer good_morning_alarm_hour = Integer.parseInt(good_morning_alarm_time.split(":")[0]);
         Integer good_morning_alarm_min = Integer.parseInt(good_morning_alarm_time.split(":")[1]);
         Integer good_night_alarm_hour = Integer.parseInt(good_night_alarm_time.split(":")[0]);
