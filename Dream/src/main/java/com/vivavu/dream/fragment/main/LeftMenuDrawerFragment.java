@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -270,7 +271,10 @@ public class LeftMenuDrawerFragment extends Fragment {
                 }
                 break;
             case Code.ACT_ADD_BUCKET_CROP_FROM_CAMERA:
-                if(data != null && data.getDataString() != null){
+                if(data != null && data.getExtras() != null && data.getExtras().getParcelable("data") != null){
+                    Bitmap photo = data.getExtras().getParcelable("data");
+                    mMainLeftMenuBtnProfile.setImageBitmap(photo);
+                } else if(data != null && data.getDataString() != null){
                     String path = AndroidUtils.convertContentsToFileSchema(DreamApp.getInstance(), data.getDataString());
                     File f = new File(path);
                     if(f.exists() && f.isFile()){
@@ -345,7 +349,7 @@ public class LeftMenuDrawerFragment extends Fragment {
         intent.putExtra("aspectY", 1);
         intent.putExtra("scale", true);
         intent.putExtra("return-data", false);
-        intent.putExtra("output", mImageCaptureUri);
+        //intent.putExtra("output", mImageCaptureUri);
         startActivityForResult(intent, Code.ACT_ADD_BUCKET_CROP_FROM_CAMERA);
     }
 

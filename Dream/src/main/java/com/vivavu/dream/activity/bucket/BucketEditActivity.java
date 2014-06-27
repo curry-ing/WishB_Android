@@ -250,7 +250,10 @@ public class BucketEditActivity extends BaseActionBarActivity {
                 }
                 break;
             case ACT_ADD_BUCKET_CROP_FROM_CAMERA:
-                if(data != null && data.getDataString() != null){
+                if(data != null && data.getExtras() != null && data.getExtras().getParcelable("data") != null){
+                    Bitmap photo = data.getExtras().getParcelable("data");
+                    mBucketImg.setImageBitmap(photo);
+                } else if(data != null && data.getDataString() != null){
                     String path = AndroidUtils.convertContentsToFileSchema(DreamApp.getInstance(), data.getDataString());
                     File f = new File(path);
                     if(f.exists() && f.isFile()){

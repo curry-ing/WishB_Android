@@ -178,4 +178,15 @@ public class ImageUtil {
         return bar;
     }
 
+    public synchronized static ByteArrayResource convertBitmapToByteArrayResource(Bitmap bm, final String name, int compressRate){
+        ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, compressRate, byteArray );
+        ByteArrayResource bar = new ByteArrayResource(byteArray.toByteArray()){
+            @Override
+            public String getFilename() throws IllegalStateException {
+                return name;
+            }
+        };
+        return bar;
+    }
 }

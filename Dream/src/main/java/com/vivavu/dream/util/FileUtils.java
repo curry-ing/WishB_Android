@@ -66,25 +66,22 @@ public class FileUtils {
         return filename;
     }
 
-    public static boolean deleteFile(File file){
+    public static synchronized boolean deleteFile(File file){
         boolean returnValue = false;
         if(file != null){
             if(file.exists() && file.isFile()){
                 returnValue = file.delete();
                 if(returnValue){
-                    Uri contentUri = Uri.fromFile(file.getParentFile());
+                    //Uri contentUri = Uri.fromFile(file.getParentFile());
+                    Uri contentUri = Uri.fromFile(file);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                        mediaScanIntent.setData(contentUri);
+                        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, contentUri);
                         DreamApp.getInstance().sendBroadcast(mediaScanIntent);
                     } else {
-                        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_MOUNTED);
-                        mediaScanIntent.setData(contentUri);
+                        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_MOUNTED, contentUri);
                         DreamApp.getInstance().sendBroadcast(new Intent(mediaScanIntent));
                     }
                 }
-
-
             }
         }
         return returnValue;

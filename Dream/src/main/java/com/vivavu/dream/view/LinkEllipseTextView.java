@@ -18,7 +18,9 @@ import com.vivavu.dream.R;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+/*
+* http://sbsg0724.tistory.com/archive/20140426 의 것을 이용함.
+* */
 public class LinkEllipseTextView extends TextView {
     private static String TAG = "LinkEllipseTextView";
     private String moreStr;
