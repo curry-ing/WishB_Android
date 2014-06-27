@@ -2,6 +2,7 @@ package com.vivavu.dream.activity.setup;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -16,7 +17,10 @@ import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
 
+import android.widget.Toast;
 import com.vivavu.dream.R;
+import com.vivavu.dream.broadcastReceiver.AlarmManagerBroadcastReceiver;
+import com.vivavu.dream.common.DreamApp;
 
 import java.util.List;
 
@@ -68,9 +72,65 @@ public class AlertSettingsActivity extends PreferenceActivity {
         // Bind the summaries of EditText/List/Dialog/Ringtone preferences to
         // their values. When their values change, their summaries are updated
         // to reflect the new value, per the Android Design guidelines.
-        bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
-        bindPreferenceSummaryToValue(findPreference("notifications_time_start"));
-        bindPreferenceSummaryToValue(findPreference("notifications_time_end"));
+//        bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
+        bindPreferenceSummaryToValue(findPreference("notifications_time_morning"));
+        bindPreferenceSummaryToValue(findPreference("notifications_time_night"));
+
+        final Preference good_morning_alarm = (Preference) findPreference("notification_good_morning_alarm");
+        final Preference good_night_alarm = (Preference) findPreference("notification_good_night_alarm");
+        final Preference alarm_time_morning = (Preference) findPreference("notifications_time_morning");
+        final Preference alarm_time_night = (Preference) findPreference("notifications_time_night");
+        final AlarmManagerBroadcastReceiver alarm = new AlarmManagerBroadcastReceiver();
+
+
+        alarm_time_morning.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object value){
+                String v = (String)value;
+                alarm.setEverydayAlarm(preference.getContext(), Integer.parseInt(v.split(":")[0]), Integer.parseInt(v.split(":")[1]), 1);
+                preference.setSummary(v);
+                return true;
+            }
+        });
+
+        alarm_time_night.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object value){
+                String v = (String)value;
+                alarm.setEverydayAlarm(preference.getContext(), Integer.parseInt(v.split(":")[0]), Integer.parseInt(v.split(":")[1]), 2);
+                preference.setSummary(v);
+                return true;
+            }
+        });
+
+        good_morning_alarm.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object value) {
+
+                if ((Boolean)value) {
+                    Toast.makeText(getBaseContext(), "굿모닝 알람이 설정되었습니다.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getBaseContext(), "굿모닝 알람이 해제되었습니다.", Toast.LENGTH_SHORT).show();
+                }
+                alarm.setEverydayAlarm(getBaseContext(), true, 1);
+                return true;
+            }
+        });
+
+        good_night_alarm.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object value) {
+
+                if ((Boolean)value) {
+                    Toast.makeText(getBaseContext(), "굿나잇 알람이 설정되었습니다.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getBaseContext(), "굿나잇 알람이 해제되었습니다.", Toast.LENGTH_SHORT).show();
+                }
+                alarm.setEverydayAlarm(getBaseContext(), true, 2);
+                return true;
+            }
+        });
+
     }
 
     /** {@inheritDoc} */
@@ -157,6 +217,14 @@ public class AlertSettingsActivity extends PreferenceActivity {
                 // For all other preferences, set the summary to the value's
                 // simple string representation.
                 preference.setSummary(stringValue);
+
+//                if (preference.getKey().equals("notifications_time_morning")) {
+//                    AlarmManagerBroadcastReceiver alarm = new AlarmManagerBroadcastReceiver();
+//                    alarm.setEverydayAlarm(preference.getContext(), Integer.parseInt(stringValue.split(":")[0]), Integer.parseInt(stringValue.split(":")[1]), 1);
+//                } else if (preference.getKey().equals("notifications_time_night")) {
+//                    AlarmManagerBroadcastReceiver alarm = new AlarmManagerBroadcastReceiver();
+//                    alarm.setEverydayAlarm(preference.getContext(), Integer.parseInt(stringValue.split(":")[0]), Integer.parseInt(stringValue.split(":")[1]), 2);
+//                }
             }
             return true;
         }
@@ -210,9 +278,18 @@ public class AlertSettingsActivity extends PreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_notification);
 
-            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
-            bindPreferenceSummaryToValue(findPreference("notifications_time_start"));
-            bindPreferenceSummaryToValue(findPreference("notifications_time_end"));
+            final Preference morning_alarm = (Preference) findPreference("notification_good_morning_alarm");
+            morning_alarm.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Toast.makeText(getActivity().getBaseContext(), "Some Text", Toast.LENGTH_LONG).show();
+                    return false;
+                }
+            });
+
+//            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
+            bindPreferenceSummaryToValue(findPreference("notifications_time_morning"));
+            bindPreferenceSummaryToValue(findPreference("notifications_time_night"));
         }
     }
 

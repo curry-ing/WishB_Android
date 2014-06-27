@@ -114,8 +114,9 @@ public class LeftMenuDrawerFragment extends Fragment {
                 if(getActivity() instanceof MainActivity){
                     /* Set Notification Off */
                     AlarmManagerBroadcastReceiver alarm = new AlarmManagerBroadcastReceiver();
-                    alarm.SetAlarm(context, 1, false, 23);
-                    alarm.SetAlarm(context, 2, false, 11);
+                    alarm.setEverydayAlarm(context, false, 0);
+//                    alarm.SetAlarm(context, 1, false, 23, 0);
+//                    alarm.SetAlarm(context, 2, false, 11, 0);
 
                     MainActivity mainActivity = (MainActivity) getActivity();
                     mainActivity.logout();
