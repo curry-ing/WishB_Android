@@ -15,4 +15,10 @@
         <attr name="progressBarColor" format="color"></attr>
         <attr name="expand" format="boolean"></attr>
     </declare-styleable>
+
+    <declare-styleable name="LinkEllipseTextView">
+        <attr name="isLinkable" format="boolean" />
+        <attr name="isEndEllipsable" format="boolean" />
+    </declare-styleable>
+
 </resources>

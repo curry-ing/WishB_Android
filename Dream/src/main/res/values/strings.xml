@@ -104,5 +104,6 @@
     <string name="txt_send_email">보내기</string>
     <string name="email_info">chee1004@naver.com</string>
     <string name="press_again_to_exit">\'뒤로\' 버튼을 한번 더 누르면 종료돼요.</string>
+    <string name="more">더보기</string>
 
 </resources>

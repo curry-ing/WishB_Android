@@ -17,6 +17,7 @@ import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.model.bucket.timeline.Post;
 import com.vivavu.dream.model.bucket.timeline.TimelineMetaInfo;
 import com.vivavu.dream.util.DateUtils;
+import com.vivavu.dream.view.LinkEllipseTextView;
 
 import java.util.List;
 
@@ -77,19 +78,6 @@ public class TimelineListAdapter extends BaseAdapter {
         }
         viewHolder.mTxtPostDate.setText(DateUtils.getDateString(post.getContentDt(), "yyyy.MM.dd HH:mm"));
         viewHolder.mTxtPostText.setTypeface(BaseActionBarActivity.getNanumBarunGothicFont());
-        viewHolder.mBtnSeeMore.setVisibility(View.INVISIBLE);
-        final ButterknifeViewHolder finalViewHolder = viewHolder;
-        viewHolder.mTxtPostText.post(new Runnable() {
-            @Override
-            public void run() {
-                if( post.getImgUrl() == null && finalViewHolder.mTxtPostText.getLineCount() == 5){
-                    finalViewHolder.mBtnSeeMore.setVisibility(View.VISIBLE);
-                } else if(post.getImgUrl() != null && finalViewHolder.mTxtPostText.getLineCount() == 3){
-                    finalViewHolder.mBtnSeeMore.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
 
         ImageLoader.getInstance().displayImage(post.getImgUrl(), viewHolder.mIvTimelineImage, new SimpleImageLoadingListener(){
             @Override
@@ -135,9 +123,7 @@ public class TimelineListAdapter extends BaseAdapter {
         @InjectView(R.id.txt_post_date)
         TextView mTxtPostDate;
         @InjectView(R.id.txt_post_text)
-        TextView mTxtPostText;
-        @InjectView(R.id.btn_see_more)
-        TextView mBtnSeeMore;
+        LinkEllipseTextView mTxtPostText;
         @InjectView(R.id.iv_timeline_image)
         ImageView mIvTimelineImage;
 
