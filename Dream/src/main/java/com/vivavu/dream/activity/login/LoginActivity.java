@@ -127,13 +127,13 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
 
         ButterKnife.inject(this);
 
-        Typeface NanumBold = Typeface.createFromAsset(context.getAssets(), "NanumBarunGothicBold.mp3");
+//        Typeface NanumBold = Typeface.createFromAsset(context.getAssets(), "NanumBarunGothicBold.mp3");
         mActionbarLoginTitle.setText(getString(R.string.login));
-        mActionbarLoginTitle.setTypeface(NanumBold);
+        mActionbarLoginTitle.setTypeface(getNanumBarunGothicBoldFont());
         mActionbarLoginTitle.setTextSize(20);
         mActionbarLoginTitle.setTextColor(Color.WHITE);
 
-        mTxtResponseInfo.setTypeface(NanumBold);
+        mTxtResponseInfo.setTypeface(getNanumBarunGothicBoldFont());
         mTxtResponseInfo.setTextSize(15);
         mTxtResponseInfo.setTextColor(Color.WHITE);
 
@@ -142,7 +142,7 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
         mEmailView = (EditText) findViewById(R.id.email);
         mEmailView.setText(mEmail);
         mEmailView.setText(context.getEmail());
-        mEmailView.setTypeface(NanumBold);
+        mEmailView.setTypeface(getNanumBarunGothicBoldFont());
         mEmailView.setTextSize(15);
         mEmailView.setTextColor(Color.GRAY);
         mEmailView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -170,7 +170,7 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
         });
 
         mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setTypeface(NanumBold);
+        mPasswordView.setTypeface(getNanumBarunGothicBoldFont());
         mPasswordView.setTextSize(15);
         mPasswordView.setTextColor(Color.GRAY);
         mPasswordView.setOnFocusChangeListener(new View.OnFocusChangeListener(){

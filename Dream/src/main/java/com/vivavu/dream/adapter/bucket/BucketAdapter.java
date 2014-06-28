@@ -325,8 +325,7 @@ public class BucketAdapter extends PagerAdapter implements View.OnClickListener{
                 int endY = Integer.parseInt(mUserBirthday.substring(0, 4)) + ((pos + 1) * 10 - 1) - 1;
                 int thisY = cal.get(Calendar.YEAR);
 
-                Typeface periodTypeFace = Typeface.createFromAsset(context.getAssets(), "Dense-Regular.mp3");
-                holder.mPeriod.setTypeface(periodTypeFace, Typeface.BOLD);
+                holder.mPeriod.setTypeface(BaseActionBarActivity.getDenseRegularFont(), Typeface.BOLD);
                 holder.mPeriod.setTextSize(25);
                 if (pos == 6) {
                     holder.mPeriod.setText(mFromMonth + String.valueOf(startY).charAt(0) + " "

@@ -58,17 +58,17 @@ public class ResetPasswordActivity extends BaseActionBarActivity {
 
         ButterKnife.inject(this);
 
-        Typeface NanumBold = Typeface.createFromAsset(context.getAssets(), "NanumBarunGothicBold.mp3");
+//        Typeface NanumBold = Typeface.createFromAsset(context.getAssets(), "NanumBarunGothicBold.mp3");
         mActionbarLoginTitle.setText(getText(R.string.find_passwd));
-        mActionbarLoginTitle.setTypeface(NanumBold);
+        mActionbarLoginTitle.setTypeface(getNanumBarunGothicBoldFont());
         mActionbarLoginTitle.setTextSize(20);
         mActionbarLoginTitle.setTextColor(Color.WHITE);
 
-        mFindpwTxtResponseInfo.setTypeface(NanumBold);
+        mFindpwTxtResponseInfo.setTypeface(getNanumBarunGothicBoldFont());
         mFindpwTxtResponseInfo.setTextSize(15);
         mFindpwTxtResponseInfo.setTextColor(Color.WHITE);
 
-        mFindpwEmail.setTypeface(NanumBold);
+        mFindpwEmail.setTypeface(getNanumBarunGothicBoldFont());
         mFindpwEmail.setTextSize(15);
         mFindpwEmail.setTextColor(Color.GRAY);
         mFindpwEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {

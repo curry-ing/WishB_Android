@@ -113,13 +113,13 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
 
         ButterKnife.inject(this);
 
-        Typeface NanumBold = Typeface.createFromAsset(context.getAssets(), "NanumBarunGothicBold.mp3");
+//        Typeface NanumBold = Typeface.createFromAsset(context.getAssets(), "NanumBarunGothicBold.mp3");
         mActionbarLoginTitle.setText("회원가입");
-        mActionbarLoginTitle.setTypeface(NanumBold);
+        mActionbarLoginTitle.setTypeface(getNanumBarunGothicBoldFont());
         mActionbarLoginTitle.setTextSize(20);
         mActionbarLoginTitle.setTextColor(Color.WHITE);
 
-        mRegisterTxtResponseInfo.setTypeface(NanumBold);
+        mRegisterTxtResponseInfo.setTypeface(getNanumBarunGothicBoldFont());
         mRegisterTxtResponseInfo.setTextSize(15);
         mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
         setmRegisterTxtResponseInfo(mInvalidType = 0);
@@ -157,7 +157,7 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
         // Set up the login form.
         mRegisterEmail.setText(mEmail);
         mRegisterEmail.setText(context.getEmail());
-        mRegisterEmail.setTypeface(NanumBold);
+        mRegisterEmail.setTypeface(getNanumBarunGothicBoldFont());
         mRegisterEmail.setTextSize(15);
         mRegisterEmail.setTextColor(Color.GRAY);
         mRegisterEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -194,7 +194,7 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
             }
         });
 
-        mRegisterPassword.setTypeface(NanumBold);
+        mRegisterPassword.setTypeface(getNanumBarunGothicBoldFont());
         mRegisterPassword.setTextSize(15);
         mRegisterPassword.setTextColor(Color.GRAY);
         mRegisterPassword.setOnFocusChangeListener(new View.OnFocusChangeListener(){
