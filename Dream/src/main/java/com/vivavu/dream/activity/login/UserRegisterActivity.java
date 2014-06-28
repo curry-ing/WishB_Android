@@ -8,10 +8,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import android.os.*;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBar;
 import android.text.*;
@@ -67,6 +64,8 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
     TextView mRegisterAgreementTxt;
 //    @InjectView(R.id.register_fb_explain_txt)
 //    TextView mRegisterFbExplainTxt;
+
+    protected int mSdkVersion = Build.VERSION.SDK_INT;
 
     private UserRegisterTask mRegisterTask = null;
     private String mEmail;
@@ -386,6 +385,9 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
             case 0:
                 mRegisterTxtResponseInfo.setVisibility(View.INVISIBLE);
                 mRegisterTxtResponseInfo.setText("");
+                if (mSdkVersion < Build.VERSION_CODES.JELLY_BEAN) {
+                } else {
+                }
                 mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
 //                mRegisterButton.setEnabled(false);
                 break;
@@ -393,56 +395,80 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
                 mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
                 mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
                 mRegisterTxtResponseInfo.setText(getString(R.string.notify) + getString(R.string.email_required));
-                mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
-//                mRegisterButton.setEnabled(false);
+                if (mSdkVersion < Build.VERSION_CODES.JELLY_BEAN) {
+                    mRegisterButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.btn_inactive));
+                } else {
+                    mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
+                }
                 break;
             case 2:
                 mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
                 mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
                 mRegisterTxtResponseInfo.setText(getString(R.string.notify) + getString(R.string.passwd_required));
-                mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
-//                mRegisterButton.setEnabled(false);
+                if (mSdkVersion < Build.VERSION_CODES.JELLY_BEAN) {
+                    mRegisterButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.btn_inactive));
+                } else {
+                    mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
+                }
                 break;
             case 3:
                 mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
                 mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
                 mRegisterTxtResponseInfo.setText(getString(R.string.notify) + getString(R.string.email_not_valid));
-                mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
-//                mRegisterButton.setEnabled(false);
+                if (mSdkVersion < Build.VERSION_CODES.JELLY_BEAN) {
+                    mRegisterButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.btn_inactive));
+                } else {
+                    mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
+                }
                 break;
             case 4:
                 mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
                 mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
                 mRegisterTxtResponseInfo.setText(getString(R.string.notify) + getString(R.string.passwd_not_valid));
-                mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
-//                mRegisterButton.setEnabled(false);
+                if (mSdkVersion < Build.VERSION_CODES.JELLY_BEAN) {
+                    mRegisterButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.btn_inactive));
+                } else {
+                    mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
+                }
                 break;
             case 5:
                 mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
                 mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
                 mRegisterTxtResponseInfo.setText(getString(R.string.notify) + getString(R.string.email_unregistered));
-                mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
-//                mRegisterButton.setEnabled(false);
+                if (mSdkVersion < Build.VERSION_CODES.JELLY_BEAN) {
+                    mRegisterButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.btn_inactive));
+                } else {
+                    mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
+                }
                 break;
             case 6:
                 mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
                 mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
                 mRegisterTxtResponseInfo.setText(getString(R.string.notify) + getString(R.string.register_failed));
-                mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
-//                mRegisterButton.setEnabled(false);
+                if (mSdkVersion < Build.VERSION_CODES.JELLY_BEAN) {
+                    mRegisterButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.btn_inactive));
+                } else {
+                    mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
+                }
                 break;
             case 7:
                 mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
                 mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
                 mRegisterTxtResponseInfo.setText(getString(R.string.notify) + getString(R.string.email_already_registered));
-                mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
-//                mRegisterButton.setEnabled(false);
+                if (mSdkVersion < Build.VERSION_CODES.JELLY_BEAN) {
+                    mRegisterButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.btn_inactive));
+                } else {
+                    mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
+                }
                 break;
             case 9:
                 mRegisterTxtResponseInfo.setVisibility(View.INVISIBLE);
                 mRegisterTxtResponseInfo.setText("");
-                mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_active));
-//                mRegisterButton.setEnabled(true);
+                if (mSdkVersion < Build.VERSION_CODES.JELLY_BEAN) {
+                    mRegisterButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.btn_active));
+                } else {
+                    mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_active));
+                }
                 break;
 
         }

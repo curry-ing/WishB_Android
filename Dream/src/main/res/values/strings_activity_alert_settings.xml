@@ -45,17 +45,17 @@
     <string name="pref_title_notifications_time_end">종료시간</string>
     <string name="pref_title_notifications_time">설정시간</string>
 
-    <string name="pref_header_good_morning_alarm">굿모닝 알람</string>
-    <string name="pref_set_good_morning_alarm">굿모닝 알람 설정</string>
-    <string name="pref_header_good_night_alarm">굿나잇 알람</string>
-    <string name="pref_set_good_night_alarm">굿나잇 알람 설정</string>
+    <string name="pref_header_good_morning_alarm">굿모닝 알림</string>
+    <string name="pref_set_good_morning_alarm">굿모닝 알림 설정</string>
+    <string name="pref_header_good_night_alarm">굿나잇 알림</string>
+    <string name="pref_set_good_night_alarm">굿나잇 알림 설정</string>
 
     <!-- For Toast Messages -->
-    <string name="set_good_morning_alarm">굿모닝 알람이 설정되었습니다.</string>
-    <string name="unset_good_morning_alarm">굿모닝 알람이 해제되었습니다.</string>
-    <string name="set_good_night_alarm">굿나잇 알람이 설정되었습니다.</string>
-    <string name="unset_good_night_alarm">굿나잇 알람이 해제되었습니다.</string>
-    <string name="changed_alarm_time">알람 시간이 변경되었습니다.</string>
+    <string name="set_good_morning_alarm">굿모닝 알림이 설정되었습니다.</string>
+    <string name="unset_good_morning_alarm">굿모닝 알림이 해제되었습니다.</string>
+    <string name="set_good_night_alarm">굿나잇 알림이 설정되었습니다.</string>
+    <string name="unset_good_night_alarm">굿나잇 알림이 해제되었습니다.</string>
+    <string name="changed_alarm_time">알림 시간이 변경되었습니다.</string>
 
 
     <!-- Notification -->

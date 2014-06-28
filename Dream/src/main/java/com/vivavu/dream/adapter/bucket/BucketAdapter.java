@@ -54,11 +54,13 @@ import butterknife.InjectView;
  */
 public class BucketAdapter extends PagerAdapter implements View.OnClickListener{
 
+    protected int mSdkVersion = Build.VERSION.SDK_INT;
     private Context context;
     private Fragment fragment;
     private LayoutInflater mInflater;
     private List<BucketGroup> bucketGroupList;
     protected List<Bitmap> mainImages;
+
 
     private String title;
 
@@ -225,19 +227,35 @@ public class BucketAdapter extends PagerAdapter implements View.OnClickListener{
             switch (j){
                 case 0:
                     holder.mMainImage1.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                    holder.mMainImage1.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, imgCnt, deviceDensityDpi, pos));
+                    if (mSdkVersion < Build.VERSION_CODES.JELLY_BEAN) {
+                        holder.mMainImage1.setBackgroundDrawable(new FanShapeDrawable(mainImages.get(j),j+1, imgCnt, deviceDensityDpi, pos));
+                    } else {
+                        holder.mMainImage1.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, imgCnt, deviceDensityDpi, pos));
+                    }
                     break;
                 case 1:
                     holder.mMainImage2.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                    holder.mMainImage2.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, imgCnt, deviceDensityDpi, pos));
+                    if (mSdkVersion < Build.VERSION_CODES.JELLY_BEAN) {
+                        holder.mMainImage2.setBackgroundDrawable(new FanShapeDrawable(mainImages.get(j),j+1, imgCnt, deviceDensityDpi, pos));
+                    } else {
+                        holder.mMainImage2.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, imgCnt, deviceDensityDpi, pos));
+                    }
                     break;
                 case 2:
                     holder.mMainImage3.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                    holder.mMainImage3.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, imgCnt, deviceDensityDpi, pos));
+                    if (mSdkVersion < Build.VERSION_CODES.JELLY_BEAN) {
+                        holder.mMainImage3.setBackgroundDrawable(new FanShapeDrawable(mainImages.get(j),j+1, imgCnt, deviceDensityDpi, pos));
+                    } else {
+                        holder.mMainImage3.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, imgCnt, deviceDensityDpi, pos));
+                    }
                     break;
                 case 3:
                     holder.mMainImage4.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                    holder.mMainImage4.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, imgCnt, deviceDensityDpi, pos));
+                    if (mSdkVersion < Build.VERSION_CODES.JELLY_BEAN) {
+                        holder.mMainImage4.setBackgroundDrawable(new FanShapeDrawable(mainImages.get(j),j+1, imgCnt, deviceDensityDpi, pos));
+                    } else {
+                        holder.mMainImage4.setBackground(new FanShapeDrawable(mainImages.get(j),j+1, imgCnt, deviceDensityDpi, pos));
+                    }
                     break;
 //                case 4:
 //                    holder.mMainImage5.setLayerType(View.LAYER_TYPE_SOFTWARE, null);

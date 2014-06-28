@@ -59,11 +59,14 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
     /**
      * The default email to populate the email field with.
      */
-    public static final String EXTRA_EMAIL = "com.example.android.authenticatordemo.extra.EMAIL";
     @InjectView(R.id.sign_in_button)
     Button mSignInButton;
     @InjectView(R.id.txt_forgot_password)
     TextView mTxtForgotPassword;
+
+    protected int mSdkVersion = Build.VERSION.SDK_INT;
+    public static final String EXTRA_EMAIL = "com.example.android.authenticatordemo.extra.EMAIL";
+
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -313,48 +316,80 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
             case 0:
                 mTxtResponseInfo.setVisibility(View.INVISIBLE);
                 mTxtResponseInfo.setText("");
-                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
+                if (mSdkVersion < Build.VERSION_CODES.JELLY_BEAN) {
+                    mSignInButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.btn_inactive));
+                } else {
+                    mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
+                }
                 break;
             case 1:
                 mTxtResponseInfo.setVisibility(View.VISIBLE);
                 mTxtResponseInfo.setTextColor(Color.WHITE);
                 mTxtResponseInfo.setText(getString(R.string.notify) + getString(R.string.email_required));
-                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
+                if (mSdkVersion < Build.VERSION_CODES.JELLY_BEAN) {
+                    mSignInButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.btn_inactive));
+                } else {
+                    mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
+                }
                 break;
             case 2:
                 mTxtResponseInfo.setVisibility(View.VISIBLE);
                 mTxtResponseInfo.setTextColor(Color.WHITE);
                 mTxtResponseInfo.setText(getString(R.string.notify) + getString(R.string.passwd_required));
-                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
+                if (mSdkVersion < Build.VERSION_CODES.JELLY_BEAN) {
+                    mSignInButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.btn_inactive));
+                } else {
+                    mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
+                }
                 break;
             case 3:
                 mTxtResponseInfo.setVisibility(View.VISIBLE);
                 mTxtResponseInfo.setTextColor(Color.WHITE);
                 mTxtResponseInfo.setText(getString(R.string.notify) + getString(R.string.email_not_valid));
-                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
+                if (mSdkVersion < Build.VERSION_CODES.JELLY_BEAN) {
+                    mSignInButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.btn_inactive));
+                } else {
+                    mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
+                }
                 break;
             case 4:
                 mTxtResponseInfo.setVisibility(View.VISIBLE);
                 mTxtResponseInfo.setTextColor(Color.WHITE);
                 mTxtResponseInfo.setText(getString(R.string.notify) + getString(R.string.passwd_not_valid));
-                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
+                if (mSdkVersion < Build.VERSION_CODES.JELLY_BEAN) {
+                    mSignInButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.btn_inactive));
+                } else {
+                    mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
+                }
                 break;
             case 5:
                 mTxtResponseInfo.setVisibility(View.VISIBLE);
                 mTxtResponseInfo.setTextColor(Color.WHITE);
                 mTxtResponseInfo.setText(getString(R.string.notify) + getString(R.string.email_unregistered));
-                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
+                if (mSdkVersion < Build.VERSION_CODES.JELLY_BEAN) {
+                    mSignInButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.btn_inactive));
+                } else {
+                    mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
+                }
                 break;
             case 6:
                 mTxtResponseInfo.setVisibility(View.VISIBLE);
                 mTxtResponseInfo.setTextColor(Color.WHITE);
                 mTxtResponseInfo.setText(getString(R.string.notify) + getResources().getString(R.string.login_failed));
-                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
+                if (mSdkVersion < Build.VERSION_CODES.JELLY_BEAN) {
+                    mSignInButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.btn_inactive));
+                } else {
+                    mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
+                }
                 break;
             case 9:
                 mTxtResponseInfo.setVisibility(View.INVISIBLE);
                 mTxtResponseInfo.setText("");
-                mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.btn_active));
+                if (mSdkVersion < Build.VERSION_CODES.JELLY_BEAN) {
+                    mSignInButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.btn_active));
+                } else {
+                    mSignInButton.setBackground(this.getResources().getDrawable(R.drawable.btn_active));
+                }
                 break;
 
         }

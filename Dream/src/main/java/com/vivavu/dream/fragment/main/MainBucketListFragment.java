@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -47,7 +48,10 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
     static public final int OFF_SCREEN_PAGE_LIMIT = 3;
 
     private int mShortAnimationDuration, mMediumAnimationDuration, mLongAnimationDuration;
+    protected int mSdkVersion = Build.VERSION.SDK_INT;
     protected int currentPage = -1;
+
+
 
     @InjectView(R.id.main_pager)
     ViewPager mMainPager;
@@ -114,7 +118,11 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
         mMainPager.setAdapter(bucketAdapter);
         if (currentPage < 0 && DreamApp.getInstance().getUser().getUserAge() == 0) {
             currentPage = 0;
-            mMainPageBg0.setBackground((BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg0));
+            if (mSdkVersion < Build.VERSION_CODES.JELLY_BEAN) {
+                mMainPageBg0.setBackgroundDrawable((BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg0));
+            } else {
+                mMainPageBg0.setBackground((BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg0));
+            }
         } else if(currentPage < 0 ) {
             currentPage = getInstance().getUser().getUserAge() / 10;
         }
@@ -179,7 +187,11 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
         if (currentPage < 0 && DreamApp.getInstance().getUser().getUserAge() == 0) {
             currentPage= 0;
 
-            mMainPageBg0.setBackground((BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg0));
+            if (mSdkVersion < Build.VERSION_CODES.JELLY_BEAN) {
+                mMainPageBg0.setBackgroundDrawable((BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg0));
+            } else {
+                mMainPageBg0.setBackground((BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg0));
+            }
         } else if(currentPage < 0 ){
             currentPage = getInstance().getUser().getUserAge() / 10;
         }
@@ -260,13 +272,21 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
             }
             if ((position+1)%2 == 1 ) {
                 mMainPageBg0.setAlpha(0.5f);
-                mMainPageBg0.setBackground(toBg);
+                if (mSdkVersion < Build.VERSION_CODES.JELLY_BEAN) {
+                    mMainPageBg0.setBackgroundDrawable(toBg);
+                } else {
+                    mMainPageBg0.setBackground(toBg);
+                }
 
                 mMainPageBg0.animate().alpha(1f).setDuration(mShortAnimationDuration).setListener(null);
                 mMainPageBg1.animate().alpha(0f).setDuration(mShortAnimationDuration).setListener(null);
             } else {
                 mMainPageBg1.setAlpha(0.5f);
-                mMainPageBg1.setBackground(toBg);
+                if (mSdkVersion < Build.VERSION_CODES.JELLY_BEAN) {
+                    mMainPageBg1.setBackgroundDrawable(toBg);
+                } else {
+                    mMainPageBg1.setBackground(toBg);
+                }
 
                 mMainPageBg1.animate().alpha(1f).setDuration(mShortAnimationDuration).setListener(null);
                 mMainPageBg0.animate().alpha(0f).setDuration(mShortAnimationDuration).setListener(null);

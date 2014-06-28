@@ -60,12 +60,12 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.login.UserRegisterActivity"
-            android:label="register"
+            android:label="@string/register"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".activity.login.LoginActivity"
-            android:label="@string/title_activity_login"
+            android:label="@string/login"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateVisible" >
         </activity>
@@ -90,13 +90,11 @@
         </activity>
         <activity
             android:name=".activity.main.TodayActivity"
-            android:hardwareAccelerated="false"
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".activity.main.MainActivity"
-            android:hardwareAccelerated="false"
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait" >
         </activity>

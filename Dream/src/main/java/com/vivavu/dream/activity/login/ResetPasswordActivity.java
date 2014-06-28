@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.text.Editable;
@@ -28,6 +29,8 @@ import butterknife.InjectView;
  * Created by yuja on 14. 2. 20.
  */
 public class ResetPasswordActivity extends BaseActionBarActivity {
+    protected int mSdkVersion = Build.VERSION.SDK_INT;
+
     @InjectView(R.id.findpw_send_btn)
     Button mFindpwSendBtn;
     @InjectView(R.id.findpw_email)
@@ -99,10 +102,18 @@ public class ResetPasswordActivity extends BaseActionBarActivity {
                 mFindpwTxtResponseInfo.setText("");
                 if (!ValidationUtils.isValidEmail(mFindpwEmail)) {
                     mFindpwEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ing_icon, 0);
-                    mFindpwSendBtn.setBackground(getResources().getDrawable(R.drawable.btn_inactive));
+                    if (mSdkVersion < Build.VERSION_CODES.JELLY_BEAN) {
+                        mFindpwSendBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_inactive));
+                    } else {
+                        mFindpwSendBtn.setBackground(getResources().getDrawable(R.drawable.btn_inactive));
+                    }
                 } else {
                     mFindpwEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_ok_icon, 0);
-                    mFindpwSendBtn.setBackground(getResources().getDrawable(R.drawable.btn_active));
+                    if (mSdkVersion < Build.VERSION_CODES.JELLY_BEAN) {
+                        mFindpwSendBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_active));
+                    } else {
+                        mFindpwSendBtn.setBackground(getResources().getDrawable(R.drawable.btn_active));
+                    }
                 }
             }
         });
@@ -141,7 +152,11 @@ public class ResetPasswordActivity extends BaseActionBarActivity {
             task.execute();
         } else {
             mFindpwEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_alert_icon, 0);
-            mFindpwSendBtn.setBackground(getResources().getDrawable(R.drawable.btn_inactive));
+            if (mSdkVersion < Build.VERSION_CODES.JELLY_BEAN) {
+                mFindpwSendBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_inactive));
+            } else {
+                mFindpwSendBtn.setBackground(getResources().getDrawable(R.drawable.btn_inactive));
+            }
             mFindpwTxtResponseInfo.setText(getString(R.string.notify) + getString(R.string.email_not_valid));
         }
     }
