@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.view.Gravity;
@@ -138,6 +139,7 @@ public class MainActivity extends BaseActionBarActivity {
         mContainer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         mContainer.setScrimColor(getResources().getColor(R.color.transparent));
         mContainer.setFocusableInTouchMode(false); //for close drawer when press back button;
+        mContainer.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         mProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

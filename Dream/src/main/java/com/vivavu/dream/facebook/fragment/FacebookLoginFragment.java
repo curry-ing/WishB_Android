@@ -23,6 +23,7 @@ import com.facebook.widget.LoginButton;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.intro.IntroActivity;
 import com.vivavu.dream.broadcastReceiver.AlarmManagerBroadcastReceiver;
+import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.fragment.CustomBaseFragment;
 import com.vivavu.dream.model.LoginInfo;
@@ -65,13 +66,13 @@ public class FacebookLoginFragment extends CustomBaseFragment {
         final View rootView = inflater.inflate(R.layout.include_facebook_login, container, false);
         ButterKnife.inject(this, rootView);
 //        mAuthButton.setBackgroundResource(R.drawable.intro_fb_btn);
-        Typeface NanumBold = Typeface.createFromAsset(getActivity().getAssets(), "NanumBarunGothicBold.mp3");
+//        Typeface NanumBold = Typeface.createFromAsset(getActivity().getAssets(), "NanumBarunGothicBold.mp3");
         List<String> readPermissions = new ArrayList<String>();
         readPermissions.add("public_profile");
         readPermissions.add("email");
         readPermissions.add("user_birthday");
 
-        mTxtFacebookLoginExplain.setTypeface(NanumBold);
+        mTxtFacebookLoginExplain.setTypeface(BaseActionBarActivity.getNanumBarunGothicBoldFont());
         mTxtFacebookLoginExplain.setTextSize(15);
         mTxtFacebookLoginExplain.setTextColor(Color.WHITE);
 
