@@ -39,8 +39,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class AndroidUtils {
     public static void hideSoftInputFromWindow(Context context, View view){
         InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
+        if(view instanceof EditText) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        } else {
+            //imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+        }
         return;
     }
 
@@ -51,8 +54,11 @@ public class AndroidUtils {
      */
     public static void showSoftInputFromWindow(Context context, View view){
         InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+        if(view instanceof EditText) {
+            imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
+        } else {
+            //imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        }
         return;
     }
 
