@@ -63,7 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/txt_post_text"
-                android:hint="@string/txt_timeline_write"
+                android:hint="@string/txt_timeline_edit_write_hint"
                 android:background="@null"
                 android:layout_marginTop="12.5dp"
                 android:textSize="21.185sp"

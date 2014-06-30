@@ -32,6 +32,7 @@ public class BucketGroupViewActivity extends BaseActionBarActivity {
 
     private static final int REQUEST_TIMELINE_VIEW = 0;
     private static final int REQUEST_BUCKET_ADD  = 1;
+    public static final String EXTRA_KEY_GROUP_RANGE = "groupRange";
     @InjectView(R.id.grid_bucket_list)
     GridView mGridBucketList;
     @InjectView(R.id.btn_add_bucket)
@@ -68,7 +69,7 @@ public class BucketGroupViewActivity extends BaseActionBarActivity {
 
         Intent data = getIntent();
 
-        groupRange = data.getStringExtra("groupRange");
+        groupRange = data.getStringExtra(EXTRA_KEY_GROUP_RANGE);
 
         List<Bucket> bucketList = DataRepository.listBucketByRange(groupRange);
 
@@ -145,7 +146,7 @@ public class BucketGroupViewActivity extends BaseActionBarActivity {
         if(title == null && groupRange != null){
             title = groupRange + "대";
         } else if(title == null && groupRange == null){
-            title = "In My Life";
+            title = DreamApp.getInstance().getString(R.string.txt_default_in_my_life_title);
         }
 
         mTxtTitle.setText(title);

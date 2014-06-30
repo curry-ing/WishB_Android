@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="txt_timeline_view_delete_success">삭제하였습니다.</string>
+    <string name="txt_timeline_view_delete_fail">삭제에 실패하였습니다.</string>
+</resources>

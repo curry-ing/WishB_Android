@@ -92,15 +92,15 @@ public class BucketOptionActivity extends BaseActionBarActivity {
     public void confirm(){
         if(bucketOption.isModFlag()){
             AlertDialog.Builder alertConfirm = new AlertDialog.Builder(this);
-            alertConfirm.setTitle("내용 변경 확인");
-            alertConfirm.setMessage("변경한 내용을 저장하시겠습니까?").setCancelable(false).setPositiveButton("예",
+            alertConfirm.setTitle(getString(R.string.txt_bucket_option_confirm_edit_title));
+            alertConfirm.setMessage(getString(R.string.txt_bucket_option_confirm_edit_body)).setCancelable(false).setPositiveButton(getString(R.string.confirm_yes),
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             saveOption();
                         }
                     }
-            ).setNegativeButton("아니오",
+            ).setNegativeButton(getString(R.string.confirm_no),
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

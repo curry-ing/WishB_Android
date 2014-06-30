@@ -32,6 +32,7 @@ import com.vivavu.dream.activity.main.MainActivity;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.common.enums.RepeatType;
+import com.vivavu.dream.common.enums.Scope;
 import com.vivavu.dream.fragment.bucket.option.description.DescriptionViewFragment;
 import com.vivavu.dream.fragment.bucket.option.repeat.RepeatViewFragment;
 import com.vivavu.dream.model.ResponseBodyWrapped;
@@ -120,7 +121,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
                     if(progressDialog.isShowing()) {
                         progressDialog.dismiss();
                     }
-                    Toast.makeText(BucketEditActivity.this, modString + "성공", Toast.LENGTH_LONG).show();
+                    Toast.makeText(BucketEditActivity.this, modString + getString(R.string.txt_bucket_edit_success), Toast.LENGTH_LONG).show();
                     Bucket bucket = (Bucket) msg.obj;
                     Intent intent = new Intent();
                     intent.putExtra(RESULT_EXTRA_BUCKET_ID, (Integer) bucket.getId());
@@ -133,13 +134,13 @@ public class BucketEditActivity extends BaseActionBarActivity {
                     if(progressDialog.isShowing()) {
                         progressDialog.dismiss();
                     }
-                    Toast.makeText(BucketEditActivity.this, modString + "실패하였습니다. 다시 시도해주세요.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(BucketEditActivity.this, modString + getString(R.string.txt_bucket_edit_fail), Toast.LENGTH_LONG).show();
                     break;
                 case SEND_DATA_DELETE:
                     if(progressDialog.isShowing()) {
                         progressDialog.dismiss();
                     }
-                    Toast.makeText(BucketEditActivity.this, modString + "버킷을 삭제하였습니다.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(BucketEditActivity.this, modString + getString(R.string.txt_bucket_edit_delete), Toast.LENGTH_LONG).show();
                     setResult(RESULT_USER_DATA_DELETED);
                     finish();
                     break;
@@ -147,7 +148,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
                     if(progressDialog.isShowing()) {
                         progressDialog.dismiss();
                     }
-                    Toast.makeText(BucketEditActivity.this, modString + "버킷을 삭제에 실패하였습니다.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(BucketEditActivity.this, modString + getString(R.string.txt_bucket_edit_delete_fail), Toast.LENGTH_LONG).show();
                     break;
             }
         }
@@ -175,9 +176,9 @@ public class BucketEditActivity extends BaseActionBarActivity {
         int range = data.getIntExtra(MainActivity.EXTRA_BUCKET_DEFAULT_RANGE, -1);
         bucket = DataRepository.getBucket(bucketId);
         if (bucketId > 0) {
-            modString = "수정";
+            modString = getString(R.string.txt_bucket_edit_mod_edit);
         } else {
-            modString = "등록";
+            modString = getString(R.string.txt_bucket_edit_mod_add);
         }
 
         ButterKnife.inject(this);
@@ -200,7 +201,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
 
     public void saveBucket() {
         if (bucket == null || bucket.getTitle() == null || bucket.getTitle().trim().length() <= 0) {
-            Toast.makeText(this, "필수입력 항목이 입력되지 않았음", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.txt_bucket_edit_need_required_fields), Toast.LENGTH_SHORT).show();
         }else{
             handler.sendEmptyMessage(SEND_DATA_START);
             BucketAddTask bucketAddTask = new BucketAddTask();
@@ -284,7 +285,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
 
     private void updateUiData(OptionDDay dday) {
         bucket.setTitle(mBucketInputTitle.getText().toString());
-        bucket.setScope("DECADE");
+        bucket.setScope(Scope.DECADE.getValue());
         Date birthday = DateUtils.getDateFromString(DreamApp.getInstance().getUser().getBirthday(), "yyyyMMdd", new Date());
         Calendar instance = Calendar.getInstance();
         instance.setTime(birthday);
@@ -324,9 +325,9 @@ public class BucketEditActivity extends BaseActionBarActivity {
         mBucketImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String items[] = {"카메라", "갤러리", "이미지삭제"};
+                final String items[] = DreamApp.getInstance().getResources().getStringArray(R.array.array_image_attach);
                 AlertDialog.Builder ab = new AlertDialog.Builder(BucketEditActivity.this);
-                ab.setTitle("선택");
+                ab.setTitle(getString(R.string.choose));
                 ab.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -446,7 +447,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
         if (bucket.getDeadline() != null) {
             mBucketInputDeadline.setText( DateUtils.getDateString(bucket.getDeadline(), "yyyy. MM. dd"));
         } else {
-            mBucketInputDeadline.setText("In my life");
+            mBucketInputDeadline.setText(getString(R.string.txt_default_in_my_life_title));
         }
 
         checkRequireElement();//
@@ -510,8 +511,8 @@ public class BucketEditActivity extends BaseActionBarActivity {
 
     private void doDelte() {
             AlertDialog.Builder alertConfirm = new AlertDialog.Builder(this);
-            alertConfirm.setTitle("삭제확인");
-            alertConfirm.setMessage("버킷을 삭제하시겠습니까?").setCancelable(false).setPositiveButton("예",
+            alertConfirm.setTitle(getString(R.string.txt_bucket_edit_confirm_delete_title));
+            alertConfirm.setMessage(getString(R.string.txt_bucket_edit_confirm_delete_body)).setCancelable(false).setPositiveButton(getString(R.string.confirm_yes),
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -523,7 +524,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
                             }
                         }
                     }
-            ).setNegativeButton("아니오",
+            ).setNegativeButton(getString(R.string.confirm_no),
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -613,7 +614,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
                 mImageCaptureUri = Uri.fromFile(photoFile); // 파일명 가져오기
             } catch (IOException ex) {
                 Log.e(TAG, ex.getMessage());
-                Toast.makeText(this, "카메라 준비중 에러가 발생했습니다.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.txt_camera_ready_error), Toast.LENGTH_LONG).show();
             }
 
             // Continue only if the File was successfully created
@@ -623,7 +624,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
                 startActivityForResult(intent, RequestCode.ACT_ADD_BUCKET_TAKE_CAMERA.ordinal());
             }
         }else{
-            Toast.makeText(this, "카메라 앱을 실행할 수 없습니다.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.txt_camera_not_exc), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -721,15 +722,15 @@ public class BucketEditActivity extends BaseActionBarActivity {
     public void confirm(){
         if(modFlag) {
             AlertDialog.Builder alertConfirm = new AlertDialog.Builder(this);
-            alertConfirm.setTitle("내용 변경 확인");
-            alertConfirm.setMessage("변경한 내용을 저장하시겠습니까?").setCancelable(false).setPositiveButton("예",
+            alertConfirm.setTitle(getString(R.string.txt_bucket_edit_confirm_edit_title));
+            alertConfirm.setMessage(getString(R.string.txt_bucket_edit_confirm_edit_body)).setCancelable(false).setPositiveButton(getString(R.string.confirm_yes),
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             saveBucket();
                         }
                     }
-            ).setNegativeButton("아니오",
+            ).setNegativeButton(getString(R.string.confirm_no),
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

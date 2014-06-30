@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="txt_timeline_bucket_info_update_fail">버킷 정보 갱신에 실패하였습니다.</string>
+</resources>

@@ -68,7 +68,7 @@ public class BucketAdapter extends PagerAdapter implements View.OnClickListener{
     private String mFromMonth, mToMonth;
 
     static public final int PROGRESS_BAR_BASELINE = 270;
-    public static final String TAG = "DialogActivity";
+    public static final String TAG = "BucketAdapter";
     public static final int TEXT_ID = 0;
 
 
@@ -376,7 +376,7 @@ public class BucketAdapter extends PagerAdapter implements View.OnClickListener{
             public void onClick(View v){
                 Intent intent;
                 intent = new Intent();
-                intent.putExtra("groupRange", getBucketGroupList().get(pos).getRange());
+                intent.putExtra(BucketGroupViewActivity.EXTRA_KEY_GROUP_RANGE, getBucketGroupList().get(pos).getRange());
                 //intent.setClass(context, CircleBucketListActivity.class);
                 intent.setClass(context, BucketGroupViewActivity.class);
                 fragment.startActivityForResult(intent, Code.ACT_VIEW_BUCKET_GROUP);

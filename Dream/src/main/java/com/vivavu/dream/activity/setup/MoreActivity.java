@@ -61,7 +61,7 @@ public class MoreActivity extends BaseActionBarActivity {
                     logout();
                     break;
                 case SEND_DATA_ERROR:
-                    Toast.makeText(MoreActivity.this, "사용자 정보 삭제 실패", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MoreActivity.this, getString(R.string.txt_more_user_info_delete_error), Toast.LENGTH_SHORT).show();
                     break;
             }
         }
@@ -135,11 +135,11 @@ public class MoreActivity extends BaseActionBarActivity {
             public void onClick(View v) {
                 /*Intent intent = new Intent(MoreActivity.this, MainActivity.class);
                 startActivity(intent);*/
-                Toast.makeText(MoreActivity.this, "회원탈퇴", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MoreActivity.this, getString(R.string.txt_more_member_leave), Toast.LENGTH_SHORT).show();
 
                 AlertDialog.Builder alertConfirm = new AlertDialog.Builder(MoreActivity.this);
-                alertConfirm.setTitle("회원탈퇴 확인");
-                alertConfirm.setMessage("정말 회원을 탈퇴 하시겠습니까?").setCancelable(false).setPositiveButton("예",
+                alertConfirm.setTitle(getString(R.string.txt_more_member_leave_title));
+                alertConfirm.setMessage(getString(R.string.txt_more_member_leave_title)).setCancelable(false).setPositiveButton(getString(R.string.confirm_yes),
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -147,7 +147,7 @@ public class MoreActivity extends BaseActionBarActivity {
                                 thread.start();
                             }
                         }
-                ).setNegativeButton("아니오",
+                ).setNegativeButton(getString(R.string.confirm_no),
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

@@ -150,7 +150,7 @@ public class TimelineActivity extends BaseActionBarActivity {
                     bindData(bucket);
                     break;
                 case UPDATE_BUCKET_DATA_FAIL:
-                    Toast.makeText(TimelineActivity.this, "버킷 정보 갱신에 실패하였습니다.", Toast.LENGTH_SHORT ).show();
+                    Toast.makeText(TimelineActivity.this, getString(R.string.txt_timeline_bucket_info_update_fail), Toast.LENGTH_SHORT ).show();
                     break;
             }
         }

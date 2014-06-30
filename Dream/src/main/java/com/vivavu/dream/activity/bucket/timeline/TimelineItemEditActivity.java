@@ -136,7 +136,7 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                     break;
                 case SEND_DATA_SUCCESS:
                     progressDialog.dismiss();
-                    Toast.makeText(TimelineItemEditActivity.this, "저장하였습니다.", LENGTH_LONG).show();
+                    Toast.makeText(TimelineItemEditActivity.this, getString(R.string.txt_timeline_edit_save_success), LENGTH_LONG).show();
                     Intent intent = new Intent();
                     Post obj = (Post) msg.obj;
                     intent.putExtra(TimelineItemViewActivity.extraKeyReturnValue, obj);
@@ -145,7 +145,7 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                     break;
                 case SEND_DATA_FAIL:
                     progressDialog.dismiss();
-                    Toast.makeText(TimelineItemEditActivity.this, "저장에 실패하였습니다.", LENGTH_LONG).show();
+                    Toast.makeText(TimelineItemEditActivity.this, getString(R.string.txt_timeline_edit_save_fail), LENGTH_LONG).show();
                     break;
             }
         }
@@ -195,9 +195,9 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
         mBtnPostCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String items[] = {"카메라", "갤러리"};
+                final String items[] = DreamApp.getInstance().getResources().getStringArray(R.array.array_attach_image_only);
                 AlertDialog.Builder ab = new AlertDialog.Builder(TimelineItemEditActivity.this);
-                ab.setTitle("선택");
+                ab.setTitle(getString(R.string.choose));
                 ab.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -229,9 +229,9 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
         mBtnTimelineAttach.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String items[] = {"카메라", "갤러리", "이미지삭제"};
+                final String items[] = DreamApp.getInstance().getResources().getStringArray(R.array.array_image_attach);
                 AlertDialog.Builder ab = new AlertDialog.Builder(TimelineItemEditActivity.this);
-                ab.setTitle("선택");
+                ab.setTitle(getString(R.string.choose));
                 ab.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -451,7 +451,7 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                 mImageCaptureUri = Uri.fromFile(photoFile); // 파일명 가져오기
             } catch (IOException ex) {
                 Log.e(TAG, ex.getMessage());
-                Toast.makeText(this, "카메라 준비중 에러가 발생했습니다.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.txt_camera_ready_error), Toast.LENGTH_LONG).show();
             }
 
             // Continue only if the File was successfully created
@@ -461,7 +461,7 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                 startActivityForResult(intent, Code.ACT_ADD_BUCKET_TAKE_CAMERA);
             }
         }else{
-            Toast.makeText(this, "카메라 앱을 실행할 수 없습니다.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.txt_camera_not_exc), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -474,15 +474,15 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
     public void confirm(){
         if(checkRequireElement()) {
             AlertDialog.Builder alertConfirm = new AlertDialog.Builder(this);
-            alertConfirm.setTitle("내용 변경 확인");
-            alertConfirm.setMessage("변경한 내용을 저장하시겠습니까?").setCancelable(false).setPositiveButton("예",
+            alertConfirm.setTitle(getString(R.string.txt_timeline_edit_confirm_edit_title));
+            alertConfirm.setMessage(getString(R.string.txt_timeline_edit_confirm_edit_body)).setCancelable(false).setPositiveButton(getString(R.string.confirm_yes),
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             postSave();
                         }
                     }
-            ).setNegativeButton("아니오",
+            ).setNegativeButton(getString(R.string.confirm_no),
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

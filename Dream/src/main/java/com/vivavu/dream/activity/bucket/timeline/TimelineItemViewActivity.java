@@ -79,13 +79,13 @@ public class TimelineItemViewActivity extends BaseActionBarActivity{
                     break;
                 case SEND_DATA_DELETE_SUCCESS:
                     progressDialog.dismiss();
-                    Toast.makeText(TimelineItemViewActivity.this, "삭제하였습니다.", LENGTH_LONG).show();
+                    Toast.makeText(TimelineItemViewActivity.this, getString(R.string.txt_timeline_view_delete_success), LENGTH_LONG).show();
                     setResult(RESULT_OK);
                     finish();
                     break;
                 case SEND_DATA_DELETE_FAIL:
                     progressDialog.dismiss();
-                    Toast.makeText(TimelineItemViewActivity.this, "삭제에 실패하였습니다.", LENGTH_LONG).show();
+                    Toast.makeText(TimelineItemViewActivity.this, getString(R.string.txt_timeline_view_delete_fail), LENGTH_LONG).show();
                     break;
             }
         }

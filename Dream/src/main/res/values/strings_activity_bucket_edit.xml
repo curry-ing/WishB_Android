@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="txt_bucket_edit_mod_add">등록</string>
+    <string name="txt_bucket_edit_mod_edit">수정</string>
+    <string name="txt_bucket_edit_success">성공</string>
+    <string name="txt_bucket_edit_fail">실패하였습니다. 다시 시도해주세요.</string>
+    <string name="txt_bucket_edit_delete">버킷을 삭제하였습니다.</string>
+    <string name="txt_bucket_edit_delete_fail">버킷을 삭제에 실패하였습니다.</string>
+    <string name="txt_bucket_edit_need_required_fields">필수입력 항목이 입력되지 않았음</string>
+    <string name="txt_bucket_edit_confirm_delete_title">삭제확인</string>
+    <string name="txt_bucket_edit_confirm_delete_body">버킷을 삭제하시겠습니까?</string>
+    <string name="txt_bucket_edit_confirm_edit_title">내용변경확인</string>
+    <string name="txt_bucket_edit_confirm_edit_body">변경한 내용을 저장하시겠습니까?</string>
+</resources>

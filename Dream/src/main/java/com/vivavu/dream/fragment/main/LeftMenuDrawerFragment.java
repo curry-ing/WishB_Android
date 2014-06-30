@@ -86,7 +86,7 @@ public class LeftMenuDrawerFragment extends Fragment {
                     bindData();
                     break;
                 case SEND_DATA_ERROR:
-                    Toast.makeText(getActivity(), "사용자 정보 수정 실패", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getString(R.string.txt_fragment_profile_user_info_update_fail), Toast.LENGTH_SHORT).show();
                     break;
             }
         }
@@ -111,7 +111,7 @@ public class LeftMenuDrawerFragment extends Fragment {
         mMainLeftMenuBtnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), "로그아웃", Toast.LENGTH_SHORT ).show();
+                Toast.makeText(getActivity(), getString(R.string.txt_fragment_profile_logout_message), Toast.LENGTH_SHORT ).show();
                 if(getActivity() instanceof MainActivity){
                     /* Set Notification Off */
                     AlarmManagerBroadcastReceiver alarm = new AlarmManagerBroadcastReceiver();
@@ -134,9 +134,9 @@ public class LeftMenuDrawerFragment extends Fragment {
         mMainLeftMenuBtnProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String items[] = {"카메라", "갤러리", "이미지삭제"};
+                final String items[] = DreamApp.getInstance().getResources().getStringArray(R.array.array_image_attach);
                 AlertDialog.Builder ab = new AlertDialog.Builder(getActivity());
-                ab.setTitle("선택");
+                ab.setTitle(getString(R.string.choose));
                 ab.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -216,8 +216,8 @@ public class LeftMenuDrawerFragment extends Fragment {
     private void createDialog(){
         AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
 
-        alert.setTitle("사용자명 수정");
-        alert.setMessage("사용자명 수정해보세요.");
+        alert.setTitle(getString(R.string.txt_fragment_profile_user_name_edit_title));
+        alert.setMessage(getString(R.string.txt_fragment_profile_user_name_edit_body));
 
         // Set an EditText view to get user input
         final EditText input = new EditText(getActivity());
@@ -227,7 +227,7 @@ public class LeftMenuDrawerFragment extends Fragment {
         input.setText(mMainLeftMenuTxtName.getText());
         input.selectAll();
 
-        alert.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+        alert.setPositiveButton(getString(R.string.txt_fragment_profile_alert_submit), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 String value = input.getText().toString();
                 value.toString();
@@ -242,7 +242,7 @@ public class LeftMenuDrawerFragment extends Fragment {
             }
         });
 
-        alert.setNegativeButton("Cancel",
+        alert.setNegativeButton(getString(R.string.txt_fragment_profile_alert_cancel),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         // Canceled.
@@ -317,7 +317,7 @@ public class LeftMenuDrawerFragment extends Fragment {
                 mImageCaptureUri = Uri.fromFile(photoFile); // 파일명 가져오기
             } catch (IOException ex) {
                 Log.e(LeftMenuDrawerFragment.class.getSimpleName(), ex.getMessage());
-                Toast.makeText(getActivity(), "카메라 준비중 에러가 발생했습니다.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), getString(R.string.txt_camera_ready_error), Toast.LENGTH_LONG).show();
             }
 
             // Continue only if the File was successfully created
@@ -327,7 +327,7 @@ public class LeftMenuDrawerFragment extends Fragment {
                 startActivityForResult(intent, Code.ACT_ADD_BUCKET_TAKE_CAMERA);
             }
         }else{
-            Toast.makeText(getActivity(), "카메라 앱을 실행할 수 없습니다.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), getString(R.string.txt_camera_not_exc), Toast.LENGTH_LONG).show();
         }
     }
 

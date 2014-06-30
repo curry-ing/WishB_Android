@@ -43,7 +43,7 @@
             android:focusableInTouchMode="true"
             android:minLines="10"
             android:gravity="top"
-            android:hint="@string/bucket_option_note_hint"
+            android:hint="@string/txt_bucket_option_note_hint"
             android:background="@null"
             >
             <requestFocus></requestFocus>
