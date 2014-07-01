@@ -9,10 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.GridView;
 
+import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
 import com.vivavu.dream.R;
-import com.vivavu.dream.adapter.today.TodayDailyItemAdapter;
+import com.vivavu.dream.adapter.today.TodayDailyStickyAdapter;
 import com.vivavu.dream.fragment.CustomBaseFragment;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.bucket.Today;
@@ -39,7 +39,7 @@ public class TodayListFragment extends CustomBaseFragment {
     static public final int SEND_BUKET_LIST_UPDATE = 2;
     private static final int SEND_NETWORK_DATA = 3;
     @InjectView(R.id.listview)
-    GridView mListview;
+    StickyGridHeadersGridView mListview;
     @InjectView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -62,7 +62,7 @@ public class TodayListFragment extends CustomBaseFragment {
             }
         }
     };
-    private TodayDailyItemAdapter todayDailyViewAdapter;
+    private TodayDailyStickyAdapter todayDailyViewAdapter;
 
     public TodayListFragment() {
         this.todayGroupList = new ArrayList<Today>();
@@ -108,6 +108,7 @@ public class TodayListFragment extends CustomBaseFragment {
 
             }
         });
+
         return rootView;
     }
 
@@ -125,7 +126,7 @@ public class TodayListFragment extends CustomBaseFragment {
         }
         todayGroupList.addAll(obj );
         if(todayDailyViewAdapter == null){
-            todayDailyViewAdapter = new TodayDailyItemAdapter(getActivity(), todayGroupList);
+            todayDailyViewAdapter = new TodayDailyStickyAdapter(getActivity(), todayGroupList);
             mListview.setAdapter(todayDailyViewAdapter);
         }
         todayDailyViewAdapter.setTodayList(todayGroupList);
