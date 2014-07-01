@@ -61,9 +61,17 @@
     <!-- Notification -->
     <string name="good_morning_alarm_ticker">Wish B: Good Morning!</string>
     <string name="good_morning_alarm_title">오늘 하루도 화이팅!</string>
+    <string name="good_morning_alarm_title_week">활기찬 한 주 보내세요!!</string>
+    <string name="good_morning_alarm_title_month">이번 달은 어떠신가요?</string>
     <string name="good_morning_alarm_content">오늘, %d개의 열기구에 불을 지펴보세요</string>
+    <string name="good_morning_alarm_content_week">이번주에 %d개의 열기구를 날려보아요</string>
+    <string name="good_morning_alarm_content_month">이번 달에는 어떠한 것들을 계획하고 계신가요?</string>
 
     <string name="good_night_alarm_ticker">Wish B: Evening!</string>
     <string name="good_night_alarm_title">수고했어요. 오늘도!</string>
+    <string name="good_night_alarm_title_week">이번 주, 어떻게 보내셨나요?</string>
+    <string name="good_night_alarm_title_month">이번 한 달을 정리해 보세요.</string>
     <string name="good_night_alarm_content">%d개의 열기구를 확인해보세요</string>
+    <string name="good_night_alarm_content_week">날려보낸 %d개의 열기구는 어디쯤 있을까요?</string>
+    <string name="good_night_alarm_content_month">계획했던 것들을 함께 정리해 봐요!</string>
 </resources>

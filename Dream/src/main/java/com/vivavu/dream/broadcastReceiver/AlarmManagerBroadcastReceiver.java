@@ -91,12 +91,32 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver{
         Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         if (type == 1) {
             NotificationTicker.append(context.getResources().getString(R.string.good_morning_alarm_ticker));
-            NotificationTitle.append(context.getResources().getString(R.string.good_morning_alarm_title));
-            NotificationContent.append(String.format(context.getResources().getString(R.string.good_morning_alarm_content), buckets.size()));
+            if (weekDay.equals("Mon")){
+                if (dayOfWeekInMonth == 1) {
+                    NotificationTitle.append(context.getResources().getString(R.string.good_morning_alarm_title_month));
+                    NotificationContent.append(String.format(context.getResources().getString(R.string.good_morning_alarm_content_month), buckets.size()));
+                } else {
+                    NotificationTitle.append(context.getResources().getString(R.string.good_morning_alarm_title_week));
+                    NotificationContent.append(String.format(context.getResources().getString(R.string.good_morning_alarm_content_week), buckets.size()));
+                }
+            } else {
+                NotificationTitle.append(context.getResources().getString(R.string.good_morning_alarm_title));
+                NotificationContent.append(String.format(context.getResources().getString(R.string.good_morning_alarm_content), buckets.size()));
+            }
         } else if (type == 2) {
             NotificationTicker.append(context.getResources().getString(R.string.good_night_alarm_ticker));
-            NotificationTitle.append(context.getResources().getString(R.string.good_night_alarm_title));
-            NotificationContent.append(String.format(context.getResources().getString(R.string.good_night_alarm_content),buckets.size()));
+            if (weekDay.equals("Sun")) {
+                if (dayOfWeekInMonth == -1){
+                    NotificationTitle.append(context.getResources().getString(R.string.good_night_alarm_title_month));
+                    NotificationContent.append(String.format(context.getResources().getString(R.string.good_night_alarm_content_month),buckets.size()));
+                } else {
+                    NotificationTitle.append(context.getResources().getString(R.string.good_night_alarm_title_week));
+                    NotificationContent.append(String.format(context.getResources().getString(R.string.good_night_alarm_content_week),buckets.size()));
+                }
+            } else {
+                NotificationTitle.append(context.getResources().getString(R.string.good_night_alarm_title));
+                NotificationContent.append(String.format(context.getResources().getString(R.string.good_night_alarm_content), buckets.size()));
+            }
         }
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
