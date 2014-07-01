@@ -63,14 +63,15 @@ public class BucketOptionActivity extends BaseActionBarActivity {
         Option initData = (Option) data.getSerializableExtra("option");
         option = (Option) initData.clone();
         if(initData instanceof OptionDDay){
-            bucketOption = new DDayFragment((OptionDDay) initData);
+            bucketOption = new DDayFragment();
         }else if(initData instanceof OptionDescription){
-            bucketOption = new DescriptionFragment((OptionDescription) initData);
+            bucketOption = new DescriptionFragment();
         }else if(initData instanceof OptionRepeat){
-            bucketOption = new RepeatFragment((OptionRepeat) initData);
+            bucketOption = new RepeatFragment();
         }else{
             finish();
         }
+        bucketOption.setContents(initData);
 
         mMenuSave.setOnClickListener(new View.OnClickListener() {
             @Override

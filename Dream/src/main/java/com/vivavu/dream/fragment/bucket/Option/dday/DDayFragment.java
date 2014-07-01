@@ -32,8 +32,9 @@ public class DDayFragment extends OptionBaseFragment<OptionDDay> implements View
     @InjectView(R.id.layout_bucket_option_note)
     LinearLayout mLayoutBucketOptionNote;
 
-    public DDayFragment(OptionDDay originalData) {
-        super(originalData);
+    public DDayFragment(){
+        super();
+
     }
 
     @Override

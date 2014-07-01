@@ -459,7 +459,8 @@ public class BucketEditActivity extends BaseActionBarActivity {
         if(ValidationUtils.isNotEmpty(bucket.getDescription())){
             OptionDescription option = new OptionDescription(bucket.getDescription());
             if (descriptionViewFragment == null) {
-                descriptionViewFragment = new DescriptionViewFragment(option);
+                descriptionViewFragment = new DescriptionViewFragment();
+                descriptionViewFragment.setContents(option);
                 getSupportFragmentManager().beginTransaction().add(R.id.option_contents_note, descriptionViewFragment, DescriptionViewFragment.TAG).commit();
             } else {
                 descriptionViewFragment.setContents(option);
@@ -476,7 +477,8 @@ public class BucketEditActivity extends BaseActionBarActivity {
         if (bucket.getRptType() != null && ValidationUtils.isValidRepeatCount(bucket.getRptCndt())) {
             OptionRepeat option = new OptionRepeat(RepeatType.fromCode(bucket.getRptType()), bucket.getRptCndt());
             if (repeatFragment == null) {
-                repeatFragment = new RepeatViewFragment(option);
+                repeatFragment = new RepeatViewFragment();
+                repeatFragment.setContents(option);
                 getSupportFragmentManager().beginTransaction().add(R.id.option_contents_repeat, repeatFragment, RepeatViewFragment.TAG).commit();
             } else {
                 repeatFragment.setContents(option);

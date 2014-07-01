@@ -14,6 +14,10 @@ public abstract class OptionBaseFragment<T extends Option> extends CustomBaseFra
         this.contents = originalData;
     }
 
+    public OptionBaseFragment() {
+
+    }
+
     public T getContents() {
         bind();
         return contents;

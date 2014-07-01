@@ -55,8 +55,8 @@ public class RepeatFragment extends OptionBaseFragment<OptionRepeat> implements 
     @InjectView(R.id.layout_bucket_option_repeat_custom_mask)
     FrameLayout mLayoutBucketOptionRepeatCustomMask;
 
-    public RepeatFragment(OptionRepeat optionRepeat) {
-        super(optionRepeat);
+    public RepeatFragment() {
+
     }
 
     @Override

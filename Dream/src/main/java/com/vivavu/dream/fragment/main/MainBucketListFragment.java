@@ -88,10 +88,6 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
         bucketGroupList = new ArrayList<BucketGroup>();
     }
 
-    public MainBucketListFragment(List<BucketGroup> bucketGroupList) {
-        this.bucketGroupList = bucketGroupList;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

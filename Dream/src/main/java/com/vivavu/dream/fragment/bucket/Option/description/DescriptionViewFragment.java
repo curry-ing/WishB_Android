@@ -28,8 +28,8 @@ public class DescriptionViewFragment extends OptionBaseFragment<OptionDescriptio
     @InjectView(R.id.layout_bucket_option_note)
     LinearLayout mLayoutBucketOptionNote;
 
-    public DescriptionViewFragment(OptionDescription originalData) {
-        super(originalData);
+    public DescriptionViewFragment() {
+
     }
 
     @Override

@@ -49,9 +49,8 @@ public class RepeatViewFragment extends OptionBaseFragment<OptionRepeat> impleme
     @InjectView(R.id.layout_bucket_option_repeat_custom)
     LinearLayout mLayoutBucketOptionRepeatCustom;
 
+    public RepeatViewFragment() {
 
-    public RepeatViewFragment(OptionRepeat optionRepeat) {
-        super(optionRepeat);
     }
 
     @Override

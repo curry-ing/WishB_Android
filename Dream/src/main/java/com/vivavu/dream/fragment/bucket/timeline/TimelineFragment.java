@@ -74,16 +74,6 @@ public class TimelineFragment extends CustomBaseFragment {
         }
     };
 
-
-    public TimelineFragment(TimelineMetaInfo timelineMetaInfo, int position) {
-        this.timelineMetaInfo = timelineMetaInfo;
-        this.selectedDate = timelineMetaInfo.getDateList().get(position);
-    }
-
-    public static TimelineFragment newInstance(TimelineMetaInfo timelineMetaInfo, int position){
-        return new TimelineFragment(timelineMetaInfo, position);
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
