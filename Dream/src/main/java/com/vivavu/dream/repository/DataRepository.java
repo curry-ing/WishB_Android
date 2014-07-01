@@ -441,9 +441,14 @@ public class DataRepository {
     public static List<Bucket> ListBucketByRptCndt(String weekDay, Integer dayOfWeekInMonth){
         List<Bucket> list = null;
         try {
+            Date date = new Date();
             QueryBuilder<Bucket, Integer> queryBuilder = getDatabaseHelper().getBucketRuntimeDao().queryBuilder();
             Where where = queryBuilder.where();
             where.eq("rptType", "WKRP");
+            where.and();
+            where.eq("status", 0);
+            where.and();
+            where.gt("deadline",date);
             where.and();
             if (weekDay.equals("Mon")) {
                 where.like("rptCndt", "1______");
@@ -465,6 +470,12 @@ public class DataRepository {
                 where.like("rptCndt","_____1_");
             } else if (weekDay.equals("Sun")) {
                 where.like("rptCndt","______1");
+                where.or();
+                where.eq("rptType", "WEEK");
+                if (dayOfWeekInMonth == -1){
+                    where.or();
+                    where.eq("rptType", "MNTH");
+                }
             }
             list = queryBuilder.query();
         } catch (SQLException e) {

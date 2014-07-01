@@ -22,6 +22,7 @@ import android.support.v4.app.NotificationCompat;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.StartActivity;
+import com.vivavu.dream.fragment.main.TodayListFragment;
 import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.repository.DataRepository;
 
@@ -62,6 +63,11 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver{
         Calendar calendar = Calendar.getInstance();
         String weekDay = dayFormat.format(calendar.getTime());
         int dayOfWeekInMonth = calendar.get(Calendar.DAY_OF_WEEK_IN_MONTH);
+        Calendar calendar2 = Calendar.getInstance();
+        calendar2.set(Calendar.DAY_OF_WEEK_IN_MONTH, -1);
+        if (calendar2.get(Calendar.DAY_OF_WEEK_IN_MONTH) == dayOfWeekInMonth){
+            dayOfWeekInMonth = -1;
+        }
 
         List<Bucket> buckets = DataRepository.ListBucketByRptCndt(weekDay, dayOfWeekInMonth);
         List<Bitmap> images = new ArrayList<Bitmap>();
@@ -94,10 +100,9 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver{
         }
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
-//                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),R.drawable.main_logo))
                 .setLargeIcon(mBitmap)
                 .setSmallIcon(R.drawable.logo_tiny_bw_t, 1)
-//                .setNumber(2)
+                .setNumber(buckets.size())
                 .setTicker(NotificationTicker)
                 .setContentTitle(NotificationTitle)
                 .setContentText(NotificationContent)
