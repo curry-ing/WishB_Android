@@ -230,8 +230,7 @@ public class LeftMenuDrawerFragment extends Fragment {
         alert.setPositiveButton(getString(R.string.txt_fragment_profile_alert_submit), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 String value = input.getText().toString();
-                value.toString();
-
+                mMainLeftMenuTxtName.setText(value);
                 User user = DreamApp.getInstance().getUser();
                 user.setUsername(value);
                 handler.sendEmptyMessage(SEND_DATA_START);
