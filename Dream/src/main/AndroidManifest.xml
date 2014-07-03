@@ -20,7 +20,7 @@
     <application
         android:name=".common.DreamApp"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/logo_large_cl"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:theme="@style/AppTheme" >
