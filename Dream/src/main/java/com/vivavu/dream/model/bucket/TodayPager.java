@@ -12,13 +12,13 @@ import java.util.List;
 @DatabaseTable(tableName = "todays")
 public class TodayPager implements Serializable{
     @SerializedName("page")
-    private Integer page;
+    private Integer page = 0;
 
     @SerializedName("total_cnt")
-    private Integer totalCnt;
+    private Integer totalCnt = 0;
 
     @SerializedName("page_cnt")
-    private Integer pageCnt;
+    private Integer pageCnt = 0;
 
     @SerializedName("page_data")
     private List<Today> pageData;

@@ -9,6 +9,7 @@ import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.common.RestTemplateFactory;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.bucket.Bucket;
+import com.vivavu.dream.model.bucket.Today;
 import com.vivavu.dream.model.bucket.TodayPager;
 import com.vivavu.dream.util.DateUtils;
 import com.vivavu.dream.util.ImageUtil;
@@ -19,6 +20,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
@@ -217,6 +219,12 @@ public class BucketConnector {
         ResponseBodyWrapped<TodayPager> result = new ResponseBodyWrapped<TodayPager>("error", String.valueOf(resultString.getStatusCode()), new TodayPager());
 
         if(RestTemplateUtils.isAvailableParseToJson(resultString)){
+            if(resultString.getStatusCode() == HttpStatus.NO_CONTENT){
+                result.setStatus("success");//데이터가 없을 경우 빈 값을 던짐
+                TodayPager data = result.getData();
+                data.setPageData(new ArrayList<Today>());
+                return result;
+            }
             Gson gson = JsonFactory.getInstance();
             Type type = new TypeToken<ResponseBodyWrapped<TodayPager>>(){}.getType();
             result  = gson.fromJson((String) resultString.getBody(), type);
