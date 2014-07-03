@@ -65,11 +65,6 @@ public class RepeatFragment extends OptionBaseFragment<OptionRepeat> implements 
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
         final ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.bucket_option_repeat, container, false);
@@ -201,6 +196,9 @@ public class RepeatFragment extends OptionBaseFragment<OptionRepeat> implements 
 
     @Override
     public void update() {
+        if(contents == null){
+            return;
+        }
         if (contents.getRepeatType() == RepeatType.WKRP) {
             enableWeek(true);
             mBtnBucketOptionSun.setSelected(contents.isSun());

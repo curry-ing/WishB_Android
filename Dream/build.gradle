@@ -70,4 +70,5 @@ dependencies {
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.1'
     compile 'de.hdodenhof:circleimageview:1.1.0'
     compile 'com.tonicartos:stickygridheaders:1.0.1'
+    compile 'com.google.android.gms:play-services:+'
 }

@@ -414,6 +414,7 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
 
     private void postSave() {
         if(checkRequireElement()) {
+            AndroidUtils.hideSoftInputFromWindow(DreamApp.getInstance(), mTxtPostText);
             Post post = getPost();
             NetworkThread networkThread = new NetworkThread(post);
             Thread thread = new Thread(networkThread);

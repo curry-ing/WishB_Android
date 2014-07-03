@@ -14,6 +14,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.facebook.Session;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.StartActivity;
 import com.vivavu.dream.activity.intro.IntroActivity;
@@ -98,6 +100,15 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
         super.onStart();
         View view = AndroidUtils.getRootView(this);
         view.setOnClickListener(this);//root view에 click listener를 달아 두어 다른곳을 선책하면 키보드가 없어지도록 함
+        Tracker tracker = DreamApp.getInstance().getTracker(DreamApp.TrackerName.APP_TRACKER);
+        tracker.setScreenName(this.getLocalClassName());
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Tracker tracker = DreamApp.getInstance().getTracker(DreamApp.TrackerName.APP_TRACKER);
+        tracker.send(new HitBuilders.AppViewBuilder().build());
     }
 
     public void goIntro(){
