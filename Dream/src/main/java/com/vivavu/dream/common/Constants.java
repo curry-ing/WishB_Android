@@ -1,5 +1,8 @@
 package com.vivavu.dream.common;
 
+import com.vivavu.dream.common.DreamApp;
+import com.vivavu.dream.R;
+
 /**
  * Created by yuja on 14. 1. 8.
  */
@@ -9,20 +12,9 @@ public class Constants {
     static public final String token = "token";
     static public final String tokenType = "tokenType";
 
-    /* Dev Server */
-    static public String url = "http://masunghoon.iptime.org";
-    static public String port = "5001";
-
-    /* Real Server */
-//    static public String url = "http://54.178.201.197";
-//    static public String port = "80";
-
-    /* Real Server Test */
-//    static public String url = "http://54.178.201.197";
-//    static public String port = "5000";
-
+    static public String url = DreamApp.getInstance().getString(R.string.wishb_server_url);
+    static public String port = DreamApp.getInstance().getString(R.string.wishb_server_port);
     static public String baseUrl = url + ":"+port+"/";
-
 
     // Authentication
     static public String apiUsers = baseUrl+"api/users";
