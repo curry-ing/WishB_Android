@@ -10,19 +10,18 @@ public class Constants {
     static public final String tokenType = "tokenType";
 
     /* Dev Server */
-    static public String url = "http://54.178.201.197";
-    static public String port = "5000";
-    static public String baseUrl = url + ":"+port+"/";
+    static public String url = "http://masunghoon.iptime.org";
+    static public String port = "5001";
 
     /* Real Server */
 //    static public String url = "http://54.178.201.197";
 //    static public String port = "80";
-//    static public String baseUrl = url + ":"+port+"/";
 
     /* Real Server Test */
 //    static public String url = "http://54.178.201.197";
 //    static public String port = "5000";
-//    static public String baseUrl = url + ":"+port+"/";
+
+    static public String baseUrl = url + ":"+port+"/";
 
 
     // Authentication
