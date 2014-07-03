@@ -101,7 +101,7 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
         View view = AndroidUtils.getRootView(this);
         view.setOnClickListener(this);//root view에 click listener를 달아 두어 다른곳을 선책하면 키보드가 없어지도록 함
         Tracker tracker = DreamApp.getInstance().getTracker(DreamApp.TrackerName.APP_TRACKER);
-        tracker.setScreenName(this.getPackageName());
+        tracker.setScreenName(this.getLocalClassName());
     }
 
     @Override

@@ -41,12 +41,6 @@ public class DescriptionFragment extends OptionBaseFragment<OptionDescription> i
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        update();
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
         final View rootView = inflater.inflate(R.layout.bucket_option_description, container, false);
@@ -84,11 +78,15 @@ public class DescriptionFragment extends OptionBaseFragment<OptionDescription> i
 
             }
         });
+        update();
         return rootView;
     }
 
     @Override
     public void update() {
+        if(contents == null){
+            return;
+        }
         mBucketOptionNote.setText(contents.getDescription());
     }
 

@@ -464,6 +464,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
                 getSupportFragmentManager().beginTransaction().add(R.id.option_contents_note, descriptionViewFragment, DescriptionViewFragment.TAG).commit();
             } else {
                 descriptionViewFragment.setContents(option);
+                descriptionViewFragment.update();
             }
             mBtnBucketOptionNote.setVisibility(View.GONE);
         }else{
@@ -482,6 +483,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
                 getSupportFragmentManager().beginTransaction().add(R.id.option_contents_repeat, repeatFragment, RepeatViewFragment.TAG).commit();
             } else {
                 repeatFragment.setContents(option);
+                repeatFragment.update();
             }
             mBtnBucketOptionRepeat.setVisibility(View.GONE);
         } else {

@@ -25,7 +25,6 @@ public abstract class OptionBaseFragment<T extends Option> extends CustomBaseFra
 
     public void setContents(T contents) {
         this.contents = contents;
-        update();
     }
 
     public abstract void update();
