@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 
@@ -27,12 +28,7 @@ import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.repository.DataRepository;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * Created by masunghoon on 6/10/14.
@@ -50,6 +46,9 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver{
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onReceive(Context context, Intent intent) {
+//        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+//        PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "YOUR TAG");
+//        wl.acquire();
 
         Bundle bundle = intent.getExtras();
         int type = bundle.getInt(ALARM_TYPE);
@@ -77,7 +76,8 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver{
                     images.add(ImageLoader.getInstance().loadImageSync(buckets.get(i).getCvrImgUrl()));
                 }
             }
-        } else {
+        }
+        if (images.size() == 0) {
             images.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.main_default_01));
             images.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.main_default_02));
             images.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.main_default_03));
@@ -134,7 +134,6 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver{
         resultIntent.putExtra("goToday", true);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-//        stackBuilder.addParentStack(MainActivity.class);
         stackBuilder.addNextIntent(resultIntent);
 
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(type, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -143,6 +142,7 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver{
         NotificationManager mNotificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(0, mBuilder.build());
 
+//        wl.release();
     }
 
     @Override
@@ -181,21 +181,16 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver{
     }
 
     public void SetAlarm(Context context, int alarmType, boolean alarmOn, int hour, int min) {
-        Calendar cur_cal = new GregorianCalendar();
-        cur_cal.setTimeInMillis(System.currentTimeMillis());//set the current time and date for this calendar
-
         Calendar cal = new GregorianCalendar();
-        cal.add(Calendar.DAY_OF_YEAR, cur_cal.get(Calendar.DAY_OF_YEAR));
+        cal.setTimeInMillis(System.currentTimeMillis());//set the current time and date for this calendar
+
         cal.set(Calendar.HOUR_OF_DAY, hour);
         cal.set(Calendar.MINUTE, min);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
-        cal.set(Calendar.DATE, cur_cal.get(Calendar.DATE));
-        cal.set(Calendar.MONTH, cur_cal.get(Calendar.MONTH));
-        if (cal.getTimeInMillis() <= cur_cal.getTimeInMillis()){
+        if (cal.getTimeInMillis() <= System.currentTimeMillis()){
             cal.add(Calendar.DAY_OF_YEAR, 1);
         }
-
         AlarmManager am=(AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
 
         if (alarmOn) {
