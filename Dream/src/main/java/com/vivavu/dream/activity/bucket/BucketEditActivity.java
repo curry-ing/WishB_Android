@@ -121,7 +121,6 @@ public class BucketEditActivity extends BaseActionBarActivity {
                     if(progressDialog.isShowing()) {
                         progressDialog.dismiss();
                     }
-                    Toast.makeText(BucketEditActivity.this, modString + getString(R.string.txt_bucket_edit_success), Toast.LENGTH_LONG).show();
                     Bucket bucket = (Bucket) msg.obj;
                     Intent intent = new Intent();
                     intent.putExtra(RESULT_EXTRA_BUCKET_ID, (Integer) bucket.getId());
@@ -134,13 +133,12 @@ public class BucketEditActivity extends BaseActionBarActivity {
                     if(progressDialog.isShowing()) {
                         progressDialog.dismiss();
                     }
-                    Toast.makeText(BucketEditActivity.this, modString + getString(R.string.txt_bucket_edit_fail), Toast.LENGTH_LONG).show();
+                    Toast.makeText(BucketEditActivity.this, getString(R.string.txt_bucket_edit_fail), Toast.LENGTH_LONG).show();
                     break;
                 case SEND_DATA_DELETE:
                     if(progressDialog.isShowing()) {
                         progressDialog.dismiss();
                     }
-                    Toast.makeText(BucketEditActivity.this, modString + getString(R.string.txt_bucket_edit_delete), Toast.LENGTH_LONG).show();
                     setResult(RESULT_USER_DATA_DELETED);
                     finish();
                     break;
@@ -148,7 +146,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
                     if(progressDialog.isShowing()) {
                         progressDialog.dismiss();
                     }
-                    Toast.makeText(BucketEditActivity.this, modString + getString(R.string.txt_bucket_edit_delete_fail), Toast.LENGTH_LONG).show();
+                    Toast.makeText(BucketEditActivity.this, getString(R.string.txt_bucket_edit_delete_fail), Toast.LENGTH_LONG).show();
                     break;
             }
         }
@@ -175,11 +173,6 @@ public class BucketEditActivity extends BaseActionBarActivity {
         int bucketId = data.getIntExtra(RESULT_EXTRA_BUCKET_ID, -1);
         int range = data.getIntExtra(MainActivity.EXTRA_BUCKET_DEFAULT_RANGE, -1);
         bucket = DataRepository.getBucket(bucketId);
-        if (bucketId > 0) {
-            modString = getString(R.string.txt_bucket_edit_mod_edit);
-        } else {
-            modString = getString(R.string.txt_bucket_edit_mod_add);
-        }
 
         ButterKnife.inject(this);
 
@@ -515,7 +508,6 @@ public class BucketEditActivity extends BaseActionBarActivity {
 
     private void doDelte() {
             AlertDialog.Builder alertConfirm = new AlertDialog.Builder(this);
-            alertConfirm.setTitle(getString(R.string.txt_bucket_edit_confirm_delete_title));
             alertConfirm.setMessage(getString(R.string.txt_bucket_edit_confirm_delete_body)).setCancelable(false).setPositiveButton(getString(R.string.confirm_yes),
                     new DialogInterface.OnClickListener() {
                         @Override
@@ -726,20 +718,19 @@ public class BucketEditActivity extends BaseActionBarActivity {
     public void confirm(){
         if(modFlag) {
             AlertDialog.Builder alertConfirm = new AlertDialog.Builder(this);
-            alertConfirm.setTitle(getString(R.string.txt_bucket_edit_confirm_edit_title));
             alertConfirm.setMessage(getString(R.string.txt_bucket_edit_confirm_edit_body)).setCancelable(false).setPositiveButton(getString(R.string.confirm_yes),
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            saveBucket();
+                            finish();
+                            return;
                         }
                     }
             ).setNegativeButton(getString(R.string.confirm_no),
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                            return;
+                            //saveBucket();
                         }
                     }
             );

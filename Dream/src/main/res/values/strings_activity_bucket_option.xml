@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="txt_bucket_option_confirm_edit_title">내용변경확인</string>
-    <string name="txt_bucket_option_confirm_edit_body">변경한 내용을 저장하시겠습니까?</string>
-    <string name="txt_bucket_option_note_hint">노트를 입력하세요</string>
+    <string name="txt_bucket_option_confirm_edit_body">변경한 내용을 취소하시겠습니까?</string>
+    <string name="txt_bucket_option_note_hint">꿈에 대한 메모를 기록하세요</string>
 </resources>

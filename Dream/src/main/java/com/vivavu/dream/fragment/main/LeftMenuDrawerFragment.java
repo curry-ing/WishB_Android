@@ -216,9 +216,6 @@ public class LeftMenuDrawerFragment extends Fragment {
     private void createDialog(){
         AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
 
-        alert.setTitle(getString(R.string.txt_fragment_profile_user_name_edit_title));
-        alert.setMessage(getString(R.string.txt_fragment_profile_user_name_edit_body));
-
         // Set an EditText view to get user input
         final EditText input = new EditText(getActivity());
         alert.setView(input);

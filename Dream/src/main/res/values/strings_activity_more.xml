@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="txt_more_user_info_delete_error">사용자 정보 삭제 실패</string>
-    <string name="txt_more_member_leave">회원탈퇴</string>
-    <string name="txt_more_member_leave_title">회원탈퇴 확인</string>
-    <string name="txt_more_member_leave_body">정말 회원을 탈퇴 하시겠습니까?</string>
+    <string name="txt_more_member_leave">탈퇴하기</string>
+    <string name="txt_more_member_leave_body">정말 탈퇴 하시는건가요?</string>
 </resources>

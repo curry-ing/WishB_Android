@@ -93,20 +93,19 @@ public class BucketOptionActivity extends BaseActionBarActivity {
     public void confirm(){
         if(bucketOption.isModFlag()){
             AlertDialog.Builder alertConfirm = new AlertDialog.Builder(this);
-            alertConfirm.setTitle(getString(R.string.txt_bucket_option_confirm_edit_title));
             alertConfirm.setMessage(getString(R.string.txt_bucket_option_confirm_edit_body)).setCancelable(false).setPositiveButton(getString(R.string.confirm_yes),
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            saveOption();
+                            setResult(Activity.RESULT_CANCELED);
+                            finish();
                         }
                     }
             ).setNegativeButton(getString(R.string.confirm_no),
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            setResult(Activity.RESULT_CANCELED);
-                            finish();
+                            //saveOption();
                             return;
                         }
                     }

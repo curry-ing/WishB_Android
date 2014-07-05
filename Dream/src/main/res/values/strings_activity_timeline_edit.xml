@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="txt_timeline_edit_save_success">저장하였습니다.</string>
-    <string name="txt_timeline_edit_save_fail">저장에 실패하였습니다.</string>
-    <string name="txt_timeline_edit_confirm_edit_title">내용변경확인</string>
-    <string name="txt_timeline_edit_confirm_edit_body">변경한 내용을 저장하시겠습니까?</string>
-    <string name="txt_timeline_edit_write_hint">버킷일지를 입력하세요</string>
+    <string name="txt_timeline_edit_save_fail">앗! 잠시 후에 다시 시도해주세요</string>
+    <string name="txt_timeline_edit_confirm_edit_body">변경한 내용을 취소하시겠습니까?</string>
+    <string name="txt_timeline_edit_write_hint">오늘 하루를 작성해보세요</string>
 </resources>

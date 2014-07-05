@@ -61,7 +61,6 @@ public class MoreActivity extends BaseActionBarActivity {
                     logout();
                     break;
                 case SEND_DATA_ERROR:
-                    Toast.makeText(MoreActivity.this, getString(R.string.txt_more_user_info_delete_error), Toast.LENGTH_SHORT).show();
                     break;
             }
         }
@@ -138,8 +137,7 @@ public class MoreActivity extends BaseActionBarActivity {
                 Toast.makeText(MoreActivity.this, getString(R.string.txt_more_member_leave), Toast.LENGTH_SHORT).show();
 
                 AlertDialog.Builder alertConfirm = new AlertDialog.Builder(MoreActivity.this);
-                alertConfirm.setTitle(getString(R.string.txt_more_member_leave_title));
-                alertConfirm.setMessage(getString(R.string.txt_more_member_leave_title)).setCancelable(false).setPositiveButton(getString(R.string.confirm_yes),
+                alertConfirm.setMessage(getString(R.string.txt_more_member_leave_body)).setCancelable(false).setPositiveButton(getString(R.string.confirm_yes),
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

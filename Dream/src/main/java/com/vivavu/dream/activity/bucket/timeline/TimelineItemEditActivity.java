@@ -136,7 +136,6 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                     break;
                 case SEND_DATA_SUCCESS:
                     progressDialog.dismiss();
-                    Toast.makeText(TimelineItemEditActivity.this, getString(R.string.txt_timeline_edit_save_success), LENGTH_LONG).show();
                     Intent intent = new Intent();
                     Post obj = (Post) msg.obj;
                     intent.putExtra(TimelineItemViewActivity.extraKeyReturnValue, obj);
@@ -475,20 +474,19 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
     public void confirm(){
         if(checkRequireElement()) {
             AlertDialog.Builder alertConfirm = new AlertDialog.Builder(this);
-            alertConfirm.setTitle(getString(R.string.txt_timeline_edit_confirm_edit_title));
             alertConfirm.setMessage(getString(R.string.txt_timeline_edit_confirm_edit_body)).setCancelable(false).setPositiveButton(getString(R.string.confirm_yes),
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            postSave();
+                            finish();
+                            return;
                         }
                     }
             ).setNegativeButton(getString(R.string.confirm_no),
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                            return;
+                            //postSave();
                         }
                     }
             );
