@@ -245,9 +245,9 @@ public class LeftMenuDrawerFragment extends Fragment {
                         AndroidUtils.hideSoftInputFromWindow(DreamApp.getInstance(), input);
                     }
                 });
-
-        alert.show();
         AndroidUtils.showSoftInputFromWindow(getActivity(), input);
+        alert.show();
+
     }
 
     @Override

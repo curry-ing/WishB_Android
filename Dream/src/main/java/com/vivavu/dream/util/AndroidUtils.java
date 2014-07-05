@@ -56,6 +56,8 @@ public class AndroidUtils {
         InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
         if(view instanceof EditText) {
             imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
+            imm.showSoftInputFromInputMethod(view.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED);
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         } else {
             //imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }
