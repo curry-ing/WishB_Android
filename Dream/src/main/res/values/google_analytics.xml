@@ -10,4 +10,26 @@
     <bool name="ga_reportUncaughtExceptions">true</bool>
 
     <integer name="ga_dispatchPeriod">60</integer>
+
+    <!-- EventBuilder Category start -->
+    <string name="ga_event_category_main_activity">MainActivity</string>
+    <string name="ga_event_category_bucket_group_view_activity">BucketGroupViewActivity</string>
+    <string name="ga_event_category_profile_fragment">profile_fragment</string>
+    <!-- EventBuilder Category end -->
+
+    <!-- EventBuilder Action start -->
+    <string name="ga_event_action_add_bucket">add bucket</string>
+    <string name="ga_event_action_move_subview">move bucket</string>
+    <string name="ga_event_action_period_title_setting">period title setting</string>
+    <string name="ga_event_action_open_profile">open profile</string>
+    <string name="ga_event_action_move_today">open profile</string>
+    <string name="ga_event_action_swipe_page">swipe page</string>
+    <string name="ga_event_action_move_timeline">move timeline</string>
+    <string name="ga_event_action_move_scroll">scroll</string>
+    <!-- EventBuilder Action end -->
+
+    <!-- EventBuilder value start-->
+    <integer name="ga_vent_action_scroll_up_value">0</integer>
+    <integer name="ga_vent_action_scroll_down_value">1</integer>
+    <!-- EventBuilder value end-->
 </resources>

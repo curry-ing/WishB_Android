@@ -26,6 +26,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.vivavu.dream.R;
@@ -374,6 +376,9 @@ public class BucketAdapter extends PagerAdapter implements View.OnClickListener{
         holder.mMainImage8.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
+                Tracker tracker = DreamApp.getInstance().getTracker();
+                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(context.getString(R.string.ga_event_category_main_activity)).setAction(context.getString(R.string.ga_event_action_move_subview));
+                tracker.send(eventBuilder.build());
                 Intent intent;
                 intent = new Intent();
                 intent.putExtra(BucketGroupViewActivity.EXTRA_KEY_GROUP_RANGE, getBucketGroupList().get(pos).getRange());
@@ -424,6 +429,9 @@ public class BucketAdapter extends PagerAdapter implements View.OnClickListener{
                 holder.mBtnDecade.setText(titleValue);
                 imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);  //Hide soft keyboard
                 saveUser(titleValue, pos);
+                Tracker tracker = DreamApp.getInstance().getTracker();
+                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(context.getString(R.string.ga_event_category_main_activity)).setAction(context.getString(R.string.ga_event_action_period_title_setting));
+                tracker.send(eventBuilder.build());
             }
         });
 

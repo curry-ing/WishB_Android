@@ -20,6 +20,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
@@ -128,6 +130,9 @@ public class MainActivity extends BaseActionBarActivity {
 //                Intent intent = new Intent(MainActivity.this, TodayActivity.class);
 //                startActivity(intent);
                 goToday();
+                Tracker tracker = DreamApp.getInstance().getTracker();
+                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_main_activity)).setAction(getString(R.string.ga_event_action_move_today));
+                tracker.send(eventBuilder.build());
             }
         });
 
@@ -165,12 +170,18 @@ public class MainActivity extends BaseActionBarActivity {
             public void onDrawerOpened(View drawerView) {
                 ActionBar bar = getSupportActionBar();
                 bar.setCustomView(customActionBarViewProfile);
+                Tracker tracker = DreamApp.getInstance().getTracker();
+                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_main_activity)).setAction(getString(R.string.ga_event_action_open_profile));
+                tracker.send(eventBuilder.build());
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 ActionBar bar = getSupportActionBar();
                 bar.setCustomView(customActionBarView);
+                Tracker tracker = DreamApp.getInstance().getTracker();
+                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_profile_fragment)).setAction(getString(R.string.ga_event_action_open_profile));
+                tracker.send(eventBuilder.build());
             }
 
             @Override
@@ -224,6 +235,9 @@ public class MainActivity extends BaseActionBarActivity {
         switch (view.getId()) {
             case R.id.btn_add_bucket:
                 goAddBucket();
+                Tracker tracker = DreamApp.getInstance().getTracker();
+                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_main_activity)).setAction(getString(R.string.ga_event_action_add_bucket));
+                tracker.send(eventBuilder.build());
                 break;
         }
     }

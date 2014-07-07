@@ -206,4 +206,16 @@ public class DreamApp extends Application {
         return mTrackers.get(trackerId);
     }
 
+    synchronized public Tracker getTracker(){
+        if (!mTrackers.containsKey(TrackerName.APP_TRACKER)) {
+
+            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+            Tracker t = analytics.newTracker(getResources().getString(R.string.ga_trackingId));
+            mTrackers.put(TrackerName.APP_TRACKER, t);
+
+        }
+
+        return mTrackers.get(TrackerName.APP_TRACKER);
+    }
+
 }

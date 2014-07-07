@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.bucket.BucketEditActivity;
 import com.vivavu.dream.adapter.bucket.BucketAdapter;
@@ -248,6 +250,9 @@ public class MainBucketListFragment extends CustomBaseFragment { //} implements 
 
         @Override
         public void onPageSelected(final int position){
+            Tracker tracker = DreamApp.getInstance().getTracker();
+            HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_main_activity)).setAction(getString(R.string.ga_event_action_swipe_page));
+            tracker.send(eventBuilder.build());
             BitmapDrawable toBg = null;
             if(position == 0) {
                 toBg = (BitmapDrawable) getResources().getDrawable(R.drawable.mainview_bg0);

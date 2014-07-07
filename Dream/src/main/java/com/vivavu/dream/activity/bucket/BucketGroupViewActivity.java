@@ -11,6 +11,8 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.main.MainActivity;
 import com.vivavu.dream.activity.main.TodayActivity;
@@ -95,6 +97,9 @@ public class BucketGroupViewActivity extends BaseActionBarActivity {
         mBtnToday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Tracker tracker = DreamApp.getInstance().getTracker();
+                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_bucket_group_view_activity)).setAction(getString(R.string.ga_event_action_move_today));
+                tracker.send(eventBuilder.build());
                 Intent intent = new Intent(BucketGroupViewActivity.this, TodayActivity.class);
                 startActivity(intent);
             }
@@ -191,6 +196,11 @@ public class BucketGroupViewActivity extends BaseActionBarActivity {
     }
 
     public void goTimelineActivity(int bucketId){
+
+        Tracker tracker = DreamApp.getInstance().getTracker();
+        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_bucket_group_view_activity)).setAction(getString(R.string.ga_event_action_move_timeline));
+        tracker.send(eventBuilder.build());
+
         Intent intent = new Intent();
         intent.setClass(this, TimelineActivity.class);
         intent.putExtra(TimelineActivity.extraKey, bucketId);
@@ -198,6 +208,11 @@ public class BucketGroupViewActivity extends BaseActionBarActivity {
     }
 
     private void goAddBucket() {
+
+        Tracker tracker = DreamApp.getInstance().getTracker();
+        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_bucket_group_view_activity)).setAction(getString(R.string.ga_event_action_add_bucket));
+        tracker.send(eventBuilder.build());
+
         Intent intent;
         intent = new Intent();
         intent.setClass(this, BucketEditActivity.class);
