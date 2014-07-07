@@ -28,6 +28,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.vivavu.dream.R;
@@ -213,6 +215,10 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                                 modFlag = true;
                                 post.setImgUrl(null);
                                 post.setPhoto(null);
+                                Tracker tracker = DreamApp.getInstance().getTracker();
+                                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_timeline_item_edit_activity)).setAction(getString(R.string.ga_event_action_image_delete));
+                                tracker.send(eventBuilder.build());
+
                                 bindData(post);
                                 dialog.dismiss();
                                 break;
@@ -267,6 +273,12 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                 checkRequireElement();
                 boolean flag = !mBtnPostFacebook.isSelected();
                 mBtnPostFacebook.setSelected(flag);
+
+                Tracker tracker = DreamApp.getInstance().getTracker();
+                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_timeline_item_edit_activity)).setAction(getString(R.string.ga_event_action_share_facebook));
+                eventBuilder.setValue(flag ? 1 : 0);
+                tracker.send(eventBuilder.build());
+
                 post.setFbShare( flag ? FacebookShareType.SELF.getCode() : FacebookShareType.NONE.getCode());
             }
         });
@@ -278,6 +290,9 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         // monthOfYear가 -1 되어 들어옴
+                        Tracker tracker = DreamApp.getInstance().getTracker();
+                        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_timeline_item_edit_activity)).setAction(getString(R.string.ga_event_action_edit_date));
+                        tracker.send(eventBuilder.build());
                         mTxtPostDate.setText(String.format("%4d.%02d.%02d", year, monthOfYear+1, dayOfMonth ));
                         modFlag = true;
                         checkRequireElement();
@@ -299,6 +314,9 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                 TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        Tracker tracker = DreamApp.getInstance().getTracker();
+                        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_timeline_item_edit_activity)).setAction(getString(R.string.ga_event_action_edit_time));
+                        tracker.send(eventBuilder.build());
                         mTxtPostTime.setText(String.format("%02d:%02d", hourOfDay, minute));
                         modFlag = true;
                         checkRequireElement();
@@ -355,6 +373,10 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
             case Code.ACT_ADD_BUCKET_TAKE_GALLERY:
                 if(resultCode == RESULT_OK){
                     if(data != null ) {
+                        Tracker tracker = DreamApp.getInstance().getTracker();
+                        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_timeline_item_edit_activity)).setAction(getString(R.string.ga_event_action_image_gallery));
+                        tracker.send(eventBuilder.build());
+
                         modFlag = true;
                         mImageCaptureUri = data.getData();
                         showImage(mImageCaptureUri, mBtnTimelineAttach);
@@ -363,6 +385,10 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                 break;
             case Code.ACT_ADD_BUCKET_TAKE_CAMERA:
                 if(resultCode == RESULT_OK){
+                    Tracker tracker = DreamApp.getInstance().getTracker();
+                    HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_timeline_item_edit_activity)).setAction(getString(R.string.ga_event_action_image_camera));
+                    tracker.send(eventBuilder.build());
+
                     modFlag = true;
                     showImage(mImageCaptureUri, mBtnTimelineAttach);
                 }
@@ -415,6 +441,11 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
         if(checkRequireElement()) {
             AndroidUtils.hideSoftInputFromWindow(DreamApp.getInstance(), mTxtPostText);
             Post post = getPost();
+
+            Tracker tracker = DreamApp.getInstance().getTracker();
+            HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_timeline_item_edit_activity)).setAction(getString(R.string.ga_event_action_save));
+            tracker.send(eventBuilder.build());
+
             NetworkThread networkThread = new NetworkThread(post);
             Thread thread = new Thread(networkThread);
             thread.start();
@@ -478,6 +509,10 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            Tracker tracker = DreamApp.getInstance().getTracker();
+                            HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_timeline_item_edit_activity)).setAction(getString(R.string.ga_event_action_cancel));
+                            tracker.send(eventBuilder.build());
+
                             finish();
                             return;
                         }

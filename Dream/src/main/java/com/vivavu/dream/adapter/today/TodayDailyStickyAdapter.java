@@ -8,12 +8,15 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tonicartos.widget.stickygridheaders.StickyGridHeadersSimpleAdapter;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.bucket.TimelineActivity;
 import com.vivavu.dream.activity.bucket.timeline.TimelineItemEditActivity;
+import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.model.bucket.Today;
 import com.vivavu.dream.model.bucket.timeline.Post;
@@ -86,6 +89,10 @@ public class TodayDailyStickyAdapter extends BaseAdapter implements StickyGridHe
         holder.mBucketItemImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Tracker tracker = DreamApp.getInstance().getTracker();
+                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(context.getString(R.string.ga_event_category_today_activity)).setAction(context.getString(R.string.ga_event_action_add_timeline_item));
+                tracker.send(eventBuilder.build());
+
                 Intent intent;
                 intent = new Intent();
                 intent.setClass(context, TimelineItemEditActivity.class);

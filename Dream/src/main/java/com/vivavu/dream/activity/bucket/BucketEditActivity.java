@@ -199,7 +199,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
             Toast.makeText(this, getString(R.string.txt_bucket_edit_need_required_fields), Toast.LENGTH_SHORT).show();
         }else{
             Tracker tracker = DreamApp.getInstance().getTracker();
-            HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_buket_edit_activity)).setAction(getString(R.string.ga_event_action_edit_bucket_save));
+            HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_buket_edit_activity)).setAction(getString(R.string.ga_event_action_save));
             tracker.send(eventBuilder.build());
 
             handler.sendEmptyMessage(SEND_DATA_START);
@@ -757,7 +757,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Tracker tracker = DreamApp.getInstance().getTracker();
-                            HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_buket_edit_activity)).setAction(getString(R.string.ga_event_action_edit_bucket_cancel));
+                            HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_buket_edit_activity)).setAction(getString(R.string.ga_event_action_cancel));
                             tracker.send(eventBuilder.build());
                             finish();
                             return;

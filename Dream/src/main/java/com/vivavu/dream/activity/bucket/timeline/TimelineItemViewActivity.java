@@ -17,12 +17,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.bucket.TimelineActivity;
 import com.vivavu.dream.activity.image.ImageViewActivity;
 import com.vivavu.dream.common.BaseActionBarActivity;
+import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.model.bucket.timeline.Post;
@@ -208,15 +211,23 @@ public class TimelineItemViewActivity extends BaseActionBarActivity{
     }
 
     private void removePost() {
+        Tracker tracker = DreamApp.getInstance().getTracker();
+        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_timeline_item_view_activity)).setAction(getString(R.string.ga_event_action_delete));
+        tracker.send(eventBuilder.build());
         Thread thread = new Thread(new PostDeleteThread());
         thread.start();
     }
 
     private void sharedPost() {
-
+        Tracker tracker = DreamApp.getInstance().getTracker();
+        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_timeline_item_view_activity)).setAction(getString(R.string.ga_event_action_share_facebook));
+        tracker.send(eventBuilder.build());
     }
 
     private void goEdit() {
+        Tracker tracker = DreamApp.getInstance().getTracker();
+        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_timeline_item_view_activity)).setAction(getString(R.string.ga_event_action_edit_item));
+        tracker.send(eventBuilder.build());
         Intent intent = getIntent();
         intent.setClass(this, TimelineItemEditActivity.class);
         startActivityForResult(intent, REQUEST_MOD_POST);

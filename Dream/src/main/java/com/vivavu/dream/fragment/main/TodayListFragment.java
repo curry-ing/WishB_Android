@@ -10,9 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
 import com.vivavu.dream.R;
 import com.vivavu.dream.adapter.today.TodayDailyStickyAdapter;
+import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.fragment.CustomBaseFragment;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.bucket.Today;
@@ -96,6 +99,12 @@ public class TodayListFragment extends CustomBaseFragment {
                     // 맨 밑으로 내려가면 데이터를 더 들고오게 한다.
                     mSwipeRefreshLayout.setRefreshing(true);
                     networkThread.setPage(lastPageNum + 1);
+
+                    Tracker tracker = DreamApp.getInstance().getTracker();
+                    HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_today_activity)).setAction(getString(R.string.ga_event_action_more_page));
+                    eventBuilder.setValue(networkThread.getPage());
+                    tracker.send(eventBuilder.build());
+
                     Thread thread = new Thread(networkThread);
                     thread.start();
                 }
