@@ -19,6 +19,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vivavu.dream.R;
@@ -209,6 +211,10 @@ public class TimelineActivity extends BaseActionBarActivity {
                     // 맨 밑으로 내려가면 데이터를 더 들고오게 한다.
                     mSwipeRefreshLayout.setRefreshing(true);
                     timelineThread.setPage(lastPageNum + 1);
+                    Tracker tracker = DreamApp.getInstance().getTracker();
+                    HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_timeline_activity)).setAction(getString(R.string.ga_event_action_more_page));
+                    eventBuilder.setValue(timelineThread.getPage());
+                    tracker.send(eventBuilder.build());
                     Thread thread = new Thread(timelineThread);
                     thread.start();
                 }
@@ -325,6 +331,10 @@ public class TimelineActivity extends BaseActionBarActivity {
         mBtnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Tracker tracker = DreamApp.getInstance().getTracker();
+                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_timeline_activity)).setAction(getString(R.string.ga_event_action_edit_bucket));
+                tracker.send(eventBuilder.build());
+
                 Intent intent = new Intent(TimelineActivity.this, BucketEditActivity.class);
                 intent.putExtra(BucketEditActivity.RESULT_EXTRA_BUCKET_ID, (Integer) bucket.getId());
                 startActivityForResult(intent, REQUEST_MOD_BUCKET);
@@ -334,6 +344,10 @@ public class TimelineActivity extends BaseActionBarActivity {
         mBtnAddPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Tracker tracker = DreamApp.getInstance().getTracker();
+                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_timeline_activity)).setAction(getString(R.string.ga_event_action_add_timeline_item));
+                tracker.send(eventBuilder.build());
+
                 Intent intent = new Intent(TimelineActivity.this, TimelineItemEditActivity.class);
                 intent.putExtra(extraKeyBucket, bucket);
                 intent.putExtra(extraKeyPost, new Post(new Date()));
@@ -345,12 +359,17 @@ public class TimelineActivity extends BaseActionBarActivity {
         mBtnAchieve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Tracker tracker = DreamApp.getInstance().getTracker();
+                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_timeline_activity)).setAction(getString(R.string.ga_event_action_achieve_bucket));
+
                 if(bucket.getStatus() == 0) {
                     bucket.setStatus(1);
+                    eventBuilder.setValue(1);
                 } else {
                     bucket.setStatus(0);
+                    eventBuilder.setValue(0);
                 }
-
+                tracker.send(eventBuilder.build());
                 Thread thread = new Thread(new BucketThread());
                 thread.start();
             }
@@ -415,6 +434,10 @@ public class TimelineActivity extends BaseActionBarActivity {
     }
 
     public void viewPost(Post post){
+        Tracker tracker = DreamApp.getInstance().getTracker();
+        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_timeline_activity)).setAction(getString(R.string.ga_event_action_view_timeline_item));
+        tracker.send(eventBuilder.build());
+
         Intent intent = new Intent(this, TimelineItemViewActivity.class);
         intent.putExtra(TimelineActivity.extraKeyBucket, bucket);
         intent.putExtra(TimelineActivity.extraKeyPost, post);

@@ -14,6 +14,7 @@
     <!-- EventBuilder Category start -->
     <string name="ga_event_category_main_activity">MainActivity</string>
     <string name="ga_event_category_bucket_group_view_activity">BucketGroupViewActivity</string>
+    <string name="ga_event_category_timeline_activity">TimelineActivity</string>
     <string name="ga_event_category_profile_fragment">profile_fragment</string>
     <!-- EventBuilder Category end -->
 
@@ -26,6 +27,11 @@
     <string name="ga_event_action_swipe_page">swipe page</string>
     <string name="ga_event_action_move_timeline">move timeline</string>
     <string name="ga_event_action_move_scroll">scroll</string>
+    <string name="ga_event_action_edit_bucket">edit bucket</string>
+    <string name="ga_event_action_view_timeline_item">view timeline item</string>
+    <string name="ga_event_action_add_timeline_item">add timeline item</string>
+    <string name="ga_event_action_achieve_bucket">achieve bucket</string>
+    <string name="ga_event_action_more_page">more page</string>
     <!-- EventBuilder Action end -->
 
     <!-- EventBuilder value start-->
