@@ -15,6 +15,7 @@
     <string name="ga_event_category_main_activity">MainActivity</string>
     <string name="ga_event_category_bucket_group_view_activity">BucketGroupViewActivity</string>
     <string name="ga_event_category_timeline_activity">TimelineActivity</string>
+    <string name="ga_event_category_buket_edit_activity">BucketEditActivity</string>
     <string name="ga_event_category_profile_fragment">profile_fragment</string>
     <!-- EventBuilder Category end -->
 
@@ -32,6 +33,19 @@
     <string name="ga_event_action_add_timeline_item">add timeline item</string>
     <string name="ga_event_action_achieve_bucket">achieve bucket</string>
     <string name="ga_event_action_more_page">more page</string>
+    <string name="ga_event_action_image_camera">image camera</string>
+    <string name="ga_event_action_image_gallery">image gallery</string>
+    <string name="ga_event_action_image_delete">image delete</string>
+    <string name="ga_event_action_edit_bucket_title">edit bucket title</string>
+    <string name="ga_event_action_edit_bucket_deadline">edit bucket deadline</string>
+    <string name="ga_event_action_edit_bucket_description">edit bucket description</string>
+    <string name="ga_event_action_edit_bucket_repeat">edit bucket repeat</string>
+    <string name="ga_event_action_edit_bucket_public">edit bucket public</string>
+    <string name="ga_event_action_edit_bucket_delete">edit bucket delete</string>
+    <string name="ga_event_action_edit_bucket_save">edit bucket save</string>
+    <string name="ga_event_action_edit_bucket_cancel">edit bucket cancel</string>
+
+
     <!-- EventBuilder Action end -->
 
     <!-- EventBuilder value start-->
