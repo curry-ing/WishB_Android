@@ -20,6 +20,7 @@
     <string name="ga_event_category_timeline_item_view_activity">TimelineItemViewActivity</string>
     <string name="ga_event_category_today_activity">TodayActivity</string>
     <string name="ga_event_category_profile_fragment">profile_fragment</string>
+    <string name="ga_event_category_more_activity">more activity</string>
     <!-- EventBuilder Category end -->
 
     <!-- EventBuilder Action start -->
@@ -53,6 +54,16 @@
     <string name="ga_event_action_edit_text">edit text</string>
     <string name="ga_event_action_share_facebook">share facebook</string>
     <string name="ga_event_action_edit_item">edit item</string>
+    <string name="ga_event_action_edit_username">edit username</string>
+    <string name="ga_event_action_logout">logout</string>
+    <string name="ga_event_action_setting">setting</string>
+    <string name="ga_event_action_notice">notice</string>
+    <string name="ga_event_action_update">update</string>
+    <string name="ga_event_action_alert">alert</string>
+    <string name="ga_event_action_inquiry">inquiry</string>
+    <string name="ga_event_action_access_terms">access terms</string>
+    <string name="ga_event_action_privacy">privacy</string>
+    <string name="ga_event_action_member_leave">member leave</string>
 
     <!-- EventBuilder Action end -->
 

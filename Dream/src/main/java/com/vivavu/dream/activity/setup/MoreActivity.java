@@ -13,6 +13,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.login.PrivacyActivity;
 import com.vivavu.dream.activity.login.UserAgreementActivity;
@@ -90,6 +92,9 @@ public class MoreActivity extends BaseActionBarActivity {
         mBtnAlertSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Tracker tracker = DreamApp.getInstance().getTracker();
+                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_more_activity)).setAction(getString(R.string.ga_event_action_setting));
+                tracker.send(eventBuilder.build());
                 Intent intent = new Intent(MoreActivity.this, AlertSettingsActivity.class);
                 startActivity(intent);
             }
@@ -110,6 +115,9 @@ public class MoreActivity extends BaseActionBarActivity {
         mBtnInquiry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Tracker tracker = DreamApp.getInstance().getTracker();
+                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_more_activity)).setAction(getString(R.string.ga_event_action_inquiry));
+                tracker.send(eventBuilder.build());
                 Intent intent = new Intent(MoreActivity.this, InquiryActivity.class);
                 startActivity(intent);
             }
@@ -117,6 +125,9 @@ public class MoreActivity extends BaseActionBarActivity {
         mBtnAccessTerms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Tracker tracker = DreamApp.getInstance().getTracker();
+                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_more_activity)).setAction(getString(R.string.ga_event_action_access_terms));
+                tracker.send(eventBuilder.build());
                 Intent intent = new Intent(MoreActivity.this, UserAgreementActivity.class);
                 startActivity(intent);
             }
@@ -124,6 +135,9 @@ public class MoreActivity extends BaseActionBarActivity {
         mBtnPrivacy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Tracker tracker = DreamApp.getInstance().getTracker();
+                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_more_activity)).setAction(getString(R.string.ga_event_action_privacy));
+                tracker.send(eventBuilder.build());
                 Intent intent = new Intent(MoreActivity.this, PrivacyActivity.class);
                 startActivity(intent);
             }
@@ -132,6 +146,9 @@ public class MoreActivity extends BaseActionBarActivity {
         mBtnMemberLeave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Tracker tracker = DreamApp.getInstance().getTracker();
+                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_more_activity)).setAction(getString(R.string.ga_event_action_member_leave));
+                tracker.send(eventBuilder.build());
                 /*Intent intent = new Intent(MoreActivity.this, MainActivity.class);
                 startActivity(intent);*/
                 Toast.makeText(MoreActivity.this, getString(R.string.txt_more_member_leave), Toast.LENGTH_SHORT).show();

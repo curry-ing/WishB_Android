@@ -21,6 +21,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vivavu.dream.R;
@@ -111,6 +113,10 @@ public class LeftMenuDrawerFragment extends Fragment {
         mMainLeftMenuBtnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Tracker tracker = DreamApp.getInstance().getTracker();
+                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_profile_fragment)).setAction(getString(R.string.ga_event_action_logout));
+                tracker.send(eventBuilder.build());
+
                 Toast.makeText(getActivity(), getString(R.string.txt_fragment_profile_logout_message), Toast.LENGTH_SHORT ).show();
                 if(getActivity() instanceof MainActivity){
                     /* Set Notification Off */
@@ -172,6 +178,10 @@ public class LeftMenuDrawerFragment extends Fragment {
         mMainLeftMenuBtnSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Tracker tracker = DreamApp.getInstance().getTracker();
+                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_profile_fragment)).setAction(getString(R.string.ga_event_action_setting));
+                tracker.send(eventBuilder.build());
+
                 Intent intent = new Intent(getActivity(), MoreActivity.class);
                 startActivity(intent);
             }
@@ -184,6 +194,23 @@ public class LeftMenuDrawerFragment extends Fragment {
             }
         });
 
+        mMainLeftMenuBtnNotice.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Tracker tracker = DreamApp.getInstance().getTracker();
+                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_profile_fragment)).setAction(getString(R.string.ga_event_action_notice));
+                tracker.send(eventBuilder.build());
+            }
+        });
+
+        mMainLeftMenuBtnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Tracker tracker = DreamApp.getInstance().getTracker();
+                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_profile_fragment)).setAction(getString(R.string.ga_event_action_update));
+                tracker.send(eventBuilder.build());
+            }
+        });
         return rootView;
     }
 
@@ -230,6 +257,11 @@ public class LeftMenuDrawerFragment extends Fragment {
                 mMainLeftMenuTxtName.setText(value);
                 User user = DreamApp.getInstance().getUser();
                 user.setUsername(value);
+
+                Tracker tracker = DreamApp.getInstance().getTracker();
+                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_profile_fragment)).setAction(getString(R.string.ga_event_action_edit_username));
+                tracker.send(eventBuilder.build());
+
                 handler.sendEmptyMessage(SEND_DATA_START);
                 Thread thread = new Thread(new UserModifyThread(user));
                 thread.start();
@@ -244,7 +276,8 @@ public class LeftMenuDrawerFragment extends Fragment {
                         // Canceled.
                         AndroidUtils.hideSoftInputFromWindow(DreamApp.getInstance(), input);
                     }
-                });
+                }
+        );
         AndroidUtils.showSoftInputFromWindow(getActivity(), input);
         alert.show();
 
