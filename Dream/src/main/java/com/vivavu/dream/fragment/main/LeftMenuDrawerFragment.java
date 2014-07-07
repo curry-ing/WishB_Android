@@ -161,6 +161,10 @@ public class LeftMenuDrawerFragment extends Fragment {
                                 // 사진을 찍고 그냥
                                 FileUtils.deleteFile(user.getPhoto());
                                 user.setPhoto(null);
+                                Tracker tracker = DreamApp.getInstance().getTracker();
+                                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_profile_fragment)).setAction(getString(R.string.ga_event_action_image_delete));
+                                tracker.send(eventBuilder.build());
+
                                 handler.sendEmptyMessage(SEND_DATA_START);
                                 Thread thread = new Thread(new UserModifyThread(user));
                                 thread.start();
@@ -289,12 +293,20 @@ public class LeftMenuDrawerFragment extends Fragment {
         switch (requestCode){
             case Code.ACT_ADD_BUCKET_TAKE_CAMERA:
                 if(resultCode == Activity.RESULT_OK){
+                    Tracker tracker = DreamApp.getInstance().getTracker();
+                    HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_profile_fragment)).setAction(getString(R.string.ga_event_action_image_camera));
+                    tracker.send(eventBuilder.build());
+
                     doCropPhoto();
                 }
                 break;
             case Code.ACT_ADD_BUCKET_TAKE_GALLERY:
                 if(resultCode == Activity.RESULT_OK){
                     if(data != null ) {
+                        Tracker tracker = DreamApp.getInstance().getTracker();
+                        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_profile_fragment)).setAction(getString(R.string.ga_event_action_image_gallery));
+                        tracker.send(eventBuilder.build());
+
                         mImageCaptureUri = data.getData();
                         doCropPhoto();
                     }

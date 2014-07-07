@@ -180,7 +180,7 @@ public class MainActivity extends BaseActionBarActivity {
                 ActionBar bar = getSupportActionBar();
                 bar.setCustomView(customActionBarView);
                 Tracker tracker = DreamApp.getInstance().getTracker();
-                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_profile_fragment)).setAction(getString(R.string.ga_event_action_open_profile));
+                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_profile_fragment)).setAction(getString(R.string.ga_event_action_close_profile));
                 tracker.send(eventBuilder.build());
             }
 

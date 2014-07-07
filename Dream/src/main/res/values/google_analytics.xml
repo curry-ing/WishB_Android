@@ -28,6 +28,7 @@
     <string name="ga_event_action_move_subview">move bucket</string>
     <string name="ga_event_action_period_title_setting">period title setting</string>
     <string name="ga_event_action_open_profile">open profile</string>
+    <string name="ga_event_action_close_profile">close profile</string>
     <string name="ga_event_action_move_today">open profile</string>
     <string name="ga_event_action_swipe_page">swipe page</string>
     <string name="ga_event_action_move_timeline">move timeline</string>
