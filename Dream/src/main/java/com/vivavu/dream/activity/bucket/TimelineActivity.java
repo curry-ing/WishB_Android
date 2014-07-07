@@ -409,14 +409,16 @@ public class TimelineActivity extends BaseActionBarActivity {
             case REQUEST_ADD_POST:
                 if(resultCode == RESULT_OK) {
                     // 포스트 작성되었을 경우
-                    Thread thread = new Thread(new TimelineThread());
+                    timelineThread.setPage(1);
+                    Thread thread = new Thread(timelineThread);
                     thread.start();
                 }
                 break;
             case REQUEST_MOD_POST:
                 if(resultCode == RESULT_OK) {
                     // 포스트 작성되었을 경우
-                    Thread thread = new Thread(new TimelineThread());
+                    timelineThread.setPage(1);
+                    Thread thread = new Thread(timelineThread);
                     thread.start();
                 }
                 break;

@@ -340,8 +340,7 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
         mMenuPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setResult(RESULT_CANCELED);
-                confirm();
+                onBackPressed();
             }
         });
     }
@@ -428,7 +427,11 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
     }
 
     private boolean checkRequireElement(){
-        if (post != null && modFlag && ( post.getText() != null ) ) {
+        if (post != null && modFlag
+                && (( post.getId() != null && post.getId() > 0 && ( post.getText() != null || post.getPhoto() != null || post.getImgUrl() != null)) // 글 수정시 세가지 중 하나만 있어도 수정 가능
+                || (post.getId() == null || post.getId() < 1 && (post.getText() != null || post.getPhoto() != null)) // 글 추가시에는 둘 중 하나만 있어도 추가 가능
+                )
+                ) {
             mMenuSave.setVisibility(View.VISIBLE);
             return true;
         }else{

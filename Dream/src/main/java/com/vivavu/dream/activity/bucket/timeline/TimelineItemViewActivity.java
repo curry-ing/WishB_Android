@@ -200,8 +200,10 @@ public class TimelineItemViewActivity extends BaseActionBarActivity{
         switch (requestCode){
             case REQUEST_MOD_POST:
                 if(resultCode == RESULT_OK){
-                    Post returnValue = (Post) data.getSerializableExtra(extraKeyReturnValue);
-                    bindData(returnValue);
+                    post = (Post) data.getSerializableExtra(extraKeyReturnValue);
+                    Intent intent = getIntent();
+                    intent.putExtra(TimelineActivity.extraKeyPost, post);
+                    bindData(post);
                     setResult(RESULT_OK);
                 } else {
                     setResult(RESULT_CANCELED);
