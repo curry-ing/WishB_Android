@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resource>
+    <!--Replace placeholder ID with your tracking ID-->
+    <string name="ga_trackingId">UA-52445855-1</string>
+
+    <!-- Percentage of events to include in reports -->
+    <string name="ga_sampleFrequency">100.0</string>
+
+    <!-- Enable automatic Activity measurement -->
+    <bool name="ga_autoActivityTracking">true</bool>
+
+    <!-- catch and report uncaught exceptions from the app -->
+    <bool name="ga_reportUncaughtExceptions">true</bool>
+
+    <!-- How long a session exists before giving up -->
+    <integer name="ga_sessionTimeout">-1</integer>
+
+    <!-- the Local LogLevel for Analytics -->
+    <string name="ga_logLevel">verbose</string>
+
+    <integer name="ga_dispatchPeriod">30</integer>
+
+    <!-- Treat events as test events and don't send to google -->
+    <bool name="ga_dryRun">false</bool>
+
+    <screenName name="com.vivavu.dream.activity.main.MainActivity">MainActivity</screenName>
+    <screenName name="com.vivavu.dream.activity.main.TodayActivity">TodayActivity</screenName>
+    <screenName name="com.vivavu.dream.activity.bucket.BucketEditActivity">BucketEditActivity</screenName>
+    <screenName name="com.vivavu.dream.activity.bucket.BucketGroupViewActivity">BucketGroupViewActivity</screenName>
+    <screenName name="com.vivavu.dream.activity.bucket.BucketOptionActivity">BucketOptionActivity</screenName>
+    <screenName name="com.vivavu.dream.activity.bucket.BucketViewActivity">BucketViewActivity</screenName>
+    <screenName name="com.vivavu.dream.activity.bucket.TimelineActivity">TimelineActivity</screenName>
+    <screenName name="com.vivavu.dream.activity.bucket.timeline.TimelineItemEditActivity">TimelineItemEditActivity</screenName>
+    <screenName name="com.vivavu.dream.activity.bucket.timeline.TimelineItemViewActivity">TimelineItemViewActivity</screenName>
+    <screenName name="com.vivavu.dream.activity.bucket.timeline.TimelineCalendarActivity">TimelineCalendarActivity</screenName>
+    <screenName name="com.vivavu.dream.activity.image.ImageViewActivity">ImageViewActivity</screenName>
+    <screenName name="com.vivavu.dream.activity.intro.IntroActivity">IntroActivity</screenName>
+    <screenName name="com.vivavu.dream.activity.login.LoginActivity">LoginActivity</screenName>
+    <screenName name="com.vivavu.dream.activity.login.PrivacyActivity">PrivacyActivity</screenName>
+    <screenName name="com.vivavu.dream.activity.login.ResetPasswordActivity">ResetPasswordActivity</screenName>
+    <screenName name="com.vivavu.dream.activity.login.UserAgreementActivity">UserAgreementActivity</screenName>
+    <screenName name="com.vivavu.dream.activity.login.UserRegisterActivity">UserRegisterActivity</screenName>
+    <screenName name="com.vivavu.dream.activity.setup.AlertSettingsActivity">AlertSettingsActivity</screenName>
+    <screenName name="com.vivavu.dream.activity.setup.InquiryActivity">InquiryActivity</screenName>
+    <screenName name="com.vivavu.dream.activity.setup.MoreActivity">MoreActivity</screenName>
+    <screenName name="com.vivavu.dream.activity.StartActivity">StartActivity</screenName>
+
+</resource>

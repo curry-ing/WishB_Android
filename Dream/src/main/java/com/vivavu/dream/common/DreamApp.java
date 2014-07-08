@@ -197,6 +197,7 @@ public class DreamApp extends Application {
         if (!mTrackers.containsKey(trackerId)) {
 
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+            analytics.enableAutoActivityReports(this);
             Tracker t = (trackerId == TrackerName.APP_TRACKER) ? analytics.newTracker(getResources().getString(R.string.ga_trackingId))
                     : (trackerId == TrackerName.GLOBAL_TRACKER) ? analytics.newTracker(0)
                     : analytics.newTracker(1);
@@ -210,7 +211,8 @@ public class DreamApp extends Application {
         if (!mTrackers.containsKey(TrackerName.APP_TRACKER)) {
 
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-            Tracker t = analytics.newTracker(getResources().getString(R.string.ga_trackingId));
+            analytics.enableAutoActivityReports(this);
+            Tracker t = analytics.newTracker(R.xml.global_tracker);
             mTrackers.put(TrackerName.APP_TRACKER, t);
 
         }
