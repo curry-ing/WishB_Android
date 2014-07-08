@@ -3,7 +3,6 @@
     <!--Replace placeholder ID with your tracking ID-->
     <string name="ga_trackingId">UA-52445855-1</string>
 
-
     <!-- EventBuilder Category start -->
     <string name="ga_event_category_main_activity">MainActivity</string>
     <string name="ga_event_category_bucket_group_view_activity">BucketGroupViewActivity</string>

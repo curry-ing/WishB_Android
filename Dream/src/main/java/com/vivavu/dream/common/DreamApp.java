@@ -198,7 +198,7 @@ public class DreamApp extends Application {
 
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
             analytics.enableAutoActivityReports(this);
-            Tracker t = (trackerId == TrackerName.APP_TRACKER) ? analytics.newTracker(getResources().getString(R.string.ga_trackingId))
+            Tracker t = (trackerId == TrackerName.APP_TRACKER) ? analytics.newTracker(R.xml.global_tracker)
                     : (trackerId == TrackerName.GLOBAL_TRACKER) ? analytics.newTracker(0)
                     : analytics.newTracker(1);
             mTrackers.put(trackerId, t);
