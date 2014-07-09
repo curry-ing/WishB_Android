@@ -24,26 +24,26 @@
     <!-- Treat events as test events and don't send to google -->
     <bool name="ga_dryRun">false</bool>
 
-    <screenName name="com.vivavu.dream.activity.main.MainActivity">MainActivity</screenName>
-    <screenName name="com.vivavu.dream.activity.main.TodayActivity">TodayActivity</screenName>
-    <screenName name="com.vivavu.dream.activity.bucket.BucketEditActivity">BucketEditActivity</screenName>
-    <screenName name="com.vivavu.dream.activity.bucket.BucketGroupViewActivity">BucketGroupViewActivity</screenName>
-    <screenName name="com.vivavu.dream.activity.bucket.BucketOptionActivity">BucketOptionActivity</screenName>
-    <screenName name="com.vivavu.dream.activity.bucket.BucketViewActivity">BucketViewActivity</screenName>
-    <screenName name="com.vivavu.dream.activity.bucket.TimelineActivity">TimelineActivity</screenName>
-    <screenName name="com.vivavu.dream.activity.bucket.timeline.TimelineItemEditActivity">TimelineItemEditActivity</screenName>
-    <screenName name="com.vivavu.dream.activity.bucket.timeline.TimelineItemViewActivity">TimelineItemViewActivity</screenName>
-    <screenName name="com.vivavu.dream.activity.bucket.timeline.TimelineCalendarActivity">TimelineCalendarActivity</screenName>
-    <screenName name="com.vivavu.dream.activity.image.ImageViewActivity">ImageViewActivity</screenName>
-    <screenName name="com.vivavu.dream.activity.intro.IntroActivity">IntroActivity</screenName>
-    <screenName name="com.vivavu.dream.activity.login.LoginActivity">LoginActivity</screenName>
-    <screenName name="com.vivavu.dream.activity.login.PrivacyActivity">PrivacyActivity</screenName>
-    <screenName name="com.vivavu.dream.activity.login.ResetPasswordActivity">ResetPasswordActivity</screenName>
-    <screenName name="com.vivavu.dream.activity.login.UserAgreementActivity">UserAgreementActivity</screenName>
-    <screenName name="com.vivavu.dream.activity.login.UserRegisterActivity">UserRegisterActivity</screenName>
-    <screenName name="com.vivavu.dream.activity.setup.AlertSettingsActivity">AlertSettingsActivity</screenName>
-    <screenName name="com.vivavu.dream.activity.setup.InquiryActivity">InquiryActivity</screenName>
-    <screenName name="com.vivavu.dream.activity.setup.MoreActivity">MoreActivity</screenName>
-    <screenName name="com.vivavu.dream.activity.StartActivity">StartActivity</screenName>
+    <screenName name="com.vivavu.dream.activity.main.MainActivity">메인화면</screenName>
+    <screenName name="com.vivavu.dream.activity.main.TodayActivity">투데이 화면</screenName>
+    <screenName name="com.vivavu.dream.activity.bucket.BucketEditActivity">버킷추가/수정 화면</screenName>
+    <screenName name="com.vivavu.dream.activity.bucket.BucketGroupViewActivity">서브뷰 화면</screenName>
+    <screenName name="com.vivavu.dream.activity.bucket.BucketOptionActivity">버킷옵션 화면</screenName>
+    <screenName name="com.vivavu.dream.activity.bucket.BucketViewActivity">버킷뷰 화면</screenName>
+    <screenName name="com.vivavu.dream.activity.bucket.TimelineActivity">타임라인뷰 화면</screenName>
+    <screenName name="com.vivavu.dream.activity.bucket.timeline.TimelineItemEditActivity">일지추가/수정 화면</screenName>
+    <screenName name="com.vivavu.dream.activity.bucket.timeline.TimelineItemViewActivity">일지보기 화면</screenName>
+    <screenName name="com.vivavu.dream.activity.bucket.timeline.TimelineCalendarActivity">일지달력 화면</screenName>
+    <screenName name="com.vivavu.dream.activity.image.ImageViewActivity">이미지보기 화면</screenName>
+    <screenName name="com.vivavu.dream.activity.intro.IntroActivity">인트로 화면</screenName>
+    <screenName name="com.vivavu.dream.activity.login.LoginActivity">로그인 화면</screenName>
+    <screenName name="com.vivavu.dream.activity.login.PrivacyActivity">개인정보보호 화면</screenName>
+    <screenName name="com.vivavu.dream.activity.login.ResetPasswordActivity">패스워드초기화 화면</screenName>
+    <screenName name="com.vivavu.dream.activity.login.UserAgreementActivity">이용약관 화면</screenName>
+    <screenName name="com.vivavu.dream.activity.login.UserRegisterActivity">회원가입 화면</screenName>
+    <screenName name="com.vivavu.dream.activity.setup.AlertSettingsActivity">알람설정 화면</screenName>
+    <screenName name="com.vivavu.dream.activity.setup.InquiryActivity">문의하기 화면</screenName>
+    <screenName name="com.vivavu.dream.activity.setup.MoreActivity">설정 화면</screenName>
+    <screenName name="com.vivavu.dream.activity.StartActivity">초기시작위치 숨겨진 화면</screenName>
 
 </resource>

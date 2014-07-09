@@ -1,15 +1,21 @@
 package com.vivavu.dream.fragment;
 
 import android.app.Activity;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.util.AndroidUtils;
 
 /**
  * Created by yuja on 14. 1. 24.
  */
 public class CustomBaseFragment extends Fragment implements View.OnClickListener{
+
+    private Tracker tracker;
 
     @Override
     public void onClick(View view) {
@@ -26,4 +32,27 @@ public class CustomBaseFragment extends Fragment implements View.OnClickListener
         super.onAttach(activity);
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        tracker = DreamApp.getInstance().getTracker();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(tracker != null){
+            this.tracker.setScreenName(getClass().getName());
+            this.tracker.send(new HitBuilders.ScreenViewBuilder().build());
+        }
+    }
+
+    @Override
+    public void onStop() {
+        if(tracker != null){
+
+        }
+        super.onStop();
+    }
 }

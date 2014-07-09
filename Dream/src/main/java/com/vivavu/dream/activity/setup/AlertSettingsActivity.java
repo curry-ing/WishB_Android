@@ -2,7 +2,6 @@ package com.vivavu.dream.activity.setup;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -16,8 +15,9 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
-
 import android.widget.Toast;
+
+import com.google.android.gms.analytics.GoogleAnalytics;
 import com.vivavu.dream.R;
 import com.vivavu.dream.broadcastReceiver.AlarmManagerBroadcastReceiver;
 import com.vivavu.dream.common.DreamApp;
@@ -50,6 +50,18 @@ public class AlertSettingsActivity extends PreferenceActivity {
         super.onPostCreate(savedInstanceState);
 
         setupSimplePreferencesScreen();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        GoogleAnalytics.getInstance(DreamApp.getInstance()).reportActivityStart(this);
+    }
+
+    @Override
+    protected void onStop() {
+        GoogleAnalytics.getInstance(DreamApp.getInstance()).reportActivityStop(this);
+        super.onStop();
     }
 
     /**
