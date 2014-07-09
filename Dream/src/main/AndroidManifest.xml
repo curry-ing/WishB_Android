@@ -116,8 +116,6 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:screenOrientation="portrait" >
         </activity>
-        <activity android:name=".activity.bucket.CircleBucketListActivity" >
-        </activity>
         <activity
             android:name=".activity.setup.MoreActivity"
             android:label="@string/title_activity_more" >
