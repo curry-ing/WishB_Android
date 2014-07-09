@@ -7,7 +7,8 @@
     <string name="ga_event_category_main_activity">MainActivity</string>
     <string name="ga_event_category_bucket_group_view_activity">BucketGroupViewActivity</string>
     <string name="ga_event_category_timeline_activity">TimelineActivity</string>
-    <string name="ga_event_category_buket_edit_activity">BucketEditActivity</string>
+    <string name="ga_event_category_bucket_edit_activity">BucketEditActivity</string>
+    <string name="ga_event_category_bucket_option_activity">BucketOptionActivity</string>
     <string name="ga_event_category_timeline_item_edit_activity">TimelineItemEditActivity</string>
     <string name="ga_event_category_timeline_item_view_activity">TimelineItemViewActivity</string>
     <string name="ga_event_category_today_activity">TodayActivity</string>
@@ -39,6 +40,13 @@
     <string name="ga_event_action_edit_bucket_repeat">edit bucket repeat</string>
     <string name="ga_event_action_edit_bucket_public">edit bucket public</string>
     <string name="ga_event_action_edit_bucket_delete">edit bucket delete</string>
+    <string name="ga_event_action_bucket_option_description_save">description save</string>
+    <string name="ga_event_action_bucket_option_description_cancel">description cancel</string>
+    <string name="ga_event_action_bucket_option_repeat_save">repeat save</string>
+    <string name="ga_event_action_bucket_option_repeat_cancel">repeat cancel</string>
+    <string name="ga_event_action_bucket_option_repeat_wkrp">WKRP</string>
+    <string name="ga_event_action_bucket_option_repeat_week">WEEK</string>
+    <string name="ga_event_action_bucket_option_repeat_mnth">MONTH</string>
     <string name="ga_event_action_save">save</string>
     <string name="ga_event_action_cancel">cancel</string>
     <string name="ga_event_action_delete">delete</string>

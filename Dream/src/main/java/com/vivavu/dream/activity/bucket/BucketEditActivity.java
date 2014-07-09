@@ -199,7 +199,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
             Toast.makeText(this, getString(R.string.txt_bucket_edit_need_required_fields), Toast.LENGTH_SHORT).show();
         }else{
             Tracker tracker = DreamApp.getInstance().getTracker();
-            HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_buket_edit_activity)).setAction(getString(R.string.ga_event_action_save));
+            HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_bucket_edit_activity)).setAction(getString(R.string.ga_event_action_save));
             tracker.send(eventBuilder.build());
 
             handler.sendEmptyMessage(SEND_DATA_START);
@@ -237,7 +237,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
             case ACT_ADD_BUCKET_TAKE_CAMERA:
                 if(resultCode == RESULT_OK){
                     Tracker tracker = DreamApp.getInstance().getTracker();
-                    HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_buket_edit_activity)).setAction(getString(R.string.ga_event_action_image_camera));
+                    HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_bucket_edit_activity)).setAction(getString(R.string.ga_event_action_image_camera));
                     tracker.send(eventBuilder.build());
                     modFlag = true;
                     doCropPhoto();
@@ -247,7 +247,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
                 if(resultCode == RESULT_OK){
                     modFlag = true;
                     Tracker tracker = DreamApp.getInstance().getTracker();
-                    HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_buket_edit_activity)).setAction(getString(R.string.ga_event_action_image_gallery));
+                    HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_bucket_edit_activity)).setAction(getString(R.string.ga_event_action_image_gallery));
                     tracker.send(eventBuilder.build());
                     if(data != null ) {
                         mImageCaptureUri = data.getData();
@@ -306,7 +306,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
         }
         bucket.setDeadline(dday.getDeadline());
         Tracker tracker = DreamApp.getInstance().getTracker();
-        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_buket_edit_activity)).setAction(getString(R.string.ga_event_action_edit_bucket_deadline));
+        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_bucket_edit_activity)).setAction(getString(R.string.ga_event_action_edit_bucket_deadline));
         tracker.send(eventBuilder.build());
         bindData();
     }
@@ -315,7 +315,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
         bucket.setRptType(repeat.getRepeatType().getCode());
         bucket.setRptCndt(repeat.getOptionStat());
         Tracker tracker = DreamApp.getInstance().getTracker();
-        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_buket_edit_activity)).setAction(getString(R.string.ga_event_action_edit_bucket_repeat));
+        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_bucket_edit_activity)).setAction(getString(R.string.ga_event_action_edit_bucket_repeat));
         if(repeat.getRepeatType() == RepeatType.WKRP){
             eventBuilder.setValue(RepeatType.WKRP.ordinal());
         } else if(repeat.getRepeatType() == RepeatType.WEEK){
@@ -362,7 +362,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
                                 modFlag = true;
                                 FileUtils.deleteFile(bucket.getFile());
                                 Tracker tracker = DreamApp.getInstance().getTracker();
-                                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_buket_edit_activity)).setAction(getString(R.string.ga_event_action_image_delete));
+                                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_bucket_edit_activity)).setAction(getString(R.string.ga_event_action_image_delete));
                                 tracker.send(eventBuilder.build());
                                 bucket.setFile(null);
                                 bucket.setCvrImgId(null);
@@ -527,7 +527,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
             goOptionRepeat();
         } else if(view == mBtnBucketOptionPublic){
             Tracker tracker = DreamApp.getInstance().getTracker();
-            HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_buket_edit_activity)).setAction(getString(R.string.ga_event_action_edit_bucket_public));
+            HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_bucket_edit_activity)).setAction(getString(R.string.ga_event_action_edit_bucket_public));
             tracker.send(eventBuilder.build());
             modFlag = true;
             mBtnBucketOptionPublic.setSelected(!mBtnBucketOptionPublic.isSelected());
@@ -545,7 +545,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             if (bucket != null && bucket.getId() != null && bucket.getId() > 0) {
                                 Tracker tracker = DreamApp.getInstance().getTracker();
-                                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_buket_edit_activity)).setAction(getString(R.string.ga_event_action_edit_bucket_delete));
+                                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_bucket_edit_activity)).setAction(getString(R.string.ga_event_action_edit_bucket_delete));
                                 tracker.send(eventBuilder.build());
                                 BucketDeleteTask bucketDeleteTask = new BucketDeleteTask();
                                 bucketDeleteTask.execute(bucket);
@@ -757,7 +757,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Tracker tracker = DreamApp.getInstance().getTracker();
-                            HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_buket_edit_activity)).setAction(getString(R.string.ga_event_action_cancel));
+                            HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_bucket_edit_activity)).setAction(getString(R.string.ga_event_action_cancel));
                             tracker.send(eventBuilder.build());
                             finish();
                             return;

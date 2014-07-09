@@ -12,8 +12,12 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.vivavu.dream.R;
 import com.vivavu.dream.common.BaseActionBarActivity;
+import com.vivavu.dream.common.DreamApp;
+import com.vivavu.dream.common.enums.RepeatType;
 import com.vivavu.dream.fragment.bucket.option.OptionBaseFragment;
 import com.vivavu.dream.fragment.bucket.option.dday.DDayFragment;
 import com.vivavu.dream.fragment.bucket.option.description.DescriptionFragment;
@@ -97,6 +101,16 @@ public class BucketOptionActivity extends BaseActionBarActivity {
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+
+                            Tracker tracker = DreamApp.getInstance().getTracker();
+                            if(option instanceof OptionDescription) {
+                                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_bucket_option_activity)).setAction(getString(R.string.ga_event_action_bucket_option_description_cancel));
+                                tracker.send(eventBuilder.build());
+                            } else if(option instanceof OptionRepeat){
+                                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_bucket_option_activity)).setAction(getString(R.string.ga_event_action_bucket_option_repeat_cancel));
+                                tracker.send(eventBuilder.build());
+                            }
+
                             setResult(Activity.RESULT_CANCELED);
                             finish();
                         }
@@ -119,11 +133,39 @@ public class BucketOptionActivity extends BaseActionBarActivity {
     }
 
     public void saveOption() {
-
         Option option = bucketOption.getContents();
         Intent intent = new Intent();
         intent.putExtra("option.result", option);
         setResult(Activity.RESULT_OK, intent);
+
+        Tracker tracker = DreamApp.getInstance().getTracker();
+        if(option != null && option instanceof OptionDescription) {
+            HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_bucket_option_activity)).setAction(getString(R.string.ga_event_action_bucket_option_description_save));
+            tracker.send(eventBuilder.build());
+        } else if(option != null && option instanceof OptionRepeat){
+            HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_bucket_option_activity)).setAction(getString(R.string.ga_event_action_bucket_option_repeat_save));
+            tracker.send(eventBuilder.build());
+            OptionRepeat optionRepeat = (OptionRepeat) option;
+            if(optionRepeat.getRepeatType() == RepeatType.WKRP){
+                eventBuilder = new HitBuilders.EventBuilder()
+                        .setCategory(getString(R.string.ga_event_category_bucket_option_activity))
+                        .setAction(getString(R.string.ga_event_action_bucket_option_repeat_wkrp));
+                tracker.send(eventBuilder.build());
+            } else if(optionRepeat.getRepeatType() == RepeatType.WEEK){
+                eventBuilder = new HitBuilders.EventBuilder()
+                        .setCategory(getString(R.string.ga_event_category_bucket_option_activity))
+                        .setAction(getString(R.string.ga_event_action_bucket_option_repeat_week))
+                        .setValue(optionRepeat.getRepeatCount());
+                tracker.send(eventBuilder.build());
+            } else if(optionRepeat.getRepeatType() == RepeatType.MNTH){
+                eventBuilder = new HitBuilders.EventBuilder()
+                        .setCategory(getString(R.string.ga_event_category_bucket_option_activity))
+                        .setAction(getString(R.string.ga_event_action_bucket_option_repeat_mnth))
+                        .setValue(optionRepeat.getRepeatCount());;
+                tracker.send(eventBuilder.build());
+            }
+        }
+
         finish();
     }
 
