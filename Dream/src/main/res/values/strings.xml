@@ -3,7 +3,7 @@
     <!--Dev Server-->
     <string name="wishb_server_url">http://masunghoon.iptime.org</string>
     <string name="wishb_server_port">5001</string>
-    <string name="facebook_app_id">453419611460252</string>
+    <!--<string name="facebook_app_id">268430496627035</string>-->
 
     <!--Test Server-->
     <!--<string name="wishb_server_url">http://54.178.201.197</string>-->
@@ -13,7 +13,7 @@
     <!--Real Server-->
     <!--<string name="wishb_server_url">http://54.178.201.197</string>-->
     <!--<string name="wishb_server_port">80</string>-->
-    <!--<string name="facebook_app_id">453419611460252</string>-->
+    <string name="facebook_app_id">268430496627035</string>
 
     <string name="app_name">Wish B</string>
     <string name="title_activity_main">Wish B</string>

@@ -94,28 +94,28 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver{
             if (weekDay.equals("Mon")){
                 if (dayOfWeekInMonth == 1) {
                     NotificationTitle.append(context.getResources().getString(R.string.good_morning_alarm_title_month));
-                    NotificationContent.append(String.format(context.getResources().getString(R.string.good_morning_alarm_content_month), buckets.size()));
+                    NotificationContent.append(String.format(context.getResources().getString(buckets.size() > 0 ? R.string.good_morning_alarm_content_month : R.string.good_morning_alarm_content_month_zero), buckets.size()));
                 } else {
                     NotificationTitle.append(context.getResources().getString(R.string.good_morning_alarm_title_week));
-                    NotificationContent.append(String.format(context.getResources().getString(R.string.good_morning_alarm_content_week), buckets.size()));
+                    NotificationContent.append(String.format(context.getResources().getString(buckets.size() > 0 ? R.string.good_morning_alarm_content_week : R.string.good_morning_alarm_content_week_zero), buckets.size()));
                 }
             } else {
                 NotificationTitle.append(context.getResources().getString(R.string.good_morning_alarm_title));
-                NotificationContent.append(String.format(context.getResources().getString(R.string.good_morning_alarm_content), buckets.size()));
+                NotificationContent.append(String.format(context.getResources().getString(buckets.size() > 0 ? R.string.good_morning_alarm_content : R.string.good_morning_alarm_content_zero), buckets.size()));
             }
         } else if (type == 2) {
             NotificationTicker.append(context.getResources().getString(R.string.good_night_alarm_ticker));
             if (weekDay.equals("Sun")) {
                 if (dayOfWeekInMonth == -1){
                     NotificationTitle.append(context.getResources().getString(R.string.good_night_alarm_title_month));
-                    NotificationContent.append(String.format(context.getResources().getString(R.string.good_night_alarm_content_month),buckets.size()));
+                    NotificationContent.append(String.format(context.getResources().getString(buckets.size() > 0 ? R.string.good_night_alarm_content_month : R.string.good_night_alarm_content_month_zero), buckets.size()));
                 } else {
                     NotificationTitle.append(context.getResources().getString(R.string.good_night_alarm_title_week));
-                    NotificationContent.append(String.format(context.getResources().getString(R.string.good_night_alarm_content_week),buckets.size()));
+                    NotificationContent.append(String.format(context.getResources().getString(buckets.size() > 0 ? R.string.good_night_alarm_content_week : R.string.good_night_alarm_content_week_zero), buckets.size()));
                 }
             } else {
                 NotificationTitle.append(context.getResources().getString(R.string.good_night_alarm_title));
-                NotificationContent.append(String.format(context.getResources().getString(R.string.good_night_alarm_content), buckets.size()));
+                NotificationContent.append(String.format(context.getResources().getString(buckets.size() > 0 ? R.string.good_night_alarm_content : R.string.good_night_alarm_content_zero), buckets.size()));
             }
         }
 

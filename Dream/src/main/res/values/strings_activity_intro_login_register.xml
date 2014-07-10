@@ -4,24 +4,24 @@
     <string name="notify">"알림:  "</string>
     <string name="txt_facebook_login">페이스북으로 로그인하면\n친구들의 꿈도 볼 수 있어요!</string>
 
-    <string name="email_required">이메일 주소가 입력되지 않았습니다.</string>
-    <string name="passwd_required">패스워드가 입력되지 않았습니다.</string>
-    <string name="email_not_valid">올바르지 않은 이메일 형식입니다.</string>
-    <string name="passwd_not_valid">비밀번호(6자 이상)을 확인해주세요.</string>
-    <string name="email_unregistered">가입하지 않은 이메일입니다.</string>
-    <string name="register_failed">오류가 발생했습니다. 다시 시도해주세요</string>
+    <string name="email_required">이메일 주소를 적어주세요</string>
+    <string name="passwd_required">비밀번호를 적어주세요</string>
+    <string name="email_not_valid">올바르지 않은 이메일 형식입니다</string>
+    <string name="passwd_not_valid">비밀번호(6자 이상)를 확인해주세요</string>
+    <string name="email_unregistered">가입하지 않은 이메일입니다</string>
+    <string name="register_failed">앗! 잠시 후에 시도해주세요</string>
 
     <!--Intro-->
     <string name="intro_login_btn">로그인</string>
     <string name="intro_register_btn">가입하기</string>
     <string name="login_with_facebook">페이스북으로 순식간에 로그인</string>
-    <string name="regist_agreement">가입과 함께 약관에 동의하신 것으로 간주합니다. 약관보기</string>
+    <string name="regist_agreement">가입과 함께 약관에 동의하신 것으로 간주됩니다. 약관보기</string>
 
     <!--Register-->
     <string name="register">회원가입</string>
     <string name="prompt_email">이메일 주소</string>
     <string name="prompt_password">비밀번호 (6자 이상)</string>
-    <string name="email_already_registered">이미 가입된 이메일입니다.</string>
+    <string name="email_already_registered">이미 가입된 이메일입니다</string>
     <string name="register_completed">가입완료</string>
     <string name="login_progress_signing_in">Signing in&#8230;</string>
 
@@ -32,8 +32,8 @@
 
     <!--Find Password-->
     <string name="find_passwd">비밀번호 찾기</string>
-    <string name="enter_registered_email">가입한 이메일 주소를 적어주세요.</string>
-    <string name="sent_reset_passwd_mail">비밀번호 초기화 메일을 발송했습니다.</string>
-    <string name="send_reset_passwd_mail">전송</string>
+    <string name="enter_registered_email">가입한 이메일 주소를 적어주세요</string>
+    <string name="sent_reset_passwd_mail">비밀번호 초기화 메일을 보냈어요</string>
+    <string name="send_reset_passwd_mail">보내기</string>
 
 </resources>

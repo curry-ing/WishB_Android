@@ -119,11 +119,11 @@ public class AlertSettingsActivity extends PreferenceActivity {
             @Override
             public boolean onPreferenceChange(Preference preference, Object value) {
 
-                if ((Boolean)value) {
-                    Toast.makeText(getBaseContext(), R.string.set_good_morning_alarm, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getBaseContext(), R.string.unset_good_morning_alarm, Toast.LENGTH_SHORT).show();
-                }
+//                if ((Boolean)value) {
+//                    Toast.makeText(getBaseContext(), R.string.set_good_morning_alarm, Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Toast.makeText(getBaseContext(), R.string.unset_good_morning_alarm, Toast.LENGTH_SHORT).show();
+//                }
                 alarm.setEverydayAlarm(getBaseContext(), true, 1);
                 return true;
             }
@@ -133,11 +133,11 @@ public class AlertSettingsActivity extends PreferenceActivity {
             @Override
             public boolean onPreferenceChange(Preference preference, Object value) {
 
-                if ((Boolean)value) {
-                    Toast.makeText(getBaseContext(), R.string.set_good_night_alarm, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getBaseContext(), R.string.unset_good_night_alarm, Toast.LENGTH_SHORT).show();
-                }
+//                if ((Boolean)value) {
+//                    Toast.makeText(getBaseContext(), R.string.set_good_night_alarm, Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Toast.makeText(getBaseContext(), R.string.unset_good_night_alarm, Toast.LENGTH_SHORT).show();
+//                }
                 alarm.setEverydayAlarm(getBaseContext(), true, 2);
                 return true;
             }
