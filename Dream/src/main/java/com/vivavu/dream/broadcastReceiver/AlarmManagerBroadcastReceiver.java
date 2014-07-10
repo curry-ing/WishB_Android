@@ -16,19 +16,22 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.StartActivity;
-import com.vivavu.dream.fragment.main.TodayListFragment;
 import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.repository.DataRepository;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by masunghoon on 6/10/14.
