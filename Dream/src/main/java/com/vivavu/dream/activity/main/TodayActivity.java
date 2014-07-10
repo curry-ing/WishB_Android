@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageButton;
-import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.bucket.BucketEditActivity;
@@ -24,7 +24,7 @@ import butterknife.InjectView;
  */
 public class TodayActivity extends BaseActionBarActivity {
     @InjectView(R.id.actionbar_main_title)
-    ImageView mActionbarMainTitle;
+    TextView mActionbarMainTitle;
     @InjectView(R.id.menu_previous)
     ImageButton mMenuPrevious;
 
@@ -47,6 +47,7 @@ public class TodayActivity extends BaseActionBarActivity {
 
         ButterKnife.inject(this);
 
+        mActionbarMainTitle.setTypeface(getNanumBarunGothicBoldFont());
         Intent intent = getIntent();
         fromAlarm = intent.getBooleanExtra(BaseActionBarActivity.EXTRA_KEY_FROM_ALARM, false);
         intent.putExtra(BaseActionBarActivity.EXTRA_KEY_FROM_ALARM, false);
