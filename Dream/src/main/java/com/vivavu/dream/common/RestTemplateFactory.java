@@ -26,7 +26,10 @@ public class RestTemplateFactory {
 
     public static RestTemplate getInstance(){
         if(restTemplate == null){
-            restTemplate = new RestTemplate( new HttpComponentsClientHttpRequestFactory());
+            HttpComponentsClientHttpRequestFactory httpComponentsClientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
+            httpComponentsClientHttpRequestFactory.setReadTimeout(2000);
+            httpComponentsClientHttpRequestFactory.setConnectTimeout(2000);
+            restTemplate = new RestTemplate( httpComponentsClientHttpRequestFactory );
             restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
 
             /**
