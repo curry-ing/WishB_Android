@@ -406,10 +406,10 @@ public class BucketAdapter extends PagerAdapter implements View.OnClickListener{
         final InputMethodManager imm = (InputMethodManager) DreamApp.getInstance().getSystemService(Context.INPUT_METHOD_SERVICE);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         if (pos != 0) {
-            builder.setTitle(String.format(context.getString(R.string.mainview_decade_set_title), pos*10));
+//            builder.setTitle(String.format(context.getString(R.string.mainview_decade_set_title), pos*10));
             builder.setMessage(context.getString(R.string.mainview_decade_set_message));
         } else {
-            builder.setTitle(context.getString(R.string.mainview_life_set_title));
+//            builder.setTitle(context.getString(R.string.mainview_life_set_title));
             builder.setMessage(context.getString(R.string.mainview_life_set_message));
         }
 

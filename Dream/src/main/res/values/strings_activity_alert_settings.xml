@@ -51,27 +51,33 @@
     <string name="pref_set_good_night_alarm">굿나잇 알림 설정</string>
 
     <!-- For Toast Messages -->
-    <string name="set_good_morning_alarm">굿모닝 알림이 설정되었습니다.</string>
-    <string name="unset_good_morning_alarm">굿모닝 알림이 해제되었습니다.</string>
-    <string name="set_good_night_alarm">굿나잇 알림이 설정되었습니다.</string>
-    <string name="unset_good_night_alarm">굿나잇 알림이 해제되었습니다.</string>
-    <string name="changed_alarm_time">알림 시간이 변경되었습니다.</string>
+    <!--<string name="set_good_morning_alarm">굿모닝 알림이 설정되었습니다.</string>-->
+    <!--<string name="unset_good_morning_alarm">굿모닝 알림이 해제되었습니다.</string>-->
+    <!--<string name="set_good_night_alarm">굿나잇 알림이 설정되었습니다.</string>-->
+    <!--<string name="unset_good_night_alarm">굿나잇 알림이 해제되었습니다.</string>-->
+    <string name="changed_alarm_time">알림 시간을 변경했어요</string>
 
 
     <!-- Notification -->
-    <string name="good_morning_alarm_ticker">Wish B: Good Morning!</string>
+    <string name="good_morning_alarm_ticker">Good Morning! How are you?</string>
     <string name="good_morning_alarm_title">오늘 하루도 화이팅!</string>
     <string name="good_morning_alarm_title_week">활기찬 한 주 보내세요!!</string>
-    <string name="good_morning_alarm_title_month">이번 달은 어떠신가요?</string>
-    <string name="good_morning_alarm_content">오늘, %d개의 열기구에 불을 지펴보세요</string>
-    <string name="good_morning_alarm_content_week">이번주에 %d개의 열기구를 날려보아요</string>
-    <string name="good_morning_alarm_content_month">이번 달에는 어떠한 것들을 계획하고 계신가요?</string>
+    <string name="good_morning_alarm_title_month">새로운 한 달을 계획해봐요!</string>
+    <string name="good_morning_alarm_content">%d개의 Wish가 함께 하세요</string>
+    <string name="good_morning_alarm_content_week">%d개의 Wish가 함께 하세요</string>
+    <string name="good_morning_alarm_content_month">%d개의 Wish가 함께 하세요</string>
+    <string name="good_morning_alarm_content_zero">인생의 Wish를 떠올려보세요</string>
+    <string name="good_morning_alarm_content_week_zero">인생의 Wish를 떠올려보세요</string>
+    <string name="good_morning_alarm_content_month_zero">인생의 Wish를 떠올려보세요</string>
 
-    <string name="good_night_alarm_ticker">Wish B: Evening!</string>
+    <string name="good_night_alarm_ticker">Evening! Good Job!</string>
     <string name="good_night_alarm_title">수고했어요. 오늘도!</string>
-    <string name="good_night_alarm_title_week">이번 주, 어떻게 보내셨나요?</string>
-    <string name="good_night_alarm_title_month">이번 한 달을 정리해 보세요.</string>
-    <string name="good_night_alarm_content">%d개의 열기구를 확인해보세요</string>
-    <string name="good_night_alarm_content_week">날려보낸 %d개의 열기구는 어디쯤 있을까요?</string>
-    <string name="good_night_alarm_content_month">계획했던 것들을 함께 정리해 봐요!</string>
+    <string name="good_night_alarm_title_week">이번 주는 어떠셨나요?</string>
+    <string name="good_night_alarm_title_month">이번 한 달을 정리해봐요</string>
+    <string name="good_night_alarm_content">%d개의 Wish와 함께한 하루를 정리해보세요</string>
+    <string name="good_night_alarm_content_week">%d개의 Wish와 함께한 한 주를 정리해보세요</string>
+    <string name="good_night_alarm_content_month">%d개의 Wish와 함께한 한 달을 정리해보세요</string>
+    <string name="good_night_alarm_content_zero">인생의 Wish를 떠올려보세요</string>
+    <string name="good_night_alarm_content_week_zero">인생의 Wish를 떠올려보세요</string>
+    <string name="good_night_alarm_content_month_zero">인생의 Wish를 떠올려보세요</string>
 </resources>

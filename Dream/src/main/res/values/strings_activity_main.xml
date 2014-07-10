@@ -14,15 +14,17 @@
     <string name="nov">"N O V  "</string>
     <string name="dec">"D E C  "</string>
 
-    <string name="after_sixties">60대 이후</string>
+    <string name="in_my_life">평생동안</string>
+    <string name="each_decades">%s대의 꿈</string>
+    <string name="after_sixties">60대 이후의 꿈</string>
 
     <!--Title Modify Dialog-->
-    <string name="mainview_life_set_title">Wish B.</string>
-    <string name="mainview_life_set_message">어떤 인생을 꿈꾸시나요?</string>
-    <string name="mainview_decade_set_title">Wish B: 당신의 %d대</string>
-    <string name="mainview_decade_set_message">어떤 10년을 보내고 싶으세요?</string>
+    <!--<string name="mainview_life_set_title">Wish B.</string>-->
+    <string name="mainview_life_set_message">어떤 인생을 꿈꾸고 있나요?</string>
+    <!--<string name="mainview_decade_set_title">Wish B: 당신의 %d대</string>-->
+    <string name="mainview_decade_set_message">어떤 10년을 보내고 싶나요?</string>
 
     <!--Common-->
-    <string name="press_again_to_exit">\'뒤로\' 버튼을 한번 더 누르면 종료돼요.</string>
-    <string name="modification_failed">수정에 실패하였습니다.</string>
+    <string name="press_again_to_exit">\'뒤로\' 버튼을 한번 더 누르면 종료돼요</string>
+    <string name="modification_failed">앗! 잠시 후에 다시 시도해주세요</string>
 </resources>

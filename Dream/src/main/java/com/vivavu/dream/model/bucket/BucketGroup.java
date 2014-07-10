@@ -1,6 +1,8 @@
 package com.vivavu.dream.model.bucket;
 
 import com.google.gson.annotations.SerializedName;
+import com.vivavu.dream.R;
+import com.vivavu.dream.common.DreamApp;
 
 import java.util.List;
 
@@ -32,9 +34,9 @@ public class BucketGroup implements Comparable<BucketGroup> {
 
     public String getRangeText() {
         if(range == null){
-            return "In My Life";
+            return DreamApp.getInstance().getString(R.string.in_my_life);
         }
-        return range + "대";
+        return String.format(DreamApp.getInstance().getString(range.equals("60") ? R.string.after_sixties : R.string.each_decades), range);
     }
 
     public int getCount(){
