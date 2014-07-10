@@ -3,7 +3,7 @@
     <string name="txt_bucket_edit_fail">앗! 잠시 후에 다시 시도해주세요.</string>
     <string name="txt_bucket_edit_delete_fail">앗! 잠시 후에 다시 시도해주세요.</string>
 
-    <string name="txt_bucket_edit_need_required_fields">제목이 입력되지 않았습니다. 확인해주세요.</string>
+    <string name="txt_bucket_edit_need_required_fields">제목을 확인해주세요</string>
 
     <string name="txt_bucket_edit_confirm_delete_body">삭제하시겠습니까?</string>
     <string name="txt_bucket_edit_confirm_edit_body">변경된 내용을 취소하시겠습니까?</string>
