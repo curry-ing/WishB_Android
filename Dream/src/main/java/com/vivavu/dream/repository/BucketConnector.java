@@ -79,6 +79,8 @@ public class BucketConnector {
         }
         if (bucket.getDeadline() != null) {
             requestBucket.add("deadline", DateUtils.getDateString(bucket.getDeadline(), "yyyy-MM-dd"));
+        } else {
+            requestBucket.add("deadline", "2999-12-31");
         }
 
         if(bucket.getIsPrivate() != null){
