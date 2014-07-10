@@ -11,7 +11,6 @@
         android:id="@+id/sticky_header"
         style="@style/TextBucketDescriptionStyle"
         android:textSize="20sp"
-        android:layout_marginLeft="30dp"
         />
 
 </LinearLayout>

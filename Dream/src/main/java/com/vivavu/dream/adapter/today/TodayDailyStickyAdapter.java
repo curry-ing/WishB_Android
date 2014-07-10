@@ -151,7 +151,7 @@ public class TodayDailyStickyAdapter extends BaseAdapter implements StickyGridHe
             holder = (ButterknifeHeaderViewHolder) convertView.getTag();
         }
 
-        holder.mStickyHeader.setText(DateUtils.getDateString(DateUtils.getDate(getHeaderId(position)), "yyyy.MM.dd"));
+        holder.mStickyHeader.setText(DateUtils.getDateString(DateUtils.getDate(getHeaderId(position)), "     yyyy.MM.dd"));
 
         return convertView;
     }
