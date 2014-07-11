@@ -256,9 +256,41 @@ public class BucketEditActivity extends BaseActionBarActivity {
                 }
                 break;
             case ACT_ADD_BUCKET_CROP_FROM_CAMERA:
-                if(data != null && data.getExtras() != null && data.getExtras().getParcelable("data") != null){
+                if(data != null && data.getExtras() != null && data.getExtras().getParcelable("data") != null) {
                     Bitmap photo = data.getExtras().getParcelable("data");
                     mBucketImg.setImageBitmap(photo);
+                } else if(data != null && data.getExtras() != null && data.getExtras().getParcelable("output") != null){
+                    Uri cropFileUri = data.getExtras().getParcelable("output");
+                    File f = null;
+                    if("file".equals(cropFileUri.getScheme() )){
+                        f = new File(cropFileUri.getPath());
+                    } else if("content".equals(cropFileUri.getScheme())){
+                        String path = AndroidUtils.convertContentsToFileSchema(DreamApp.getInstance(), cropFileUri.toString());
+                        f = new File(path);
+                    }
+
+                    if(f!= null && f.exists() && f.isFile()){
+                        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                                .cacheInMemory(true)
+                                .cacheOnDisc(true)
+                                .considerExifParams(true)
+                                .showImageForEmptyUri(R.drawable.ic_camera_big)
+                                .showImageOnFail(R.drawable.ic_picture_big)
+                                .build();
+                        ImageLoader.getInstance().displayImage(data.getDataString(), mBucketImg, options, new SimpleImageLoadingListener(){
+                            @Override
+                            public void onLoadingStarted(String imageUri, View view) {
+                                mBucketImg.setExpand(false);
+                            }
+
+                            @Override
+                            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                                mBucketImg.setExpand(loadedImage != null);
+                            }
+                        });
+                        bucket.setFile(f);
+                    }
+
                 } else if(data != null && data.getDataString() != null){
                     String path = AndroidUtils.convertContentsToFileSchema(DreamApp.getInstance(), data.getDataString());
                     File f = new File(path);
@@ -538,32 +570,32 @@ public class BucketEditActivity extends BaseActionBarActivity {
     }
 
     private void doDelte() {
-            AlertDialog.Builder alertConfirm = new AlertDialog.Builder(this);
-            alertConfirm.setMessage(getString(R.string.txt_bucket_edit_confirm_delete_body)).setCancelable(false).setPositiveButton(getString(R.string.confirm_yes),
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (bucket != null && bucket.getId() != null && bucket.getId() > 0) {
-                                Tracker tracker = DreamApp.getInstance().getTracker();
-                                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_bucket_edit_activity)).setAction(getString(R.string.ga_event_action_edit_bucket_delete));
-                                tracker.send(eventBuilder.build());
-                                BucketDeleteTask bucketDeleteTask = new BucketDeleteTask();
-                                bucketDeleteTask.execute(bucket);
-                            } else {
-                                finish();
-                            }
+        AlertDialog.Builder alertConfirm = new AlertDialog.Builder(this);
+        alertConfirm.setMessage(getString(R.string.txt_bucket_edit_confirm_delete_body)).setCancelable(false).setPositiveButton(getString(R.string.confirm_yes),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (bucket != null && bucket.getId() != null && bucket.getId() > 0) {
+                            Tracker tracker = DreamApp.getInstance().getTracker();
+                            HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_bucket_edit_activity)).setAction(getString(R.string.ga_event_action_edit_bucket_delete));
+                            tracker.send(eventBuilder.build());
+                            BucketDeleteTask bucketDeleteTask = new BucketDeleteTask();
+                            bucketDeleteTask.execute(bucket);
+                        } else {
+                            finish();
                         }
                     }
-            ).setNegativeButton(getString(R.string.confirm_no),
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            return;
-                        }
+                }
+        ).setNegativeButton(getString(R.string.confirm_no),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        return;
                     }
-            );
-            AlertDialog alert = alertConfirm.create();
-            alert.show();
+                }
+        );
+        AlertDialog alert = alertConfirm.create();
+        alert.show();
 
     }
 
@@ -677,6 +709,13 @@ public class BucketEditActivity extends BaseActionBarActivity {
         intent.putExtra("aspectY", 1);
         intent.putExtra("scale", true);
         intent.putExtra("return-data", false);
+        try{
+            File cropFile = ImageUtil.createImageFile();
+            intent.putExtra("output", Uri.fromFile(cropFile));
+        }catch (IOException e){
+
+        }
+
         startActivityForResult(intent, RequestCode.ACT_ADD_BUCKET_CROP_FROM_CAMERA.ordinal());
     }
 
