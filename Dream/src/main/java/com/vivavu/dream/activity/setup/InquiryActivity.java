@@ -1,9 +1,11 @@
 package com.vivavu.dream.activity.setup;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -37,6 +39,7 @@ public class InquiryActivity extends BaseActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);//api level 11 이상 부터 사용가능
         setContentView(R.layout.activity_inquiry);
 
         final ActionBar actionBar = getSupportActionBar();
@@ -57,6 +60,9 @@ public class InquiryActivity extends BaseActionBarActivity {
         }
 
         mTxtTitle.setText(getString(R.string.inquiry));
+        mTxtTitle.setTypeface(getNanumBarunGothicBoldFont());
+        mTxtTitle.setTextSize(20);
+        mTxtTitle.setTextColor(Color.WHITE);
         mMenuPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,6 +70,7 @@ public class InquiryActivity extends BaseActionBarActivity {
             }
         });
 
+        mBtnSendEmail.setTypeface(getNanumBarunGothicBoldFont());
         mBtnSendEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

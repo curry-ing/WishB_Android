@@ -2,26 +2,59 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/register_login_bg">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/scrollView"
-        android:layout_gravity="center_horizontal" >
+        android:layout_gravity="center_horizontal" android:layout_marginTop="65dp" android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" android:layout_marginBottom="10dp" android:background="#60ffffff"
+        android:fillViewport="false">
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
 
+            <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="@string/lbl_agreement"
+                    android:id="@+id/agreement_btn"
+                    android:background="@drawable/btn_inactive" android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp" android:layout_marginTop="10dp" android:paddingRight="10dp"
+                    android:paddingLeft="30dp"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Medium Text"
-                android:id="@+id/txt_contents"
-                android:layout_gravity="center_horizontal" />
+                android:id="@+id/agreement_text"
+                android:textSize="14sp"
+                android:layout_gravity="center_horizontal" android:paddingLeft="10dp" android:paddingRight="10dp"
+                android:layout_margin="10dp"/>
+            <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="@string/lbl_private"
+                    android:id="@+id/privacy_btn"
+                    android:background="@drawable/btn_inactive"
+                    android:layout_margin="10dp" android:paddingLeft="30dp" android:paddingRight="10dp"/>
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="14sp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:id="@+id/privacy_text"
+                    android:layout_gravity="center_horizontal" android:paddingLeft="10dp" android:paddingRight="10dp"
+                    android:layout_margin="10dp"/>
+            <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:id="@+id/imageView" android:layout_gravity="center_horizontal"
+                    android:background="@drawable/logo_large_cl" android:layout_marginTop="20dp"
+                    android:layout_marginBottom="30dp"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

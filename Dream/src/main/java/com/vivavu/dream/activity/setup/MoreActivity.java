@@ -3,11 +3,13 @@ package com.vivavu.dream.activity.setup;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -40,8 +42,8 @@ public class MoreActivity extends BaseActionBarActivity {
     Button mBtnInquiry;
     @InjectView(R.id.btn_access_terms)
     Button mBtnAccessTerms;
-    @InjectView(R.id.btn_privacy)
-    Button mBtnPrivacy;
+//    @InjectView(R.id.btn_privacy)
+//    Button mBtnPrivacy;
     @InjectView(R.id.btn_member_leave)
     Button mBtnMemberLeave;
     @InjectView(R.id.menu_previous)
@@ -71,6 +73,7 @@ public class MoreActivity extends BaseActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);//api level 11 이상 부터 사용가능
         setContentView(R.layout.activity_more);
 
         final ActionBar actionBar = getSupportActionBar();
@@ -87,7 +90,9 @@ public class MoreActivity extends BaseActionBarActivity {
                 finish();
             }
         });
-        mTxtTitle.setTypeface(getNanumBarunGothicFont());
+        mTxtTitle.setTypeface(getNanumBarunGothicBoldFont());
+        mTxtTitle.setTextSize(20);
+        mTxtTitle.setTextColor(Color.WHITE);
 
         mBtnAlertSetting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,16 +137,16 @@ public class MoreActivity extends BaseActionBarActivity {
                 startActivity(intent);
             }
         });
-        mBtnPrivacy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Tracker tracker = DreamApp.getInstance().getTracker();
-                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_more_activity)).setAction(getString(R.string.ga_event_action_privacy));
-                tracker.send(eventBuilder.build());
-                Intent intent = new Intent(MoreActivity.this, PrivacyActivity.class);
-                startActivity(intent);
-            }
-        });
+//        mBtnPrivacy.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Tracker tracker = DreamApp.getInstance().getTracker();
+//                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_more_activity)).setAction(getString(R.string.ga_event_action_privacy));
+//                tracker.send(eventBuilder.build());
+//                Intent intent = new Intent(MoreActivity.this, PrivacyActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         mBtnMemberLeave.setOnClickListener(new View.OnClickListener() {
             @Override

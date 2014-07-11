@@ -17,10 +17,10 @@ import butterknife.InjectView;
  * Created by yuja on 14. 2. 20.
  */
 public class PrivacyActivity extends BaseActionBarActivity {
-    @InjectView(R.id.txt_contents)
-    TextView mTxtContents;
-    @InjectView(R.id.scrollView)
-    ScrollView mScrollView;
+//    @InjectView(R.id.txt_contents)
+//    TextView mTxtContents;
+//    @InjectView(R.id.scrollView)
+//    ScrollView mScrollView;
     @InjectView(R.id.menu_previous)
     ImageButton mMenuPrevious;
     @InjectView(R.id.txt_title)
@@ -38,7 +38,7 @@ public class PrivacyActivity extends BaseActionBarActivity {
         actionBar.setCustomView(R.layout.actionbar_more);
 
         ButterKnife.inject(this);
-        mTxtContents.setText(getString(R.string.privacy_contents));
+//        mTxtContents.setText(getString(R.string.privacy_contents));
         //Intent data = getIntent();
 
         mTxtTitle.setText(getString(R.string.lbl_private));

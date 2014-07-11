@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center_vertical"
-    android:background="@color/action_bar_white_with_alpha_80"
     >
     <ImageButton
         android:layout_width="wrap_content"
@@ -27,13 +26,13 @@
         style="@style/TextBucketTitleStyle"
         />
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:src="@drawable/ic_more"
-        android:background="@null"
-        android:id="@+id/menu_more"
-        android:visibility="gone"
-        style="@style/TextActionbarRightButton"
-        />
+    <!--<ImageButton-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:src="@drawable/ic_more"-->
+        <!--android:background="@null"-->
+        <!--android:id="@+id/menu_more"-->
+        <!--android:visibility="gone"-->
+        <!--style="@style/TextActionbarRightButton"-->
+        <!--/>-->
 </RelativeLayout>

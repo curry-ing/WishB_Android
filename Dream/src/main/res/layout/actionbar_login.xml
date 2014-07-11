@@ -18,7 +18,6 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:id="@+id/actionbar_login_title"
-        android:text="logo"
         android:layout_marginTop="2dp"
         style="@style/TextBucketTitleStyle"
         />
