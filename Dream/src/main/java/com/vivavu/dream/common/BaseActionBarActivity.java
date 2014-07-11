@@ -72,7 +72,7 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
 
     protected void onNetworkStateChanged(boolean connected){
         if(!connected) {
-            Toast.makeText(this, getText(R.string.no_network_connection_toast), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getText(R.string.no_network_connection_toast), Toast.LENGTH_SHORT).show();
         }
     }
 
