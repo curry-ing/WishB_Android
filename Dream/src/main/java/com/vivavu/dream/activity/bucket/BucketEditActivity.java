@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -192,6 +193,23 @@ public class BucketEditActivity extends BaseActionBarActivity {
         checkRequireElement();
         bindData();
         modFlag = false;
+
+        Log.d(TAG, "BOARD: " + Build.BOARD);
+        Log.d(TAG, "BRAND: " + Build.BRAND);
+        Log.d(TAG, "CPU_ABI: " + Build.CPU_ABI);
+        Log.d(TAG, "DEVICE: " + Build.DEVICE);
+        Log.d(TAG, "DISPLAY: " + Build.DISPLAY);
+        Log.d(TAG, "FINGERPRINT: " + Build.FINGERPRINT);
+        Log.d(TAG, "HOST: " + Build.HOST);
+        Log.d(TAG, "ID: " + Build.ID);
+        Log.d(TAG, "MANUFACTURER: " + Build.MANUFACTURER);
+        Log.d(TAG, "MODEL: " + Build.MODEL);
+        Log.d(TAG, "PRODUCT: " + Build.PRODUCT);
+        Log.d(TAG, "TAGS: " + Build.TAGS);
+        Log.d(TAG, "TIME: " + Build.TIME);
+        Log.d(TAG, "TYPE: " + Build.TYPE);
+        Log.d(TAG, "USER: " + Build.USER);
+
     }
 
     public void saveBucket() {
@@ -277,7 +295,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
                                 .showImageForEmptyUri(R.drawable.ic_camera_big)
                                 .showImageOnFail(R.drawable.ic_picture_big)
                                 .build();
-                        ImageLoader.getInstance().displayImage(data.getDataString(), mBucketImg, options, new SimpleImageLoadingListener(){
+                        ImageLoader.getInstance().displayImage(cropFileUri.toString(), mBucketImg, options, new SimpleImageLoadingListener(){
                             @Override
                             public void onLoadingStarted(String imageUri, View view) {
                                 mBucketImg.setExpand(false);
