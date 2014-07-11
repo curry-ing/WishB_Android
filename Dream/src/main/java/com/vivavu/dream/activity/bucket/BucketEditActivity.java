@@ -727,11 +727,13 @@ public class BucketEditActivity extends BaseActionBarActivity {
         intent.putExtra("aspectY", 1);
         intent.putExtra("scale", true);
         intent.putExtra("return-data", false);
-        try{
-            File cropFile = ImageUtil.createImageFile();
-            intent.putExtra("output", Uri.fromFile(cropFile));
-        }catch (IOException e){
+        if("samsung".compareToIgnoreCase(Build.BRAND)  == 0 || "samsung".compareToIgnoreCase(Build.MANUFACTURER) == 0){
+            try{
+                File cropFile = ImageUtil.createImageFile();
+                intent.putExtra("output", Uri.fromFile(cropFile));
+            }catch (IOException e){
 
+            }
         }
 
         startActivityForResult(intent, RequestCode.ACT_ADD_BUCKET_CROP_FROM_CAMERA.ordinal());
