@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -316,6 +317,31 @@ public class LeftMenuDrawerFragment extends Fragment {
                 if(data != null && data.getExtras() != null && data.getExtras().getParcelable("data") != null){
                     Bitmap photo = data.getExtras().getParcelable("data");
                     mMainLeftMenuBtnProfile.setImageBitmap(photo);
+                } else if(data != null && data.getExtras() != null && data.getExtras().getParcelable("output") != null){
+                    Uri cropFileUri = data.getExtras().getParcelable("output");
+                    File f = null;
+                    if("file".equals(cropFileUri.getScheme() )){
+                        f = new File(cropFileUri.getPath());
+                    } else if("content".equals(cropFileUri.getScheme())){
+                        String path = AndroidUtils.convertContentsToFileSchema(DreamApp.getInstance(), cropFileUri.toString());
+                        f = new File(path);
+                    }
+
+                    if(f.exists() && f.isFile()){
+                        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                                .cacheInMemory(true)
+                                .cacheOnDisc(true)
+                                .considerExifParams(true)
+                                .showImageForEmptyUri(R.drawable.ic_profile_empty)
+                                .build();
+                        ImageLoader.getInstance().displayImage(data.getDataString(), mMainLeftMenuBtnProfile, options);
+                        User user = DreamApp.getInstance().getUser();
+                        user.setPhoto(f);
+                        handler.sendEmptyMessage(SEND_DATA_START);
+                        Thread thread = new Thread(new UserModifyThread(user));
+                        thread.start();
+                    }
+
                 } else if(data != null && data.getDataString() != null){
                     String path = AndroidUtils.convertContentsToFileSchema(DreamApp.getInstance(), data.getDataString());
                     File f = new File(path);
@@ -391,7 +417,15 @@ public class LeftMenuDrawerFragment extends Fragment {
         intent.putExtra("aspectY", 1);
         intent.putExtra("scale", true);
         intent.putExtra("return-data", false);
-        //intent.putExtra("output", mImageCaptureUri);
+        if("samsung".compareToIgnoreCase(Build.BRAND)  == 0 || "samsung".compareToIgnoreCase(Build.MANUFACTURER) == 0){
+            try{
+                File cropFile = ImageUtil.createImageFile();
+                intent.putExtra("output", Uri.fromFile(cropFile));
+            }catch (IOException e){
+
+            }
+        }
+
         startActivityForResult(intent, Code.ACT_ADD_BUCKET_CROP_FROM_CAMERA);
     }
 
