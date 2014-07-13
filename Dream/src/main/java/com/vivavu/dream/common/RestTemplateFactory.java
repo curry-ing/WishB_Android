@@ -27,8 +27,8 @@ public class RestTemplateFactory {
     public static RestTemplate getInstance(){
         if(restTemplate == null){
             HttpComponentsClientHttpRequestFactory httpComponentsClientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
-            httpComponentsClientHttpRequestFactory.setReadTimeout(2000);
-            httpComponentsClientHttpRequestFactory.setConnectTimeout(2000);
+            httpComponentsClientHttpRequestFactory.setReadTimeout(5000);
+            httpComponentsClientHttpRequestFactory.setConnectTimeout(5000);
             restTemplate = new RestTemplate( httpComponentsClientHttpRequestFactory );
             restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
 
