@@ -78,7 +78,7 @@ public class AlertSettingsActivity extends PreferenceActivity {
         // use the older PreferenceActivity APIs.
 
         // Add 'general' preferences.
-        addPreferencesFromResource(R.xml.pref_general);
+//        addPreferencesFromResource(R.xml.pref_general);
         addPreferencesFromResource(R.xml.pref_notification);
 
         // Bind the summaries of EditText/List/Dialog/Ringtone preferences to

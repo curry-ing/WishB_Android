@@ -74,7 +74,8 @@
     <string name="title_section3">Section 3</string>
     <string name="access_terms">이용약관 보기</string>
     <string name="privacy">개인정보 보호방침 보기</string>
-    <string name="lbl_access_terms">이용약관</string>
+    <string name="lbl_access_terms">이용약관 &amp; 개인정보 보호방침</string>
+    <string name="lbl_agreement">이용약관</string>
     <string name="lbl_private">개인정보 보호방침</string>
     <string name="txt_btn_submit">전송</string>
     <string name="not_valid_email">올바르지 않은 이메일 형식입니다.</string>
@@ -103,7 +104,7 @@
     <string name="title_activity_inquiry">InquiryActivity</string>
     <string name="txt_answer_for_email">답변받을 E-Mail</string>
     <string name="txt_send_email">보내기</string>
-    <string name="email_info">chee1004@naver.com</string>
+    <string name="email_info">""</string>
     <string name="more">더보기</string>
     <string name="notice_test">알림알림알림알림알\n수박수박수박수박수</string>
 
