@@ -3,7 +3,6 @@ package com.vivavu.dream.activity.login;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,10 +12,14 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.vivavu.dream.R;
 import com.vivavu.dream.common.BaseActionBarActivity;
+import com.vivavu.dream.common.enums.ResponseStatus;
 import com.vivavu.dream.model.LoginInfo;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.repository.connector.UserInfoConnector;
@@ -196,7 +199,8 @@ public class ResetPasswordActivity extends BaseActionBarActivity {
                 });
 
                 alert.show();
-
+            }else if(loginInfoResponseBodyWrapped != null && loginInfoResponseBodyWrapped.getResponseStatus() == ResponseStatus.TIMEOUT) {
+	            defaultHandler.sendEmptyMessage(SERVER_TIMEOUT);
             }else{
 //                mFindpwTxtResponseInfo.setText(loginInfoResponseBodyWrapped.getDescription());
                 mFindpwEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_alert_icon, 0);

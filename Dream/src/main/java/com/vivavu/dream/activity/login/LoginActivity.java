@@ -9,19 +9,22 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Message;
 import android.os.Handler;
+import android.os.Message;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.*;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,17 +35,18 @@ import com.vivavu.dream.R;
 import com.vivavu.dream.broadcastReceiver.AlarmManagerBroadcastReceiver;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.Code;
+import com.vivavu.dream.common.enums.ResponseStatus;
 import com.vivavu.dream.model.LoginInfo;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.SecureToken;
 import com.vivavu.dream.repository.connector.UserInfoConnector;
 import com.vivavu.dream.util.ValidationUtils;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
@@ -561,7 +565,7 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
             if (params.length > 0) {
                 user = params[0];
             } else {
-                return new ResponseBodyWrapped<SecureToken>("error", "unknown", new SecureToken());
+                return new ResponseBodyWrapped<SecureToken>(ResponseStatus.UNKNOWN_ERROR, "unknown", new SecureToken());
             }
 
             UserInfoConnector userInfoConnector = new UserInfoConnector();
@@ -570,15 +574,15 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
         }
 
         @Override
-        protected void onPostExecute(final ResponseBodyWrapped<SecureToken> success) {
+        protected void onPostExecute(final ResponseBodyWrapped<SecureToken> result) {
             mAuthTask = null;
 //            showProgress(false);
 
-            if (success != null && success.isSuccess()) {
+            if (result != null && result.isSuccess()) {
                 context.setLogin(true);
-                context.setUser(success.getData().getUser());
-                context.setUsername(success.getData().getUser().getUsername());
-                context.setToken(success.getData().getToken());
+                context.setUser(result.getData().getUser());
+                context.setUsername(result.getData().getUser().getUsername());
+                context.setToken(result.getData().getToken());
                 context.setTokenType("unused");
                 context.saveAppDefaultInfo();
 
@@ -590,6 +594,8 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
 
                 setResult(RESULT_OK);
                 finish();
+            }else if(result.getResponseStatus() == ResponseStatus.TIMEOUT) {
+	            defaultHandler.sendEmptyMessage(SERVER_TIMEOUT);
             } else {
                 this.cancel(false);
                 context.setLogin(false);

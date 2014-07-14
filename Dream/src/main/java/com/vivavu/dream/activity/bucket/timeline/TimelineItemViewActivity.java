@@ -26,6 +26,7 @@ import com.vivavu.dream.activity.bucket.TimelineActivity;
 import com.vivavu.dream.activity.image.ImageViewActivity;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.DreamApp;
+import com.vivavu.dream.common.enums.ResponseStatus;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.model.bucket.timeline.Post;
@@ -66,8 +67,6 @@ public class TimelineItemViewActivity extends BaseActionBarActivity{
     Post post;
     @InjectView(R.id.txt_post_time)
     TextView mTxtPostTime;
-
-    private ProgressDialog progressDialog;
 
     private static final int SEND_DATA_START = 0;
     private static final int SEND_DATA_DELETE_SUCCESS = 1;
@@ -248,6 +247,10 @@ public class TimelineItemViewActivity extends BaseActionBarActivity{
 
                 if (result != null && result.isSuccess()) {
                     handler.sendEmptyMessage(SEND_DATA_DELETE_SUCCESS);
+                }else if(result != null && result.getResponseStatus() == ResponseStatus.TIMEOUT) {
+	                defaultHandler.sendEmptyMessage(SERVER_TIMEOUT);
+                }else {
+	                handler.sendEmptyMessage(SEND_DATA_DELETE_FAIL);
                 }
             }
         }

@@ -2,6 +2,8 @@ package com.vivavu.dream.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
@@ -17,6 +19,12 @@ public class CustomBaseFragment extends Fragment implements View.OnClickListener
 
     private Tracker tracker;
 
+	protected Handler handler = new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+		}
+	};
     @Override
     public void onClick(View view) {
         //todo:이게 호출되는지 확인 필요.

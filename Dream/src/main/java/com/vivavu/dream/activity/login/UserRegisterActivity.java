@@ -8,10 +8,18 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.*;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBar;
-import android.text.*;
+import android.text.Editable;
+import android.text.SpannableString;
+import android.text.TextPaint;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
@@ -21,10 +29,16 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.vivavu.dream.R;
 import com.vivavu.dream.common.BaseActionBarActivity;
+import com.vivavu.dream.common.enums.ResponseStatus;
 import com.vivavu.dream.model.LoginInfo;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.SecureToken;
@@ -32,11 +46,11 @@ import com.vivavu.dream.repository.DataRepository;
 import com.vivavu.dream.repository.connector.UserInfoConnector;
 import com.vivavu.dream.util.ValidationUtils;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * Created by yuja on 14. 2. 11.
@@ -554,17 +568,19 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
         }
 
         @Override
-        protected void onPostExecute(final ResponseBodyWrapped<SecureToken> resp) {
-            if (resp.isSuccess()) {
+        protected void onPostExecute(final ResponseBodyWrapped<SecureToken> result) {
+            if (result.isSuccess()) {
                 context.setLogin(true);
-                context.setUser(resp.getData().getUser());
-                context.setUsername(resp.getData().getUser().getUsername());
-                context.setToken(resp.getData().getToken());
+                context.setUser(result.getData().getUser());
+                context.setUsername(result.getData().getUser().getUsername());
+                context.setToken(result.getData().getToken());
                 context.setTokenType("unused");
                 context.saveAppDefaultInfo();
 
                 setResult(RESULT_OK);
                 finish();
+            }else if(result.getResponseStatus() == ResponseStatus.TIMEOUT) {
+	            defaultHandler.sendEmptyMessage(SERVER_TIMEOUT);
             } else {
                 this.cancel(false);
                 context.setLogin(false);

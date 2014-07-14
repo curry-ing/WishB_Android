@@ -1,20 +1,16 @@
 package com.vivavu.dream.facebook.fragment;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -25,13 +21,13 @@ import com.vivavu.dream.activity.intro.IntroActivity;
 import com.vivavu.dream.broadcastReceiver.AlarmManagerBroadcastReceiver;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.DreamApp;
+import com.vivavu.dream.common.enums.ResponseStatus;
 import com.vivavu.dream.fragment.CustomBaseFragment;
 import com.vivavu.dream.model.LoginInfo;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.SecureToken;
 import com.vivavu.dream.repository.connector.UserInfoConnector;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -178,7 +174,7 @@ public class FacebookLoginFragment extends CustomBaseFragment {
             if (params.length > 0) {
                 user = params[0];
             } else {
-                return new ResponseBodyWrapped<SecureToken>("error", "unknown", new SecureToken());
+                return new ResponseBodyWrapped<SecureToken>(ResponseStatus.UNKNOWN_ERROR, "unknown", new SecureToken());
             }
 
             UserInfoConnector userInfoConnector = new UserInfoConnector();
@@ -210,6 +206,15 @@ public class FacebookLoginFragment extends CustomBaseFragment {
                 getActivity().setResult(Activity.RESULT_OK);
                 getActivity().finish();
             } else {
+	            if(success.getResponseStatus() == ResponseStatus.TIMEOUT) {
+		            handler.post(new Runnable() {
+			            @Override
+			            public void run() {
+				            Toast.makeText(getActivity(), R.string.server_timeout, Toast.LENGTH_SHORT).show();
+			            }
+		            });
+	            }
+
                 this.cancel(false);
                 Session session = Session.getActiveSession();
                 if (session != null && (session.isOpened() || session.isClosed())) {

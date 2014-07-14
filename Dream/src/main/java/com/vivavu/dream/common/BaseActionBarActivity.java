@@ -1,5 +1,6 @@
 package com.vivavu.dream.common;
 
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +8,8 @@ import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +23,7 @@ import com.vivavu.dream.activity.StartActivity;
 import com.vivavu.dream.activity.intro.IntroActivity;
 import com.vivavu.dream.activity.main.MainActivity;
 import com.vivavu.dream.activity.main.TodayActivity;
+import com.vivavu.dream.common.enums.ResponseStatus;
 import com.vivavu.dream.model.BaseInfo;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.repository.DataRepository;
@@ -40,11 +44,27 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
     public static final int RESULT_USER_DATA_DELETED = RESULT_FIRST_USER;
     public static final int RESULT_USER_DATA_UPDATED = RESULT_FIRST_USER + 1;
     public static final int RESULT_USER_DATA_MODIFIED = RESULT_FIRST_USER + 2;
+	public static final int SERVER_TIMEOUT = 0;
     public static Typeface denseRegularFont = null;
     public static Typeface nanumBarunGothicFont = null;
     public static Typeface nanumBarunGothicBoldFont = null;
     public static Typeface ptSansFont = null;
 
+	protected ProgressDialog progressDialog;
+
+	protected Handler defaultHandler = new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			switch(msg.what){
+				case SERVER_TIMEOUT:
+					if(progressDialog != null && progressDialog.isShowing()){
+						progressDialog.dismiss();
+					}
+					Toast.makeText(BaseActionBarActivity.this, getString(R.string.server_timeout), Toast.LENGTH_SHORT).show();
+					break;
+			}
+		}
+	};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -198,6 +218,9 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
                     context.setLogin(true);
                     DataRepository.deleteBucketsNotEqualUserId(baseInfo.getId());//로그인 사용자 이외의 데이터 삭제
                     return true;
+                }else if(response.getResponseStatus() == ResponseStatus.TIMEOUT) {
+	                logout();
+	                defaultHandler.sendEmptyMessage(SERVER_TIMEOUT);
                 }else{
                     //로그인 에러시에 강제로 로그아웃 시켜서 무한루프에 안들어가도록 함
                     logout();

@@ -3,11 +3,11 @@ package com.vivavu.dream.repository.connector;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.vivavu.dream.common.Constants;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.common.RestTemplateFactory;
+import com.vivavu.dream.common.enums.ResponseStatus;
 import com.vivavu.dream.model.BaseInfo;
 import com.vivavu.dream.model.LoginInfo;
 import com.vivavu.dream.model.ResponseBodyWrapped;
@@ -65,11 +65,16 @@ public class UserInfoConnector extends Connector<User> {
         ResponseEntity<String> resultString = null;
         try {
             resultString = restTemplate.exchange(Constants.apiUserInfo, HttpMethod.PUT, request, String.class, DreamApp.getInstance().getUser().getId());
+        } catch (ResourceAccessException timeoutException){
+	        Log.e("dream", timeoutException.toString());
+	        if(timeoutException.getCause() instanceof ConnectTimeoutException){
+		        return new ResponseBodyWrapped<User>(ResponseStatus.TIMEOUT, "서버가 응답하지 않습니다. 잠시 후 다시 시도해주세요.", null);
+	        }
         } catch (RestClientException e){
             Log.e("DreamProj.",e.toString());
         }
 
-        ResponseBodyWrapped<User> result = new ResponseBodyWrapped<User>("error", String.valueOf(resultString.getStatusCode()), new User());
+        ResponseBodyWrapped<User> result = new ResponseBodyWrapped<User>(ResponseStatus.SERVER_ERROR, RestTemplateUtils.getStatusCodeString(resultString), new User());
 
         if(RestTemplateUtils.isAvailableParseToJson(resultString)){
             Gson gson = JsonFactory.getInstance();
@@ -89,12 +94,17 @@ public class UserInfoConnector extends Connector<User> {
         ResponseEntity<String> result = null;
         try{
             result = restTemplate.exchange(Constants.apiBaseInfo, HttpMethod.GET, request, String.class);
+        } catch (ResourceAccessException timeoutException){
+	        Log.e("dream", timeoutException.toString());
+	        if(timeoutException.getCause() instanceof ConnectTimeoutException){
+		        return new ResponseBodyWrapped<User>(ResponseStatus.TIMEOUT, "서버가 응답하지 않습니다. 잠시 후 다시 시도해주세요.", null);
+	        }
         }catch (RestClientException e) {
             Log.e("dream", e.toString());
         }
         ResponseBodyWrapped<User> responseBodyWrapped = null;
         if(result != null && result.getStatusCode() == HttpStatus.OK || result.getStatusCode()== HttpStatus.NO_CONTENT){
-            Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+            Gson gson = JsonFactory.getInstance();
             Type type = new TypeToken<ResponseBodyWrapped<User>>(){}.getType();
             responseBodyWrapped = gson.fromJson(String.valueOf(result.getBody()), type);
             //GsonBuilder
@@ -113,11 +123,16 @@ public class UserInfoConnector extends Connector<User> {
         ResponseEntity<String> resultString = null;
         try {
             resultString = restTemplate.exchange(Constants.apiUserInfo, HttpMethod.DELETE, request, String.class, DreamApp.getInstance().getUser().getId());
+        } catch (ResourceAccessException timeoutException){
+	        Log.e("dream", timeoutException.toString());
+	        if(timeoutException.getCause() instanceof ConnectTimeoutException){
+		        return new ResponseBodyWrapped<User>(ResponseStatus.TIMEOUT, "서버가 응답하지 않습니다. 잠시 후 다시 시도해주세요.", null);
+	        }
         } catch (RestClientException e){
             Log.e("DreamProj.",e.toString());
         }
 
-        ResponseBodyWrapped<User> result = new ResponseBodyWrapped<User>("error", String.valueOf(resultString.getStatusCode()), new User());
+        ResponseBodyWrapped<User> result = new ResponseBodyWrapped<User>(ResponseStatus.SERVER_ERROR, RestTemplateUtils.getStatusCodeString(resultString), new User());
 
         if(RestTemplateUtils.isAvailableParseToJson(resultString)){
             Gson gson = JsonFactory.getInstance();
@@ -139,22 +154,22 @@ public class UserInfoConnector extends Connector<User> {
         } catch (ResourceAccessException timeoutException){
             Log.e("dream", timeoutException.toString());
             if(timeoutException.getCause() instanceof ConnectTimeoutException){
-                return new ResponseBodyWrapped<SecureToken>("error", "서버가 응답하지 않습니다. 잠시 후 다시 시도해주세요.", null);
+                return new ResponseBodyWrapped<SecureToken>(ResponseStatus.TIMEOUT, "서버가 응답하지 않습니다. 잠시 후 다시 시도해주세요.", null);
             }
         } catch (RestClientException e) {
             Log.e("dream", e.toString());
-            return new ResponseBodyWrapped<SecureToken>("error", "오류가 발생하였습니다. 다시 시도해주시기 바랍니다.", null);
+            return new ResponseBodyWrapped<SecureToken>(ResponseStatus.SERVER_ERROR, "오류가 발생하였습니다. 다시 시도해주시기 바랍니다.", null);
         }
 
         if(result != null && result.getStatusCode() == HttpStatus.OK){
-            Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+            Gson gson = JsonFactory.getInstance();
             Type type = new TypeToken<ResponseBodyWrapped<SecureToken>>(){}.getType();
             ResponseBodyWrapped<SecureToken> responseBodyWrapped = gson.fromJson(String.valueOf(result.getBody()), type);
             return responseBodyWrapped;
         }else if (result != null && result.getStatusCode() == HttpStatus.UNAUTHORIZED){
-            return new ResponseBodyWrapped<SecureToken>("error", "사용자 정보 확인 필요", null);
+            return new ResponseBodyWrapped<SecureToken>(ResponseStatus.SERVER_ERROR, "사용자 정보 확인 필요", null);
         }
-        return new ResponseBodyWrapped<SecureToken>("error", "오류가 발생하였습니다. 다시 시도해주시기 바랍니다.", null);
+        return new ResponseBodyWrapped<SecureToken>(ResponseStatus.SERVER_ERROR, "오류가 발생하였습니다. 다시 시도해주시기 바랍니다.", null);
     }
 
     public ResponseBodyWrapped<BaseInfo> getBaseInfo(){
@@ -168,14 +183,14 @@ public class UserInfoConnector extends Connector<User> {
         } catch (ResourceAccessException timeoutException){
             Log.e("dream", timeoutException.toString());
             if(timeoutException.getCause() instanceof ConnectTimeoutException){
-                return new ResponseBodyWrapped<BaseInfo>("error", "서버가 응답하지 않습니다. 잠시 후 다시 시도해주세요.", null);
+                return new ResponseBodyWrapped<BaseInfo>(ResponseStatus.TIMEOUT, "서버가 응답하지 않습니다. 잠시 후 다시 시도해주세요.", null);
             }
         }catch (RestClientException e) {
             Log.e("dream", e.toString());
         }
         ResponseBodyWrapped<BaseInfo> responseBodyWrapped = null;
         if(result != null && (result.getStatusCode() == HttpStatus.OK || result.getStatusCode()== HttpStatus.NO_CONTENT)){
-            Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+            Gson gson = JsonFactory.getInstance();
             Type type = new TypeToken<ResponseBodyWrapped<BaseInfo>>(){}.getType();
             responseBodyWrapped = gson.fromJson(String.valueOf(result.getBody()), type);
             //GsonBuilder
@@ -193,13 +208,18 @@ public class UserInfoConnector extends Connector<User> {
 
         try {
             result = restTemplate.exchange(Constants.apiResetPassword, HttpMethod.POST, request, String.class, email);
+        } catch (ResourceAccessException timeoutException){
+	        Log.e("dream", timeoutException.toString());
+	        if(timeoutException.getCause() instanceof ConnectTimeoutException){
+		        return new ResponseBodyWrapped<LoginInfo>(ResponseStatus.TIMEOUT, "서버가 응답하지 않습니다. 잠시 후 다시 시도해주세요.", null);
+	        }
         } catch (RestClientException e) {
             Log.e("dream", e.toString());
         }
 
 
-        if(result.getStatusCode() == HttpStatus.OK){
-            Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+        if(result != null && result.getStatusCode() == HttpStatus.OK){
+            Gson gson = JsonFactory.getInstance();
             Type type = new TypeToken<ResponseBodyWrapped<LoginInfo>>(){}.getType();
 
             ResponseBodyWrapped<LoginInfo> user = gson.fromJson((String) result.getBody(), type);
@@ -220,19 +240,24 @@ public class UserInfoConnector extends Connector<User> {
 
         try {
             result = restTemplate.exchange(Constants.apiValidEmail, HttpMethod.GET, request, String.class, email);
+        } catch (ResourceAccessException timeoutException){
+	        Log.e("dream", timeoutException.toString());
+	        if(timeoutException.getCause() instanceof ConnectTimeoutException){
+		        return new ResponseBodyWrapped<Integer>(ResponseStatus.TIMEOUT, "서버가 응답하지 않습니다. 잠시 후 다시 시도해주세요.", null);
+	        }
         } catch (RestClientException e) {
             Log.e("dream", e.toString());
         }
 
-        if(result.getStatusCode() == HttpStatus.OK){
-            Gson gson = new GsonBuilder().create();
+        if(result != null && result.getStatusCode() == HttpStatus.OK){
+            Gson gson = JsonFactory.getInstance();
             Type type = new TypeToken<ResponseBodyWrapped<Integer>>(){}.getType();
 
             ResponseBodyWrapped<Integer> responseBodyWrapped = gson.fromJson((String) result.getBody(), type);
             return responseBodyWrapped;
         }
 
-        return new ResponseBodyWrapped<Integer>("error", "오류가 발생하였습니다. 다시 시도해주시기 바랍니다.", null);
+        return new ResponseBodyWrapped<Integer>(ResponseStatus.SERVER_ERROR, "오류가 발생하였습니다. 다시 시도해주시기 바랍니다.", null);
     }
 
 

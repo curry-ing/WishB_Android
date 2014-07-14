@@ -1,36 +1,31 @@
 package com.vivavu.dream.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.vivavu.dream.common.enums.ResponseStatus;
 
 /**
  * Created by yuja on 14. 2. 14.
  */
 public class ResponseBodyWrapped<T> {
-    @SerializedName("status")
-    private String status;
-    @SerializedName("description")
+	@SerializedName("status")
+	private ResponseStatus responseStatus;
+
+	@SerializedName("description")
     private String description;
 
     @SerializedName("data")
     private T data;
 
     public ResponseBodyWrapped(){
-        this.status="error";
         this.description="unknown";
+	    this.responseStatus = ResponseStatus.UNKNOWN_ERROR;
         this.data = null;
     }
-    public ResponseBodyWrapped(String status, String description, T data) {
-        this.status = status;
+
+    public ResponseBodyWrapped(ResponseStatus responseStatus, String description, T data) {
+        this.responseStatus = responseStatus;
         this.description = description;
         this.data = data;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public String getDescription() {
@@ -50,6 +45,14 @@ public class ResponseBodyWrapped<T> {
     }
 
     public boolean isSuccess(){
-        return "success".equals(status);
+        return responseStatus == ResponseStatus.SUCCESS;
     }
+
+	public ResponseStatus getResponseStatus() {
+		return responseStatus;
+	}
+
+	public void setResponseStatus(ResponseStatus responseStatus) {
+		this.responseStatus = responseStatus;
+	}
 }

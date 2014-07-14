@@ -7,6 +7,7 @@ import com.google.gson.reflect.TypeToken;
 import com.vivavu.dream.common.Constants;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.common.RestTemplateFactory;
+import com.vivavu.dream.common.enums.ResponseStatus;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.model.bucket.Today;
@@ -16,6 +17,7 @@ import com.vivavu.dream.util.ImageUtil;
 import com.vivavu.dream.util.JsonFactory;
 import com.vivavu.dream.util.RestTemplateUtils;
 
+import org.apache.http.conn.ConnectTimeoutException;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -25,6 +27,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -55,11 +58,16 @@ public class BucketConnector {
 
         try {
             resultString = restTemplate.exchange(Constants.apiBuckets, HttpMethod.GET, request, String.class, getContext().getUser().getId());
+        } catch (ResourceAccessException timeoutException){
+	        Log.e("dream", timeoutException.toString());
+	        if(timeoutException.getCause() instanceof ConnectTimeoutException){
+		        return new ResponseBodyWrapped<List<Bucket>>(ResponseStatus.TIMEOUT, "서버가 응답하지 않습니다. 잠시 후 다시 시도해주세요.", null);
+	        }
         } catch (RestClientException e) {
             Log.e("dream", e.toString());
         }
 
-        ResponseBodyWrapped<List<Bucket>> result = new ResponseBodyWrapped<List<Bucket>>("error", String.valueOf(resultString.getStatusCode()), new ArrayList<Bucket>());
+        ResponseBodyWrapped<List<Bucket>> result = new ResponseBodyWrapped<List<Bucket>>(ResponseStatus.SERVER_ERROR, RestTemplateUtils.getStatusCodeString(resultString), new ArrayList<Bucket>());
 
         if(RestTemplateUtils.isAvailableParseToJson(resultString)){
             Gson gson = JsonFactory.getInstance();
@@ -134,12 +142,16 @@ public class BucketConnector {
         ResponseEntity<String> resultString = null;
         try {
             resultString = restTemplate.exchange(Constants.apiBuckets, HttpMethod.POST, request, String.class, getContext().getUser().getId());
-
+        } catch (ResourceAccessException timeoutException){
+	        Log.e("dream", timeoutException.toString());
+	        if(timeoutException.getCause() instanceof ConnectTimeoutException){
+		        return new ResponseBodyWrapped<Bucket>(ResponseStatus.TIMEOUT, "서버가 응답하지 않습니다. 잠시 후 다시 시도해주세요.", null);
+	        }
         } catch (RestClientException e) {
             Log.e("dream", e.toString());
         }
 
-        ResponseBodyWrapped<Bucket> result = new ResponseBodyWrapped<Bucket>("error", String.valueOf(resultString.getStatusCode()), new Bucket());
+        ResponseBodyWrapped<Bucket> result = new ResponseBodyWrapped<Bucket>(ResponseStatus.SERVER_ERROR, RestTemplateUtils.getStatusCodeString(resultString), new Bucket());
 
         if(RestTemplateUtils.isAvailableParseToJson(resultString)){
             Gson gson = JsonFactory.getInstance();
@@ -169,12 +181,16 @@ public class BucketConnector {
         ResponseEntity<String> resultString = null;
         try {
             resultString = restTemplate.exchange(Constants.apiBucketInfo, HttpMethod.PUT, request, String.class, bucket.getId());
-
+        } catch (ResourceAccessException timeoutException){
+	        Log.e("dream", timeoutException.toString());
+	        if(timeoutException.getCause() instanceof ConnectTimeoutException){
+		        return new ResponseBodyWrapped<Bucket>(ResponseStatus.TIMEOUT, "서버가 응답하지 않습니다. 잠시 후 다시 시도해주세요.", null);
+	        }
         } catch (RestClientException e) {
             Log.e("dream", e.toString());
         }
 
-        ResponseBodyWrapped<Bucket> result = new ResponseBodyWrapped<Bucket>("error", String.valueOf(resultString.getStatusCode()), new Bucket());
+        ResponseBodyWrapped<Bucket> result = new ResponseBodyWrapped<Bucket>(ResponseStatus.SERVER_ERROR, RestTemplateUtils.getStatusCodeString(resultString), new Bucket());
 
         if(RestTemplateUtils.isAvailableParseToJson(resultString)){
             Gson gson = JsonFactory.getInstance();
@@ -193,11 +209,16 @@ public class BucketConnector {
 
         try {
             resultString = restTemplate.exchange(Constants.apiBucketInfo, HttpMethod.DELETE, request, String.class, bucket.getId());
+        } catch (ResourceAccessException timeoutException){
+	        Log.e("dream", timeoutException.toString());
+	        if(timeoutException.getCause() instanceof ConnectTimeoutException){
+		        return new ResponseBodyWrapped<Bucket>(ResponseStatus.TIMEOUT, "서버가 응답하지 않습니다. 잠시 후 다시 시도해주세요.", null);
+	        }
         } catch (RestClientException e) {
             Log.e("dream", e.toString());
         }
 
-        ResponseBodyWrapped<Bucket> result = new ResponseBodyWrapped<Bucket>("error", String.valueOf(resultString.getStatusCode()), new Bucket());
+        ResponseBodyWrapped<Bucket> result = new ResponseBodyWrapped<Bucket>(ResponseStatus.SERVER_ERROR, RestTemplateUtils.getStatusCodeString(resultString), new Bucket());
 
         if(RestTemplateUtils.isAvailableParseToJson(resultString)){
             Gson gson = JsonFactory.getInstance();
@@ -218,16 +239,20 @@ public class BucketConnector {
         }
         try {
             resultString = restTemplate.exchange(Constants.apiTodayListWithPage, HttpMethod.GET, request, String.class, getContext().getUser().getId(), page);
-
+        } catch (ResourceAccessException timeoutException){
+	        Log.e("dream", timeoutException.toString());
+	        if(timeoutException.getCause() instanceof ConnectTimeoutException){
+		        return new ResponseBodyWrapped<TodayPager>(ResponseStatus.TIMEOUT, "서버가 응답하지 않습니다. 잠시 후 다시 시도해주세요.", null);
+	        }
         } catch (RestClientException e) {
             Log.e("dream", e.toString());
         }
 
-        ResponseBodyWrapped<TodayPager> result = new ResponseBodyWrapped<TodayPager>("error", String.valueOf(resultString.getStatusCode()), new TodayPager());
+        ResponseBodyWrapped<TodayPager> result = new ResponseBodyWrapped<TodayPager>(ResponseStatus.SERVER_ERROR, RestTemplateUtils.getStatusCodeString(resultString), new TodayPager());
 
         if(RestTemplateUtils.isAvailableParseToJson(resultString)){
             if(resultString.getStatusCode() == HttpStatus.NO_CONTENT){
-                result.setStatus("success");//데이터가 없을 경우 빈 값을 던짐
+                result.setResponseStatus(ResponseStatus.SUCCESS);
                 TodayPager data = result.getData();
                 data.setPageData(new ArrayList<Today>());
                 return result;

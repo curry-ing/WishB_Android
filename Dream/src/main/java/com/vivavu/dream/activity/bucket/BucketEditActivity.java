@@ -36,6 +36,7 @@ import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.common.enums.FacebookShareType;
 import com.vivavu.dream.common.enums.RepeatType;
+import com.vivavu.dream.common.enums.ResponseStatus;
 import com.vivavu.dream.common.enums.Scope;
 import com.vivavu.dream.fragment.bucket.option.description.DescriptionViewFragment;
 import com.vivavu.dream.fragment.bucket.option.repeat.RepeatViewFragment;
@@ -113,8 +114,6 @@ public class BucketEditActivity extends BaseActionBarActivity {
     private boolean modFlag = false;
     protected Uri mImageCaptureUri;
     private String modString;
-
-    private ProgressDialog progressDialog;
 
     protected final Handler handler = new Handler() {
         @Override
@@ -768,6 +767,8 @@ public class BucketEditActivity extends BaseActionBarActivity {
                     Message message = handler.obtainMessage(SEND_DATA_END, bucket);
                     handler.sendMessage(message);
                 }
+            }else if(bucketWrappedResponseBodyWrapped.getResponseStatus() == ResponseStatus.TIMEOUT) {
+	            defaultHandler.sendEmptyMessage(SERVER_TIMEOUT);
             }else {
                 handler.sendEmptyMessage(SEND_DATA_ERROR);
             }
@@ -794,6 +795,8 @@ public class BucketEditActivity extends BaseActionBarActivity {
             if(bucketWrappedResponseBodyWrapped.isSuccess()){
                 DataRepository.deleteBucket(bucket);
                 handler.sendEmptyMessage(SEND_DATA_DELETE);
+            }else if(bucketWrappedResponseBodyWrapped.getResponseStatus() == ResponseStatus.TIMEOUT) {
+	            defaultHandler.sendEmptyMessage(SERVER_TIMEOUT);
             }else {
                 handler.sendEmptyMessage(SEND_DATA_DELETE_ERROR);
             }

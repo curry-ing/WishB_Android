@@ -3,7 +3,6 @@ package com.vivavu.dream.repository;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.stmt.DeleteBuilder;
@@ -12,6 +11,7 @@ import com.j256.ormlite.stmt.Where;
 import com.vivavu.dream.common.Constants;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.common.RestTemplateFactory;
+import com.vivavu.dream.common.enums.ResponseStatus;
 import com.vivavu.dream.model.LoginInfo;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.SecureToken;
@@ -19,13 +19,15 @@ import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.model.bucket.BucketGroup;
 import com.vivavu.dream.model.bucket.Today;
 import com.vivavu.dream.model.bucket.TodayGroup;
-import com.vivavu.dream.model.user.User;
+import com.vivavu.dream.util.JsonFactory;
 import com.vivavu.dream.util.RestTemplateUtils;
 
+import org.apache.http.conn.ConnectTimeoutException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -67,11 +69,16 @@ public class DataRepository {
         ResponseEntity<String> result = null;
         try{
             result = restTemplate.exchange(Constants.apiUsers, HttpMethod.POST, request, String.class);
+        } catch (ResourceAccessException timeoutException){
+	        Log.e("dream", timeoutException.toString());
+	        if(timeoutException.getCause() instanceof ConnectTimeoutException){
+		        return new ResponseBodyWrapped<SecureToken>(ResponseStatus.TIMEOUT, "서버가 응답하지 않습니다. 잠시 후 다시 시도해주세요.", null);
+	        }
         }catch (RestClientException e) {
             Log.e("dream", e.toString());
         }
 
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+        Gson gson = JsonFactory.getInstance();
         Type type = new TypeToken<ResponseBodyWrapped<SecureToken>>(){}.getType();
         ResponseBodyWrapped<SecureToken> responseBodyWrapped = gson.fromJson(String.valueOf(result.getBody()), type);
 
@@ -87,6 +94,11 @@ public class DataRepository {
         try {
             result = restTemplate.exchange(Constants.apiBucketInfo, HttpMethod.DELETE, request, String.class, bucketId);
             return ;
+        } catch (ResourceAccessException timeoutException){
+	        Log.e("dream", timeoutException.toString());
+	        if(timeoutException.getCause() instanceof ConnectTimeoutException){
+		        return ;
+	        }
         } catch (RestClientException e) {
             Log.e("dream", e.toString());
         }
@@ -94,28 +106,6 @@ public class DataRepository {
 
         return ;
     }
-
-    public static User getUserInfo(Integer userId){
-        RestTemplate restTemplate = RestTemplateFactory.getInstance();
-        HttpHeaders requestHeaders = getBasicAuthHeader();
-        HttpEntity request = new HttpEntity<String>(requestHeaders);
-        ResponseEntity<String> result = null;
-
-        try {
-            result = restTemplate.exchange(Constants.apiUserInfo, HttpMethod.GET, request, String.class, userId);
-        } catch (RestClientException e) {
-            Log.e("dream", e.toString());
-        }
-
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-        Type type = new TypeToken<ResponseBodyWrapped<User>>(){}.getType();
-        ResponseBodyWrapped<User> user = gson.fromJson((String) result.getBody(), type);
-
-
-        return user.getData();
-    }
-
-
 
     public static DreamApp getContext() {
         if(context == null){

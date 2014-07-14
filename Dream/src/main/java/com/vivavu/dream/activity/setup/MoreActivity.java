@@ -18,11 +18,11 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.vivavu.dream.R;
-import com.vivavu.dream.activity.login.PrivacyActivity;
 import com.vivavu.dream.activity.login.UserAgreementActivity;
 import com.vivavu.dream.activity.main.MainActivity;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.DreamApp;
+import com.vivavu.dream.common.enums.ResponseStatus;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.user.User;
 import com.vivavu.dream.repository.connector.UserInfoConnector;
@@ -199,11 +199,17 @@ public class MoreActivity extends BaseActionBarActivity {
                 responseBodyWrapped = userInfoConnector.delete(user);
             }
 
-            if(!responseBodyWrapped.isSuccess()){
-                handler.sendEmptyMessage(SEND_DATA_ERROR);
+
+            if(responseBodyWrapped.isSuccess()){
+	            handler.sendEmptyMessage(SEND_DATA_END);
                 return;
+            }else if(responseBodyWrapped.getResponseStatus() == ResponseStatus.TIMEOUT) {
+	            defaultHandler.sendEmptyMessage(SERVER_TIMEOUT);
+	            return;
             }
-            handler.sendEmptyMessage(SEND_DATA_END);
+
+	        handler.sendEmptyMessage(SEND_DATA_ERROR);
+
         }
     }
 

@@ -7,6 +7,7 @@ import com.google.gson.reflect.TypeToken;
 import com.vivavu.dream.common.Constants;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.common.RestTemplateFactory;
+import com.vivavu.dream.common.enums.ResponseStatus;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.bucket.timeline.Post;
 import com.vivavu.dream.model.bucket.timeline.Timeline;
@@ -17,6 +18,7 @@ import com.vivavu.dream.util.ImageUtil;
 import com.vivavu.dream.util.JsonFactory;
 import com.vivavu.dream.util.RestTemplateUtils;
 
+import org.apache.http.conn.ConnectTimeoutException;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -26,6 +28,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -44,7 +47,11 @@ public class TimelineConnector extends Connector<Post> {
         ResponseEntity<String> resultString = null;
         try {
             resultString = restTemplate.exchange(Constants.apiTimelineMetaInfo, HttpMethod.GET, request, String.class, bucketId);
-
+        } catch (ResourceAccessException timeoutException){
+	        Log.e("dream", timeoutException.toString());
+	        if(timeoutException.getCause() instanceof ConnectTimeoutException){
+		        return new ResponseBodyWrapped<TimelineMetaInfo>(ResponseStatus.TIMEOUT, "서버가 응답하지 않습니다. 잠시 후 다시 시도해주세요.", null);
+	        }
         } catch (RestClientException e) {
             Log.e("dream", e.toString());
         }
@@ -56,10 +63,10 @@ public class TimelineConnector extends Connector<Post> {
             Type type = new TypeToken<ResponseBodyWrapped<TimelineMetaInfo>>(){}.getType();
             result = gson.fromJson((String) resultString.getBody(), type);
             if(resultString.getStatusCode() == HttpStatus.NO_CONTENT){
-                result = new ResponseBodyWrapped<TimelineMetaInfo>("succes", String.valueOf(resultString.getStatusCode()), new TimelineMetaInfo());
+                result = new ResponseBodyWrapped<TimelineMetaInfo>(ResponseStatus.SUCCESS, RestTemplateUtils.getStatusCodeString(resultString), new TimelineMetaInfo());
             }
         } else {
-            result = new ResponseBodyWrapped<TimelineMetaInfo>("error", String.valueOf(resultString.getStatusCode()), new TimelineMetaInfo());
+            result = new ResponseBodyWrapped<TimelineMetaInfo>(ResponseStatus.SERVER_ERROR, RestTemplateUtils.getStatusCodeString(resultString), new TimelineMetaInfo());
         }
         return result;
     }
@@ -71,12 +78,16 @@ public class TimelineConnector extends Connector<Post> {
         ResponseEntity<String> resultString = null;
         try {
             resultString = restTemplate.exchange(Constants.apiTimelineForDate, HttpMethod.GET, request, String.class, bucketId, date);
-
+        } catch (ResourceAccessException timeoutException){
+	        Log.e("dream", timeoutException.toString());
+	        if(timeoutException.getCause() instanceof ConnectTimeoutException){
+		        return new ResponseBodyWrapped<Timeline>(ResponseStatus.TIMEOUT, "서버가 응답하지 않습니다. 잠시 후 다시 시도해주세요.", null);
+	        }
         } catch (RestClientException e) {
             Log.e("dream", e.toString());
         }
 
-        ResponseBodyWrapped<Timeline> result = new ResponseBodyWrapped<Timeline>("error", String.valueOf(resultString.getStatusCode()), new Timeline());
+        ResponseBodyWrapped<Timeline> result = new ResponseBodyWrapped<Timeline>(ResponseStatus.SERVER_ERROR, RestTemplateUtils.getStatusCodeString(resultString), new Timeline());
 
         if(RestTemplateUtils.isAvailableParseToJson(resultString)){
             Gson gson = JsonFactory.getInstance();
@@ -93,12 +104,16 @@ public class TimelineConnector extends Connector<Post> {
         ResponseEntity<String> resultString = null;
         try {
             resultString = restTemplate.exchange(Constants.apiTimeline, HttpMethod.GET, request, String.class, bucketId);
-
+        } catch (ResourceAccessException timeoutException){
+	        Log.e("dream", timeoutException.toString());
+	        if(timeoutException.getCause() instanceof ConnectTimeoutException){
+		        return new ResponseBodyWrapped<Timeline>(ResponseStatus.TIMEOUT, "서버가 응답하지 않습니다. 잠시 후 다시 시도해주세요.", null);
+	        }
         } catch (RestClientException e) {
             Log.e("dream", e.toString());
         }
 
-        ResponseBodyWrapped<Timeline> result = new ResponseBodyWrapped<Timeline>("error", String.valueOf(resultString.getStatusCode()), new Timeline());
+        ResponseBodyWrapped<Timeline> result = new ResponseBodyWrapped<Timeline>(ResponseStatus.SERVER_ERROR, RestTemplateUtils.getStatusCodeString(resultString), new Timeline());
 
         if(RestTemplateUtils.isAvailableParseToJson(resultString)){
             Gson gson = JsonFactory.getInstance();
@@ -119,12 +134,16 @@ public class TimelineConnector extends Connector<Post> {
         ResponseEntity<String> resultString = null;
         try {
             resultString = restTemplate.exchange(Constants.apiTimelineWithPage, HttpMethod.GET, request, String.class, bucketId, page);
-
+        } catch (ResourceAccessException timeoutException){
+	        Log.e("dream", timeoutException.toString());
+	        if(timeoutException.getCause() instanceof ConnectTimeoutException){
+		        return new ResponseBodyWrapped<Timeline>(ResponseStatus.TIMEOUT, "서버가 응답하지 않습니다. 잠시 후 다시 시도해주세요.", null);
+	        }
         } catch (RestClientException e) {
             Log.e("dream", e.toString());
         }
 
-        ResponseBodyWrapped<Timeline> result = new ResponseBodyWrapped<Timeline>("error", String.valueOf(resultString.getStatusCode()), new Timeline());
+        ResponseBodyWrapped<Timeline> result = new ResponseBodyWrapped<Timeline>(ResponseStatus.SERVER_ERROR, RestTemplateUtils.getStatusCodeString(resultString), new Timeline());
 
         if(RestTemplateUtils.isAvailableParseToJson(resultString)){
             Gson gson = JsonFactory.getInstance();
@@ -152,12 +171,16 @@ public class TimelineConnector extends Connector<Post> {
         ResponseEntity<String> resultString = null;
         try {
             resultString = restTemplate.exchange(Constants.apiTimeline, HttpMethod.POST, request, String.class, data.getBucketId());
-
+        } catch (ResourceAccessException timeoutException){
+	        Log.e("dream", timeoutException.toString());
+	        if(timeoutException.getCause() instanceof ConnectTimeoutException){
+		        return new ResponseBodyWrapped<Post>(ResponseStatus.TIMEOUT, "서버가 응답하지 않습니다. 잠시 후 다시 시도해주세요.", null);
+	        }
         } catch (RestClientException e) {
             Log.e("dream", e.toString());
         }
 
-        ResponseBodyWrapped<Post> result = new ResponseBodyWrapped<Post>("error", String.valueOf(resultString.getStatusCode()), new Post(new Date()));
+        ResponseBodyWrapped<Post> result = new ResponseBodyWrapped<Post>(ResponseStatus.SERVER_ERROR, RestTemplateUtils.getStatusCodeString(resultString), new Post(new Date()));
 
         if(RestTemplateUtils.isAvailableParseToJson(resultString)){
             Gson gson = JsonFactory.getInstance();
@@ -185,12 +208,16 @@ public class TimelineConnector extends Connector<Post> {
         ResponseEntity<String> resultString = null;
         try {
             resultString = restTemplate.exchange(Constants.apiTimelineInfo, HttpMethod.PUT, request, String.class, data.getId());
-
+        } catch (ResourceAccessException timeoutException){
+	        Log.e("dream", timeoutException.toString());
+	        if(timeoutException.getCause() instanceof ConnectTimeoutException){
+		        return new ResponseBodyWrapped<Post>(ResponseStatus.TIMEOUT, "서버가 응답하지 않습니다. 잠시 후 다시 시도해주세요.", null);
+	        }
         } catch (RestClientException e) {
             Log.e("dream", e.toString());
         }
 
-        ResponseBodyWrapped<Post> result = new ResponseBodyWrapped<Post>("error", String.valueOf(resultString.getStatusCode()), new Post(new Date()));
+        ResponseBodyWrapped<Post> result = new ResponseBodyWrapped<Post>(ResponseStatus.SERVER_ERROR, RestTemplateUtils.getStatusCodeString(resultString), new Post(new Date()));
 
         if(RestTemplateUtils.isAvailableParseToJson(resultString)){
             Gson gson = JsonFactory.getInstance();
@@ -208,12 +235,16 @@ public class TimelineConnector extends Connector<Post> {
         ResponseEntity<String> resultString = null;
         try {
             resultString = restTemplate.exchange(Constants.apiTimelineInfo, HttpMethod.POST, request, String.class, data.getId());
-
+        } catch (ResourceAccessException timeoutException){
+	        Log.e("dream", timeoutException.toString());
+	        if(timeoutException.getCause() instanceof ConnectTimeoutException){
+		        return new ResponseBodyWrapped<Post>(ResponseStatus.TIMEOUT, "서버가 응답하지 않습니다. 잠시 후 다시 시도해주세요.", null);
+	        }
         } catch (RestClientException e) {
             Log.e("dream", e.toString());
         }
 
-        ResponseBodyWrapped<Post> result = new ResponseBodyWrapped<Post>("error", String.valueOf(resultString.getStatusCode()), new Post(new Date()));
+        ResponseBodyWrapped<Post> result = new ResponseBodyWrapped<Post>(ResponseStatus.SERVER_ERROR, RestTemplateUtils.getStatusCodeString(resultString), new Post(new Date()));
 
         if(RestTemplateUtils.isAvailableParseToJson(resultString)){
             Gson gson = JsonFactory.getInstance();
@@ -232,12 +263,16 @@ public class TimelineConnector extends Connector<Post> {
         ResponseEntity<String> resultString = null;
         try {
             resultString = restTemplate.exchange(Constants.apiTimelineInfo, HttpMethod.DELETE, request, String.class, data.getId());
-
+        } catch (ResourceAccessException timeoutException){
+	        Log.e("dream", timeoutException.toString());
+	        if(timeoutException.getCause() instanceof ConnectTimeoutException){
+		        return new ResponseBodyWrapped<Post>(ResponseStatus.TIMEOUT, "서버가 응답하지 않습니다. 잠시 후 다시 시도해주세요.", null);
+	        }
         } catch (RestClientException e) {
             Log.e("dream", e.toString());
         }
 
-        ResponseBodyWrapped<Post> result = new ResponseBodyWrapped<Post>("error", String.valueOf(resultString.getStatusCode()), new Post(new Date()));
+        ResponseBodyWrapped<Post> result = new ResponseBodyWrapped<Post>(ResponseStatus.SERVER_ERROR, RestTemplateUtils.getStatusCodeString(resultString), new Post(new Date()));
 
         if(RestTemplateUtils.isAvailableParseToJson(resultString)){
             Gson gson = JsonFactory.getInstance();

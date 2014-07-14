@@ -1,7 +1,6 @@
 package com.vivavu.dream.util;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import org.springframework.http.HttpAuthentication;
 import org.springframework.http.HttpBasicAuthentication;
@@ -35,7 +34,7 @@ public class RestTemplateUtils {
         T result = null;
         HttpHeaders headers = responseEntity.getHeaders();
         if(headers != null && headers.getContentType() == MediaType.APPLICATION_JSON){
-            Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+            Gson gson = JsonFactory.getInstance();
             result = gson.fromJson((String) responseEntity.getBody(), typeOfT);
         }else if( headers != null && headers.getContentType() != MediaType.APPLICATION_JSON){
 
@@ -45,11 +44,23 @@ public class RestTemplateUtils {
     }
 
     public static boolean isAvailableParseToJson(ResponseEntity<?> responseEntity){
+	    if(responseEntity == null){
+		    return false;
+	    }
+
         HttpHeaders headers = responseEntity.getHeaders();
         if(headers != null && MediaType.APPLICATION_JSON.equals(headers.getContentType() )){
             return true;
         }
         return false;
     }
+
+	public static String getStatusCodeString(ResponseEntity<String> resultString){
+		if(resultString == null){
+			return null;
+		}
+
+		return String.valueOf(resultString.getStatusCode());
+	}
 
 }

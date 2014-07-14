@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -16,6 +17,7 @@ import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
 import com.vivavu.dream.R;
 import com.vivavu.dream.adapter.today.TodayDailyStickyAdapter;
 import com.vivavu.dream.common.DreamApp;
+import com.vivavu.dream.common.enums.ResponseStatus;
 import com.vivavu.dream.fragment.CustomBaseFragment;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.bucket.Today;
@@ -155,6 +157,15 @@ public class TodayListFragment extends CustomBaseFragment {
                 DataRepository.saveTodays(result.getData().getPageData());
                 Message message = handler.obtainMessage(SEND_BUKET_LIST_UPDATE, result.getData().getPageData());
                 handler.sendMessage(message);
+            } else if(result.getResponseStatus() == ResponseStatus.TIMEOUT){
+	            handler.post(new Runnable() {
+		            @Override
+		            public void run() {
+			            Toast.makeText(getActivity(), R.string.server_timeout, Toast.LENGTH_SHORT).show();
+		            }
+	            });
+
+	            return;
             }
         }
 

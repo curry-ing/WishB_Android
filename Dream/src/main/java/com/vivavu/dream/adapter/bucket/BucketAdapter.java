@@ -35,6 +35,7 @@ import com.vivavu.dream.activity.bucket.BucketGroupViewActivity;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.Code;
 import com.vivavu.dream.common.DreamApp;
+import com.vivavu.dream.common.enums.ResponseStatus;
 import com.vivavu.dream.drawable.FanShapeDrawable;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.bucket.BucketGroup;
@@ -493,6 +494,8 @@ public class BucketAdapter extends PagerAdapter implements View.OnClickListener{
         protected void onPostExecute(ResponseBodyWrapped<User> userResponseBodyWrapped) {
             if(userResponseBodyWrapped.isSuccess()){
                 DreamApp.getInstance().setUser(userResponseBodyWrapped.getData());
+            }else if(userResponseBodyWrapped.getResponseStatus() == ResponseStatus.TIMEOUT) {
+	            Toast.makeText(BucketAdapter.this.context, R.string.server_timeout, Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(BucketAdapter.this.context, R.string.modification_failed, Toast.LENGTH_SHORT).show();
             }

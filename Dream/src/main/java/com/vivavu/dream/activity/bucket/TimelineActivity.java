@@ -31,6 +31,7 @@ import com.vivavu.dream.adapter.bucket.timeline.TimelineListAdapter;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.common.enums.RepeatType;
+import com.vivavu.dream.common.enums.ResponseStatus;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.model.bucket.option.OptionRepeat;
@@ -457,6 +458,8 @@ public class TimelineActivity extends BaseActionBarActivity {
             if(result.isSuccess()) {
                 Message message = handler.obtainMessage(FETCH_DATA_SUCCESS, result.getData());
                 handler.sendMessage(message);
+            }else if(result.getResponseStatus() == ResponseStatus.TIMEOUT) {
+	            defaultHandler.sendEmptyMessage(SERVER_TIMEOUT);
             }else {
                 handler.sendEmptyMessage(FETCH_DATA_FAIL);
             }
@@ -476,6 +479,8 @@ public class TimelineActivity extends BaseActionBarActivity {
                 lastPageNum = page;
                 Message message = handler.obtainMessage(FETCH_DATA_SUCCESS, result.getData());
                 handler.sendMessage(message);
+            }else if(result.getResponseStatus() == ResponseStatus.TIMEOUT) {
+	            defaultHandler.sendEmptyMessage(SERVER_TIMEOUT);
             }else {
                 handler.sendEmptyMessage(FETCH_DATA_FAIL);
             }
@@ -501,6 +506,8 @@ public class TimelineActivity extends BaseActionBarActivity {
             if(result.isSuccess()) {
                 Message message = handler.obtainMessage(UPDATE_BUCKET_DATA_SUCCESS, result.getData());
                 handler.sendMessage(message);
+            }else if(result.getResponseStatus() == ResponseStatus.TIMEOUT) {
+	            defaultHandler.sendEmptyMessage(SERVER_TIMEOUT);
             }else {
                 handler.sendEmptyMessage(UPDATE_BUCKET_DATA_FAIL);
             }

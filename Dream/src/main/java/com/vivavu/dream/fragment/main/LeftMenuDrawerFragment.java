@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
 import android.text.InputFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,6 +32,8 @@ import com.vivavu.dream.broadcastReceiver.AlarmManagerBroadcastReceiver;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.Code;
 import com.vivavu.dream.common.DreamApp;
+import com.vivavu.dream.common.enums.ResponseStatus;
+import com.vivavu.dream.fragment.CustomBaseFragment;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.user.User;
 import com.vivavu.dream.repository.connector.UserInfoConnector;
@@ -50,7 +51,7 @@ import butterknife.InjectView;
 /**
  * Created by yuja on 14. 1. 23.
  */
-public class LeftMenuDrawerFragment extends Fragment {
+public class LeftMenuDrawerFragment extends CustomBaseFragment {
     private DreamApp context = null;
     @InjectView(R.id.main_left_menu_btn_profile)
     ShadowImageView mMainLeftMenuBtnProfile;
@@ -447,6 +448,15 @@ public class LeftMenuDrawerFragment extends Fragment {
             }
 
             if(!responseBodyWrapped.isSuccess()){
+	            if(responseBodyWrapped.getResponseStatus() == ResponseStatus.TIMEOUT){
+		            handler.post(new Runnable() {
+			            @Override
+			            public void run() {
+				            Toast.makeText(getActivity(), R.string.server_timeout, Toast.LENGTH_SHORT).show();
+			            }
+		            });
+		            return;
+	            }
                 handler.sendEmptyMessage(SEND_DATA_ERROR);
                 return;
             }
