@@ -81,6 +81,10 @@ public class Bucket implements Serializable{
     @SerializedName("fb_share")
     private String fbShare;
 
+	@DatabaseField
+	@SerializedName("fb_feed_id")
+	protected String fbFeedId;
+
     private File file;
 
     public Bucket(){
@@ -265,7 +269,15 @@ public class Bucket implements Serializable{
         this.fbShare = fbShare;
     }
 
-    @Override
+	public String getFbFeedId() {
+		return fbFeedId;
+	}
+
+	public void setFbFeedId(String fbFeedId) {
+		this.fbFeedId = fbFeedId;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Bucket)) return false;

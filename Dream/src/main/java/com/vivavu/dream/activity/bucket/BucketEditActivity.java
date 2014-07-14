@@ -34,6 +34,7 @@ import com.vivavu.dream.R;
 import com.vivavu.dream.activity.main.MainActivity;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.DreamApp;
+import com.vivavu.dream.common.enums.FacebookShareType;
 import com.vivavu.dream.common.enums.RepeatType;
 import com.vivavu.dream.common.enums.Scope;
 import com.vivavu.dream.fragment.bucket.option.description.DescriptionViewFragment;
@@ -104,6 +105,8 @@ public class BucketEditActivity extends BaseActionBarActivity {
     ImageButton mMenuPrevious;
     @InjectView(R.id.menu_save)
     Button mMenuSave;
+    @InjectView(R.id.btn_bucket_option_facebook)
+    Button mBtnBucketOptionFacebook;
 
     private LayoutInflater layoutInflater;
     private Bucket bucket = null;
@@ -193,22 +196,6 @@ public class BucketEditActivity extends BaseActionBarActivity {
         checkRequireElement();
         bindData();
         modFlag = false;
-
-        Log.d(TAG, "BOARD: " + Build.BOARD);
-        Log.d(TAG, "BRAND: " + Build.BRAND);
-        Log.d(TAG, "CPU_ABI: " + Build.CPU_ABI);
-        Log.d(TAG, "DEVICE: " + Build.DEVICE);
-        Log.d(TAG, "DISPLAY: " + Build.DISPLAY);
-        Log.d(TAG, "FINGERPRINT: " + Build.FINGERPRINT);
-        Log.d(TAG, "HOST: " + Build.HOST);
-        Log.d(TAG, "ID: " + Build.ID);
-        Log.d(TAG, "MANUFACTURER: " + Build.MANUFACTURER);
-        Log.d(TAG, "MODEL: " + Build.MODEL);
-        Log.d(TAG, "PRODUCT: " + Build.PRODUCT);
-        Log.d(TAG, "TAGS: " + Build.TAGS);
-        Log.d(TAG, "TIME: " + Build.TIME);
-        Log.d(TAG, "TYPE: " + Build.TYPE);
-        Log.d(TAG, "USER: " + Build.USER);
 
     }
 
@@ -388,6 +375,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
         mBtnBucketOptionNote.setOnClickListener(this);
         mBtnBucketOptionRepeat.setOnClickListener(this);
         mBtnBucketOptionPublic.setOnClickListener(this);
+	    mBtnBucketOptionFacebook.setOnClickListener(this);
 
         mBtnBucketOptionDel.setOnClickListener(this);
         mBucketImg.setOnClickListener(new View.OnClickListener() {
@@ -525,7 +513,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
 
         // 눌린 상태가 비공개
         mBtnBucketOptionPublic.setSelected( bucket.getIsPrivate() == null || bucket.getIsPrivate() == 1 );
-
+		mBtnBucketOptionFacebook.setSelected(bucket.getFbFeedId() != null);
         DescriptionViewFragment descriptionViewFragment = (DescriptionViewFragment) getSupportFragmentManager().findFragmentByTag(DescriptionViewFragment.TAG);
         if(ValidationUtils.isNotEmpty(bucket.getDescription())){
             OptionDescription option = new OptionDescription(bucket.getDescription());
@@ -584,6 +572,16 @@ public class BucketEditActivity extends BaseActionBarActivity {
             bucket.setIsPrivate( mBtnBucketOptionPublic.isSelected() ? 1 : 0 );
         } else if (view == mBtnBucketOptionDel){
             doDelte();
+        } else if(view == mBtnBucketOptionFacebook){
+	        boolean flag = !mBtnBucketOptionFacebook.isSelected();
+	        mBtnBucketOptionFacebook.setSelected(flag);
+
+	        Tracker tracker = DreamApp.getInstance().getTracker();
+	        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_bucket_edit_activity)).setAction(getString(R.string.ga_event_action_share_facebook));
+	        eventBuilder.setValue(flag ? 1 : 0);
+	        tracker.send(eventBuilder.build());
+
+	        bucket.setFbShare( flag ? FacebookShareType.SELF.getCode() : FacebookShareType.NONE.getCode());
         }
     }
 

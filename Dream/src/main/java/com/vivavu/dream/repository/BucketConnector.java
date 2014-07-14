@@ -107,6 +107,11 @@ public class BucketConnector {
             ByteArrayResource byteArrayResource = ImageUtil.convertImageFileToByteArrayResource(bucket.getFile(), 1024, 1024, 70);
             requestBucket.add("photo", byteArrayResource);
         }
+	    if(bucket.getFbShare() == null){
+		    requestBucket.set("fb_share", "false");
+	    } else {
+		    requestBucket.set("fb_share", bucket.getFbShare());
+	    }
 
         return requestBucket;
     }

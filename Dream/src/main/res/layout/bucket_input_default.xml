@@ -137,6 +137,16 @@
                     android:enabled="true"
                     android:clickable="true"
                     android:layout_marginRight="30dp"
+                    android:visibility="gone"
+                    />
+                <Button
+                    android:layout_width="39dp"
+                    android:layout_height="39dp"
+                    android:id="@+id/btn_bucket_option_facebook"
+                    android:background="@drawable/ic_facebook"
+                    android:enabled="true"
+                    android:clickable="true"
+                    android:layout_marginRight="30dp"
                     />
                 <Button
                     android:layout_width="39dp"

@@ -21,7 +21,7 @@ import java.util.Date;
  */
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private static final String DATABASE_NAME = "dream.db";
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 11;
 
     // the DAO object we use to access the SimpleData table
     private Dao<Bucket, Integer> bucketDao = null;

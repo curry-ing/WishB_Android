@@ -281,4 +281,22 @@ public class AndroidUtils {
 
         return path;
     }
+
+    public static void getDeviceInfo(String tag){
+        Log.d(tag, "BOARD: " + Build.BOARD);
+        Log.d(tag, "BRAND: " + Build.BRAND);
+        Log.d(tag, "CPU_ABI: " + Build.CPU_ABI);
+        Log.d(tag, "DEVICE: " + Build.DEVICE);
+        Log.d(tag, "DISPLAY: " + Build.DISPLAY);
+        Log.d(tag, "FINGERPRINT: " + Build.FINGERPRINT);
+        Log.d(tag, "HOST: " + Build.HOST);
+        Log.d(tag, "ID: " + Build.ID);
+        Log.d(tag, "MANUFACTURER: " + Build.MANUFACTURER);
+        Log.d(tag, "MODEL: " + Build.MODEL);
+        Log.d(tag, "PRODUCT: " + Build.PRODUCT);
+        Log.d(tag, "TAGS: " + Build.TAGS);
+        Log.d(tag, "TIME: " + Build.TIME);
+        Log.d(tag, "TYPE: " + Build.TYPE);
+        Log.d(tag, "USER: " + Build.USER);
+    }
 }
