@@ -11,6 +11,7 @@ import com.j256.ormlite.stmt.Where;
 import com.vivavu.dream.common.Constants;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.common.RestTemplateFactory;
+import com.vivavu.dream.common.enums.FacebookShareType;
 import com.vivavu.dream.common.enums.ResponseStatus;
 import com.vivavu.dream.model.LoginInfo;
 import com.vivavu.dream.model.ResponseBodyWrapped;
@@ -248,6 +249,7 @@ public class DataRepository {
         }
         if(bucket == null){
             bucket = new Bucket();
+	        bucket.setFbShare(FacebookShareType.SHARE.getCode());
         }
         return bucket;
     }

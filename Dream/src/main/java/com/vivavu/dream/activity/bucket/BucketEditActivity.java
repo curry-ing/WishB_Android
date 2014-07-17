@@ -380,7 +380,12 @@ public class BucketEditActivity extends BaseActionBarActivity {
         mBucketImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String items[] = DreamApp.getInstance().getResources().getStringArray(R.array.array_image_attach);
+                String items[] = null;
+	            if(bucket.getCvrImgUrl() != null || bucket.getFile() != null) {
+		            items = DreamApp.getInstance().getResources().getStringArray(R.array.array_image_attach);
+	            } else {
+		            items = DreamApp.getInstance().getResources().getStringArray(R.array.array_attach_image_only);
+	            }
                 AlertDialog.Builder ab = new AlertDialog.Builder(BucketEditActivity.this);
                 ab.setTitle(getString(R.string.choose));
                 ab.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
@@ -512,7 +517,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
 
         // 눌린 상태가 비공개
         mBtnBucketOptionPublic.setSelected( bucket.getIsPrivate() == null || bucket.getIsPrivate() == 1 );
-		mBtnBucketOptionFacebook.setSelected(bucket.getFbFeedId() != null);
+		mBtnBucketOptionFacebook.setSelected(bucket.getFbFeedId() != null || FacebookShareType.SHARE.getCode().equalsIgnoreCase(bucket.getFbShare()));
         DescriptionViewFragment descriptionViewFragment = (DescriptionViewFragment) getSupportFragmentManager().findFragmentByTag(DescriptionViewFragment.TAG);
         if(ValidationUtils.isNotEmpty(bucket.getDescription())){
             OptionDescription option = new OptionDescription(bucket.getDescription());
@@ -580,7 +585,7 @@ public class BucketEditActivity extends BaseActionBarActivity {
 	        eventBuilder.setValue(flag ? 1 : 0);
 	        tracker.send(eventBuilder.build());
 
-	        bucket.setFbShare( flag ? FacebookShareType.SELF.getCode() : FacebookShareType.NONE.getCode());
+	        bucket.setFbShare( flag ? FacebookShareType.SHARE.getCode() : FacebookShareType.NONE.getCode());
         }
     }
 

@@ -5,7 +5,7 @@ package com.vivavu.dream.common.enums;
  */
 public enum FacebookShareType {
     NONE("false", "공유안함")
-    , SELF("true","공유");
+    , SHARE("true","공유");
 
     private String code;
     private String description;

@@ -278,7 +278,7 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
                 eventBuilder.setValue(flag ? 1 : 0);
                 tracker.send(eventBuilder.build());
 
-                post.setFbShare( flag ? FacebookShareType.SELF.getCode() : FacebookShareType.NONE.getCode());
+                post.setFbShare( flag ? FacebookShareType.SHARE.getCode() : FacebookShareType.NONE.getCode());
             }
         });
 
