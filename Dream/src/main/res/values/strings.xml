@@ -104,7 +104,7 @@
     <string name="title_activity_inquiry">InquiryActivity</string>
     <string name="txt_answer_for_email">답변받을 E-Mail</string>
     <string name="txt_send_email">보내기</string>
-    <string name="email_info">""</string>
+    <string name="email_info">"contact@wishb.net"</string>
     <string name="more">더보기</string>
     <string name="notice_test">알림알림알림알림알\n수박수박수박수박수</string>
 

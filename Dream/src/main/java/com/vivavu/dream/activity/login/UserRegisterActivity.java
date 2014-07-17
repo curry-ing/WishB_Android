@@ -399,10 +399,11 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
             case 0:
                 mRegisterTxtResponseInfo.setVisibility(View.INVISIBLE);
                 mRegisterTxtResponseInfo.setText("");
-                if (mSdkVersion < Build.VERSION_CODES.JELLY_BEAN) {
-                } else {
-                }
-                mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
+	            if (mSdkVersion < Build.VERSION_CODES.JELLY_BEAN) {
+		            mRegisterButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.btn_inactive));
+	            } else {
+		            mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
+	            }
 //                mRegisterButton.setEnabled(false);
                 break;
             case 1:

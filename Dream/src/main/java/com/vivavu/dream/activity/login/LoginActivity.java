@@ -21,7 +21,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -304,14 +303,6 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
                 onBackPressed();
             }
         });
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.login, menu);
-        return true;
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
