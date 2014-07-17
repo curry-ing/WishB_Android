@@ -106,33 +106,19 @@ public class MainActivity extends BaseActionBarActivity {
 
         noticeView = getLayoutInflater().inflate(R.layout.actionbar_notice, null);
         mPopupNotice = AndroidUtils.makePopupWindow(noticeView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        //mPopupNotice.setAnimationStyle(R.style.AnimationPopup);
         mBtnAddBucket.setOnClickListener(this);
-        /*mActionbarMainNotice.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                if(mPopupNotice != null && !mPopupNotice.isShowing() && !v.isSelected()){
-                    mPopupNotice.showAsDropDown(v);
-                    v.setSelected(true);
-                }else{
-                    mPopupNotice.hide();
-                    v.setSelected(false);
-                }
-            }
-        });*/
 
         mActionbarMainToday.setTypeface(getNanumBarunGothicBoldFont());
 
         mActionbarMainToday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(MainActivity.this, TodayActivity.class);
-//                startActivity(intent);
+	            Tracker tracker = DreamApp.getInstance().getTracker();
+	            HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_main_activity)).setAction(getString(R.string.ga_event_action_move_today));
+	            tracker.send(eventBuilder.build());
+
                 goToday();
-                Tracker tracker = DreamApp.getInstance().getTracker();
-                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_main_activity)).setAction(getString(R.string.ga_event_action_move_today));
-                tracker.send(eventBuilder.build());
             }
         });
 
@@ -153,12 +139,18 @@ public class MainActivity extends BaseActionBarActivity {
         });
 
         actionBarProfileViewHolder.mProfile.setOnClickListener(new View.OnClickListener(){
-
             @Override
             public void onClick(View view) {
                 mContainer.closeDrawer(Gravity.LEFT);
             }
         });
+
+	    actionBarProfileViewHolder.mTxtProfile.setOnClickListener(new View.OnClickListener() {
+		    @Override
+		    public void onClick(View v) {
+			    mContainer.closeDrawer(Gravity.LEFT);
+		    }
+	    });
 
         mContainer.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
