@@ -11,11 +11,17 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.vivavu.dream.R;
 import com.vivavu.dream.model.user.User;
 
+import org.acra.ReportingInteractionMode;
+import org.acra.annotation.ReportsCrashes;
+import org.acra.sender.HttpSender;
+
 import java.util.HashMap;
 
 /**
  * Created by yuja on 14. 1. 17.
  */
+@ReportsCrashes(formKey = "", mode = ReportingInteractionMode.TOAST, forceCloseDialogAfterToast = false, resToastText = R.string.app_crash_message
+		, formUri = "http://yourserver.com/yourscript",httpMethod = org.acra.sender.HttpSender.Method.PUT, reportType = HttpSender.Type.JSON)
 public class DreamApp extends Application {
     public static final String LOG_TAG = "dream";
     public static boolean debugMode = true;
@@ -31,8 +37,8 @@ public class DreamApp extends Application {
     private boolean login=false;
 
     protected static DreamApp dreamApp;
-    public static DreamApp getInstance(){
 
+	public static synchronized DreamApp getInstance(){
         return dreamApp;
     }
 
@@ -53,6 +59,7 @@ public class DreamApp extends Application {
                 .build();
         ImageLoader.getInstance().init(config);
         dreamApp = this;
+	    //ACRA.init(this); // todo: 서버 파트의 에러 수집 api가 개발되면 주석을 해제하여 ACRA 가동
     }
 
     @Override

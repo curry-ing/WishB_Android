@@ -71,4 +71,5 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:1.1.0'
     compile 'com.tonicartos:stickygridheaders:1.0.1'
     compile 'com.google.android.gms:play-services:4.4.+'
+    compile 'ch.acra:acra:4.5.0'
 }
