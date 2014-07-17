@@ -1,5 +1,6 @@
 package com.vivavu.dream.fragment.bucket.option.description;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,7 +12,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import android.widget.TextView;
 import com.vivavu.dream.R;
+import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.fragment.bucket.option.OptionBaseFragment;
 import com.vivavu.dream.model.bucket.option.OptionDescription;
 
@@ -29,6 +32,8 @@ public class DescriptionFragment extends OptionBaseFragment<OptionDescription> i
     EditText mBucketOptionNote;
     @InjectView(R.id.layout_bucket_option_note)
     LinearLayout mLayoutBucketOptionNote;
+    @InjectView(R.id.description)
+    TextView mDescription;
 
     public DescriptionFragment() {
 
@@ -46,6 +51,14 @@ public class DescriptionFragment extends OptionBaseFragment<OptionDescription> i
         final View rootView = inflater.inflate(R.layout.bucket_option_description, container, false);
         ButterKnife.inject(this, rootView);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+        mDescription.setTypeface(BaseActionBarActivity.getNanumBarunGothicBoldFont());
+
+        mBucketOptionNote.setTypeface(BaseActionBarActivity.getNanumBarunGothicFont());
+        mBucketOptionNote.setTextSize(18);
+        mBucketOptionNote.setTextColor(Color.GRAY);
+
+
         mBucketOptionNote.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

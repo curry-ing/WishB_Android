@@ -133,14 +133,17 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
         mActionbarLoginTitle.setTextSize(20);
         mActionbarLoginTitle.setTextColor(Color.WHITE);
 
-        mRegisterTxtResponseInfo.setTypeface(getNanumBarunGothicBoldFont());
-        mRegisterTxtResponseInfo.setTextSize(15);
+        mRegisterTxtResponseInfo.setTypeface(getNanumBarunGothicFont());
+        mRegisterTxtResponseInfo.setTextSize(14);
         mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
         setmRegisterTxtResponseInfo(mInvalidType = 0);
 
         mRegisterAgreementTxt.setTypeface(getNanumBarunGothicFont());
         mRegisterAgreementTxt.setTextSize(12);
-//        mRegisterAgreementTxt.setTextColor(Color.WHITE);
+
+        mRegisterButton.setTypeface(getNanumBarunGothicFont());
+        mRegisterButton.setTextSize(15);
+        mRegisterButton.setTextColor(Color.WHITE);
 
         SpannableString agreementText = new SpannableString(getResources().getString(R.string.regist_agreement));
         ClickableSpan agreement = new ClickableSpan() {
@@ -171,7 +174,7 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
         // Set up the login form.
         mRegisterEmail.setText(mEmail);
         mRegisterEmail.setText(context.getEmail());
-        mRegisterEmail.setTypeface(getNanumBarunGothicBoldFont());
+        mRegisterEmail.setTypeface(getNanumBarunGothicFont());
         mRegisterEmail.setTextSize(15);
         mRegisterEmail.setTextColor(Color.GRAY);
         mRegisterEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -208,7 +211,7 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
             }
         });
 
-        mRegisterPassword.setTypeface(getNanumBarunGothicBoldFont());
+        mRegisterPassword.setTypeface(getNanumBarunGothicFont());
         mRegisterPassword.setTextSize(15);
         mRegisterPassword.setTextColor(Color.GRAY);
         mRegisterPassword.setOnFocusChangeListener(new View.OnFocusChangeListener(){

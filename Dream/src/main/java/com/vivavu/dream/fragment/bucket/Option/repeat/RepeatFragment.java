@@ -54,6 +54,9 @@ public class RepeatFragment extends OptionBaseFragment<OptionRepeat> implements 
     FrameLayout mLayoutBucketOptionRepeatWeekMask;
     @InjectView(R.id.layout_bucket_option_repeat_custom_mask)
     FrameLayout mLayoutBucketOptionRepeatCustomMask;
+    @InjectView(R.id.terms_of_notice)
+    TextView mTermsofNotice;
+
 
     public RepeatFragment() {
 
@@ -117,6 +120,7 @@ public class RepeatFragment extends OptionBaseFragment<OptionRepeat> implements 
             }
         });
 
+        mTermsofNotice.setTypeface(BaseActionBarActivity.getNanumBarunGothicBoldFont());
         mTxtBucketOptionRepeatCnt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {

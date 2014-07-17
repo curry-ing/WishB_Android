@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -182,7 +184,12 @@ public class BucketEditActivity extends BaseActionBarActivity {
         ButterKnife.inject(this);
 
         mBucketInputTitle.setTypeface(getNanumBarunGothicFont());
+        mBucketInputTitle.setTextColor(Color.WHITE);
+        mBucketInputTitle.setTextSize(20);
         mBucketInputDeadline.setTypeface(getDenseRegularFont());
+        mBucketInputTitle.setTextColor(Color.WHITE);
+        mBucketInputDeadline.setTextSize(28);
+
         if(range > -1 && DreamApp.getInstance().getUser().getBirthday() != null){
 
             Date birthday = DateUtils.getDateFromString(DreamApp.getInstance().getUser().getBirthday(), "yyyyMMdd", new Date());

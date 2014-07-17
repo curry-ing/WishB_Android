@@ -19,8 +19,6 @@
             android:gravity="center_horizontal"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:paddingLeft="@dimen/layout_bucket_option_padding_left"
-            android:paddingRight="@dimen/layout_bucket_option_padding_right"
             android:paddingBottom="20dp"
             >
     <com.vivavu.dream.view.ShadowImageView
@@ -42,8 +40,8 @@
     </com.vivavu.dream.view.ShadowImageView>
 
     <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:layout_height="35dp"
         android:id="@+id/bucket_input_title"
         android:drawableRight="@drawable/ic_pencil"
         android:background="@drawable/inputbox_underline"
@@ -56,11 +54,14 @@
         android:minWidth="200dp"
         android:maxWidth="200dp"
         android:textSize="23.415sp"
-        style="@style/TextBucketTitleStyle"
-         />
+        android:shadowColor="#444444"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="2" />
+        <!--style="@style/TextBucketTitleStyle"-->
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="170dp"
+        android:layout_height="35dp"
         android:id="@+id/bucket_input_deadline"
         android:inputType="time"
         android:drawableRight="@drawable/ic_calendar"
@@ -75,69 +76,33 @@
 
         android:singleLine="true"
         android:textColor="@color/white"
-        android:shadowColor="#60000000"
-        android:shadowDx="0.0"
-        android:shadowDy="0.0"
-        android:shadowRadius="8.0"
+        android:shadowColor="#444444"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="2"
         />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_marginTop="15dp"
-            >
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/option_contents_note"
-                android:orientation="vertical"
-                >
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/option_contents_repeat"
-                android:orientation="vertical"
-                android:layout_marginTop="15dp"
-                >
-
-            </LinearLayout>
-        </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="left"
-                android:layout_marginTop="15dp"
-                >
+            <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:gravity="center" android:layout_marginTop="30dp">
                 <Button
                     android:layout_width="39dp"
                     android:layout_height="39dp"
                     android:id="@+id/btn_bucket_option_note"
                     android:clickable="true"
-                    android:background="@drawable/ic_memo"
+                    android:background="@drawable/btn_desc"
                     android:layout_marginRight="30dp"
                     />
                 <Button
                     android:layout_width="39dp"
                     android:layout_height="39dp"
                     android:id="@+id/btn_bucket_option_repeat"
-                    android:background="@drawable/ic_repeat"
+                    android:background="@drawable/btn_repeat"
                     android:enabled="true"
                     android:clickable="true"
                     android:layout_marginRight="30dp"
-                    />
-                <Button
-                    android:layout_width="39dp"
-                    android:layout_height="39dp"
-                    android:id="@+id/btn_bucket_option_public"
-                    android:background="@drawable/ic_lock"
-                    android:enabled="true"
-                    android:clickable="true"
-                    android:layout_marginRight="30dp"
-                    android:visibility="gone"
                     />
                 <Button
                     android:layout_width="39dp"
@@ -152,9 +117,51 @@
                     android:layout_width="39dp"
                     android:layout_height="39dp"
                     android:id="@+id/btn_bucket_option_del"
-                    android:background="@drawable/ic_delete"
+                    android:background="@drawable/btn_delete"
                     android:clickable="true"
                     android:enabled="true" />
+            </TableRow>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="15dp" android:layout_marginRight="15dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/option_contents_note"
+                    android:orientation="vertical"
+                    >
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/option_contents_repeat"
+                    android:orientation="vertical"
+                    android:layout_marginTop="15dp"
+                    >
+
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="left"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="15dp" android:layout_marginRight="15dp">
+                <Button
+                    android:layout_width="39dp"
+                    android:layout_height="39dp"
+                    android:id="@+id/btn_bucket_option_public"
+                    android:background="@drawable/ic_lock"
+                    android:enabled="true"
+                    android:clickable="true"
+                    android:layout_marginRight="30dp"
+                    android:visibility="gone"
+                    />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

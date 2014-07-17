@@ -2,10 +2,10 @@
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="true"
-        android:drawable="@color/btn_inactive"></item>
+        android:drawable="@drawable/bg_btn_press2"></item>
     <item android:state_selected="true"
-        android:drawable="@color/btn_inactive"></item>
+        android:drawable="@drawable/bg_btn_press2"></item>
     <item
-        android:drawable="@color/btn_inactive"></item>
+        android:drawable="@drawable/bg_btn_press2"></item>
 
 </selector>

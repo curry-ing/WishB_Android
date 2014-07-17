@@ -136,8 +136,8 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
         mActionbarLoginTitle.setTextSize(20);
         mActionbarLoginTitle.setTextColor(Color.WHITE);
 
-        mTxtResponseInfo.setTypeface(getNanumBarunGothicBoldFont());
-        mTxtResponseInfo.setTextSize(15);
+        mTxtResponseInfo.setTypeface(getNanumBarunGothicFont());
+        mTxtResponseInfo.setTextSize(14);
         mTxtResponseInfo.setTextColor(Color.WHITE);
 
         // Set up the login form.
@@ -145,7 +145,7 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
         mEmailView = (EditText) findViewById(R.id.email);
         mEmailView.setText(mEmail);
         mEmailView.setText(context.getEmail());
-        mEmailView.setTypeface(getNanumBarunGothicBoldFont());
+        mEmailView.setTypeface(getNanumBarunGothicFont());
         mEmailView.setTextSize(15);
         mEmailView.setTextColor(Color.GRAY);
         mEmailView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -173,7 +173,7 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
         });
 
         mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setTypeface(getNanumBarunGothicBoldFont());
+        mPasswordView.setTypeface(getNanumBarunGothicFont());
         mPasswordView.setTextSize(15);
         mPasswordView.setTextColor(Color.GRAY);
         mPasswordView.setOnFocusChangeListener(new View.OnFocusChangeListener(){

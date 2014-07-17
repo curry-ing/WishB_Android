@@ -49,6 +49,9 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
     public static Typeface nanumBarunGothicFont = null;
     public static Typeface nanumBarunGothicBoldFont = null;
     public static Typeface ptSansFont = null;
+    public static Typeface droidSansFallback = null;
+    public static Typeface roboto = null;
+    public static Typeface robotoBold = null;
 
 	protected ProgressDialog progressDialog;
 
@@ -311,6 +314,27 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
             ptSansFont = Typeface.createFromAsset(DreamApp.getInstance().getAssets(), "PT_SANS.ttf");
         }
         return ptSansFont;
+    }
+
+    public static Typeface getDriodSansFallback() {
+        if(droidSansFallback == null) {
+            droidSansFallback = Typeface.createFromAsset(DreamApp.getInstance().getAssets(), "DroidSansFallback.mp3");
+        }
+        return droidSansFallback;
+    }
+
+    public static Typeface getRoboto() {
+        if(roboto == null) {
+            roboto = Typeface.createFromAsset(DreamApp.getInstance().getAssets(), "Roboto-Regular.ttf");
+        }
+        return droidSansFallback;
+    }
+
+    public static Typeface getRobotoBold() {
+        if(robotoBold == null) {
+            robotoBold = Typeface.createFromAsset(DreamApp.getInstance().getAssets(), "Roboto-Bold.ttf");
+        }
+        return droidSansFallback;
     }
 
     public static void hideSoftKeyboard(){

@@ -67,11 +67,11 @@ public class ResetPasswordActivity extends BaseActionBarActivity {
         mActionbarLoginTitle.setTextSize(20);
         mActionbarLoginTitle.setTextColor(Color.WHITE);
 
-        mFindpwTxtResponseInfo.setTypeface(getNanumBarunGothicBoldFont());
-        mFindpwTxtResponseInfo.setTextSize(15);
+        mFindpwTxtResponseInfo.setTypeface(getNanumBarunGothicFont());
+        mFindpwTxtResponseInfo.setTextSize(14);
         mFindpwTxtResponseInfo.setTextColor(Color.WHITE);
 
-        mFindpwEmail.setTypeface(getNanumBarunGothicBoldFont());
+        mFindpwEmail.setTypeface(getNanumBarunGothicFont());
         mFindpwEmail.setTextSize(15);
         mFindpwEmail.setTextColor(Color.GRAY);
         mFindpwEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {

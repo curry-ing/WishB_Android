@@ -62,7 +62,7 @@
                 android:background="@drawable/bg_profile_divider"
                 android:paddingTop="20dp"
                 android:paddingBottom="10dp"
-                >
+                android:visibility="gone">
                 <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="wrap_content"

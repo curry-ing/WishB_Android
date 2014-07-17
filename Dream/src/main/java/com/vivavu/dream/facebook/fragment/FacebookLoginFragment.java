@@ -61,19 +61,20 @@ public class FacebookLoginFragment extends CustomBaseFragment {
         context = DreamApp.getInstance();
         final View rootView = inflater.inflate(R.layout.include_facebook_login, container, false);
         ButterKnife.inject(this, rootView);
-//        mAuthButton.setBackgroundResource(R.drawable.intro_fb_btn);
-//        Typeface NanumBold = Typeface.createFromAsset(getActivity().getAssets(), "NanumBarunGothicBold.mp3");
         List<String> readPermissions = new ArrayList<String>();
         readPermissions.add("public_profile");
         readPermissions.add("email");
         readPermissions.add("user_birthday");
 
-        mTxtFacebookLoginExplain.setTypeface(BaseActionBarActivity.getNanumBarunGothicBoldFont());
-        mTxtFacebookLoginExplain.setTextSize(15);
+        mTxtFacebookLoginExplain.setTypeface(BaseActionBarActivity.getNanumBarunGothicFont());
+        mTxtFacebookLoginExplain.setTextSize(14);
         mTxtFacebookLoginExplain.setTextColor(Color.WHITE);
 
+        mAuthButton.setTypeface(BaseActionBarActivity.getNanumBarunGothicFont());
+        mAuthButton.setTextSize(15);
         mAuthButton.setReadPermissions(readPermissions);
         mAuthButton.setFragment(this);
+        mAuthButton.setBackgroundResource(R.drawable.btn_fb_login);
 
         if(getActivity() instanceof IntroActivity){
             mTxtFacebookLoginExplain.setVisibility(View.GONE);

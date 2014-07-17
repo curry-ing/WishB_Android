@@ -92,8 +92,8 @@ public class IntroActivity extends BaseActionBarActivity {
         // Set up the ViewPager with the sections adapter.
 //        mPager.setAdapter(mSectionsPagerAdapter);
 //        mIntroViewpagerIndicator.setViewPager(mPager);
-        mRegisterButton.setTypeface(getNanumBarunGothicBoldFont());
-        mSignInButton.setTypeface(getNanumBarunGothicBoldFont());
+        mRegisterButton.setTypeface(getNanumBarunGothicFont());
+        mSignInButton.setTypeface(getNanumBarunGothicFont());
         mIntroAgreementTxt.setTypeface(getNanumBarunGothicFont());
         mIntroAgreementTxt.setTextColor(Color.WHITE);
         mIntroAgreementTxt.setTextSize(12);

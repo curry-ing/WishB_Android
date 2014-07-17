@@ -13,19 +13,19 @@
         android:gravity="center_vertical"
         >
         <Button
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
             android:id="@+id/btn_bucket_option_repeat"
             android:background="@drawable/ic_repeat_view"
             android:enabled="true"
             android:clickable="false"
-            android:layout_marginRight="11dp"
-            />
-        <View
+            android:layout_marginTop="3dp" android:layout_marginBottom="3dp" android:layout_marginLeft="6dp"
+            android:layout_marginRight="7dp"/>
+        <TextView
             android:layout_width="138dp"
-            android:layout_height="17dp"
-            android:background="@drawable/txt_bucket_edit_sub_repeat_title"
-            ></View>
+            android:layout_height="24dp"
+            android:text="Notification" android:textColor="#444444" android:gravity="center_vertical"
+            android:textSize="17sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -49,9 +49,9 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="No.1 요일별 반복알림"
-                    android:textSize="12.265sp"
-                    android:textColor="@color/white"
+                    android:text="요일별 반복알림"
+                    android:textSize="13sp"
+                    android:textColor="#444444"
                     android:shadowDx="1.0"
                     android:shadowDy="1.0"
                     android:shadowColor="@color/darkgray"
@@ -132,19 +132,18 @@
             android:layout_gravity="center_horizontal"
             android:background="@drawable/bg_box_with_top_line"
             android:paddingBottom="20dp"
-            >
+            android:paddingLeft="15dp" android:paddingRight="15dp">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="20dp"
                 android:layout_marginBottom="7dp"
                 >
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="No.2 횟수별 반복알림"
-                    android:textColor="@color/white"
-                    android:textSize="12.265sp"
+                    android:text="횟수별 반복알림"
+                    android:textColor="#444444"
+                    android:textSize="13sp"
                     android:shadowDx="1.0"
                     android:shadowDy="1.0"
                     android:shadowColor="@color/darkgray"

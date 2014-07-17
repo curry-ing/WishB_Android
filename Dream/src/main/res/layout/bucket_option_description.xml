@@ -11,19 +11,26 @@
         android:gravity="center_vertical"
         >
         <Button
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:id="@+id/btn_bucket_option_note"
-            android:background="@drawable/ic_memo_release"
+            android:background="@drawable/btn_desc_released"
             android:enabled="true"
             android:clickable="true"
-            android:layout_marginRight="11dp"
-            />
-        <View
-            android:layout_width="44dp"
-            android:layout_height="17dp"
-            android:background="@drawable/txt_bucket_edit_sub_note_title"
-            ></View>
+            android:layout_marginRight="7dp"
+            android:layout_marginLeft="2dp" android:layout_marginTop="2dp" android:layout_marginBottom="2dp"/>
+        <TextView
+            android:layout_width="138dp"
+            android:layout_height="35dp"
+            android:text="Description"
+            android:textSize="20sp"
+            android:textColor="#ffffff"
+            android:id="@+id/description" android:lines="1" android:gravity="center_vertical"
+            android:shadowColor="#AA000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="2"
+            android:layout_weight="0.18"/>/>
     </LinearLayout>
 
     <LinearLayout
@@ -31,8 +38,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@drawable/bg_box_with_top_line"
-        android:paddingLeft="15dp"
-        android:paddingTop="7dp"
+        android:paddingLeft="20dp"
+        android:paddingTop="20dp"
         android:paddingRight="20dp"
         >
         <EditText

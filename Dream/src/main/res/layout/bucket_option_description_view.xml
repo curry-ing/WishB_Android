@@ -17,13 +17,12 @@
             android:background="@drawable/ic_memo_view"
             android:enabled="true"
             android:clickable="true"
-            android:layout_marginRight="11dp"
-            />
-        <View
+            android:layout_marginRight="7dp"
+            android:layout_marginLeft="3dp"/>
+        <TextView
             android:layout_width="44dp"
-            android:layout_height="17dp"
-            android:background="@drawable/txt_bucket_edit_sub_note_title"
-            ></View>
+            android:layout_height="24dp"
+            android:text="Note" android:textSize="17sp" android:gravity="center_vertical"/>
     </LinearLayout>
 
     <LinearLayout
@@ -44,7 +43,7 @@
             android:focusableInTouchMode="true"
             android:gravity="top"
             android:background="@null"
-            />
+            android:textColor="#777777" android:textSize="17sp"/>
     </LinearLayout>
 
 </LinearLayout>

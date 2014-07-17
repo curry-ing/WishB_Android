@@ -11,27 +11,34 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        >
+        android:weightSum="1">
         <Button
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:id="@+id/btn_bucket_option_repeat"
-            android:background="@drawable/ic_repeat_release"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/btn_bucket_release"
+            android:background="@drawable/btn_repeat_released"
             android:enabled="true"
             android:clickable="false"
-            android:layout_marginRight="11dp"
-            />
-        <View
+            android:layout_marginRight="7dp"
+            android:layout_marginLeft="2dp" android:layout_marginTop="2dp" android:layout_marginBottom="2dp"/>
+        <TextView
             android:layout_width="138dp"
-            android:layout_height="17dp"
-            android:background="@drawable/txt_bucket_edit_sub_repeat_title"
-            ></View>
+            android:layout_height="35dp"
+            android:text="Notification"
+            android:textSize="20sp"
+            android:textColor="#ffffff"
+            android:id="@+id/terms_of_notice" android:lines="1" android:gravity="center_vertical"
+            android:shadowColor="#AA000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="2"
+            android:layout_weight="0.18"/>
         </LinearLayout>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="40dp"
-        >
+        android:layout_marginTop="20dp">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -53,9 +60,9 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="No.1 요일별 반복알림"
-                    android:textSize="12.265sp"
-                    android:textColor="@color/white"
+                    android:text="요일별 반복알림"
+                    android:textSize="13sp"
+                    android:textColor="#444444"
                     android:shadowDx="1.0"
                     android:shadowDy="1.0"
                     android:shadowColor="@color/darkgray"
@@ -63,12 +70,11 @@
                     />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_horizontal"
-                >
+            <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:gravity="center">
                 <Button
                     android:layout_width="32dp"
                     android:layout_height="32dp"
@@ -124,8 +130,7 @@
                     android:enabled="true"
                     android:clickable="true"
                     android:background="@drawable/ic_week_sun" />
-
-            </LinearLayout>
+            </TableRow>
         </LinearLayout>
         <FrameLayout
             android:layout_width="match_parent"
@@ -140,7 +145,8 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+            >
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -148,19 +154,18 @@
             android:id="@+id/layout_bucket_option_repeat_custom"
             android:layout_gravity="center_horizontal"
             android:background="@drawable/bg_box_with_top_line"
-            >
+            android:paddingLeft="20dp" android:paddingRight="20dp" android:paddingBottom="20dp">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="20dp"
                 android:layout_marginBottom="7dp"
                 >
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="No.2 횟수별 반복알림"
-                    android:textColor="@color/white"
-                    android:textSize="12.265sp"
+                    android:text="횟수별 반복알림"
+                    android:textColor="#444444"
+                    android:textSize="13sp"
                     android:shadowDx="1.0"
                     android:shadowDy="1.0"
                     android:shadowColor="@color/darkgray"

@@ -41,14 +41,15 @@
                 <!--android:background="@drawable/intro_fb_btn"-->
                 <!--android:singleLine="false"-->
                 <!--android:layout_marginTop="10dp"/>-->
-        입<com.facebook.widget.LoginButton
+        <com.facebook.widget.LoginButton
             xmlns:fb="http://schemas.android.com/apk/res-auto"
             android:layout_width="270dp"
-            android:layout_height="45dp"
+            android:layout_height="40dp"
             android:layout_gravity="center"
             android:id="@+id/authButton"
             android:layout_marginTop="10dp"
+            android:background="@drawable/btn_fb_login"
             fb:login_text="@string/login_with_facebook"
-            fb:logout_text="@string/login_with_facebook" android:background="#ff627aad"/>
+            fb:logout_text="@string/login_with_facebook" />
     </LinearLayout>
 </RelativeLayout>

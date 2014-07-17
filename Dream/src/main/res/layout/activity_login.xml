@@ -100,7 +100,8 @@
     android:layout_marginTop="30dp"
     android:paddingLeft="32dp"
     android:paddingRight="32dp"
-    android:layout_gravity="center" android:background="@drawable/btn_inactive" android:enabled="true"
+    android:layout_gravity="center"
+    android:background="@drawable/btn_inactive" android:enabled="true"
     android:textSize="15sp" android:text="@string/login" android:textColor="@color/white"/>
 
     <Button
