@@ -85,7 +85,7 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
     private String mEmail;
     private String mPassword;
     private Integer mInvalidType = 0;  // 1: Empty Email | 2: Empty PW | 3: Invalid Email | 4: InvalidPW | 5: Unregistered Email
-    private Boolean mAvailableEmail;
+    private boolean mAvailableEmail = false;
 
     protected final Handler handler = new Handler() {
         @Override
