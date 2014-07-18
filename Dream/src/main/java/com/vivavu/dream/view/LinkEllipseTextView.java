@@ -169,7 +169,7 @@ public class LinkEllipseTextView extends TextView {
      * @return The max lines reserved for text.
      */
     public int getMaxLines() {
-        return super.getMaxLines();
+        return mMaxLines;
     }
 
     /**
@@ -179,7 +179,7 @@ public class LinkEllipseTextView extends TextView {
      */
     public void setMaxLines(int maxLines) {
         super.setMaxLines(maxLines);
-        mMaxLines = getMaxLines();
+        mMaxLines = maxLines;
         if (mIsEndEllipsable) {
             mIsFinishEllipsed = false;
             mIsRemake = true;
