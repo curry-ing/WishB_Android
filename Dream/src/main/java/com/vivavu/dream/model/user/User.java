@@ -1,6 +1,8 @@
 package com.vivavu.dream.model.user;
 
 import com.google.gson.annotations.SerializedName;
+import com.vivavu.dream.R;
+import com.vivavu.dream.common.DreamApp;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -64,7 +66,7 @@ public class User{
     private File photo;
 
     public String getTitle_60() {
-        return title_60;
+        return getDefaultText(title_60, "60");
     }
 
     public void setTitle_60(String title_60) {
@@ -72,7 +74,7 @@ public class User{
     }
 
     public String getTitle_10() {
-        return title_10;
+        return getDefaultText(title_10, "10");
     }
 
     public void setTitle_10(String title_10) {
@@ -80,7 +82,7 @@ public class User{
     }
 
     public String getTitle_20() {
-        return title_20;
+        return getDefaultText(title_20, "20");
     }
 
     public void setTitle_20(String title_20) {
@@ -88,7 +90,7 @@ public class User{
     }
 
     public String getTitle_30() {
-        return title_30;
+        return getDefaultText(title_30, "30");
     }
 
     public void setTitle_30(String title_30) {
@@ -96,7 +98,7 @@ public class User{
     }
 
     public String getTitle_40() {
-        return title_40;
+        return getDefaultText(title_40, "40");
     }
 
     public void setTitle_40(String title_40) {
@@ -104,7 +106,7 @@ public class User{
     }
 
     public String getTitle_50() {
-        return title_50;
+        return getDefaultText(title_50, "50");
     }
 
     public void setTitle_50(String title_50) {
@@ -112,7 +114,7 @@ public class User{
     }
 
     public String getTitle_life() {
-        return title_life;
+        return getDefaultText(title_life, null);
     }
 
     public void setTitle_life(String title_life) {
@@ -220,6 +222,17 @@ public class User{
         }
     }
 
+	public String getDefaultText(String range, String defaultRange){
+		if(range == null){
+			if(defaultRange == null) {
+				return DreamApp.getInstance().getString(R.string.in_my_life);
+			}else {
+				return String.format(DreamApp.getInstance().getString(defaultRange.equals("60") ? R.string.after_sixties : R.string.each_decades), defaultRange);
+			}
+		}
+
+		 return range;
+	}
     @Override
     public String toString() {
         return "User{" +

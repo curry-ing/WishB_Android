@@ -16,7 +16,7 @@
 
     <string name="in_my_life">평생동안</string>
     <string name="each_decades">%s대의 꿈</string>
-    <string name="after_sixties">60대 이후의 꿈</string>
+    <string name="after_sixties">%s대 이후의 꿈</string>
 
     <!--Title Modify Dialog-->
     <!--<string name="mainview_life_set_title">Wish B.</string>-->
