@@ -75,7 +75,9 @@
                 android:imeOptions="actionUnspecified" android:background="@drawable/login_edittext_bg"
                 android:layout_marginLeft="1dp"
                 android:paddingLeft="10dp"
-                android:paddingRight="10dp" android:textSize="15sp"/>
+                android:paddingRight="10dp" android:textSize="15sp"
+                android:maxLength="64"
+            />
     </LinearLayout>
     <LinearLayout
     android:orientation="vertical"

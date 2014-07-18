@@ -20,7 +20,7 @@
     <!--Register-->
     <string name="register">회원가입</string>
     <string name="prompt_email">이메일 주소</string>
-    <string name="prompt_password">비밀번호 (6자 이상)</string>
+    <string name="prompt_password">비밀번호 (6자 이상, 64자 이하)</string>
     <string name="email_already_registered">이미 가입된 이메일입니다</string>
     <string name="register_completed">가입완료</string>
     <string name="login_progress_signing_in">Signing in&#8230;</string>
