@@ -364,9 +364,11 @@ public class TimelineActivity extends BaseActionBarActivity {
                 HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_timeline_activity)).setAction(getString(R.string.ga_event_action_achieve_bucket));
 
                 if(bucket.getStatus() == 0) {
+	                mBtnAchieve.setSelected(true);
                     bucket.setStatus(1);
                     eventBuilder.setValue(1);
                 } else {
+	                mBtnAchieve.setSelected(false);
                     bucket.setStatus(0);
                     eventBuilder.setValue(0);
                 }
