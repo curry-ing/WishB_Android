@@ -1,35 +1,27 @@
 package com.vivavu.dream.activity.intro;
 
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.text.SpannableString;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
-import android.text.style.UnderlineSpan;
-import android.util.Base64;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import android.widget.Toast;
+
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.login.LoginActivity;
 import com.vivavu.dream.activity.login.PrivacyActivity;
@@ -39,8 +31,6 @@ import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.Code;
 import com.vivavu.dream.util.AndroidUtils;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
 
 import butterknife.ButterKnife;
@@ -139,8 +129,16 @@ public class IntroActivity extends BaseActionBarActivity {
 
     }
 
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if ( keyCode == KeyEvent.KEYCODE_MENU ) {
+			// do nothing
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
 
-    private void goPrivacy() {
+	private void goPrivacy() {
         Intent intent = new Intent();
         intent.setClass(this, PrivacyActivity.class);
         startActivity(intent);
@@ -150,15 +148,6 @@ public class IntroActivity extends BaseActionBarActivity {
         Intent intent = new Intent();
         intent.setClass(this, UserAgreementActivity.class);
         startActivity(intent);
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.intro, menu);
-        return true;
     }
 
     @Override
