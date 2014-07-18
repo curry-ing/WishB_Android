@@ -160,6 +160,7 @@ public class LeftMenuDrawerFragment extends CustomBaseFragment {
                             case 2:
                                 User user = DreamApp.getInstance().getUser();
                                 user.setProfileImgUrl(null);
+	                            bindData();
                                 // 사진을 찍고 그냥
                                 FileUtils.deleteFile(user.getPhoto());
                                 user.setPhoto(null);
