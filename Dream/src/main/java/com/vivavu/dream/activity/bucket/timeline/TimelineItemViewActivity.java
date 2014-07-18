@@ -1,6 +1,8 @@
 package com.vivavu.dream.activity.bucket.timeline;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -212,11 +214,34 @@ public class TimelineItemViewActivity extends BaseActionBarActivity{
     }
 
     private void removePost() {
-        Tracker tracker = DreamApp.getInstance().getTracker();
-        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_timeline_item_view_activity)).setAction(getString(R.string.ga_event_action_delete));
-        tracker.send(eventBuilder.build());
-        Thread thread = new Thread(new PostDeleteThread());
-        thread.start();
+	    AlertDialog.Builder alertConfirm = new AlertDialog.Builder(this);
+	    alertConfirm.setMessage(getString(R.string.txt_timeline_view_confirm_delete_body)).setCancelable(false).setPositiveButton(getString(R.string.confirm_yes),
+			    new DialogInterface.OnClickListener() {
+				    @Override
+				    public void onClick(DialogInterface dialog, int which) {
+					    if (post != null && post.getId() != null && post.getId() > 0) {
+						    Tracker tracker = DreamApp.getInstance().getTracker();
+						    HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_timeline_item_view_activity)).setAction(getString(R.string.ga_event_action_delete));
+						    tracker.send(eventBuilder.build());
+						    Thread thread = new Thread(new PostDeleteThread());
+						    thread.start();
+					    } else {
+						    finish();
+					    }
+				    }
+			    }
+	    ).setNegativeButton(getString(R.string.confirm_no),
+			    new DialogInterface.OnClickListener() {
+				    @Override
+				    public void onClick(DialogInterface dialog, int which) {
+					    return;
+				    }
+			    }
+	    );
+	    AlertDialog alert = alertConfirm.create();
+	    alert.show();
+
+
     }
 
     private void sharedPost() {
