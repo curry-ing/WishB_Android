@@ -86,6 +86,31 @@
             />
     </LinearLayout>
     <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginTop="12dp">
+        <TextView
+            android:id="@+id/register_birthday"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:layout_width="fill_parent"
+            android:layout_height="41dp"
+            android:gravity="center"
+            android:hint="@string/prompt_birthday"
+            android:inputType="date"
+            android:imeActionLabel="@string/login"
+            android:imeActionId="@+id/login"
+            android:imeOptions="actionUnspecified"
+            android:background="@drawable/login_edittext_bg"
+            android:layout_marginLeft="1dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp" android:selectAllOnFocus="true" android:textSize="15dp"
+            android:maxLength="64"
+            />
+    </LinearLayout>
+    <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">

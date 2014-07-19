@@ -1,5 +1,6 @@
 package com.vivavu.dream.activity.login;
 
+import android.app.DatePickerDialog;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -30,14 +31,18 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.vivavu.dream.R;
 import com.vivavu.dream.common.BaseActionBarActivity;
+import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.common.enums.ResponseStatus;
 import com.vivavu.dream.model.LoginInfo;
 import com.vivavu.dream.model.ResponseBodyWrapped;
@@ -47,6 +52,7 @@ import com.vivavu.dream.repository.connector.UserInfoConnector;
 import com.vivavu.dream.util.ValidationUtils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -80,8 +86,10 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
 //    TextView mRegisterFbExplainTxt;
 
     protected int mSdkVersion = Build.VERSION.SDK_INT;
+	@InjectView(R.id.register_birthday)
+	TextView mRegisterBirthday;
 
-    private UserRegisterTask mRegisterTask = null;
+	private UserRegisterTask mRegisterTask = null;
     private String mEmail;
     private String mPassword;
     private Integer mInvalidType = 0;  // 1: Empty Email | 2: Empty PW | 3: Invalid Email | 4: InvalidPW | 5: Unregistered Email
@@ -340,6 +348,25 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
                 onBackPressed();
             }
         });
+
+	    mRegisterBirthday.setOnClickListener(new View.OnClickListener() {
+		    @Override
+		    public void onClick(View v) {
+			    DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
+				    @Override
+				    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+					    // monthOfYear가 -1 되어 들어옴
+					    Tracker tracker = DreamApp.getInstance().getTracker();
+					    HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_timeline_item_edit_activity)).setAction(getString(R.string.ga_event_action_edit_date));
+					    tracker.send(eventBuilder.build());
+					    mRegisterBirthday.setText(String.format("%4d.%02d.%02d", year, monthOfYear+1, dayOfMonth ));
+				    }
+			    };
+			    Calendar calendar = Calendar.getInstance();
+			    DatePickerDialog dialog = new DatePickerDialog(UserRegisterActivity.this, listener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+			    dialog.show();
+		    }
+	    });
     }
 
     @Override
@@ -488,6 +515,16 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
                     mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_active));
                 }
                 break;
+	        case 10:
+		        mRegisterTxtResponseInfo.setVisibility(View.VISIBLE);
+		        mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
+		        mRegisterTxtResponseInfo.setText(getString(R.string.notify) + getString(R.string.birthday_must_required));
+		        if (mSdkVersion < Build.VERSION_CODES.JELLY_BEAN) {
+			        mRegisterButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.btn_inactive));
+		        } else {
+			        mRegisterButton.setBackground(this.getResources().getDrawable(R.drawable.btn_inactive));
+		        }
+		        break;
 
         }
     }
@@ -506,7 +543,10 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
         if (ValidationUtils.isValidEmail(mRegisterEmail)) {
             UserInfoConnector userInfoConnector = new UserInfoConnector();
             ResponseBodyWrapped<Integer> result = userInfoConnector.checkEmailExists(mRegisterEmail.getText().toString());
-            mAvailableEmail = (result.getData() != 0);
+	        if(result == null){
+		        return;
+	        }
+            mAvailableEmail = (result.getData() != null && result.getData() == 0);
 
             if (!mAvailableEmail) {
                 mRegisterEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_alert_icon, 0);
@@ -528,6 +568,11 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
                 return;
             }
         }
+
+	    if(!ValidationUtils.isValidBirthday(mRegisterBirthday)){
+		    setmRegisterTxtResponseInfo(mInvalidType = 10);
+		    return;
+	    }
 //        if (!ValidationUtils.isValidEmail(mRegisterEmail)) {
 //            mRegisterEmail.requestFocus();
 //            return;
@@ -548,6 +593,7 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
         LoginInfo user = new LoginInfo();
         user.setEmail(mEmail);
         user.setPassword(mPassword);
+	    user.setBirthday("19831123");
 
         mRegisterTask.execute(user);
     }
@@ -608,8 +654,10 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
         public void run() {
             UserInfoConnector userInfoConnector = new UserInfoConnector();
             ResponseBodyWrapped<Integer> result = userInfoConnector.checkEmailExists(mRegisterEmail.getText().toString());
-            Message message = handler.obtainMessage(result.getData());
-            handler.sendMessage(message);
+	        if(result != null && result.isSuccess()) {
+		        Message message = handler.obtainMessage(result.getData());
+		        handler.sendMessage(message);
+	        }
         }
     }
 

@@ -3,6 +3,7 @@ package com.vivavu.dream.util;
 import android.content.Context;
 import android.text.TextUtils;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.vivavu.dream.R;
 
@@ -46,6 +47,24 @@ public class ValidationUtils {
 
         return true;
     }
+
+	public static boolean isValidBirthday(TextView view){
+		String value = view.getText().toString();
+		String regExp = "([12][0-9]{3})\\.([01][0-9])\\.([0-3][0-9])";
+		Pattern p = Pattern.compile(regExp);
+		Matcher m = p.matcher(value);
+
+		// Check for a valid email address.
+		if (TextUtils.isEmpty(value)) {
+//            view.setError(context.getString(R.string.error_field_required));
+			return false;
+		} else if (!m.matches()) {
+//            view.setError(context.getString(R.string.error_invalid_email));
+			return false;
+		}
+
+		return true;
+	}
 
     public static Boolean isValidNotEmpty(EditText view){
         Context context = view.getContext();
