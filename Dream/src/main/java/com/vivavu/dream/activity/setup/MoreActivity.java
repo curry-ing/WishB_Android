@@ -91,7 +91,7 @@ public class MoreActivity extends BaseActionBarActivity {
             }
         });
         mTxtTitle.setTypeface(getNanumBarunGothicBoldFont());
-        mTxtTitle.setTextSize(20);
+        //mTxtTitle.setTextSize(20);
         mTxtTitle.setTextColor(Color.WHITE);
 
         mBtnAlertSetting.setOnClickListener(new View.OnClickListener() {

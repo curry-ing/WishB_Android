@@ -67,11 +67,11 @@ public class FacebookLoginFragment extends CustomBaseFragment {
         readPermissions.add("user_birthday");
 
         mTxtFacebookLoginExplain.setTypeface(BaseActionBarActivity.getNanumBarunGothicFont());
-        mTxtFacebookLoginExplain.setTextSize(14);
+        //mTxtFacebookLoginExplain.setTextSize(14);
         mTxtFacebookLoginExplain.setTextColor(Color.WHITE);
 
         mAuthButton.setTypeface(BaseActionBarActivity.getNanumBarunGothicFont());
-        mAuthButton.setTextSize(15);
+        //mAuthButton.setTextSize(15);
         mAuthButton.setReadPermissions(readPermissions);
         mAuthButton.setFragment(this);
         mAuthButton.setBackgroundResource(R.drawable.btn_fb_login);

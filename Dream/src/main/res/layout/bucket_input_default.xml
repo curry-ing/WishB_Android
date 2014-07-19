@@ -53,14 +53,15 @@
         android:gravity="center"
         android:minWidth="200dp"
         android:maxWidth="200dp"
-        android:textSize="23.415sp"
+        android:textSize="20dp"
+        android:singleLine="true"
         android:shadowColor="#444444"
         android:shadowDx="2"
         android:shadowDy="2"
         android:shadowRadius="2" />
         <!--style="@style/TextBucketTitleStyle"-->
     <TextView
-        android:layout_width="170dp"
+        android:layout_width="250dp"
         android:layout_height="35dp"
         android:id="@+id/bucket_input_deadline"
         android:inputType="time"
@@ -72,7 +73,7 @@
         android:minWidth="200dp"
         android:maxWidth="200dp"
         android:gravity="center"
-        android:textSize="30.6625sp"
+        android:textSize="28dp"
 
         android:singleLine="true"
         android:textColor="@color/white"

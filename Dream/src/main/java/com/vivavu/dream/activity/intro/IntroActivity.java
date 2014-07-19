@@ -86,7 +86,7 @@ public class IntroActivity extends BaseActionBarActivity {
         mSignInButton.setTypeface(getNanumBarunGothicFont());
         mIntroAgreementTxt.setTypeface(getNanumBarunGothicFont());
         mIntroAgreementTxt.setTextColor(Color.WHITE);
-        mIntroAgreementTxt.setTextSize(12);
+        //mIntroAgreementTxt.setTextSize(12);
 
         SpannableString agreementText = new SpannableString(getResources().getString(R.string.regist_agreement));
         ClickableSpan agreement = new ClickableSpan() {

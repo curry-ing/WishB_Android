@@ -1,14 +1,12 @@
 package com.vivavu.dream.activity.login;
 
 import android.graphics.Color;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.vivavu.dream.R;
@@ -66,7 +64,7 @@ public class UserAgreementActivity extends BaseActionBarActivity {
         //Intent data = getIntent();
         mTxtTitle.setText(getString(R.string.lbl_access_terms));
         mTxtTitle.setTypeface(getNanumBarunGothicBoldFont());
-        mTxtTitle.setTextSize(19);
+        //mTxtTitle.setTextSize(19);
         mTxtTitle.setTextColor(Color.WHITE);
 
         mMenuPrevious.setOnClickListener(new View.OnClickListener() {

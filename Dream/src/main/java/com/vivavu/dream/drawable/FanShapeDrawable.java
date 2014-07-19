@@ -44,14 +44,20 @@ public class FanShapeDrawable extends Drawable {
         imgCnt = cnt;
         mPosition = position;
 
-        if (res == 320) {
+	    //todo : 이부분 교정이 필요함. 이미지 처리는 외부 drawable이 아닌 view에서 처리하도록 수정이 필요함.
+	    double fact = (double)540 /320;
+	    CANVAS_WIDTH = (int) (fact * res);
+	    CANVAS_HEIGHT= (int) (fact * res);
+
+	    if (res == 320) {
             CANVAS_WIDTH = 540;
             CANVAS_HEIGHT = 540;
         } else if (res == 480) {
             CANVAS_WIDTH = 810;
             CANVAS_HEIGHT = 810;
-        }
+        } else {
 
+	    }
 
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);

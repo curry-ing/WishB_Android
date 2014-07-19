@@ -145,7 +145,7 @@ public class BucketAdapter extends PagerAdapter implements View.OnClickListener{
 
         /* SET MAIN TITLE */
         holder.mBtnDecade.setTypeface(BaseActionBarActivity.getNanumBarunGothicBoldFont());
-        holder.mBtnDecade.setTextSize(22);
+        //holder.mBtnDecade.setTextSize(22);
         holder.mBtnDecade.setTextColor(Color.WHITE);
         holder.mBtnDecade.getPaint().setAntiAlias(true);
 
@@ -329,7 +329,7 @@ public class BucketAdapter extends PagerAdapter implements View.OnClickListener{
                 int thisY = cal.get(Calendar.YEAR);
 
                 holder.mPeriod.setTypeface(BaseActionBarActivity.getDenseRegularFont(), Typeface.BOLD);
-                holder.mPeriod.setTextSize(25);
+                //holder.mPeriod.setTextSize(25);
                 if (pos == 6) {
                     holder.mPeriod.setText(mFromMonth + String.valueOf(startY).charAt(0) + " "
                             + String.valueOf(startY).charAt(1) + " "
@@ -360,7 +360,7 @@ public class BucketAdapter extends PagerAdapter implements View.OnClickListener{
                 int marking = (int) ((float) DreamApp.getInstance().getUser().getUserAge() / 100 * 360);
 
                 holder.mPeriod.setTypeface(BaseActionBarActivity.getDenseRegularFont(), Typeface.BOLD);
-                holder.mPeriod.setTextSize(25);
+                //holder.mPeriod.setTextSize(25);
                 holder.mMainProgress.setImageDrawable(new FanShapeDrawable(null, marking, PROGRESS_BAR_BASELINE, deviceDensityDpi, pos));
                 holder.mPeriod.setText(mFromMonth + mUserBirthday.substring(0, 1) + " "
                         + mUserBirthday.substring(1, 2) + " "

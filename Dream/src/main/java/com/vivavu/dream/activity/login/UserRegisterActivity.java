@@ -130,19 +130,19 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
 //        Typeface NanumBold = Typeface.createFromAsset(context.getAssets(), "NanumBarunGothicBold.mp3");
         mActionbarLoginTitle.setText("회원가입");
         mActionbarLoginTitle.setTypeface(getNanumBarunGothicBoldFont());
-        mActionbarLoginTitle.setTextSize(20);
+        //mActionbarLoginTitle.setTextSize(20);
         mActionbarLoginTitle.setTextColor(Color.WHITE);
 
         mRegisterTxtResponseInfo.setTypeface(getNanumBarunGothicFont());
-        mRegisterTxtResponseInfo.setTextSize(14);
+        //mRegisterTxtResponseInfo.setTextSize(14);
         mRegisterTxtResponseInfo.setTextColor(Color.WHITE);
         setmRegisterTxtResponseInfo(mInvalidType = 0);
 
         mRegisterAgreementTxt.setTypeface(getNanumBarunGothicFont());
-        mRegisterAgreementTxt.setTextSize(12);
+        //mRegisterAgreementTxt.setTextSize(12);
 
         mRegisterButton.setTypeface(getNanumBarunGothicFont());
-        mRegisterButton.setTextSize(15);
+        //mRegisterButton.setTextSize(15);
         mRegisterButton.setTextColor(Color.WHITE);
 
         SpannableString agreementText = new SpannableString(getResources().getString(R.string.regist_agreement));
@@ -175,7 +175,7 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
         mRegisterEmail.setText(mEmail);
         mRegisterEmail.setText(context.getEmail());
         mRegisterEmail.setTypeface(getNanumBarunGothicFont());
-        mRegisterEmail.setTextSize(15);
+        //mRegisterEmail.setTextSize(15);
         mRegisterEmail.setTextColor(Color.GRAY);
         mRegisterEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -212,7 +212,7 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
         });
 
         mRegisterPassword.setTypeface(getNanumBarunGothicFont());
-        mRegisterPassword.setTextSize(15);
+        //mRegisterPassword.setTextSize(15);
         mRegisterPassword.setTextColor(Color.GRAY);
         mRegisterPassword.setOnFocusChangeListener(new View.OnFocusChangeListener(){
 

@@ -61,7 +61,7 @@ public class InquiryActivity extends BaseActionBarActivity {
 
         mTxtTitle.setText(getString(R.string.inquiry));
         mTxtTitle.setTypeface(getNanumBarunGothicBoldFont());
-        mTxtTitle.setTextSize(20);
+        //mTxtTitle.setTextSize(20);
         mTxtTitle.setTextColor(Color.WHITE);
         mMenuPrevious.setOnClickListener(new View.OnClickListener() {
             @Override

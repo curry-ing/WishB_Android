@@ -52,6 +52,7 @@
             android:gravity="top"
             android:hint="@string/txt_bucket_option_note_hint"
             android:background="@null"
+            android:textSize="18dp"
             >
             <requestFocus></requestFocus>
             </EditText>

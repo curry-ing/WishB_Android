@@ -64,15 +64,15 @@ public class ResetPasswordActivity extends BaseActionBarActivity {
 //        Typeface NanumBold = Typeface.createFromAsset(context.getAssets(), "NanumBarunGothicBold.mp3");
         mActionbarLoginTitle.setText(getText(R.string.find_passwd));
         mActionbarLoginTitle.setTypeface(getNanumBarunGothicBoldFont());
-        mActionbarLoginTitle.setTextSize(20);
+        //mActionbarLoginTitle.setTextSize(20);
         mActionbarLoginTitle.setTextColor(Color.WHITE);
 
         mFindpwTxtResponseInfo.setTypeface(getNanumBarunGothicFont());
-        mFindpwTxtResponseInfo.setTextSize(14);
+        //mFindpwTxtResponseInfo.setTextSize(14);
         mFindpwTxtResponseInfo.setTextColor(Color.WHITE);
 
         mFindpwEmail.setTypeface(getNanumBarunGothicFont());
-        mFindpwEmail.setTextSize(15);
+        //mFindpwEmail.setTextSize(15);
         mFindpwEmail.setTextColor(Color.GRAY);
         mFindpwEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override

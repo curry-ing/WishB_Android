@@ -23,6 +23,7 @@
         android:text="더보기"
         android:textAlignment="center"
         android:textColor="@color/default_text_color"
+        android:textSize="19dp"
         style="@style/TextBucketTitleStyle"
         />
 

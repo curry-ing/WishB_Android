@@ -11,8 +11,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-
 import android.widget.TextView;
+
 import com.vivavu.dream.R;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.fragment.bucket.option.OptionBaseFragment;
@@ -55,7 +55,7 @@ public class DescriptionFragment extends OptionBaseFragment<OptionDescription> i
         mDescription.setTypeface(BaseActionBarActivity.getNanumBarunGothicBoldFont());
 
         mBucketOptionNote.setTypeface(BaseActionBarActivity.getNanumBarunGothicFont());
-        mBucketOptionNote.setTextSize(18);
+        //mBucketOptionNote.setTextSize(18);
         mBucketOptionNote.setTextColor(Color.GRAY);
 
 

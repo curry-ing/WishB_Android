@@ -27,6 +27,7 @@
                 android:layout_height="41dp"
                 android:inputType="textEmailAddress"
                 android:background="@drawable/login_edittext_bg"
+                android:textSize="15dp"
                 android:layout_marginLeft="1dp"
                 android:paddingRight="10dp"
                 android:paddingLeft="10dp" />
@@ -47,7 +48,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="40dp"
             android:typeface="sans"
-            android:textSize="16sp"
+            android:textSize="14dp"
             android:textStyle="bold"
             android:singleLine="true"
             android:paddingLeft="5dp"
