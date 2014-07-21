@@ -268,17 +268,31 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
         mBtnPostFacebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                modFlag = true;
-                checkRequireElement();
-                boolean flag = !mBtnPostFacebook.isSelected();
-                mBtnPostFacebook.setSelected(flag);
+	            if(DreamApp.getInstance().getUser().isFacebookLogin()) {
+		            modFlag = true;
+		            checkRequireElement();
+		            boolean flag = !mBtnPostFacebook.isSelected();
+		            mBtnPostFacebook.setSelected(flag);
 
-                Tracker tracker = DreamApp.getInstance().getTracker();
-                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_timeline_item_edit_activity)).setAction(getString(R.string.ga_event_action_share_facebook));
-                eventBuilder.setValue(flag ? 1 : 0);
-                tracker.send(eventBuilder.build());
+		            Tracker tracker = DreamApp.getInstance().getTracker();
+		            HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_timeline_item_edit_activity)).setAction(getString(R.string.ga_event_action_share_facebook));
+		            eventBuilder.setValue(flag ? 1 : 0);
+		            tracker.send(eventBuilder.build());
 
-                post.setFbShare( flag ? FacebookShareType.SHARE.getCode() : FacebookShareType.NONE.getCode());
+		            post.setFbShare(flag ? FacebookShareType.SHARE.getCode() : FacebookShareType.NONE.getCode());
+	            } else {
+		            AlertDialog.Builder alertConfirm = new AlertDialog.Builder(TimelineItemEditActivity.this);
+		            alertConfirm.setMessage(getString(R.string.txt_bucket_edit_confirm_need_facebook_login)).setPositiveButton(getString(R.string.confirm_check),
+				            new DialogInterface.OnClickListener() {
+					            @Override
+					            public void onClick(DialogInterface dialog, int which) {
+						            dialog.dismiss();
+					            }
+				            }
+		            );
+		            AlertDialog alert = alertConfirm.create();
+		            alert.show();
+	            }
             }
         });
 
@@ -428,7 +442,7 @@ public class TimelineItemEditActivity extends BaseActionBarActivity {
     private boolean checkRequireElement(){
         if (post != null && modFlag
                 && (( post.getId() != null && post.getId() > 0 && ( post.getText() != null || post.getPhoto() != null || post.getImgUrl() != null)) // 글 수정시 세가지 중 하나만 있어도 수정 가능
-                || (post.getId() == null || post.getId() < 1 && (post.getText() != null || post.getPhoto() != null)) // 글 추가시에는 둘 중 하나만 있어도 추가 가능
+                || ((post.getId() == null || post.getId() < 1) && (post.getText() != null || post.getPhoto() != null)) // 글 추가시에는 둘 중 하나만 있어도 추가 가능
                 )
                 ) {
             mMenuSave.setVisibility(View.VISIBLE);

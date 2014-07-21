@@ -544,7 +544,12 @@ public class BucketEditActivity extends BaseActionBarActivity {
 
         // 눌린 상태가 비공개
         mBtnBucketOptionPublic.setSelected( bucket.getIsPrivate() == null || bucket.getIsPrivate() == 1 );
-		mBtnBucketOptionFacebook.setSelected(bucket.getFbFeedId() != null || FacebookShareType.SHARE.getCode().equalsIgnoreCase(bucket.getFbShare()));
+	    if(DreamApp.getInstance().getUser().isFacebookLogin()) {
+		    mBtnBucketOptionFacebook.setSelected(bucket.getFbFeedId() != null || FacebookShareType.SHARE.getCode().equalsIgnoreCase(bucket.getFbShare()));
+	    } else {
+		    mBtnBucketOptionFacebook.setSelected(false);
+		    bucket.setFbShare(FacebookShareType.NONE.getCode());
+	    }
         DescriptionViewFragment descriptionViewFragment = (DescriptionViewFragment) getSupportFragmentManager().findFragmentByTag(DescriptionViewFragment.TAG);
         if(ValidationUtils.isNotEmpty(bucket.getDescription())){
             OptionDescription option = new OptionDescription(bucket.getDescription());
@@ -604,15 +609,29 @@ public class BucketEditActivity extends BaseActionBarActivity {
         } else if (view == mBtnBucketOptionDel){
             doDelte();
         } else if(view == mBtnBucketOptionFacebook){
-	        boolean flag = !mBtnBucketOptionFacebook.isSelected();
-	        mBtnBucketOptionFacebook.setSelected(flag);
+	        if(DreamApp.getInstance().getUser().isFacebookLogin()) {
+		        boolean flag = !mBtnBucketOptionFacebook.isSelected();
+		        mBtnBucketOptionFacebook.setSelected(flag);
 
-	        Tracker tracker = DreamApp.getInstance().getTracker();
-	        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_bucket_edit_activity)).setAction(getString(R.string.ga_event_action_share_facebook));
-	        eventBuilder.setValue(flag ? 1 : 0);
-	        tracker.send(eventBuilder.build());
+		        Tracker tracker = DreamApp.getInstance().getTracker();
+		        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_bucket_edit_activity)).setAction(getString(R.string.ga_event_action_share_facebook));
+		        eventBuilder.setValue(flag ? 1 : 0);
+		        tracker.send(eventBuilder.build());
 
-	        bucket.setFbShare( flag ? FacebookShareType.SHARE.getCode() : FacebookShareType.NONE.getCode());
+		        bucket.setFbShare(flag ? FacebookShareType.SHARE.getCode() : FacebookShareType.NONE.getCode());
+	        } else {
+		        AlertDialog.Builder alertConfirm = new AlertDialog.Builder(this);
+		        alertConfirm.setMessage(getString(R.string.txt_bucket_edit_confirm_need_facebook_login)).setPositiveButton(getString(R.string.confirm_check),
+				        new DialogInterface.OnClickListener() {
+					        @Override
+					        public void onClick(DialogInterface dialog, int which) {
+						        dialog.dismiss();
+					        }
+				        }
+		        );
+		        AlertDialog alert = alertConfirm.create();
+		        alert.show();
+	        }
         }
     }
 

@@ -63,6 +63,9 @@ public class User{
     @SerializedName("profile_img_url")
     private String profileImgUrl;
 
+	@SerializedName("fb_id")
+	private String facebookId;
+
     private File photo;
 
     public String getTitle_60() {
@@ -193,7 +196,23 @@ public class User{
         this.username = username;
     }
 
-    public File getPhoto() {
+	public String getFacebookId() {
+		return facebookId;
+	}
+
+	public void setFacebookId(String facebookId) {
+		this.facebookId = facebookId;
+	}
+
+	public boolean isFacebookLogin(){
+		if(this.facebookId != null && this.facebookId.length() > 0){
+			return true;
+		}
+
+		return false;
+	}
+
+	public File getPhoto() {
         return photo;
     }
 

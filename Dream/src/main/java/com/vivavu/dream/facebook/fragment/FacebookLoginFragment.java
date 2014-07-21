@@ -1,13 +1,19 @@
 package com.vivavu.dream.facebook.fragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,10 +54,35 @@ public class FacebookLoginFragment extends CustomBaseFragment {
     @InjectView(R.id.fb_login_progress_bar)
     ProgressBar mFbLoginProgressBar;
     private UiLifecycleHelper uiHelper;
-//    private ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
+
+	protected int START_LOGIN = 0;
+	protected int END_LOGIN = 1;
+
+	private Handler handler = new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			switch (msg.what){
+				case 0:
+					if(!progressDialog.isShowing()){
+						progressDialog.show();
+					}
+					break;
+				case 1:
+					if(progressDialog.isShowing()){
+						progressDialog.dismiss();
+					}
+					break;
+			}
+		}
+	};
 
     private Session.StatusCallback callback = new Session.StatusCallback() {
         public void call(Session session, SessionState state, Exception exception) {
+	        if (state == SessionState.OPENING){
+				//handler.sendEmptyMessage(START_LOGIN);
+	        }
             onSessionStateChange(session, state, exception);
         }
     };
@@ -65,6 +96,18 @@ public class FacebookLoginFragment extends CustomBaseFragment {
         readPermissions.add("public_profile");
         readPermissions.add("email");
         readPermissions.add("user_birthday");
+
+	    LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	    View v = layoutInflater.inflate(R.layout.transparent_progress_dialog, null);
+	    progressDialog = new ProgressDialog(getActivity(), R.style.progress_bar_style);
+		progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+	    //progressDialog.setContentView(v);
+	    //progressDialog.setMessage(getString(R.string.in_login));
+
+	    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.progress_bar_style);
+	    builder.setView(v);
+	    AlertDialog alertDialog = builder.create();
+	    //builder.show();
 
         mTxtFacebookLoginExplain.setTypeface(BaseActionBarActivity.getNanumBarunGothicFont());
         //mTxtFacebookLoginExplain.setTextSize(14);
@@ -125,6 +168,7 @@ public class FacebookLoginFragment extends CustomBaseFragment {
 //        mAuthButton.setVisibility(View.GONE);
         if (requestCode == Session.DEFAULT_AUTHORIZE_ACTIVITY_CODE) {
             if (resultCode == Activity.RESULT_OK) {
+	            handler.sendEmptyMessage(START_LOGIN);
                 LoginInfo loginInfo = new LoginInfo();
                 loginInfo.setEmail(Session.getActiveSession().getAccessToken());
                 loginInfo.setPassword("facebook");
@@ -186,7 +230,7 @@ public class FacebookLoginFragment extends CustomBaseFragment {
 
         @Override
         protected void onPostExecute(final ResponseBodyWrapped<SecureToken> success) {
-
+	        handler.sendEmptyMessage(END_LOGIN);
             if (success != null && success.isSuccess()) {
                 DreamApp.getInstance().setLogin(true);
                 DreamApp.getInstance().setUser(success.getData().getUser());
