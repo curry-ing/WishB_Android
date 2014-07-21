@@ -6,7 +6,7 @@
               android:orientation="vertical"
               android:background="@drawable/register_login_bg">
 
-    <!-- Login progress -->
+<!--    &lt;!&ndash; Login progress &ndash;&gt;
     <LinearLayout android:id="@+id/register_status"
                   android:visibility="gone"
                   android:layout_width="wrap_content"
@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:text="@string/login_progress_signing_in" />
-    </LinearLayout>
+    </LinearLayout>-->
 
 
     <LinearLayout

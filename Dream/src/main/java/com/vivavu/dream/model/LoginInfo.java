@@ -8,7 +8,6 @@ import com.vivavu.dream.model.user.User;
 public class LoginInfo extends User{
     private String password;
     private String command;
-	private String birthday;
     private boolean isLogin = false;
 
     public String getPassword() {
@@ -34,12 +33,4 @@ public class LoginInfo extends User{
     public void setLogin(boolean isLogin) {
         this.isLogin = isLogin;
     }
-
-	public String getBirthday() {
-		return birthday;
-	}
-
-	public void setBirthday(String birthday) {
-		this.birthday = birthday;
-	}
 }

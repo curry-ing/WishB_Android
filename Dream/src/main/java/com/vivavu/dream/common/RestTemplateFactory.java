@@ -24,11 +24,14 @@ public class RestTemplateFactory {
     private static RestTemplate restTemplate;
     private User user;
 
+	public static final int READ_TIMEOUT = 20000;
+	public static final int CONNECT_TIMEOUT = 20000;
+
     public static RestTemplate getInstance(){
         if(restTemplate == null){
             HttpComponentsClientHttpRequestFactory httpComponentsClientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
-            httpComponentsClientHttpRequestFactory.setReadTimeout(5000);
-            httpComponentsClientHttpRequestFactory.setConnectTimeout(5000);
+            httpComponentsClientHttpRequestFactory.setReadTimeout(READ_TIMEOUT);
+            httpComponentsClientHttpRequestFactory.setConnectTimeout(CONNECT_TIMEOUT);
             restTemplate = new RestTemplate( httpComponentsClientHttpRequestFactory );
             restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
 

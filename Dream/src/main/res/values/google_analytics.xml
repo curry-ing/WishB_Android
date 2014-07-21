@@ -4,16 +4,17 @@
     <string name="ga_trackingId">UA-52445855-1</string>
 
     <!-- EventBuilder Category start -->
-    <string name="ga_event_category_main_activity">MainActivity</string>
-    <string name="ga_event_category_bucket_group_view_activity">BucketGroupViewActivity</string>
-    <string name="ga_event_category_timeline_activity">TimelineActivity</string>
-    <string name="ga_event_category_bucket_edit_activity">BucketEditActivity</string>
-    <string name="ga_event_category_bucket_option_activity">BucketOptionActivity</string>
-    <string name="ga_event_category_timeline_item_edit_activity">TimelineItemEditActivity</string>
-    <string name="ga_event_category_timeline_item_view_activity">TimelineItemViewActivity</string>
-    <string name="ga_event_category_today_activity">TodayActivity</string>
-    <string name="ga_event_category_profile_fragment">profile_fragment</string>
-    <string name="ga_event_category_more_activity">more activity</string>
+    <string name="ga_event_category_user_register_activity">회원가입</string>
+    <string name="ga_event_category_main_activity">메인화면</string>
+    <string name="ga_event_category_bucket_group_view_activity">서브뷰화면</string>
+    <string name="ga_event_category_timeline_activity">타임라인화면</string>
+    <string name="ga_event_category_bucket_edit_activity">버킷추가/수정화면</string>
+    <string name="ga_event_category_bucket_option_activity">버킷옵션화면</string>
+    <string name="ga_event_category_timeline_item_edit_activity">버킷일지추가/수정화면</string>
+    <string name="ga_event_category_timeline_item_view_activity">버킷일지뷰화면</string>
+    <string name="ga_event_category_today_activity">투데이화면</string>
+    <string name="ga_event_category_profile_fragment">프로필화면</string>
+    <string name="ga_event_category_more_activity">설정화면</string>
     <!-- EventBuilder Category end -->
 
     <!-- EventBuilder Action start -->

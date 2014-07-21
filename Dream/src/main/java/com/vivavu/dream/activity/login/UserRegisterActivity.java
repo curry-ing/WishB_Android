@@ -92,6 +92,7 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
 	private UserRegisterTask mRegisterTask = null;
     private String mEmail;
     private String mPassword;
+	private String birthday;
     private Integer mInvalidType = 0;  // 1: Empty Email | 2: Empty PW | 3: Invalid Email | 4: InvalidPW | 5: Unregistered Email
     private boolean mAvailableEmail = false;
 
@@ -357,7 +358,7 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
 				    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 					    // monthOfYear가 -1 되어 들어옴
 					    Tracker tracker = DreamApp.getInstance().getTracker();
-					    HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_timeline_item_edit_activity)).setAction(getString(R.string.ga_event_action_edit_date));
+					    HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_user_register_activity)).setAction(getString(R.string.ga_event_action_edit_date));
 					    tracker.send(eventBuilder.build());
 					    mRegisterBirthday.setText(String.format("%4d.%02d.%02d", year, monthOfYear+1, dayOfMonth ));
 				    }
@@ -365,6 +366,20 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
 			    Calendar calendar = Calendar.getInstance();
 			    DatePickerDialog dialog = new DatePickerDialog(UserRegisterActivity.this, listener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
 			    dialog.show();
+		    }
+	    });
+
+	    mRegisterBirthday.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+		    @Override
+		    public void onFocusChange(View v, boolean hasFocus) {
+
+		    }
+	    });
+
+	    mRegisterBirthday.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+		    @Override
+		    public void onFocusChange(View v, boolean hasFocus) {
+
 		    }
 	    });
     }
@@ -537,6 +552,7 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
         // Store values at the time of the login attempt.
         mEmail = mRegisterEmail.getText().toString();
         mPassword = mRegisterPassword.getText().toString();
+	    birthday = mRegisterBirthday.getText().toString();
 //        String mRegisterPasswordDupValue = mRegisterPasswordDup.getText().toString();
 
         // Check for a valid email address.
@@ -546,7 +562,7 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
 	        if(result == null){
 		        return;
 	        }
-            mAvailableEmail = (result.getData() != null && result.getData() == 0);
+            mAvailableEmail = (result.getData() != null && result.getData() == 1);
 
             if (!mAvailableEmail) {
                 mRegisterEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.login_check_alert_icon, 0);
@@ -593,7 +609,7 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
         LoginInfo user = new LoginInfo();
         user.setEmail(mEmail);
         user.setPassword(mPassword);
-	    user.setBirthday("19831123");
+	    user.setBirthday(birthday.replaceAll("\\D", ""));
 
         mRegisterTask.execute(user);
     }
