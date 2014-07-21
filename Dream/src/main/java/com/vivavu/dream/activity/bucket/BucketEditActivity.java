@@ -85,6 +85,9 @@ public class BucketEditActivity extends BaseActionBarActivity {
     private static final int SEND_DATA_ERROR = 2;
     private static final int SEND_DATA_DELETE = 3;
     private static final int SEND_DATA_DELETE_ERROR = 4;
+    private static final int FETCH_DATA_START = 5;
+    private static final int FETCH_DATA_END = 6;
+
     public static final String RESULT_EXTRA_BUCKET = "bucket";
     public static final String RESULT_EXTRA_BUCKET_ID = "bucketId";
     public static final String RESULT_EXTRA_BUCKET_RANGE = "bucketRange";
@@ -114,11 +117,13 @@ public class BucketEditActivity extends BaseActionBarActivity {
     private Bucket bucket = null;
     private boolean modFlag = false;
     protected Uri mImageCaptureUri;
-    private String modString;
+	int bucketId;
+	int range;
 
-    protected final Handler handler = new Handler() {
+	protected final Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
+	        Bucket bucket;
             switch (msg.what){
                 case SEND_DATA_START:
                     progressDialog.show();
@@ -127,8 +132,9 @@ public class BucketEditActivity extends BaseActionBarActivity {
                     if(progressDialog.isShowing()) {
                         progressDialog.dismiss();
                     }
-                    Bucket bucket = (Bucket) msg.obj;
-                    Intent intent = new Intent();
+
+	                bucket = (Bucket) msg.obj;
+	                Intent intent = new Intent();
                     intent.putExtra(RESULT_EXTRA_BUCKET_ID, (Integer) bucket.getId());
                     intent.putExtra(RESULT_EXTRA_BUCKET, bucket);
                     intent.putExtra(RESULT_EXTRA_BUCKET_RANGE, bucket.getRange() == null ? 0 : Integer.valueOf(bucket.getRange()));
@@ -154,6 +160,16 @@ public class BucketEditActivity extends BaseActionBarActivity {
                     }
                     Toast.makeText(BucketEditActivity.this, getString(R.string.txt_bucket_edit_delete_fail), Toast.LENGTH_LONG).show();
                     break;
+	            case FETCH_DATA_START:
+		            progressDialog.show();
+		            break;
+	            case FETCH_DATA_END:
+		            if(progressDialog.isShowing()) {
+			            progressDialog.dismiss();
+		            }
+		            BucketEditActivity.this.bucket = (Bucket) msg.obj;
+		            initData();
+		            break;
             }
         }
     };
@@ -176,9 +192,11 @@ public class BucketEditActivity extends BaseActionBarActivity {
 
         Intent data = getIntent();
 
-        int bucketId = data.getIntExtra(RESULT_EXTRA_BUCKET_ID, -1);
-        int range = data.getIntExtra(MainActivity.EXTRA_BUCKET_DEFAULT_RANGE, -1);
-        bucket = DataRepository.getBucket(bucketId);
+        bucketId = data.getIntExtra(RESULT_EXTRA_BUCKET_ID, -1);
+	    range = data.getIntExtra(MainActivity.EXTRA_BUCKET_DEFAULT_RANGE, -1);
+	    bucket = DataRepository.getBucket(bucketId);
+
+
 
         ButterKnife.inject(this);
 
@@ -188,21 +206,24 @@ public class BucketEditActivity extends BaseActionBarActivity {
         mBucketInputDeadline.setTypeface(getDenseRegularFont());
         mBucketInputTitle.setTextColor(Color.WHITE);
         //mBucketInputDeadline.setTextSize(28);
+	    addEventListener();
 
-        if(range > -1 && DreamApp.getInstance().getUser().getBirthday() != null){
-
-            Date birthday = DateUtils.getDateFromString(DreamApp.getInstance().getUser().getBirthday(), "yyyyMMdd", new Date());
-            Date temp = DateUtils.getLastDayOfPeriod(birthday, range);
-            mBucketInputDeadline.setText(DateUtils.getDateString(temp, "yyyy.MM.dd"));
-            bucket.setDeadline(temp);
-            bucket.setRange(String.valueOf(range));
-        }
-        addEventListener();
-        checkRequireElement();
-        bindData();
-        modFlag = false;
-
+	    Thread thread = new Thread(new GetBucketInfoRunnable(bucketId));
+	    thread.start();
     }
+
+	public void initData(){
+		if(range > -1 && DreamApp.getInstance().getUser().getBirthday() != null){
+			Date birthday = DateUtils.getDateFromString(DreamApp.getInstance().getUser().getBirthday(), "yyyyMMdd", new Date());
+			Date temp = DateUtils.getLastDayOfPeriod(birthday, range);
+			mBucketInputDeadline.setText(DateUtils.getDateString(temp, "yyyy.MM.dd"));
+			bucket.setDeadline(temp);
+			bucket.setRange(String.valueOf(range));
+		}
+		checkRequireElement();
+		bindData();
+		modFlag = false;
+	}
 
     public void saveBucket() {
         if (bucket == null || bucket.getTitle() == null || bucket.getTitle().trim().length() <= 0) {
@@ -746,6 +767,34 @@ public class BucketEditActivity extends BaseActionBarActivity {
 
         startActivityForResult(intent, RequestCode.ACT_ADD_BUCKET_CROP_FROM_CAMERA.ordinal());
     }
+
+	public class GetBucketInfoRunnable implements Runnable{
+		private Integer bucketId;
+
+		public GetBucketInfoRunnable() {
+			bucketId = 0;
+		}
+
+		public GetBucketInfoRunnable(Integer bucketId) {
+			this.bucketId = bucketId;
+		}
+
+		@Override
+		public void run() {
+			handler.sendEmptyMessage(FETCH_DATA_START);
+			BucketConnector bucketConnector = new BucketConnector();
+			ResponseBodyWrapped<Bucket> bucketResponseBodyWrapped = bucketConnector.getBucket(bucketId);
+			Bucket bucket = null;
+			if(bucketResponseBodyWrapped != null && bucketResponseBodyWrapped.isSuccess()){
+				bucket = bucketResponseBodyWrapped.getData();
+				DataRepository.saveBucket(bucket);
+			} else {
+				bucket = DataRepository.getBucket(bucketId);
+			}
+			Message message = handler.obtainMessage(FETCH_DATA_END, bucket);
+			handler.sendMessage(message);
+		}
+	}
 
     public class BucketAddTask extends CustomAsyncTask<Bucket, Void, ResponseBodyWrapped<Bucket>>{
 

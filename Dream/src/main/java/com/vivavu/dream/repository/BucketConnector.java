@@ -50,6 +50,35 @@ public class BucketConnector {
         }
     }
 
+	public ResponseBodyWrapped<Bucket> getBucket(Integer bucketId){
+
+		RestTemplate restTemplate = RestTemplateFactory.getInstance();
+		HttpHeaders requestHeaders = getBasicAuthHeader(getContext());
+		HttpEntity request = new HttpEntity<String>(requestHeaders);
+		ResponseEntity<String> resultString = null;
+
+		try {
+			resultString = restTemplate.exchange(Constants.apiBucketInfo, HttpMethod.GET, request, String.class, bucketId);
+		} catch (ResourceAccessException timeoutException){
+			Log.e("dream", timeoutException.toString());
+			if(timeoutException.getCause() instanceof ConnectTimeoutException){
+				return new ResponseBodyWrapped<Bucket>(ResponseStatus.TIMEOUT, "서버가 응답하지 않습니다. 잠시 후 다시 시도해주세요.", null);
+			}
+		} catch (RestClientException e) {
+			Log.e("dream", e.toString());
+		}
+
+		ResponseBodyWrapped<Bucket> result = new ResponseBodyWrapped<Bucket>(ResponseStatus.SERVER_ERROR, RestTemplateUtils.getStatusCodeString(resultString), new Bucket());
+
+		if(RestTemplateUtils.isAvailableParseToJson(resultString)){
+			Gson gson = JsonFactory.getInstance();
+			Type type = new TypeToken<ResponseBodyWrapped<Bucket    >>(){}.getType();
+			result = gson.fromJson((String) resultString.getBody(), type);
+		}
+
+		return result;
+	}
+
     public ResponseBodyWrapped<List<Bucket>> getBucketList(){
         RestTemplate restTemplate = RestTemplateFactory.getInstance();
         HttpHeaders requestHeaders = getBasicAuthHeader(getContext());
