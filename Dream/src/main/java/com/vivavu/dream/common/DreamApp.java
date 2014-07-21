@@ -61,6 +61,9 @@ public class DreamApp extends Application {
         ImageLoader.getInstance().init(config);
         dreamApp = this;
 	    ACRA.init(this); // todo: 서버 파트의 에러 수집 api가 개발되면 주석을 해제하여 ACRA 가동
+
+	    Constants.url = DreamApp.getInstance().getString(R.string.wishb_server_url);
+	    Constants.port = DreamApp.getInstance().getString(R.string.wishb_server_port);
     }
 
     @Override

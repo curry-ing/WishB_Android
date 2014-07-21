@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Dev Server-->
-    <string name="wishb_server_url">http://masunghoon.iptime.org</string>
-    <string name="wishb_server_port">5001</string>
+    <!--<string name="wishb_server_url">http://masunghoon.iptime.org</string>
+    <string name="wishb_server_port">5001</string>-->
     <!--<string name="facebook_app_id">268430496627035</string>-->
 
     <!--Test Server-->
@@ -11,8 +11,8 @@
     <!--<string name="facebook_app_id">268430496627035</string>-->
 
     <!--Real Server-->
-    <!--<string name="wishb_server_url">http://54.178.201.197</string>-->
-    <!--<string name="wishb_server_port">80</string>-->
+    <string name="wishb_server_url">http://beta.wishb.net</string>
+    <string name="wishb_server_port">80</string>
     <string name="facebook_app_id">268430496627035</string>
 
     <string name="app_name">Wish B</string>

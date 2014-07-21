@@ -85,6 +85,9 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
         super.onResume();
         registerReceiver(networkChangeReceiver, intentFilterChange);
         registerReceiver(networkChangeReceiver, intentFilterWifi);
+	    /*if(DreamApp.getInstance() == null || DreamApp.getInstance().getUser() == null){
+		    checkLogin();
+	    }*/
     }
 
     @Override
