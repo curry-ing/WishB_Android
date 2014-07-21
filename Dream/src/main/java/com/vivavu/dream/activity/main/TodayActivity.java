@@ -9,9 +9,12 @@ import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.bucket.BucketEditActivity;
 import com.vivavu.dream.common.BaseActionBarActivity;
+import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.fragment.main.TodayListFragment;
 import com.vivavu.dream.util.AndroidUtils;
 import com.vivavu.dream.view.CustomPopupWindow;
@@ -50,6 +53,7 @@ public class TodayActivity extends BaseActionBarActivity {
         mActionbarMainTitle.setTypeface(getNanumBarunGothicBoldFont());
         Intent intent = getIntent();
         fromAlarm = intent.getBooleanExtra(BaseActionBarActivity.EXTRA_KEY_FROM_ALARM, false);
+
         intent.putExtra(BaseActionBarActivity.EXTRA_KEY_FROM_ALARM, false);
         if (savedInstanceState == null) {
             todayListFragment = new TodayListFragment();
@@ -119,7 +123,19 @@ public class TodayActivity extends BaseActionBarActivity {
         startActivity(intent);
     }
 
-    @Override
+	@Override
+	protected void onStart() {
+		super.onStart();
+
+		if(fromAlarm){
+			Tracker tracker = DreamApp.getInstance().getTracker();
+			HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_today_activity)).setAction(getString(R.string.ga_event_action_from_alert));
+			tracker.send(eventBuilder.build());
+		}
+
+	}
+
+	@Override
     protected void onStop() {
         super.onStop();
     }

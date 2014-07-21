@@ -15,6 +15,7 @@
     <string name="ga_event_category_today_activity">투데이화면</string>
     <string name="ga_event_category_profile_fragment">프로필화면</string>
     <string name="ga_event_category_more_activity">설정화면</string>
+    <string name="ga_event_category_alert_settings_activity">알람설정화면</string>
     <!-- EventBuilder Category end -->
 
     <!-- EventBuilder Action start -->
@@ -62,10 +63,17 @@
     <string name="ga_event_action_notice">notice</string>
     <string name="ga_event_action_update">update</string>
     <string name="ga_event_action_alert">alert</string>
+    <string name="ga_event_action_from_alert">알람 선택으로 투데이 진입</string>
     <string name="ga_event_action_inquiry">inquiry</string>
     <string name="ga_event_action_access_terms">access terms</string>
     <string name="ga_event_action_privacy">privacy</string>
     <string name="ga_event_action_member_leave">member leave</string>
+    <string name="ga_event_action_change_morning_alert">오전알람시간변경</string>
+    <string name="ga_event_action_morning_alert_on">오전알람 On</string>
+    <string name="ga_event_action_morning_alert_off">오전알람 Off</string>
+    <string name="ga_event_action_change_night_alert">오후알람시간변경</string>
+    <string name="ga_event_action_night_alert_on">오후알람 On</string>
+    <string name="ga_event_action_night_alert_off">오후알람 Off</string>
 
     <!-- EventBuilder Action end -->
 

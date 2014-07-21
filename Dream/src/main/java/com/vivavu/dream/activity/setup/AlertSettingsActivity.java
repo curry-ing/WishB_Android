@@ -18,6 +18,8 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.vivavu.dream.R;
 import com.vivavu.dream.broadcastReceiver.AlarmManagerBroadcastReceiver;
 import com.vivavu.dream.common.DreamApp;
@@ -101,6 +103,11 @@ public class AlertSettingsActivity extends PreferenceActivity {
                 String v = (String)value;
                 alarm.setEverydayAlarm(preference.getContext(), Integer.parseInt(v.split(":")[0]), Integer.parseInt(v.split(":")[1]), 1);
                 preference.setSummary(v);
+
+	            Tracker tracker = DreamApp.getInstance().getTracker();
+	            HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_alert_settings_activity)).setAction(getString(R.string.ga_event_action_change_morning_alert));
+	            tracker.send(eventBuilder.build());
+
                 return true;
             }
         });
@@ -111,7 +118,12 @@ public class AlertSettingsActivity extends PreferenceActivity {
                 String v = (String)value;
                 alarm.setEverydayAlarm(preference.getContext(), Integer.parseInt(v.split(":")[0]), Integer.parseInt(v.split(":")[1]), 2);
                 preference.setSummary(v);
-                return true;
+
+	            Tracker tracker = DreamApp.getInstance().getTracker();
+	            HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_alert_settings_activity)).setAction(getString(R.string.ga_event_action_change_night_alert));
+	            tracker.send(eventBuilder.build());
+
+	            return true;
             }
         });
 
@@ -119,11 +131,15 @@ public class AlertSettingsActivity extends PreferenceActivity {
             @Override
             public boolean onPreferenceChange(Preference preference, Object value) {
 
-//                if ((Boolean)value) {
-//                    Toast.makeText(getBaseContext(), R.string.set_good_morning_alarm, Toast.LENGTH_SHORT).show();
-//                } else {
-//                    Toast.makeText(getBaseContext(), R.string.unset_good_morning_alarm, Toast.LENGTH_SHORT).show();
-//                }
+                if ((Boolean)value) {
+	                Tracker tracker = DreamApp.getInstance().getTracker();
+	                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_alert_settings_activity)).setAction(getString(R.string.ga_event_action_morning_alert_on));
+	                tracker.send(eventBuilder.build());
+                } else {
+	                Tracker tracker = DreamApp.getInstance().getTracker();
+	                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_alert_settings_activity)).setAction(getString(R.string.ga_event_action_morning_alert_off));
+	                tracker.send(eventBuilder.build());
+                }
                 alarm.setEverydayAlarm(getBaseContext(), true, 1);
                 return true;
             }
@@ -133,11 +149,16 @@ public class AlertSettingsActivity extends PreferenceActivity {
             @Override
             public boolean onPreferenceChange(Preference preference, Object value) {
 
-//                if ((Boolean)value) {
-//                    Toast.makeText(getBaseContext(), R.string.set_good_night_alarm, Toast.LENGTH_SHORT).show();
-//                } else {
-//                    Toast.makeText(getBaseContext(), R.string.unset_good_night_alarm, Toast.LENGTH_SHORT).show();
-//                }
+	            if ((Boolean)value) {
+		            Tracker tracker = DreamApp.getInstance().getTracker();
+		            HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_alert_settings_activity)).setAction(getString(R.string.ga_event_action_night_alert_on));
+		            tracker.send(eventBuilder.build());
+	            } else {
+		            Tracker tracker = DreamApp.getInstance().getTracker();
+		            HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_alert_settings_activity)).setAction(getString(R.string.ga_event_action_night_alert_off));
+		            tracker.send(eventBuilder.build());
+	            }
+
                 alarm.setEverydayAlarm(getBaseContext(), true, 2);
                 return true;
             }
