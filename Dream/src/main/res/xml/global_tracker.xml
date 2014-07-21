@@ -2,7 +2,8 @@
 
 <resource>
     <!--Replace placeholder ID with your tracking ID-->
-    <string name="ga_trackingId">UA-52445855-1</string>
+    <!--<string name="ga_trackingId">UA-52445855-1</string>-->
+    <string name="ga_trackingId">UA-41207025-4</string>
 
     <!-- Percentage of events to include in reports -->
     <string name="ga_sampleFrequency">100.0</string>
