@@ -34,7 +34,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,10 +67,10 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
     @InjectView(R.id.actionbar_login_back)
     ImageView mActionbarLoginBack;
 
-    @InjectView(R.id.register_status_message)
+    /*@InjectView(R.id.register_status_message)
     TextView mRegisterStatusMessage;
     @InjectView(R.id.register_status)
-    LinearLayout mRegisterStatus;
+    LinearLayout mRegisterStatus;*/
     @InjectView(R.id.register_email)
     EditText mRegisterEmail;
     @InjectView(R.id.register_password)
