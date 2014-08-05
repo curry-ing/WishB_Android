@@ -4,6 +4,8 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.vivavu.dream.common.DreamApp;
+import com.vivavu.dream.model.user.User;
+import com.vivavu.dream.util.StringUtils;
 
 import org.acra.ACRA;
 import org.acra.ACRAConfiguration;
@@ -75,10 +77,15 @@ public class CustomHttpReportSender extends HttpSender {
 			switch (mType) {
 				case JSON:
 					JSONObject body = new JSONObject();
-					body.put("email", DreamApp.getInstance().getEmail()==null ? "not login or unknown" : DreamApp.getInstance().getEmail() );
+					User user = DreamApp.getInstance().getUser();
+					body.put("email", user == null ? "not login or unknown" : user.getEmail() );
 					body.put("type", "crash");
 					JSONObject json = report.toJSON();
-					body.put("subject", "test");
+					String str = report.get(ReportField.STACK_TRACE);
+
+					String subject = StringUtils.split(str, "[\r\n|:]", 0, "unknown");
+
+					body.put("subject", subject);
 					body.put("report", json);
 					reportAsString = body.toString();
 					break;
