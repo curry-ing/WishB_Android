@@ -18,8 +18,8 @@ public class Inquiry {
 	@SerializedName("subject")
 	private String subject;
 
-	@SerializedName("body")
-	private String body;
+	@SerializedName("report")
+	private String report;
 
 	public String getEmail() {
 		return email;
@@ -45,11 +45,11 @@ public class Inquiry {
 		this.subject = subject;
 	}
 
-	public String getBody() {
-		return body;
+	public String getReport() {
+		return report;
 	}
 
-	public void setBody(String body) {
-		this.body = body;
+	public void setReport(String report) {
+		this.report = report;
 	}
 }

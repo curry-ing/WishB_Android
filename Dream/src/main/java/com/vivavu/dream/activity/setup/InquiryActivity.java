@@ -101,7 +101,7 @@ public class InquiryActivity extends BaseActionBarActivity {
 	                inquiry.setReportingType(ReportingType.INQUIRY);
 	                inquiry.setEmail(mTxtAnswerEmail.getText().toString());
 	                inquiry.setSubject(mTxtEmailTitle.getText().toString());
-	                inquiry.setBody(mTxtEmailBody.getText().toString());
+	                inquiry.setReport(mTxtEmailBody.getText().toString());
 
 	                NetworkThread networkThread = new NetworkThread(inquiry);
 	                handler.post(networkThread);
