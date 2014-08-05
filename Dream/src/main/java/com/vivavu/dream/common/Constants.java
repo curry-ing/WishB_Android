@@ -1,6 +1,5 @@
 package com.vivavu.dream.common;
 
-import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.R;
 
 /**
@@ -42,4 +41,7 @@ public class Constants {
     static public String apiTimelineForDate = baseUrl+"api/bucket/{bucketId}/timeline?date={date}";
     static public String apiTimelineInfo = baseUrl+"api/content/{postId}";
     static public String apiTimelineMetaInfo = baseUrl+"api/bucket/{bucketId}/timeline/exists";
+
+	// reporting
+	static public String apiReporting = baseUrl+"api/report";
 }

@@ -1,8 +1,9 @@
 package com.vivavu.dream.activity.setup;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.view.Window;
@@ -10,10 +11,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.vivavu.dream.R;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.DreamApp;
+import com.vivavu.dream.common.enums.ReportingType;
+import com.vivavu.dream.common.enums.ResponseStatus;
+import com.vivavu.dream.model.Inquiry;
+import com.vivavu.dream.model.ResponseBodyWrapped;
+import com.vivavu.dream.repository.connector.InquiryConnector;
 import com.vivavu.dream.util.AndroidUtils;
 import com.vivavu.dream.util.ValidationUtils;
 
@@ -36,6 +43,20 @@ public class InquiryActivity extends BaseActionBarActivity {
     @InjectView(R.id.txt_title)
     TextView mTxtTitle;
 
+	protected Handler handler = new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what){
+				case 0:
+					Toast.makeText(InquiryActivity.this, getString(R.string.txt_inquiry_complete), Toast.LENGTH_SHORT).show();
+					finish();
+					break;
+				case 1:
+					Toast.makeText(InquiryActivity.this, getString(R.string.txt_inquiry_fail), Toast.LENGTH_SHORT).show();
+					break;
+			}
+		}
+	};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,15 +96,16 @@ public class InquiryActivity extends BaseActionBarActivity {
             @Override
             public void onClick(View v) {
                 if(validationData()) {
-                    Intent email = new Intent(Intent.ACTION_SEND);
-                    String emailBody = mTxtEmailBody.getText().toString() + "\r\n Receive a response e-mail address : " + mTxtAnswerEmail.getText().toString();
+	                // 문의하기 변경 -> json 타입으로 할텐데....
+	                Inquiry inquiry = new Inquiry();
+	                inquiry.setReportingType(ReportingType.INQUIRY);
+	                inquiry.setEmail(mTxtAnswerEmail.getText().toString());
+	                inquiry.setSubject(mTxtEmailTitle.getText().toString());
+	                inquiry.setBody(mTxtEmailBody.getText().toString());
 
-                    email.putExtra(Intent.EXTRA_EMAIL, new String[]{getString(R.string.email_info)});
-                    email.putExtra(Intent.EXTRA_SUBJECT, mTxtEmailTitle.getText().toString());
-                    email.putExtra(Intent.EXTRA_TEXT, emailBody);
-                    email.setType("message/rfc822");
-                    //startActivity(Intent.createChooser(email, "Choose an Email client :"));
-                    startActivity(Intent.createChooser(email, "Choose an Email client :"));
+	                NetworkThread networkThread = new NetworkThread(inquiry);
+	                handler.post(networkThread);
+
                 } else {
 
                 }
@@ -107,4 +129,26 @@ public class InquiryActivity extends BaseActionBarActivity {
         return true;
     }
 
+	private class NetworkThread implements Runnable{
+		private Inquiry inquiry;
+
+		private NetworkThread(Inquiry inquiry) {
+			this.inquiry = inquiry;
+		}
+
+		@Override
+		public void run() {
+
+			InquiryConnector connector = new InquiryConnector();
+			ResponseBodyWrapped<Inquiry> result = connector.post(inquiry);
+
+			if(result.isSuccess()) {
+				handler.sendEmptyMessage(0);
+			}else if(result.getResponseStatus() == ResponseStatus.TIMEOUT) {
+				defaultHandler.sendEmptyMessage(SERVER_TIMEOUT);
+			}else {
+				handler.sendEmptyMessage(1);
+			}
+		}
+	}
 }

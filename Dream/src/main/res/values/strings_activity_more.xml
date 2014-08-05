@@ -2,4 +2,7 @@
 <resources>
     <string name="txt_more_member_leave">탈퇴하기</string>
     <string name="txt_more_member_leave_body">정말 탈퇴 하시는건가요?</string>
+
+    <string name="txt_inquiry_complete">곧 응답드리겠습니다</string>
+    <string name="txt_inquiry_fail">앗! 잠시 후에 다시 시도해주세요</string>
 </resources>
