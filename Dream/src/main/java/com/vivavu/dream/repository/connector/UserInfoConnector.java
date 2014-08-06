@@ -260,8 +260,7 @@ public class UserInfoConnector extends Connector<User> {
         return new ResponseBodyWrapped<Integer>(ResponseStatus.SERVER_ERROR, "오류가 발생하였습니다. 다시 시도해주시기 바랍니다.", null);
     }
 
-
-    public MultiValueMap convertUserToMap(final User user){
+	public MultiValueMap convertUserToMap(final User user){
         MultiValueMap<String, Object> requestUser = new LinkedMultiValueMap<String, Object>();
 
         if (user.getTitle_life() != null) {

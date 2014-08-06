@@ -24,8 +24,10 @@ import com.vivavu.dream.activity.intro.IntroActivity;
 import com.vivavu.dream.activity.main.MainActivity;
 import com.vivavu.dream.activity.main.TodayActivity;
 import com.vivavu.dream.common.enums.ResponseStatus;
+import com.vivavu.dream.model.AppVersionInfo;
 import com.vivavu.dream.model.BaseInfo;
 import com.vivavu.dream.model.ResponseBodyWrapped;
+import com.vivavu.dream.model.user.User;
 import com.vivavu.dream.repository.DataRepository;
 import com.vivavu.dream.repository.connector.UserInfoConnector;
 import com.vivavu.dream.util.AndroidUtils;
@@ -222,6 +224,7 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
                     context.setUser(baseInfo);
                     context.setUsername(baseInfo.getUsername());
                     context.setLogin(true);
+	                context.setAppVersionInfo(baseInfo.getAppVersionInfo());
                     DataRepository.deleteBucketsNotEqualUserId(baseInfo.getId());//로그인 사용자 이외의 데이터 삭제
                     return true;
                 }else if(response.getResponseStatus() == ResponseStatus.TIMEOUT) {
@@ -264,6 +267,17 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
         startActivity(intent);
     }
 
+	public boolean isNeedUpdate(){
+		float version = Float.parseFloat(getString(R.string.wishb_app_version));
+		User user = DreamApp.getInstance().getUser();
+		if(user != null && user instanceof BaseInfo){
+			AppVersionInfo lastestVersion = ((BaseInfo) user).getAppVersionInfo();
+			if(lastestVersion!=null && lastestVersion.getVersion().floatValue() > version){
+				return true;
+			}
+		}
+		return false;
+	}
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

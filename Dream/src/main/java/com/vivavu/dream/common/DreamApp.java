@@ -10,6 +10,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.vivavu.dream.R;
 import com.vivavu.dream.common.reporting.CustomHttpReportSender;
+import com.vivavu.dream.model.AppVersionInfo;
 import com.vivavu.dream.model.user.User;
 
 import org.acra.ACRA;
@@ -40,6 +41,7 @@ public class DreamApp extends Application {
     private boolean login=false;
 
     protected static DreamApp dreamApp;
+	protected AppVersionInfo appVersionInfo;
 
 	public static synchronized DreamApp getInstance(){
         return dreamApp;
@@ -236,4 +238,11 @@ public class DreamApp extends Application {
         return mTrackers.get(TrackerName.APP_TRACKER);
     }
 
+	public AppVersionInfo getAppVersionInfo() {
+		return appVersionInfo;
+	}
+
+	public void setAppVersionInfo(AppVersionInfo appVersionInfo) {
+		this.appVersionInfo = appVersionInfo;
+	}
 }

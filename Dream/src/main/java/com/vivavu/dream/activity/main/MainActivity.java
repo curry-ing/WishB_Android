@@ -182,6 +182,12 @@ public class MainActivity extends BaseActionBarActivity {
             }
         });
 
+	    if(isNeedUpdate()){
+		    Toast.makeText(this, "업데이트가 있습니다", Toast.LENGTH_SHORT).show();
+	    } else{
+		    //Toast.makeText(this, "최신버전을 사용중입니다", Toast.LENGTH_SHORT).show();
+	    }
+
     }
 
     public void updateProfileImg() {

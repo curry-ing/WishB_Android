@@ -571,6 +571,7 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
 
             if (result != null && result.isSuccess()) {
                 context.setLogin(true);
+	            context.setAppVersionInfo(result.getData().getUser().getAppVersionInfo());
                 context.setUser(result.getData().getUser());
                 context.setUsername(result.getData().getUser().getUsername());
                 context.setToken(result.getData().getToken());

@@ -1,7 +1,6 @@
 package com.vivavu.dream.model;
 
 import com.google.gson.annotations.SerializedName;
-import com.vivavu.dream.model.user.User;
 
 /**
  * Created by yuja on 14. 1. 13.
@@ -10,13 +9,13 @@ public class SecureToken {
     @SerializedName("token")
     private String token;
     @SerializedName("user")
-    private User user;
+    private BaseInfo user;
 
-    public User getUser() {
+    public BaseInfo getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(BaseInfo user) {
         this.user = user;
     }
 
