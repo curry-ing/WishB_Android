@@ -74,19 +74,19 @@
 
     <style name="TextBucketDescriptionStyle" >
         <item name="android:ellipsize">end</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:shadowColor">#AA000000</item>
-        <item name="android:shadowDx">2.0</item>
-        <item name="android:shadowDy">2.0</item>
-        <item name="android:shadowRadius">2.0</item>
+        <item name="android:textColor">@color/default_darkgray</item>
+        <item name="android:shadowColor">@color/white</item>
+        <item name="android:shadowDx">1.0</item>
+        <item name="android:shadowDy">1.0</item>
+        <item name="android:shadowRadius">1.0</item>
     </style>
     <style name="TextBucketDeadlineStyle" >
         <item name="android:textColor">@color/white</item>
         <item name="android:singleLine">true</item>
-        <item name="android:shadowColor">#AA000000</item>
-        <item name="android:shadowDx">0.0</item>
-        <item name="android:shadowDy">0.0</item>
-        <item name="android:shadowRadius">8.0</item>
+        <item name="android:shadowColor">#444444</item>
+        <item name="android:shadowDx">1.0</item>
+        <item name="android:shadowDy">1.0</item>
+        <item name="android:shadowRadius">1.0</item>
     </style>
 
     <style name="LoginFormContainer">

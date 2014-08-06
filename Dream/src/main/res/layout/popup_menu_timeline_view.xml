@@ -1,49 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_horizontal|center_vertical"
+        android:background="@drawable/line_menu_divider3"
+        android:paddingRight="10dp"
+        android:id="@+id/layout_delete"
+        android:clickable="true"
         >
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_delete_release"
+            android:drawableLeft="@drawable/ic_timeline_delete"
             android:background="@null"
+            android:id="@+id/btn_ic_delete"
             />
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/txt_timeline_view_menu_delete"
             android:background="@null"
+            android:id="@+id/btn_delete"
             />
         </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@drawable/line_menu_divider"
-        ></View>
+        <!--<View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:background="@drawable/line_menu_divider3"
+            ></View>-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_horizontal|center_vertical"
+        android:paddingRight="10dp"
+        android:id="@+id/layout_share"
+        android:clickable="true"
         >
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_share"
+            android:drawableLeft="@drawable/ic_timeline_share"
             android:background="@null"
+            android:id="@+id/btn_ic_share"
             />
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/txt_timeline_view_menu_share"
             android:background="@null"
+            android:id="@+id/btn_share"
             />
     </LinearLayout>
 </LinearLayout>

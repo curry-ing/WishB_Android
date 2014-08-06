@@ -404,7 +404,7 @@ public class LinkEllipseTextView extends TextView {
             // Remove underline and red color, because 'more' is not link.
             super.updateDrawState(tp);
             tp.setUnderlineText(false);
-            tp.setColor(R.color.default_text_color);
+            tp.setColor(R.color.gray);
         }
 
         @Override

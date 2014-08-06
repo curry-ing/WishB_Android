@@ -8,7 +8,7 @@
     android:paddingRight="11dp"
     android:paddingBottom="9dp"
     android:focusable="false"
-    android:background="@drawable/bg_box_no_line"
+    android:background="@drawable/bg_box2"
     >
     <TextView
         android:layout_width="wrap_content"
@@ -17,7 +17,7 @@
         android:id="@+id/txt_post_date"
         android:focusable="false"
         android:textSize="11sp"
-        android:textColor="@color/default_darkgray"
+        android:textColor="@color/gray"
         android:layout_marginBottom="11dp"
         />
 

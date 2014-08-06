@@ -220,6 +220,7 @@
                     android:minLines="1"
                     android:gravity="center"
                     android:textColor="#00aeef"
+                    android:textSize="18dp"
                     android:background="@drawable/bg_inputbox"
                     />
 
