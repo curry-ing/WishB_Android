@@ -260,7 +260,7 @@ public class LeftMenuDrawerFragment extends CustomBaseFragment {
 		if(getActivity() instanceof BaseActionBarActivity) {
 			BaseActionBarActivity activity = (BaseActionBarActivity) getActivity();
 			if(activity.isNeedUpdate()){
-				mMainLeftMenuBtnUpdate.setCompoundDrawablesWithIntrinsicBounds(0,0, R.drawable.login_check_alert_icon, 0);
+				mMainLeftMenuBtnUpdate.setCompoundDrawablesWithIntrinsicBounds(R.drawable.empty_icon_41_41,0, R.drawable.login_check_alert_icon, 0);
 				return true;
 			} else{
 				Toast.makeText(getActivity(), "최신버전을 사용중입니다", Toast.LENGTH_SHORT).show();
