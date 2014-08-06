@@ -217,30 +217,27 @@ public class LeftMenuDrawerFragment extends CustomBaseFragment {
                 HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_profile_fragment)).setAction(getString(R.string.ga_event_action_update));
                 tracker.send(eventBuilder.build());
 
-	            if(getActivity() instanceof BaseActionBarActivity) {
-		            BaseActionBarActivity activity = (BaseActionBarActivity) getActivity();
-		            if(activity.isNeedUpdate()){
-			            AlertDialog.Builder ab = new AlertDialog.Builder(getActivity());
-			            ab.setTitle(getString(R.string.choose));
-			            ab.setMessage(R.string.need_update);
-			            ab.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-				            @Override
-				            public void onClick(DialogInterface dialog, int which) {
+	            if(checkUpdate()) {
+	                AlertDialog.Builder ab = new AlertDialog.Builder(getActivity());
+		            ab.setTitle(getString(R.string.choose));
+		            ab.setMessage(R.string.need_update);
+		            ab.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+			            @Override
+			            public void onClick(DialogInterface dialog, int which) {
 
-				            }
-			            });
-			            ab.setPositiveButton(R.string.confirm_yes, new DialogInterface.OnClickListener() {
-				            @Override
-				            public void onClick(DialogInterface dialog, int which) {
-					            Intent i = new Intent(Intent.ACTION_VIEW);
-					            i.setData(Uri.parse(DreamApp.getInstance().getAppVersionInfo().getUrl()));
-					            startActivity(i);
-				            }
-			            });
-			            ab.show();
-		            } else{
-			            Toast.makeText(getActivity(), "최신버전을 사용중입니다", Toast.LENGTH_SHORT).show();
-		            }
+			            }
+		            });
+		            ab.setPositiveButton(R.string.confirm_yes, new DialogInterface.OnClickListener() {
+			            @Override
+			            public void onClick(DialogInterface dialog, int which) {
+				            Intent i = new Intent(Intent.ACTION_VIEW);
+				            i.setData(Uri.parse(DreamApp.getInstance().getAppVersionInfo().getUrl()));
+				            startActivity(i);
+			            }
+		            });
+		            ab.show();
+	            } else{
+		            Toast.makeText(getActivity(), "최신버전을 사용중입니다", Toast.LENGTH_SHORT).show();
 	            }
             }
         });
@@ -253,7 +250,28 @@ public class LeftMenuDrawerFragment extends CustomBaseFragment {
         bindData();
     }
 
-    private void bindData(){
+	@Override
+	public void onResume() {
+		super.onResume();
+		checkUpdate();
+	}
+
+	private boolean checkUpdate() {
+		if(getActivity() instanceof BaseActionBarActivity) {
+			BaseActionBarActivity activity = (BaseActionBarActivity) getActivity();
+			if(activity.isNeedUpdate()){
+				mMainLeftMenuBtnUpdate.setCompoundDrawablesWithIntrinsicBounds(0,0, R.drawable.login_check_alert_icon, 0);
+				return true;
+			} else{
+				Toast.makeText(getActivity(), "최신버전을 사용중입니다", Toast.LENGTH_SHORT).show();
+				mMainLeftMenuBtnUpdate.setCompoundDrawablesWithIntrinsicBounds(0,0,0, 0);
+				return false;
+			}
+		}
+		return false;
+	}
+
+	private void bindData(){
         //todo: 로그인 체크하는 것은 한곳에서만 수행할것
         if(context.isLogin()){
             mMainLeftMenuTxtName.setText(DreamApp.getInstance().getUser().getUsername());
