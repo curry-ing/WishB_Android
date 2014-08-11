@@ -35,8 +35,6 @@ import com.vivavu.dream.common.Code;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.drawable.RoundedAvatarDrawable;
 import com.vivavu.dream.fragment.main.MainBucketListFragment;
-import com.vivavu.dream.util.AndroidUtils;
-import com.vivavu.dream.view.CustomPopupWindow;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -50,9 +48,6 @@ public class MainActivity extends BaseActionBarActivity {
     ImageView mActionbarMainTitle;
     @InjectView(R.id.actionbar_main_today)
     TextView mActionbarMainToday;
-
-    View noticeView;
-    CustomPopupWindow mPopupNotice;
 
     View customActionBarView;
     View customActionBarViewProfile;
@@ -104,8 +99,6 @@ public class MainActivity extends BaseActionBarActivity {
                     .commit();
         }
 
-        noticeView = getLayoutInflater().inflate(R.layout.actionbar_notice, null);
-        mPopupNotice = AndroidUtils.makePopupWindow(noticeView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         mBtnAddBucket.setOnClickListener(this);
 
 
@@ -274,8 +267,6 @@ public class MainActivity extends BaseActionBarActivity {
 //        Boolean doubleBackToExitPressedOnce = false;
         if(mContainer.isDrawerOpen(Gravity.LEFT)){
             mContainer.closeDrawer(Gravity.LEFT);
-        } else if(mPopupNotice != null && mPopupNotice.isShowing()){
-            mPopupNotice.hide();
         } else {
             if(doubleBackToExitPressedOnce) {
                 exit();

@@ -1,23 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--Dev Server-->
-    <!--<string name="wishb_server_url">http://masunghoon.iptime.org</string>
-    <string name="wishb_server_port">5001</string>-->
-    <!--<string name="facebook_app_id">268430496627035</string>-->
 
-    <!--Test Server-->
-    <!--<string name="wishb_server_url">http://54.178.201.197</string>-->
-    <!--<string name="wishb_server_port">5000</string>-->
-    <!--<string name="facebook_app_id">268430496627035</string>-->
+    <!-- Dev Server -->
+    <!--
+    <string name="wishb_server_url">http://masunghoon.iptime.org</string>
+    <string name="wishb_server_port">5001</string>
+    -->
+    <!-- <string name="facebook_app_id">268430496627035</string> -->
 
-    <!--Real Server-->
+
+    <!-- Test Server -->
+    <!-- <string name="wishb_server_url">http://54.178.201.197</string> -->
+    <!-- <string name="wishb_server_port">5000</string> -->
+    <!-- <string name="facebook_app_id">268430496627035</string> -->
+
+
+    <!-- Real Server -->
     <string name="wishb_server_url">http://beta.wishb.net</string>
     <string name="wishb_server_port">80</string>
     <string name="facebook_app_id">268430496627035</string>
-
     <string name="app_name">Wish B</string>
     <string name="wishb_app_version">0.2</string>
-
     <string name="title_activity_main">Wish B</string>
     <string name="main_menu_add_bucket">추가</string>
     <string name="hello_world">Hello world!</string>
@@ -88,7 +91,6 @@
     <string name="bucket_status_achievement">달성</string>
     <string name="bucket_status_seal">봉인</string>
     <string name="bucket_status_delete">삭제</string>
-
     <string name="no_network_connection_toast">네트워크 연결상태를 확인해주세요</string>
     <string name="invalid_selected_date">데이터가 없는 날짜입니다. 다시 선택해주세요</string>
     <string name="complete">달성</string>
@@ -110,12 +112,13 @@
     <string name="more">더보기</string>
     <string name="notice_test">알림알림알림알림알\n수박수박수박수박수</string>
 
-    <!--Common-->
+    <!-- Common -->
     <string name="save">저장</string>
     <string name="cancel">취소</string>
     <string name="in_progress">진행중</string>
     <string name="in_login">로그인중</string>
     <string name="choose">선택</string>
+
     <string-array name="array_image_attach">
         <item>카메라</item>
         <item>갤러리</item>
@@ -125,13 +128,14 @@
         <item>카메라</item>
         <item>갤러리</item>
     </string-array>
+
     <string name="confirm_check">확인</string>
     <string name="confirm_yes">예</string>
     <string name="confirm_no">아니오</string>
     <string name="txt_camera_ready_error">카메라 준비중 에러가 발생했습니다</string>
     <string name="txt_camera_not_exc">카메라 앱을 실행할 수 없습니다</string>
 
-    <!--Action Bar-->
+    <!-- Action Bar -->
     <string name="profile">프로필</string>
     <string name="today">Today</string>
 
@@ -142,4 +146,6 @@
 
     <!-- 앱 업데이트 관련 -->
     <string name="need_update">최신버전이 아닙니다. 업데이트 하시겠습니까?</string>
+    <string name="title_activity_notice">Notice</string>
+
 </resources>

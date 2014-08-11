@@ -5,6 +5,8 @@ import com.google.gson.GsonBuilder;
 import com.vivavu.dream.common.enums.ResponseStatus;
 import com.vivavu.dream.common.json.DateDeserializer;
 import com.vivavu.dream.common.json.ResponseStatusDeserializer;
+import com.vivavu.dream.common.json.TimestampDeserializer;
+import com.vivavu.dream.model.MongoDBDate;
 
 import java.util.Date;
 
@@ -17,6 +19,7 @@ public class JsonFactory {
         if(gson == null){
             gson = new GsonBuilder()
 		            .registerTypeAdapter(Date.class, new DateDeserializer())
+		            .registerTypeAdapter(MongoDBDate.class, new TimestampDeserializer())
 		            .registerTypeAdapter(ResponseStatus.class, new ResponseStatusDeserializer())
 		            .create();
         }

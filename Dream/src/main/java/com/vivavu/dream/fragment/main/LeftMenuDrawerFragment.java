@@ -28,6 +28,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.main.MainActivity;
 import com.vivavu.dream.activity.setup.MoreActivity;
+import com.vivavu.dream.activity.setup.NoticeActivity;
 import com.vivavu.dream.broadcastReceiver.AlarmManagerBroadcastReceiver;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.Code;
@@ -207,6 +208,9 @@ public class LeftMenuDrawerFragment extends CustomBaseFragment {
                 Tracker tracker = DreamApp.getInstance().getTracker();
                 HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_profile_fragment)).setAction(getString(R.string.ga_event_action_notice));
                 tracker.send(eventBuilder.build());
+
+	            Intent intent = new Intent(getActivity(), NoticeActivity.class);
+	            startActivity(intent);
             }
         });
 

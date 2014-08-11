@@ -1,0 +1,23 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/register_login_bg"
+    tools:context="com.vivavu.dream.activity.setup.NoticeActivity">
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/actionbar_height"
+            android:id="@+id/swipe_refresh_layout">
+            <ListView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/list_notice"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                >
+
+            </ListView>
+        </android.support.v4.widget.SwipeRefreshLayout>
+</RelativeLayout>

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -16,8 +15,6 @@ import com.vivavu.dream.activity.bucket.BucketEditActivity;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.fragment.main.TodayListFragment;
-import com.vivavu.dream.util.AndroidUtils;
-import com.vivavu.dream.view.CustomPopupWindow;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -30,9 +27,6 @@ public class TodayActivity extends BaseActionBarActivity {
     TextView mActionbarMainTitle;
     @InjectView(R.id.menu_previous)
     ImageButton mMenuPrevious;
-
-    View noticeView;
-    CustomPopupWindow mPopupNotice;
 
     TodayListFragment todayListFragment;
     protected boolean fromAlarm = false;
@@ -62,8 +56,6 @@ public class TodayActivity extends BaseActionBarActivity {
                     .commit();
         }
 
-        noticeView = getLayoutInflater().inflate(R.layout.actionbar_notice, null);
-        mPopupNotice = AndroidUtils.makePopupWindow(noticeView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         mMenuPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,16 +145,11 @@ public class TodayActivity extends BaseActionBarActivity {
 
     @Override
     public void onBackPressed() {
-        if(mPopupNotice != null && mPopupNotice.isShowing()){
-            mPopupNotice.hide();
-        }else{
-            if(fromAlarm){
-                exit();
-            } else {
-                setResult(RESULT_OK);
-                finish();
-            }
-            //goMain();
+        if(fromAlarm){
+            exit();
+        } else {
+            setResult(RESULT_OK);
+            finish();
         }
     }
 }

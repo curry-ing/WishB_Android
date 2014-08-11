@@ -1,22 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#FFF0FFF0"
-    android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp"
-    android:layout_marginBottom="30dp"
-    android:gravity="center_horizontal"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
     >
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/notice_test"
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_previous"
+        android:background="@null"
+        android:id="@+id/menu_previous"
+        style="@style/TextActionbarLeftButton"
         />
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-        </ListView>
-</LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:id="@+id/txt_title"
+        android:text="@string/main_left_menu_notice"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="19dp"
+        style="@style/TextBucketTitleStyle"
+        />
+
+    <!--<ImageButton-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:src="@drawable/ic_more"-->
+    <!--android:background="@null"-->
+    <!--android:id="@+id/menu_more"-->
+    <!--android:visibility="gone"-->
+    <!--style="@style/TextActionbarRightButton"-->
+    <!--/>-->
+</RelativeLayout>
