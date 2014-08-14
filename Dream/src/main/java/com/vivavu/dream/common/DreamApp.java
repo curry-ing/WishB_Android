@@ -32,6 +32,7 @@ public class DreamApp extends Application {
 
     private User user  = null;
     private String token = null;
+	private String fbToken = null;
 
     private String tokenType = null;
     private String username = null;
@@ -196,7 +197,15 @@ public class DreamApp extends Application {
         this.tokenType = tokenType;
     }
 
-    /**
+	public String getFbToken() {
+		return fbToken;
+	}
+
+	public void setFbToken(String fbToken) {
+		this.fbToken = fbToken;
+	}
+
+	/**
      * Enum used to identify the tracker that needs to be used for tracking.
      *
      * A single tracker is usually enough for most purposes. In case you do need multiple trackers,

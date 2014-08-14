@@ -66,6 +66,9 @@ public class User{
 	@SerializedName("fb_id")
 	private String facebookId;
 
+	@SerializedName("fb_token")
+	private String fbToken;
+
     private File photo;
 
     public String getTitle_60() {
@@ -228,7 +231,15 @@ public class User{
         this.profileImgUrl = profileImgUrl;
     }
 
-    public int getUserAge() {
+	public String getFbToken() {
+		return fbToken;
+	}
+
+	public void setFbToken(String fbToken) {
+		this.fbToken = fbToken;
+	}
+
+	public int getUserAge() {
         long now = System.currentTimeMillis();
         Date date = new Date(now);
         SimpleDateFormat CurYearFormat = new SimpleDateFormat("yyyy");

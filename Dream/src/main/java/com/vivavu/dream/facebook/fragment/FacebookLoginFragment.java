@@ -245,7 +245,7 @@ public class FacebookLoginFragment extends CustomBaseFragment {
 
                 Session session = Session.getActiveSession();
                 if (session != null && (session.isOpened() || session.isClosed())) {
-                    Session.getActiveSession().closeAndClearTokenInformation();
+                    //Session.getActiveSession().closeAndClearTokenInformation();
 
                 }
                 getActivity().setResult(Activity.RESULT_OK);

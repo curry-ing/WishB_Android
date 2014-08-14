@@ -2,7 +2,9 @@ package com.vivavu.dream.adapter.bucket.timeline;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,15 +12,29 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenSource;
+import com.facebook.HttpMethod;
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.model.GraphObject;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.vivavu.dream.R;
 import com.vivavu.dream.common.BaseActionBarActivity;
+import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.model.bucket.timeline.Post;
 import com.vivavu.dream.model.bucket.timeline.TimelineMetaInfo;
 import com.vivavu.dream.util.DateUtils;
 import com.vivavu.dream.view.LinkEllipseTextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -64,7 +80,7 @@ public class TimelineListAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         ButterknifeViewHolder viewHolder = null;
         if(convertView == null){
-            convertView = layoutInflater.inflate(R.layout.fragment_timeline_item, parent, false);
+            convertView = layoutInflater.inflate(R.layout.timeline_item, parent, false);
             viewHolder = new ButterknifeViewHolder(convertView);
         } else {
             viewHolder = (ButterknifeViewHolder) convertView.getTag();
@@ -91,6 +107,57 @@ public class TimelineListAdapter extends BaseAdapter {
                 }
             }
         });
+
+	    if(post.getFbFeedId() != null && post.getFbFeedId().length() > 0) {
+		    final ButterknifeViewHolder finalViewHolder = viewHolder;
+		    viewHolder.mFacebookLikesComments.setOnClickListener(new View.OnClickListener() {
+			    @Override
+			    public void onClick(View v) {
+				    Intent i = new Intent(Intent.ACTION_VIEW);
+				    i.setData(Uri.parse(String.format("https://www.facebook.com/%s", post.getFbFeedId())));
+				    context.startActivity(i);
+			    }
+		    });
+		    viewHolder.mFacebookLikesComments.post(new Runnable() {
+			    @Override
+			    public void run() {
+				    final String s = post.getFbFeedId().split("_")[1];
+			        List<String> readPermissions = new ArrayList<String>();
+				    readPermissions.add("publish_actions");
+				    AccessToken fromExistingAccessToken = AccessToken.createFromExistingAccessToken(DreamApp.getInstance().getFbToken(), null, null, AccessTokenSource.FACEBOOK_APPLICATION_NATIVE, readPermissions);
+				    Session.openActiveSessionWithAccessToken(context, fromExistingAccessToken, new Session.StatusCallback() {
+					    @Override
+					    public void call(Session session, SessionState state, Exception exception) {
+						    if (state.isOpened()) {
+							    new Request(Session.getActiveSession(), String.format("/%s", s), null, HttpMethod.GET, new Request.Callback() {
+								    @Override
+								    public void onCompleted(Response response) {
+									    if(response != null && response.getGraphObject() != null) {
+										    GraphObject graphObject = response.getGraphObject();
+										    JSONObject jsonObject = graphObject.getInnerJSONObject();
+										    try {
+											    JSONObject likes = jsonObject.getJSONObject("likes");
+											    JSONArray likesData = likes.getJSONArray("data");
+
+											    JSONObject comments = jsonObject.getJSONObject("comments");
+											    JSONArray commentsData = likes.getJSONArray("data");
+
+											    finalViewHolder.mFacebookLikesComments.setText(String.format("좋아요 %d 답글 %d", likesData.length(), commentsData.length()));
+										    } catch (JSONException e) {
+											    e.printStackTrace();
+											    finalViewHolder.mFacebookLikesComments.setText(String.format("좋아요 0 답글 0"));
+										    }
+									    }
+								    }
+							    }).executeAsync();
+						    }
+					    }
+				    });
+			    }
+		    });
+	    } else {
+		    viewHolder.mFacebookLikesComments.setVisibility(View.GONE);
+	    }
 
         convertView.setTag(viewHolder);
         return convertView;
@@ -126,6 +193,8 @@ public class TimelineListAdapter extends BaseAdapter {
         LinkEllipseTextView mTxtPostText;
         @InjectView(R.id.iv_timeline_image)
         ImageView mIvTimelineImage;
+		@InjectView(R.id.facebook_likes_comments)
+		TextView mFacebookLikesComments;
 
         ButterknifeViewHolder(View view) {
             ButterKnife.inject(this, view);

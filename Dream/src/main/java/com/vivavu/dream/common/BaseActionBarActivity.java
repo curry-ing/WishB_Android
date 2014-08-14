@@ -225,6 +225,7 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
                     context.setUsername(baseInfo.getUsername());
                     context.setLogin(true);
 	                context.setAppVersionInfo(baseInfo.getAppVersionInfo());
+	                context.setFbToken(baseInfo.getFbToken());
                     DataRepository.deleteBucketsNotEqualUserId(baseInfo.getId());//로그인 사용자 이외의 데이터 삭제
                     return true;
                 }else if(response.getResponseStatus() == ResponseStatus.TIMEOUT) {

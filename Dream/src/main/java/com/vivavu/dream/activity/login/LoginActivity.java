@@ -576,6 +576,7 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
                 context.setUsername(result.getData().getUser().getUsername());
                 context.setToken(result.getData().getToken());
                 context.setTokenType("unused");
+	            context.setFbToken(result.getData().getUser().getFbToken());
                 context.saveAppDefaultInfo();
 
                 /* Set Notifications On */
