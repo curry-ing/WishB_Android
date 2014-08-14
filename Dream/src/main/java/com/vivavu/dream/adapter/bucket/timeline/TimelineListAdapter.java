@@ -140,7 +140,7 @@ public class TimelineListAdapter extends BaseAdapter {
 											    JSONArray likesData = likes.getJSONArray("data");
 
 											    JSONObject comments = jsonObject.getJSONObject("comments");
-											    JSONArray commentsData = likes.getJSONArray("data");
+											    JSONArray commentsData = comments.getJSONArray("data");
 
 											    finalViewHolder.mFacebookLikesComments.setText(String.format("좋아요 %d 답글 %d", likesData.length(), commentsData.length()));
 										    } catch (JSONException e) {
