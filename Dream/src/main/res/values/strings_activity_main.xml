@@ -25,6 +25,6 @@
     <string name="mainview_decade_set_message">어떤 10년을 보내고 싶나요?</string>
 
     <!--Common-->
-    <string name="press_again_to_exit">\'뒤로\' 버튼을 한번 더 누르면 종료돼요</string>
+    <string name="press_again_to_exit">\'뒤로\' 버튼을 한번 더 누르면 종료됩니다</string>
     <string name="modification_failed">앗! 잠시 후에 다시 시도해주세요</string>
 </resources>

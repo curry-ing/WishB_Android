@@ -222,26 +222,11 @@ public class LeftMenuDrawerFragment extends CustomBaseFragment {
                 tracker.send(eventBuilder.build());
 
 	            if(checkUpdate()) {
-	                AlertDialog.Builder ab = new AlertDialog.Builder(getActivity());
-		            ab.setTitle(getString(R.string.choose));
-		            ab.setMessage(R.string.need_update);
-		            ab.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-			            @Override
-			            public void onClick(DialogInterface dialog, int which) {
-
-			            }
-		            });
-		            ab.setPositiveButton(R.string.confirm_yes, new DialogInterface.OnClickListener() {
-			            @Override
-			            public void onClick(DialogInterface dialog, int which) {
-				            Intent i = new Intent(Intent.ACTION_VIEW);
-				            i.setData(Uri.parse(DreamApp.getInstance().getAppVersionInfo().getUrl()));
-				            startActivity(i);
-			            }
-		            });
-		            ab.show();
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+		            i.setData(Uri.parse(DreamApp.getInstance().getAppVersionInfo().getUrl()));
+		            startActivity(i);
 	            } else{
-		            Toast.makeText(getActivity(), "최신버전을 사용중입니다", Toast.LENGTH_SHORT).show();
+		            Toast.makeText(getActivity(), context.getString(R.string.use_lastest_version), Toast.LENGTH_SHORT).show();
 	            }
             }
         });

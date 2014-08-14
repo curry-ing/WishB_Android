@@ -1,8 +1,11 @@
 package com.vivavu.dream.activity.main;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.GravityCompat;
@@ -176,11 +179,24 @@ public class MainActivity extends BaseActionBarActivity {
         });
 
 	    if(isNeedUpdate()){
-		    Toast.makeText(this, "업데이트가 있습니다", Toast.LENGTH_SHORT).show();
-	    } else{
-		    //Toast.makeText(this, "최신버전을 사용중입니다", Toast.LENGTH_SHORT).show();
-	    }
+		    AlertDialog.Builder ab = new AlertDialog.Builder(this);
+		    ab.setMessage(R.string.need_update);
+		    ab.setNegativeButton(R.string.update_later, new DialogInterface.OnClickListener() {
+			    @Override
+			    public void onClick(DialogInterface dialog, int which) {
 
+			    }
+		    });
+		    ab.setPositiveButton(R.string.update_now, new DialogInterface.OnClickListener() {
+			    @Override
+			    public void onClick(DialogInterface dialog, int which) {
+				    Intent i = new Intent(Intent.ACTION_VIEW);
+				    i.setData(Uri.parse(DreamApp.getInstance().getAppVersionInfo().getUrl()));
+				    startActivity(i);
+			    }
+		    });
+		    ab.show();
+	    }
     }
 
     public void updateProfileImg() {

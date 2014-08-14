@@ -145,7 +145,10 @@
     <string name="app_crash_message">앱이 비정상적으로 종료되었습니다</string>
 
     <!-- 앱 업데이트 관련 -->
-    <string name="need_update">최신버전이 아닙니다. 업데이트 하시겠습니까?</string>
+    <string name="need_update">새로운 업데이트 버전이 있습니다</string>
+    <string name="update_later">나중에 하기</string>
+    <string name="update_now">지금 업데이트 하기</string>
     <string name="title_activity_notice">Notice</string>
+    <string name="use_lastest_version">최신버전을 사용중입니다</string>
 
 </resources>
