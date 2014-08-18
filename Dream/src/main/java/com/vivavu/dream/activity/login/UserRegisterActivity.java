@@ -642,6 +642,7 @@ public class UserRegisterActivity extends BaseActionBarActivity  implements Load
                 context.setToken(result.getData().getToken());
                 context.setTokenType("unused");
                 context.saveAppDefaultInfo();
+	            DataRepository.saveUser(result.getData().getUser());
 
                 setResult(RESULT_OK);
                 finish();

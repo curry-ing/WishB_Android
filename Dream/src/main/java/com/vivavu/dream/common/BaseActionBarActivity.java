@@ -227,6 +227,7 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
 	                context.setAppVersionInfo(baseInfo.getAppVersionInfo());
 	                context.setFbToken(baseInfo.getFbToken());
                     DataRepository.deleteBucketsNotEqualUserId(baseInfo.getId());//로그인 사용자 이외의 데이터 삭제
+	                DataRepository.saveUser(baseInfo);
                     return true;
                 }else if(response.getResponseStatus() == ResponseStatus.TIMEOUT) {
 	                logout();
@@ -296,7 +297,17 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
 
     }
 
-    @Override
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+	}
+
+	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:

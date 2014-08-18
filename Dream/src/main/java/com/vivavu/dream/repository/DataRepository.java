@@ -20,6 +20,7 @@ import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.model.bucket.BucketGroup;
 import com.vivavu.dream.model.bucket.Today;
 import com.vivavu.dream.model.bucket.TodayGroup;
+import com.vivavu.dream.model.user.User;
 import com.vivavu.dream.util.JsonFactory;
 import com.vivavu.dream.util.RestTemplateUtils;
 
@@ -481,13 +482,40 @@ public class DataRepository {
         DeleteBuilder<TodayGroup,Date> deleteBuilder = getDatabaseHelper().getTodayGroupRuntimeDao().deleteBuilder();
         DeleteBuilder<Bucket, Integer> bucketDeleteBuilder = getDatabaseHelper().getBucketRuntimeDao().deleteBuilder();
         DeleteBuilder<Today, Integer> todayDeleteBuilder = getDatabaseHelper().getTodayRuntimeDao().deleteBuilder();
+        DeleteBuilder<User, Integer> userDeleteBuilder = getDatabaseHelper().getUserDao().deleteBuilder();
         try {
             deleteBuilder.delete();
             bucketDeleteBuilder.delete();
             todayDeleteBuilder.delete();
+	        userDeleteBuilder.delete();
         } catch (SQLException e) {
             Log.e("dream", e.getMessage());
         }
 
     }
+
+	public static User getUser(){
+		RuntimeExceptionDao<User, Integer> userDao = getDatabaseHelper().getUserDao();
+		List<User> users = userDao.queryForAll();
+		if(users != null && users.size() > 0){
+			return users.get(0);
+		}
+		return null;
+	}
+
+	public static void saveUser(User user){
+		if(user.getId() != null) {
+			deleteUser();
+			getDatabaseHelper().getUserDao().createOrUpdate(user);
+		}
+	}
+
+	public static void deleteUser(){
+		DeleteBuilder<User, Integer> userDeleteBuilder = getDatabaseHelper().getUserDao().deleteBuilder();
+		try {
+			userDeleteBuilder.delete();
+		} catch (SQLException e) {
+			Log.e("dream", e.getMessage());
+		}
+	}
 }

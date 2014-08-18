@@ -12,6 +12,7 @@ import com.vivavu.dream.R;
 import com.vivavu.dream.common.reporting.CustomHttpReportSender;
 import com.vivavu.dream.model.AppVersionInfo;
 import com.vivavu.dream.model.user.User;
+import com.vivavu.dream.repository.DataRepository;
 
 import org.acra.ACRA;
 import org.acra.ReportingInteractionMode;
@@ -71,7 +72,7 @@ public class DreamApp extends Application {
 
 	    ACRA.init(this); // todo: 서버 파트의 에러 수집 api가 개발되면 주석을 해제하여 ACRA 가동
 	    ACRA.getErrorReporter().removeAllReportSenders();
-	    ACRA.getErrorReporter().addReportSender(new CustomHttpReportSender(ACRA.getConfig().httpMethod(), ACRA.getConfig().reportType(), Constants.apiReporting, null ));
+	    ACRA.getErrorReporter().addReportSender(new CustomHttpReportSender(ACRA.getConfig().httpMethod(), ACRA.getConfig().reportType(), Constants.apiReporting, null));
     }
 
     @Override
@@ -139,7 +140,10 @@ public class DreamApp extends Application {
     }
 
     public User getUser() {
-        return user;
+        if(user == null){
+	        user = DataRepository.getUser();
+        }
+	    return user;
     }
 
     public void setUser(User user) {

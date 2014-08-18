@@ -38,6 +38,7 @@ import com.vivavu.dream.common.enums.ResponseStatus;
 import com.vivavu.dream.model.LoginInfo;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.SecureToken;
+import com.vivavu.dream.repository.DataRepository;
 import com.vivavu.dream.repository.connector.UserInfoConnector;
 import com.vivavu.dream.util.ValidationUtils;
 
@@ -578,6 +579,7 @@ public class LoginActivity extends BaseActionBarActivity implements LoaderManage
                 context.setTokenType("unused");
 	            context.setFbToken(result.getData().getUser().getFbToken());
                 context.saveAppDefaultInfo();
+	            DataRepository.saveUser(result.getData().getUser());
 
                 /* Set Notifications On */
                 AlarmManagerBroadcastReceiver alarm = new AlarmManagerBroadcastReceiver();

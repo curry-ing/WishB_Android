@@ -1,6 +1,8 @@
 package com.vivavu.dream.model.user;
 
 import com.google.gson.annotations.SerializedName;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 import com.vivavu.dream.R;
 import com.vivavu.dream.common.DreamApp;
 
@@ -11,61 +13,81 @@ import java.util.Date;
 /**
  * Created by yuja on 14. 1. 7.
  */
+@DatabaseTable(tableName = "user")
 public class User{
+	@DatabaseField(id = true)
     @SerializedName("id")
     private Integer id;
 
+	@DatabaseField
     @SerializedName("email")
     private String email;
 
+	@DatabaseField
     @SerializedName("about_me")
     private String aboutMe;
 
+	@DatabaseField
     @SerializedName("birthday")
     private String birthday;
 
+	@DatabaseField
     @SerializedName("is_following")
     private Boolean isFollowing;
 
+	@DatabaseField
     @SerializedName("last_seen")
     private Date lastSeen;
 
+	@DatabaseField
     @SerializedName("pic")
     private String pic;
 
+	@DatabaseField
     @SerializedName("uri")
     private String uri;
 
+	@DatabaseField
     @SerializedName("username")
     private String username;
 
+	@DatabaseField
     @SerializedName("title_life")
     private String title_life;
 
+	@DatabaseField
     @SerializedName("title_10")
     private String title_10;
 
+	@DatabaseField
     @SerializedName("title_20")
     private String title_20;
 
+	@DatabaseField
     @SerializedName("title_30")
     private String title_30;
 
+	@DatabaseField
     @SerializedName("title_40")
     private String title_40;
 
+	@DatabaseField
     @SerializedName("title_50")
     private String title_50;
 
+	@DatabaseField
     @SerializedName("title_60")
     private String title_60;
 
+	@DatabaseField
     @SerializedName("profile_img_url")
     private String profileImgUrl;
 
+	@DatabaseField
 	@SerializedName("fb_id")
 	private String facebookId;
 
+	@DatabaseField
 	@SerializedName("fb_token")
 	private String fbToken;
 
