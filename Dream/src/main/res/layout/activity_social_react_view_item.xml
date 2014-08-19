@@ -3,11 +3,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="horizontal"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+              android:layout_height="wrap_content"
+              android:paddingLeft="10dp"
+              android:paddingRight="10dp"
+    >
     <ImageView
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:id="@+id/img_social_icon"
+        android:layout_marginTop="5dp"
+        android:layout_gravity="top"
         />
     <ImageView
         android:layout_width="30dp"
@@ -19,11 +24,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_marginLeft="10dp"
         >
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/txt_social_name"
+            android:textStyle="bold"
+            android:text="name"
+            android:textColor="@color/default_darkgray"
+            android:gravity="center_vertical"
             />
         <TextView
             android:layout_width="match_parent"
@@ -34,6 +44,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/txt_social_reply_created_time"
+            android:text="time"
+            android:textColor="@color/gray"
             />
         </LinearLayout>
 </LinearLayout>

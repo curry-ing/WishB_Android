@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -16,10 +17,19 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenSource;
+import com.facebook.HttpMethod;
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.model.GraphObject;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -27,15 +37,25 @@ import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.bucket.TimelineActivity;
 import com.vivavu.dream.activity.image.ImageViewActivity;
+import com.vivavu.dream.adapter.bucket.timeline.SocialReactListAdapter;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.common.enums.ResponseStatus;
 import com.vivavu.dream.model.ResponseBodyWrapped;
+import com.vivavu.dream.model.SocialReact;
 import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.model.bucket.timeline.Post;
 import com.vivavu.dream.repository.connector.TimelineConnector;
 import com.vivavu.dream.util.AndroidUtils;
 import com.vivavu.dream.util.DateUtils;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -49,28 +69,23 @@ public class TimelineItemViewActivity extends BaseActionBarActivity {
 	public static final String TAG = "com.vivavu.dream.activity.bucket.timeline.TimelineItemViewActivity";
 	public static final String extraKeyReturnValue = "extraKeyReturnValue";
 	public static final int REQUEST_MOD_POST = 0;
-	@InjectView(R.id.txt_post_date)
-	TextView mTxtPostDate;
-	@InjectView(R.id.btn_timeline_edit)
-	ImageButton mBtnTimelineEdit;
-	@InjectView(R.id.txt_post_text)
-	TextView mTxtPostText;
-	@InjectView(R.id.iv_timeline_image)
-	ImageView mIvTimelineImage;
-	@InjectView(R.id.container_post_info)
-	LinearLayout mContainerPostInfo;
-	@InjectView(R.id.content_frame)
-	LinearLayout mContentFrame;
+
+
 	@InjectView(R.id.menu_previous)
 	ImageButton mMenuPrevious;
 	@InjectView(R.id.txt_title)
 	TextView mTxtTitle;
 	@InjectView(R.id.menu_more)
 	ImageButton mMenuMore;
+	@InjectView(R.id.list_item_view)
+	ListView mListItemView;
+	@InjectView(R.id.content_frame)
+	LinearLayout mContentFrame;
+
 
 	Post post;
-	@InjectView(R.id.txt_post_time)
-	TextView mTxtPostTime;
+	HeaderViewHolder headerViewHolder;
+	protected SocialReactListAdapter socialReactListAdapter;
 
 	private static final int SEND_DATA_START = 0;
 	private static final int SEND_DATA_DELETE_SUCCESS = 1;
@@ -125,22 +140,7 @@ public class TimelineItemViewActivity extends BaseActionBarActivity {
 		post.setBucketId(bucket.getId());
 
 		mTxtTitle.setText(bucket.getTitle());
-		bindData(post);
-		mBtnTimelineEdit.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				goEdit();
-			}
-		});
-		mIvTimelineImage.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent();
-				intent.setClass(TimelineItemViewActivity.this, ImageViewActivity.class);
-				intent.putExtra(ImageViewActivity.IMAGE_VIEW_DATA_KEY, post.getImgUrl());
-				startActivity(intent);
-			}
-		});
+
 		mMenuPrevious.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -182,13 +182,36 @@ public class TimelineItemViewActivity extends BaseActionBarActivity {
 			}
 		});
 
+		View headerView = getLayoutInflater().inflate(R.layout.activity_timeline_item_view_list_header, null);
+
+		headerViewHolder = new HeaderViewHolder(headerView);
+		mListItemView.addHeaderView(headerView);
+
+		bindData(post);
+		headerViewHolder.mBtnTimelineEdit.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				goEdit();
+			}
+		});
+		headerViewHolder.mIvTimelineImage.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent();
+				intent.setClass(TimelineItemViewActivity.this, ImageViewActivity.class);
+				intent.putExtra(ImageViewActivity.IMAGE_VIEW_DATA_KEY, post.getImgUrl());
+				startActivity(intent);
+			}
+		});
+
+
 	}
 
 	private void bindData(Post post) {
-		mTxtPostText.setText(post.getText());
-		mTxtPostDate.setText(DateUtils.getDateString(post.getContentDt(), "yyyy.MM.dd"));
-		mTxtPostTime.setText(DateUtils.getDateString(post.getContentDt(), "HH:mm"));
-		ImageLoader.getInstance().displayImage(post.getImgUrl(), mIvTimelineImage, new SimpleImageLoadingListener() {
+		headerViewHolder.mTxtPostText.setText(post.getText());
+		headerViewHolder.mTxtPostDate.setText(DateUtils.getDateString(post.getContentDt(), "yyyy.MM.dd"));
+		headerViewHolder.mTxtPostTime.setText(DateUtils.getDateString(post.getContentDt(), "HH:mm"));
+		ImageLoader.getInstance().displayImage(post.getImgUrl(), headerViewHolder.mIvTimelineImage, new SimpleImageLoadingListener() {
 			@Override
 			public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 				super.onLoadingComplete(imageUri, view, loadedImage);
@@ -200,6 +223,75 @@ public class TimelineItemViewActivity extends BaseActionBarActivity {
 				}
 			}
 		});
+
+		final List<SocialReact> socialReactList = new ArrayList<SocialReact>();
+		initList(socialReactList);
+		String facebookFeedId = post.getFbFeedId();
+		if (facebookFeedId != null) {
+			headerViewHolder.mLayoutSocialReact.setVisibility(View.VISIBLE);
+			final String s = facebookFeedId.split("_")[1];
+			List<String> readPermissions = new ArrayList<String>();
+			readPermissions.add("publish_actions");
+			AccessToken fromExistingAccessToken = AccessToken.createFromExistingAccessToken(DreamApp.getInstance().getFbToken(), null, null, AccessTokenSource.FACEBOOK_APPLICATION_NATIVE, readPermissions);
+			Session.openActiveSessionWithAccessToken(context, fromExistingAccessToken, new Session.StatusCallback() {
+				@Override
+				public void call(Session session, SessionState state, Exception exception) {
+					if (state.isOpened()) {
+						new Request(Session.getActiveSession(), String.format("/%s", s), null, HttpMethod.GET, new Request.Callback() {
+							@Override
+							public void onCompleted(Response response) {
+								if (response != null && response.getGraphObject() != null) {
+									GraphObject graphObject = response.getGraphObject();
+									JSONObject jsonObject = graphObject.getInnerJSONObject();
+									try {
+										if (!jsonObject.isNull("likes")) {
+											JSONObject likes = jsonObject.getJSONObject("likes");
+											if (!likes.isNull("data")) {
+												JSONArray likesData = likes.getJSONArray("data");
+												headerViewHolder.mTxtSocialLikeCount.setText(String.format("좋아요 %d개", likesData == null ? 0 : likesData.length()));
+											}
+										}
+										if (!jsonObject.isNull("comments")) {
+											JSONObject comments = jsonObject.getJSONObject("comments");
+											if (!comments.isNull("data")) {
+												JSONArray commentsData = comments.getJSONArray("data");
+												headerViewHolder.mTxtSocialReplyCount.setText(String.format("답글 %d개", commentsData == null ? 0 : commentsData.length()));
+												for (int index = 0; index < commentsData.length(); index++) {
+													JSONObject item = (JSONObject) commentsData.get(index);
+													SocialReact socialReact = new SocialReact();
+													socialReact.setSocialType(SocialReact.SocialType.FACEBOOK);
+													socialReact.setMessage(item.getString("message"));
+													socialReact.setName(item.getJSONObject("from").getString("name"));
+													Date createdTime = DateUtils.getDateFromString(item.getString("created_time"), "yyyy-MM-dd'T'HH:mm:ssZ", new Date());
+													//createdTime = DateUtils.add(createdTime, Calendar.HOUR_OF_DAY, 9);
+													socialReact.setCreatedTime(createdTime);
+													socialReactList.add(socialReact);
+												}
+												initList(socialReactList);
+											}
+										}
+
+									} catch (JSONException e) {
+										Log.e(SocialReactViewActivity.class.getName(), e.toString());
+									}
+								}
+							}
+						}).executeAsync();
+					}
+				}
+			});
+		} else {
+			headerViewHolder.mLayoutSocialReact.setVisibility(View.GONE);
+		}
+	}
+
+	public void initList(List<SocialReact> socialReactList) {
+		if (socialReactListAdapter == null) {
+			socialReactListAdapter = new SocialReactListAdapter(this);
+			mListItemView.setAdapter(socialReactListAdapter);
+		}
+		socialReactListAdapter.setSocialReactList(socialReactList);
+		socialReactListAdapter.notifyDataSetChanged();
 	}
 
 	@Override
@@ -309,6 +401,37 @@ public class TimelineItemViewActivity extends BaseActionBarActivity {
 		Button mBtnShare;
 
 		MenuHolder(View view) {
+			ButterKnife.inject(this, view);
+		}
+	}
+
+	/**
+	 * This class contains all butterknife-injected Views & Layouts from layout file 'activity_timeline_item_view_list_header.xml'
+	 * for easy to all layout elements.
+	 *
+	 * @author ButterKnifeZelezny, plugin for Android Studio by Inmite Developers (http://inmite.github.io)
+	 */
+	static class HeaderViewHolder {
+		@InjectView(R.id.txt_post_date)
+		TextView mTxtPostDate;
+		@InjectView(R.id.txt_post_time)
+		TextView mTxtPostTime;
+		@InjectView(R.id.btn_timeline_edit)
+		ImageButton mBtnTimelineEdit;
+		@InjectView(R.id.txt_post_text)
+		TextView mTxtPostText;
+		@InjectView(R.id.iv_timeline_image)
+		ImageView mIvTimelineImage;
+		@InjectView(R.id.txt_social_like_count)
+		TextView mTxtSocialLikeCount;
+		@InjectView(R.id.txt_social_reply_count)
+		TextView mTxtSocialReplyCount;
+		@InjectView(R.id.layout_social_react)
+		LinearLayout mLayoutSocialReact;
+		@InjectView(R.id.container_post_info)
+		LinearLayout mContainerPostInfo;
+
+		HeaderViewHolder(View view) {
 			ButterKnife.inject(this, view);
 		}
 	}

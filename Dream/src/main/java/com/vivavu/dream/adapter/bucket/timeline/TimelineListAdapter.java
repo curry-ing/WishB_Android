@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -148,7 +149,7 @@ public class TimelineListAdapter extends BaseAdapter {
 
 											    finalViewHolder.mFacebookLikesComments.setText(String.format("좋아요 %d 답글 %d", likesData.length(), commentsData.length()));
 										    } catch (JSONException e) {
-											    e.printStackTrace();
+											    Log.e(this.getClass().getName(), e.toString());
 											    finalViewHolder.mFacebookLikesComments.setText(String.format("좋아요 0 답글 0"));
 										    }
 									    }
