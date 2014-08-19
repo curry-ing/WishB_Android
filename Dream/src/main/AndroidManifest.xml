@@ -140,6 +140,12 @@
             android:name=".activity.setup.NoticeActivity"
             android:label="@string/title_activity_notice" >
         </activity>
+        <activity
+            android:name=".activity.bucket.timeline.SocialReactViewActivity"
+            android:label="@string/title_activity_social_react_view"
+            android:theme="@style/Transparent"
+            >
+        </activity>
     </application>
 
 </manifest>

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +22,7 @@ import com.facebook.model.GraphObject;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.vivavu.dream.R;
+import com.vivavu.dream.activity.bucket.timeline.SocialReactViewActivity;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.model.bucket.timeline.Post;
@@ -44,7 +44,8 @@ import butterknife.InjectView;
  * Created by yuja on 2014-04-01.
  */
 public class TimelineListAdapter extends BaseAdapter {
-    protected Context context;
+	public static final String EXTRA_KEY_FACEBOOK_FEED_ID = "facebook_feed_id";
+	protected Context context;
     protected LayoutInflater layoutInflater;
     protected List<Post> postList;
     protected TimelineMetaInfo timelineMetaInfo;
@@ -109,12 +110,15 @@ public class TimelineListAdapter extends BaseAdapter {
         });
 
 	    if(post.getFbFeedId() != null && post.getFbFeedId().length() > 0) {
+		    viewHolder.mFacebookLikesComments.setVisibility(View.VISIBLE);
 		    final ButterknifeViewHolder finalViewHolder = viewHolder;
 		    viewHolder.mFacebookLikesComments.setOnClickListener(new View.OnClickListener() {
 			    @Override
 			    public void onClick(View v) {
-				    Intent i = new Intent(Intent.ACTION_VIEW);
-				    i.setData(Uri.parse(String.format("https://www.facebook.com/%s", post.getFbFeedId())));
+				    Intent i = new Intent();
+				    i.setClass(context, SocialReactViewActivity.class);
+				    i.putExtra(EXTRA_KEY_FACEBOOK_FEED_ID, post.getFbFeedId());
+				    //i.setData(Uri.parse(String.format("https://www.facebook.com/%s", post.getFbFeedId())));
 				    context.startActivity(i);
 			    }
 		    });

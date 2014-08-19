@@ -150,5 +150,6 @@
     <string name="update_now">지금 업데이트 하기</string>
     <string name="title_activity_notice">Notice</string>
     <string name="use_lastest_version">최신버전을 사용중입니다</string>
+    <string name="title_activity_social_react_view">SocialReactViewActivity</string>
 
 </resources>
