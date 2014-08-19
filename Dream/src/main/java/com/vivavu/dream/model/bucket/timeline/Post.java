@@ -44,6 +44,9 @@ public class Post implements Serializable, Comparable<Post> {
     @SerializedName("fb_feed_id")
     protected String fbFeedId;
 
+	protected int likesCount = 0;
+	protected int commentsCount = 0;
+
     public Post(Date date) {
         this.contentDt = date;
     }
@@ -168,7 +171,23 @@ public class Post implements Serializable, Comparable<Post> {
         this.fbFeedId = fbFeedId;
     }
 
-    @Override
+	public int getLikesCount() {
+		return likesCount;
+	}
+
+	public void setLikesCount(int likesCount) {
+		this.likesCount = likesCount;
+	}
+
+	public int getCommentsCount() {
+		return commentsCount;
+	}
+
+	public void setCommentsCount(int commentsCount) {
+		this.commentsCount = commentsCount;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Post)) return false;

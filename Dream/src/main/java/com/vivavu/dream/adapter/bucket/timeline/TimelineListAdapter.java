@@ -47,10 +47,14 @@ import butterknife.InjectView;
  */
 public class TimelineListAdapter extends BaseAdapter {
 	public static final String EXTRA_KEY_FACEBOOK_FEED_ID = "facebook_feed_id";
+	public static final String EXTRA_KEY_LIKES_COUNT = "likesCount";
+	public static final String EXTRA_KEY_COMMENTS_COUNT = "commentsCount";
 	protected Context context;
     protected LayoutInflater layoutInflater;
     protected List<Post> postList;
     protected TimelineMetaInfo timelineMetaInfo;
+	int likesCount = 0;
+	int commentsCount = 0;
 
     public TimelineListAdapter(Activity context) {
         this.context = context;
@@ -120,6 +124,9 @@ public class TimelineListAdapter extends BaseAdapter {
 				    Intent i = new Intent();
 				    i.setClass(context, SocialReactViewActivity.class);
 				    i.putExtra(EXTRA_KEY_FACEBOOK_FEED_ID, post.getFbFeedId());
+				    i.putExtra(EXTRA_KEY_LIKES_COUNT, likesCount);
+				    i.putExtra(EXTRA_KEY_COMMENTS_COUNT, commentsCount);
+
 				    //i.setData(Uri.parse(String.format("https://www.facebook.com/%s", post.getFbFeedId())));
 				    context.startActivity(i);
 			    }
@@ -144,8 +151,7 @@ public class TimelineListAdapter extends BaseAdapter {
 										    GraphObject graphObject = response.getGraphObject();
 										    JSONObject jsonObject = graphObject.getInnerJSONObject();
 										    try {
-											    int likesCount = 0;
-											    int commentsCount = 0;
+
 											    if(!jsonObject.isNull("likes")) {
 												    JSONObject likes = jsonObject.getJSONObject("likes");
 												    if (!likes.isNull("data")) {
@@ -161,7 +167,8 @@ public class TimelineListAdapter extends BaseAdapter {
 													    commentsCount = commentsData.length();
 												    }
 											    }
-
+												post.setLikesCount(likesCount);
+											    post.setCommentsCount(commentsCount);
 											    finalViewHolder.mFacebookLikesComments.setText(String.format("좋아요 %d 답글 %d", likesCount, commentsCount));
 
 										    } catch (JSONException e) {

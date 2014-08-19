@@ -38,6 +38,7 @@ import com.vivavu.dream.R;
 import com.vivavu.dream.activity.bucket.TimelineActivity;
 import com.vivavu.dream.activity.image.ImageViewActivity;
 import com.vivavu.dream.adapter.bucket.timeline.SocialReactListAdapter;
+import com.vivavu.dream.adapter.bucket.timeline.TimelineListAdapter;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.common.enums.ResponseStatus;
@@ -87,6 +88,9 @@ public class TimelineItemViewActivity extends BaseActionBarActivity {
 	HeaderViewHolder headerViewHolder;
 	protected SocialReactListAdapter socialReactListAdapter;
 
+	int likesCount = 0;
+	int commentsCount = 0;
+
 	private static final int SEND_DATA_START = 0;
 	private static final int SEND_DATA_DELETE_SUCCESS = 1;
 	private static final int SEND_DATA_DELETE_FAIL = 2;
@@ -134,10 +138,15 @@ public class TimelineItemViewActivity extends BaseActionBarActivity {
 		mTxtTitle.setTypeface(getNanumBarunGothicBoldFont());
 
 		Intent data = getIntent();
+		likesCount = data.getIntExtra(TimelineListAdapter.EXTRA_KEY_LIKES_COUNT, 0);
+		commentsCount = data.getIntExtra(TimelineListAdapter.EXTRA_KEY_COMMENTS_COUNT, 0);
+
 		Bucket bucket = (Bucket) data.getSerializableExtra(TimelineActivity.extraKeyBucket);
 
 		post = (Post) data.getSerializableExtra(TimelineActivity.extraKeyPost);
 		post.setBucketId(bucket.getId());
+		likesCount = post.getLikesCount();
+		commentsCount = post.getCommentsCount();
 
 		mTxtTitle.setText(bucket.getTitle());
 
@@ -226,6 +235,7 @@ public class TimelineItemViewActivity extends BaseActionBarActivity {
 
 		final List<SocialReact> socialReactList = new ArrayList<SocialReact>();
 		initList(socialReactList);
+		initCount(likesCount, commentsCount);
 		String facebookFeedId = post.getFbFeedId();
 		if (facebookFeedId != null) {
 			headerViewHolder.mLayoutSocialReact.setVisibility(View.VISIBLE);
@@ -248,14 +258,14 @@ public class TimelineItemViewActivity extends BaseActionBarActivity {
 											JSONObject likes = jsonObject.getJSONObject("likes");
 											if (!likes.isNull("data")) {
 												JSONArray likesData = likes.getJSONArray("data");
-												headerViewHolder.mTxtSocialLikeCount.setText(String.format("좋아요 %d개", likesData == null ? 0 : likesData.length()));
+												likesCount = likesData == null ? 0 : likesData.length();
 											}
 										}
 										if (!jsonObject.isNull("comments")) {
 											JSONObject comments = jsonObject.getJSONObject("comments");
 											if (!comments.isNull("data")) {
 												JSONArray commentsData = comments.getJSONArray("data");
-												headerViewHolder.mTxtSocialReplyCount.setText(String.format("답글 %d개", commentsData == null ? 0 : commentsData.length()));
+												commentsCount = commentsData == null ? 0 : commentsData.length();
 												for (int index = 0; index < commentsData.length(); index++) {
 													JSONObject item = (JSONObject) commentsData.get(index);
 													SocialReact socialReact = new SocialReact();
@@ -271,6 +281,8 @@ public class TimelineItemViewActivity extends BaseActionBarActivity {
 											}
 										}
 
+										initCount(likesCount, commentsCount);
+
 									} catch (JSONException e) {
 										Log.e(SocialReactViewActivity.class.getName(), e.toString());
 									}
@@ -283,6 +295,13 @@ public class TimelineItemViewActivity extends BaseActionBarActivity {
 		} else {
 			headerViewHolder.mLayoutSocialReact.setVisibility(View.GONE);
 		}
+	}
+
+	public void initCount(int likesCount, int commentsCount){
+		headerViewHolder.mTxtSocialLikeCount.setText(String.format("좋아요 %d개", likesCount));
+		headerViewHolder.mTxtSocialReplyCount.setText(String.format("답글 %d개", commentsCount));
+		this.likesCount = likesCount;
+		this.commentsCount = commentsCount;
 	}
 
 	public void initList(List<SocialReact> socialReactList) {
