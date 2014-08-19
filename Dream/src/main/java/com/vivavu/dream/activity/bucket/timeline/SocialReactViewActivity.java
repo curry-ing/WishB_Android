@@ -61,7 +61,9 @@ public class SocialReactViewActivity extends BaseActionBarActivity {
 				@Override
 				public void call(Session session, SessionState state, Exception exception) {
 					if (state.isOpened()) {
-						new Request(Session.getActiveSession(), String.format("/%s", s), null, HttpMethod.GET, new Request.Callback() {
+						Bundle bundle = new Bundle();
+						bundle.putString("fields", "comments{attachment,message,from,created_time},likes{name,pic}");
+						new Request(Session.getActiveSession(), String.format("/%s", s), bundle, HttpMethod.GET, new Request.Callback() {
 							@Override
 							public void onCompleted(Response response) {
 								if (response != null && response.getGraphObject() != null) {

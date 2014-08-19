@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -134,20 +135,35 @@ public class TimelineListAdapter extends BaseAdapter {
 					    @Override
 					    public void call(Session session, SessionState state, Exception exception) {
 						    if (state.isOpened()) {
-							    new Request(Session.getActiveSession(), String.format("/%s", s), null, HttpMethod.GET, new Request.Callback() {
+							    Bundle bundle = new Bundle();
+							    bundle.putString("fields", "comments{attachment,message,from,created_time},likes{name,pic}");
+							    new Request(Session.getActiveSession(), String.format("/%s", s), bundle, HttpMethod.GET, new Request.Callback() {
 								    @Override
 								    public void onCompleted(Response response) {
 									    if(response != null && response.getGraphObject() != null) {
 										    GraphObject graphObject = response.getGraphObject();
 										    JSONObject jsonObject = graphObject.getInnerJSONObject();
 										    try {
-											    JSONObject likes = jsonObject.getJSONObject("likes");
-											    JSONArray likesData = likes.getJSONArray("data");
+											    int likesCount = 0;
+											    int commentsCount = 0;
+											    if(!jsonObject.isNull("likes")) {
+												    JSONObject likes = jsonObject.getJSONObject("likes");
+												    if (!likes.isNull("data")) {
+													    JSONArray likesData = likes.getJSONArray("data");
+													    likesCount = likesData.length();
+												    }
+											    }
 
-											    JSONObject comments = jsonObject.getJSONObject("comments");
-											    JSONArray commentsData = comments.getJSONArray("data");
+											    if(!jsonObject.isNull("comments")) {
+												    JSONObject comments = jsonObject.getJSONObject("comments");
+												    if (!comments.isNull("data")) {
+													    JSONArray commentsData = comments.getJSONArray("data");
+													    commentsCount = commentsData.length();
+												    }
+											    }
 
-											    finalViewHolder.mFacebookLikesComments.setText(String.format("좋아요 %d 답글 %d", likesData.length(), commentsData.length()));
+											    finalViewHolder.mFacebookLikesComments.setText(String.format("좋아요 %d 답글 %d", likesCount, commentsCount));
+
 										    } catch (JSONException e) {
 											    Log.e(this.getClass().getName(), e.toString());
 											    finalViewHolder.mFacebookLikesComments.setText(String.format("좋아요 0 답글 0"));
@@ -205,5 +221,6 @@ public class TimelineListAdapter extends BaseAdapter {
             ButterKnife.inject(this, view);
         }
     }
+
 
 }
