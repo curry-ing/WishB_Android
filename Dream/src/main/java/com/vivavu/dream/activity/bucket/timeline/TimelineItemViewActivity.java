@@ -254,6 +254,8 @@ public class TimelineItemViewActivity extends BaseActionBarActivity {
 									GraphObject graphObject = response.getGraphObject();
 									JSONObject jsonObject = graphObject.getInnerJSONObject();
 									try {
+										likesCount = 0;
+										commentsCount = 0;
 										if (!jsonObject.isNull("likes")) {
 											JSONObject likes = jsonObject.getJSONObject("likes");
 											if (!likes.isNull("data")) {
