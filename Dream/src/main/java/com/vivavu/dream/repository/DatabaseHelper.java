@@ -9,6 +9,7 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
+import com.vivavu.dream.model.Notice;
 import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.model.bucket.Today;
 import com.vivavu.dream.model.bucket.TodayGroup;
@@ -22,7 +23,7 @@ import java.util.Date;
  */
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private static final String DATABASE_NAME = "dream.db";
-    private static final int DATABASE_VERSION = 12;
+    private static final int DATABASE_VERSION = 13;
 
     // the DAO object we use to access the SimpleData table
     private Dao<Bucket, Integer> bucketDao = null;
@@ -38,6 +39,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 	private RuntimeExceptionDao<User, Integer> userDao = null;
 
+	private RuntimeExceptionDao<Notice, Date> noticeDao = null;
+
     public DatabaseHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
@@ -51,6 +54,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, Today.class);
             TableUtils.createTable(connectionSource, TodayGroup.class);
             TableUtils.createTable(connectionSource, User.class);
+            TableUtils.createTable(connectionSource, Notice.class);
         } catch (SQLException e) {
             Log.e(DatabaseHelper.class.getName(), "Can't create database", e);
             throw new RuntimeException(e);
@@ -73,6 +77,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.dropTable(connectionSource, Today.class, true);
             TableUtils.dropTable(connectionSource, TodayGroup.class, true);
 	        TableUtils.dropTable(connectionSource, User.class, true);
+	        TableUtils.dropTable(connectionSource, Notice.class, true);
             // after we drop the old databases, we create the new ones
             onCreate(database, connectionSource);
         } catch (SQLException e) {
@@ -123,6 +128,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return todayGroupRuntimeDao;
     }
 
+	public RuntimeExceptionDao<Notice, Date> getNoticeRuntimeDao() {
+        if (noticeDao == null) {
+	        noticeDao = getRuntimeExceptionDao(Notice.class);
+        }
+        return noticeDao;
+    }
+
     @Override
     public void close() {
         super.close();
@@ -133,6 +145,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         todayGroupDao = null;
         todayGroupRuntimeDao = null;
 	    userDao = null;
+	    noticeDao = null;
     }
 
 	public RuntimeExceptionDao<User, Integer> getUserDao() {

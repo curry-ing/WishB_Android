@@ -18,6 +18,7 @@ import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.enums.ResponseStatus;
 import com.vivavu.dream.model.Notice;
 import com.vivavu.dream.model.ResponseBodyWrapped;
+import com.vivavu.dream.repository.DataRepository;
 import com.vivavu.dream.repository.connector.NoticeConnector;
 
 import java.util.List;
@@ -115,7 +116,8 @@ public class NoticeActivity extends BaseActionBarActivity {
 			NoticeConnector noticeConnector = new NoticeConnector();
 			ResponseBodyWrapped<List<Notice>> noticeResponseBodyWrapped = noticeConnector.getList();
 			if(noticeResponseBodyWrapped.isSuccess()){
-				Message message = handler.obtainMessage(FETCH_DATA_SUCCESS, noticeResponseBodyWrapped.getData());
+				DataRepository.saveNotieList(noticeResponseBodyWrapped.getData());
+				Message message = handler.obtainMessage(FETCH_DATA_SUCCESS, DataRepository.getNoticeList());
 				handler.sendMessage(message);
 				return;
 			}else if(noticeResponseBodyWrapped.getResponseStatus() == ResponseStatus.TIMEOUT) {

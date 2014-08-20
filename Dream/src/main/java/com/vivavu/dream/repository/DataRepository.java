@@ -14,6 +14,7 @@ import com.vivavu.dream.common.RestTemplateFactory;
 import com.vivavu.dream.common.enums.FacebookShareType;
 import com.vivavu.dream.common.enums.ResponseStatus;
 import com.vivavu.dream.model.LoginInfo;
+import com.vivavu.dream.model.Notice;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.SecureToken;
 import com.vivavu.dream.model.bucket.Bucket;
@@ -517,5 +518,46 @@ public class DataRepository {
 		} catch (SQLException e) {
 			Log.e("dream", e.getMessage());
 		}
+	}
+
+	public static List<Notice> getNoticeList(){
+		RuntimeExceptionDao<Notice, Date> noticeDao = getDatabaseHelper().getNoticeRuntimeDao();
+		List<Notice> noticeList = noticeDao.queryForAll();
+		return noticeList;
+	}
+
+	public static void saveNotice(Notice notice){
+		getDatabaseHelper().getNoticeRuntimeDao().createOrUpdate(notice);
+	}
+
+	public static void deleteNotice(){
+		DeleteBuilder<Notice, Date> noticeDateDeleteBuilder = getDatabaseHelper().getNoticeRuntimeDao().deleteBuilder();
+		try {
+			noticeDateDeleteBuilder.delete();
+		} catch (SQLException e) {
+			Log.e("dream", e.getMessage());
+		}
+	}
+
+	public static void saveNotieList(List<Notice> noticeList){
+		for(Notice notice : noticeList){
+			saveNotice(notice);
+		}
+	}
+
+	public static boolean checkNotReadNoticeExist(){
+		QueryBuilder<Notice, Date> queryBuilder = getDatabaseHelper().getNoticeRuntimeDao().queryBuilder();
+		Where where = queryBuilder.where();
+		try {
+			where.eq("read", false);
+			long countOf = queryBuilder.countOf();
+			if(countOf > 0L){
+				return true;
+			}
+		} catch (SQLException e) {
+			Log.e(DataRepository.class.getName(), e.toString());
+			return false;
+		}
+		return false;
 	}
 }

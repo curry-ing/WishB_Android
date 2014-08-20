@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.vivavu.dream.R;
 import com.vivavu.dream.model.Notice;
+import com.vivavu.dream.repository.DataRepository;
 
 import java.util.List;
 
@@ -63,11 +64,15 @@ public class NoticeAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		Notice notice = getItem(position);
+		final Notice notice = getItem(position);
 		holder.mSubject.setText(notice.getSubject());
 		holder.mContents.setText(notice.getContent());
 
-		holder.mSubject.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_down, 0);
+		if(!notice.isRead()) {
+			holder.mSubject.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_new, 0, R.drawable.ic_down, 0);
+		} else {
+			holder.mSubject.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_down, 0);
+		}
 		holder.mContents.setVisibility(View.GONE);
 
 		final ViewHolder finalHolder = holder;
@@ -78,6 +83,8 @@ public class NoticeAdapter extends BaseAdapter {
 				if (v.isSelected()){
 					finalHolder.mContents.setVisibility(View.VISIBLE);
 					finalHolder.mSubject.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_up, 0);
+					notice.setRead(true);
+					DataRepository.saveNotice(notice);
 				} else {
 					finalHolder.mContents.setVisibility(View.GONE);
 					finalHolder.mSubject.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_down, 0);
