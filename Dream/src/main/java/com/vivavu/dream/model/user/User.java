@@ -91,6 +91,10 @@ public class User{
 	@SerializedName("fb_token")
 	private String fbToken;
 
+	@DatabaseField
+	@SerializedName("latest_notice")
+	protected String latestNoticeKey;
+
     private File photo;
 
     public String getTitle_60() {
@@ -259,6 +263,14 @@ public class User{
 
 	public void setFbToken(String fbToken) {
 		this.fbToken = fbToken;
+	}
+
+	public String getLatestNoticeKey() {
+		return latestNoticeKey;
+	}
+
+	public void setLatestNoticeKey(String latestNoticeKey) {
+		this.latestNoticeKey = latestNoticeKey;
 	}
 
 	public int getUserAge() {

@@ -10,7 +10,9 @@ import com.j256.ormlite.table.DatabaseTable;
  */
 @DatabaseTable(tableName = "notices")
 public class Notice {
-	protected Integer id;
+	@DatabaseField(id=true)
+	@SerializedName("key")
+	protected String id;
 
 	@DatabaseField
 	@SerializedName("subject")
@@ -20,12 +22,12 @@ public class Notice {
 	@SerializedName("content")
 	protected String content;
 
-	@DatabaseField(id = true, dataType = DataType.DATE)
+	@DatabaseField(dataType = DataType.SERIALIZABLE)
 	@SerializedName("reg_dt")
 	protected MongoDBDate regDt;
 
 	@DatabaseField
-	protected boolean read = false;
+	protected boolean read;
 
 	public String getSubject() {
 		return subject;
@@ -51,19 +53,19 @@ public class Notice {
 		this.regDt = regDt;
 	}
 
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
 	public boolean isRead() {
 		return read;
 	}
 
 	public void setRead(boolean read) {
 		this.read = read;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 }

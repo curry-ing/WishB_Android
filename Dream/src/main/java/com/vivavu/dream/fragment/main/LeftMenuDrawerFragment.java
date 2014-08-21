@@ -203,10 +203,7 @@ public class LeftMenuDrawerFragment extends CustomBaseFragment {
             }
         });
 
-	    if (DataRepository.checkNotReadNoticeExist()){
-		    mMainLeftMenuBtnUpdate.setCompoundDrawablesWithIntrinsicBounds(R.drawable.empty_icon_41_41,0, R.drawable.ic_new, 0);
-	    }
-        mMainLeftMenuBtnNotice.setOnClickListener(new View.OnClickListener(){
+	    mMainLeftMenuBtnNotice.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Tracker tracker = DreamApp.getInstance().getTracker();
@@ -247,6 +244,7 @@ public class LeftMenuDrawerFragment extends CustomBaseFragment {
 	public void onResume() {
 		super.onResume();
 		checkUpdate();
+		checkNotice();
 	}
 
 	private boolean checkUpdate() {
@@ -260,6 +258,14 @@ public class LeftMenuDrawerFragment extends CustomBaseFragment {
 				mMainLeftMenuBtnUpdate.setCompoundDrawablesWithIntrinsicBounds(0,0,0, 0);
 				return false;
 			}
+		}
+		return false;
+	}
+
+	private boolean checkNotice(){
+		if(DataRepository.checkNotReadNoticeExist(DreamApp.getInstance().getUser().getLatestNoticeKey())){
+			mMainLeftMenuBtnNotice.setCompoundDrawablesWithIntrinsicBounds(R.drawable.empty_icon_41_41,0, R.drawable.ic_new, 0);
+			return true;
 		}
 		return false;
 	}

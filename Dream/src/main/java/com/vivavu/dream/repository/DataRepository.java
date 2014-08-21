@@ -521,17 +521,26 @@ public class DataRepository {
 	}
 
 	public static List<Notice> getNoticeList(){
-		RuntimeExceptionDao<Notice, Date> noticeDao = getDatabaseHelper().getNoticeRuntimeDao();
+		RuntimeExceptionDao<Notice, String> noticeDao = getDatabaseHelper().getNoticeRuntimeDao();
 		List<Notice> noticeList = noticeDao.queryForAll();
 		return noticeList;
 	}
 
 	public static void saveNotice(Notice notice){
-		getDatabaseHelper().getNoticeRuntimeDao().createOrUpdate(notice);
+		RuntimeExceptionDao<Notice, String> noticeRuntimeDao = getDatabaseHelper().getNoticeRuntimeDao();
+		Notice notice1 = noticeRuntimeDao.queryForId(notice.getId());
+		if(notice1 == null ) {
+			getDatabaseHelper().getNoticeRuntimeDao().createOrUpdate(notice);
+		} else {
+			if(notice.isRead() != true) {
+				notice.setRead(notice1.isRead());
+			}
+			getDatabaseHelper().getNoticeRuntimeDao().createOrUpdate(notice);
+		}
 	}
 
 	public static void deleteNotice(){
-		DeleteBuilder<Notice, Date> noticeDateDeleteBuilder = getDatabaseHelper().getNoticeRuntimeDao().deleteBuilder();
+		DeleteBuilder<Notice, String> noticeDateDeleteBuilder = getDatabaseHelper().getNoticeRuntimeDao().deleteBuilder();
 		try {
 			noticeDateDeleteBuilder.delete();
 		} catch (SQLException e) {
@@ -545,12 +554,20 @@ public class DataRepository {
 		}
 	}
 
-	public static boolean checkNotReadNoticeExist(){
-		QueryBuilder<Notice, Date> queryBuilder = getDatabaseHelper().getNoticeRuntimeDao().queryBuilder();
+	public static boolean checkNotReadNoticeExist(String lastestNoticeKey){
+		QueryBuilder<Notice, String> queryBuilder = getDatabaseHelper().getNoticeRuntimeDao().queryBuilder();
+		Notice queryForId = getDatabaseHelper().getNoticeRuntimeDao().queryForId(lastestNoticeKey);
+
+		if(queryForId == null){
+			return true;
+		}
+
 		Where where = queryBuilder.where();
+
 		try {
 			where.eq("read", false);
 			long countOf = queryBuilder.countOf();
+
 			if(countOf > 0L){
 				return true;
 			}

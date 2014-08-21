@@ -23,7 +23,7 @@ import java.util.Date;
  */
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private static final String DATABASE_NAME = "dream.db";
-    private static final int DATABASE_VERSION = 13;
+    private static final int DATABASE_VERSION = 14;
 
     // the DAO object we use to access the SimpleData table
     private Dao<Bucket, Integer> bucketDao = null;
@@ -39,7 +39,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 	private RuntimeExceptionDao<User, Integer> userDao = null;
 
-	private RuntimeExceptionDao<Notice, Date> noticeDao = null;
+	private RuntimeExceptionDao<Notice, String> noticeDao = null;
 
     public DatabaseHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -128,7 +128,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return todayGroupRuntimeDao;
     }
 
-	public RuntimeExceptionDao<Notice, Date> getNoticeRuntimeDao() {
+	public RuntimeExceptionDao<Notice, String> getNoticeRuntimeDao() {
         if (noticeDao == null) {
 	        noticeDao = getRuntimeExceptionDao(Notice.class);
         }
