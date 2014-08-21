@@ -235,6 +235,8 @@ public class TimelineItemViewActivity extends BaseActionBarActivity {
 
 		final List<SocialReact> socialReactList = new ArrayList<SocialReact>();
 		initList(socialReactList);
+		likesCount = 0;
+		commentsCount = 0;
 		initCount(likesCount, commentsCount);
 		String facebookFeedId = post.getFbFeedId();
 		if (facebookFeedId != null) {
@@ -247,15 +249,15 @@ public class TimelineItemViewActivity extends BaseActionBarActivity {
 				@Override
 				public void call(Session session, SessionState state, Exception exception) {
 					if (state.isOpened()) {
-						new Request(Session.getActiveSession(), String.format("/%s", s), null, HttpMethod.GET, new Request.Callback() {
+						Bundle bundle = new Bundle();
+						bundle.putString("fields", "comments{attachment,message,from,created_time},likes{name,pic}");
+						new Request(Session.getActiveSession(), String.format("/%s", s), bundle, HttpMethod.GET, new Request.Callback() {
 							@Override
 							public void onCompleted(Response response) {
 								if (response != null && response.getGraphObject() != null) {
 									GraphObject graphObject = response.getGraphObject();
 									JSONObject jsonObject = graphObject.getInnerJSONObject();
 									try {
-										likesCount = 0;
-										commentsCount = 0;
 										if (!jsonObject.isNull("likes")) {
 											JSONObject likes = jsonObject.getJSONObject("likes");
 											if (!likes.isNull("data")) {
@@ -275,6 +277,13 @@ public class TimelineItemViewActivity extends BaseActionBarActivity {
 													socialReact.setMessage(item.getString("message"));
 													socialReact.setName(item.getJSONObject("from").getString("name"));
 													Date createdTime = DateUtils.getDateFromString(item.getString("created_time"), "yyyy-MM-dd'T'HH:mm:ssZ", new Date());
+													if(!item.isNull("attachment") && !item.getJSONObject("attachment").isNull("media")
+															&& !item.getJSONObject("attachment").getJSONObject("media").isNull("image")){
+														JSONObject imageObject = item.getJSONObject("attachment").getJSONObject("media").getJSONObject("image");
+														if(!imageObject.isNull("src")){
+															socialReact.setAttachmentUrl(imageObject.getString("src"));
+														}
+													}
 													//createdTime = DateUtils.add(createdTime, Calendar.HOUR_OF_DAY, 9);
 													socialReact.setCreatedTime(createdTime);
 													socialReactList.add(socialReact);
