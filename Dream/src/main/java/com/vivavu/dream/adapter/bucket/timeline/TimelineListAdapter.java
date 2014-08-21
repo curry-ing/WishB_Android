@@ -2,7 +2,6 @@ package com.vivavu.dream.adapter.bucket.timeline;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,7 +23,6 @@ import com.facebook.model.GraphObject;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.vivavu.dream.R;
-import com.vivavu.dream.activity.bucket.timeline.SocialReactViewActivity;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.model.bucket.timeline.Post;
@@ -53,10 +51,8 @@ public class TimelineListAdapter extends BaseAdapter {
     protected LayoutInflater layoutInflater;
     protected List<Post> postList;
     protected TimelineMetaInfo timelineMetaInfo;
-	int likesCount = 0;
-	int commentsCount = 0;
 
-    public TimelineListAdapter(Activity context) {
+	public TimelineListAdapter(Activity context) {
         this.context = context;
         this.layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -118,7 +114,7 @@ public class TimelineListAdapter extends BaseAdapter {
 	    if(post.getFbFeedId() != null && post.getFbFeedId().length() > 0) {
 		    viewHolder.mFacebookLikesComments.setVisibility(View.VISIBLE);
 		    final ButterknifeViewHolder finalViewHolder = viewHolder;
-		    viewHolder.mFacebookLikesComments.setOnClickListener(new View.OnClickListener() {
+		    /*viewHolder.mFacebookLikesComments.setOnClickListener(new View.OnClickListener() {
 			    @Override
 			    public void onClick(View v) {
 				    Intent i = new Intent();
@@ -130,11 +126,10 @@ public class TimelineListAdapter extends BaseAdapter {
 				    //i.setData(Uri.parse(String.format("https://www.facebook.com/%s", post.getFbFeedId())));
 				    context.startActivity(i);
 			    }
-		    });
-		    likesCount = 0;
-		    commentsCount = 0;
+		    });*/
+
 		    finalViewHolder.mFacebookLikesComments.setText(String.format("로딩중..."));
-		    viewHolder.mFacebookLikesComments.post(new Runnable() {
+		    convertView.post(new Runnable() {
 			    @Override
 			    public void run() {
 				    final String s = post.getFbFeedId().split("_")[1];
@@ -150,6 +145,8 @@ public class TimelineListAdapter extends BaseAdapter {
 							    new Request(Session.getActiveSession(), String.format("/%s", s), bundle, HttpMethod.GET, new Request.Callback() {
 								    @Override
 								    public void onCompleted(Response response) {
+									    int likesCount = 0;
+									    int commentsCount = 0;
 									    if(response != null && response.getGraphObject() != null) {
 										    GraphObject graphObject = response.getGraphObject();
 										    JSONObject jsonObject = graphObject.getInnerJSONObject();
