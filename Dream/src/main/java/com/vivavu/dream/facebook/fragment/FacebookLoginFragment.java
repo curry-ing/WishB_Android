@@ -130,6 +130,11 @@ public class FacebookLoginFragment extends CustomBaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         uiHelper = new UiLifecycleHelper(getActivity(), callback);
+	    //기본적으로 이 화면이 호출되는 시점은 로그인 타임이므로 무조건 로그아웃 시켜버린다.
+	    Session session = Session.getActiveSession();
+	    if(session != null && !session.isClosed()){
+		    session.closeAndClearTokenInformation();
+	    }
         uiHelper.onCreate(savedInstanceState);
 
 //        progressDialog = new ProgressDialog(getActivity());

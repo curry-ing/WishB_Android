@@ -131,6 +131,9 @@ public class TimelineListAdapter extends BaseAdapter {
 				    context.startActivity(i);
 			    }
 		    });
+		    likesCount = 0;
+		    commentsCount = 0;
+		    finalViewHolder.mFacebookLikesComments.setText(String.format("로딩중..."));
 		    viewHolder.mFacebookLikesComments.post(new Runnable() {
 			    @Override
 			    public void run() {
@@ -151,7 +154,6 @@ public class TimelineListAdapter extends BaseAdapter {
 										    GraphObject graphObject = response.getGraphObject();
 										    JSONObject jsonObject = graphObject.getInnerJSONObject();
 										    try {
-
 											    if(!jsonObject.isNull("likes")) {
 												    JSONObject likes = jsonObject.getJSONObject("likes");
 												    if (!likes.isNull("data")) {
@@ -169,11 +171,12 @@ public class TimelineListAdapter extends BaseAdapter {
 											    }
 												post.setLikesCount(likesCount);
 											    post.setCommentsCount(commentsCount);
-											    finalViewHolder.mFacebookLikesComments.setText(String.format("좋아요 %d 답글 %d", likesCount, commentsCount));
+											    finalViewHolder.mFacebookLikesComments.setText(String.format("좋아요 %d개 답글 %d개", likesCount, commentsCount));
 
 										    } catch (JSONException e) {
 											    Log.e(this.getClass().getName(), e.toString());
-											    finalViewHolder.mFacebookLikesComments.setText(String.format("좋아요 0 답글 0"));
+											    finalViewHolder.mFacebookLikesComments.setVisibility(View.GONE);
+											    //finalViewHolder.mFacebookLikesComments.setText(String.format("좋아요 0개 답글 0개"));
 										    }
 									    }
 								    }

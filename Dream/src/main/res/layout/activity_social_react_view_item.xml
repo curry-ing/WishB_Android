@@ -40,6 +40,12 @@
             android:layout_height="match_parent"
             android:id="@+id/txt_social_reply"
             />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:id="@+id/img_social_react_attachment"
+            android:visibility="gone"
+            />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

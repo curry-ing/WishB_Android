@@ -16,6 +16,7 @@ public class SocialReact {
 	protected String name;
 	protected String message;
 	protected Date createdTime;
+	protected String attachmentUrl;
 
 	public SocialType getSocialType() {
 		return socialType;
@@ -55,6 +56,14 @@ public class SocialReact {
 
 	public void setCreatedTime(Date createdTime) {
 		this.createdTime = createdTime;
+	}
+
+	public String getAttachmentUrl() {
+		return attachmentUrl;
+	}
+
+	public void setAttachmentUrl(String attachmentUrl) {
+		this.attachmentUrl = attachmentUrl;
 	}
 
 	@Override
