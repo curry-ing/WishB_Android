@@ -267,6 +267,7 @@ public class LeftMenuDrawerFragment extends CustomBaseFragment {
 			mMainLeftMenuBtnNotice.setCompoundDrawablesWithIntrinsicBounds(R.drawable.empty_icon_41_41,0, R.drawable.ic_new, 0);
 			return true;
 		}
+		mMainLeftMenuBtnNotice.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 		return false;
 	}
 
