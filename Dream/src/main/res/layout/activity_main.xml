@@ -15,7 +15,9 @@
         <FrameLayout
             android:id="@+id/content_frame"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            />
 
         <Button
             android:layout_width="38dp"
@@ -30,6 +32,14 @@
             android:background="@drawable/btn_add"
             android:layout_marginRight="14dp"
             android:layout_marginBottom="22dp"/>
+        <android.support.v4.view.ViewPager
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/content_view_pager"
+            android:layout_alignParentBottom="true"
+            >
+
+        </android.support.v4.view.ViewPager>
         </RelativeLayout>
 
 

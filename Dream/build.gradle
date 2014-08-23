@@ -54,8 +54,10 @@ android {
 dependencies {
     compile project(':Libraries:facebook')
     compile project(':Libraries:carousel')
+    compile 'com.tonicartos:stickygridheaders:1.0.1'
     compile 'com.android.support:appcompat-v7:19.1.+'
     compile 'com.android.support:gridlayout-v7:19.1.+'
+    // You must install or update the Support Repository through the SDK manager to use this dependency.
     compile 'com.android.support:support-v4:19.1.+'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.jakewharton:butterknife:4.0.1'
@@ -69,7 +71,8 @@ dependencies {
     compile 'com.squareup:android-times-square:1.1.1@aar'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.1'
     compile 'de.hdodenhof:circleimageview:1.1.0'
-    compile 'com.tonicartos:stickygridheaders:1.0.1'
     compile 'com.google.android.gms:play-services:4.4.+'
     compile 'ch.acra:acra:4.5.0'
+    // You must install or update the Support Repository through the SDK manager to use this dependency.
+    compile 'com.android.support:support-v13:19.+'
 }
