@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vivavu.dream.R;
+import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.util.DateUtils;
 import com.vivavu.dream.view.ShadowImageView;
@@ -79,7 +80,11 @@ public class BucketListAdapter extends BaseAdapter {
 
             int padding = mContext.getResources().getDimensionPixelSize(R.dimen.sub_view_item_padding);
             if(position < 2){
-                convertView.setPadding(padding, mContext.getResources().getDimensionPixelSize(R.dimen.actionbar_height) + padding , padding, padding);
+	            if(mContext instanceof BaseActionBarActivity){
+
+	            }else {
+		            convertView.setPadding(padding, mContext.getResources().getDimensionPixelSize(R.dimen.actionbar_height) + padding, padding, padding);
+	            }
             } else {
                 convertView.setPadding(padding, padding, padding, padding);
             }
@@ -100,14 +105,18 @@ public class BucketListAdapter extends BaseAdapter {
 
             ImageLoader.getInstance().displayImage(item.getCvrImgUrl(), holder.mBucketItemImg, options);
 
-            if(onBucketImageViewClickListener != null) {
-                holder.mBucketItemImg.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        onBucketImageViewClickListener.onItemClick(v, position, item.getId() );
+
+            holder.mBucketItemImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(onBucketImageViewClickListener != null) {
+	                    onBucketImageViewClickListener.onItemClick(v, position, item.getId());
+                    } else {
+
                     }
-                });
-            }
+                }
+            });
+
             return convertView;
 
         }

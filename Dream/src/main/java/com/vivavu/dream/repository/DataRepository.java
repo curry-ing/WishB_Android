@@ -183,6 +183,12 @@ public class DataRepository {
         }
     }
 
+	public static List<Bucket> listBucket(){
+		List<Bucket> list = getDatabaseHelper().getBucketRuntimeDao().queryForAll();
+		return list;
+	}
+
+
     public static List<Bucket> listBucketByRange(String range){
         List<Bucket> list = null;
         try {

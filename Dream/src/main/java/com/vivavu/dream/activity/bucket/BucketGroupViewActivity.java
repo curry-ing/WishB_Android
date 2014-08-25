@@ -73,7 +73,7 @@ public class BucketGroupViewActivity extends BaseActionBarActivity {
 
         groupRange = data.getStringExtra(EXTRA_KEY_GROUP_RANGE);
 
-        List<Bucket> bucketList = DataRepository.listBucketByRange(groupRange);
+        List<Bucket> bucketList = DataRepository.listBucket();
 
         bucketListAdapter = new BucketListAdapter(DreamApp.getInstance(), bucketList);
 
@@ -188,7 +188,7 @@ public class BucketGroupViewActivity extends BaseActionBarActivity {
                 }
 
                 updateGroupRangeInfo();
-                List<Bucket> bucketList = DataRepository.listBucketByRange(groupRange);
+                List<Bucket> bucketList = DataRepository.listBucket();
                 bucketListAdapter.setList(bucketList);
                 bucketListAdapter.notifyDataSetChanged();
             }

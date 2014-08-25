@@ -3,6 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="actionbar_height">49dp</dimen>
+    <dimen name="actionbar_height_with_tab">98dp</dimen>
     <dimen name="subview_item_radius">110dp</dimen>
     <dimen name="subview_item_width">110dp</dimen>
     <dimen name="subview_item_height">110dp</dimen>

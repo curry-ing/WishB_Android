@@ -3,23 +3,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/intro_bg"
+    android:paddingTop="@dimen/actionbar_height_with_tab"
+    >
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/swipe_refresh_layout">
 
-        <!--<GridView
-            android:id="@+id/listview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:numColumns="2"
-            android:listSelector="@color/transparent"
-            >
-            </GridView>
-            -->
         <com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView
             android:id="@+id/listview"
             android:layout_width="match_parent"

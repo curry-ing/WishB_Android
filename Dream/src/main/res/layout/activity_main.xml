@@ -11,7 +11,9 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+
+        >
         <FrameLayout
             android:id="@+id/content_frame"
             android:layout_width="match_parent"
@@ -31,7 +33,9 @@
             android:layout_alignParentRight="true"
             android:background="@drawable/btn_add"
             android:layout_marginRight="14dp"
-            android:layout_marginBottom="22dp"/>
+            android:layout_marginBottom="22dp"
+            android:visibility="gone"
+            />
         <android.support.v4.view.ViewPager
             android:layout_width="match_parent"
             android:layout_height="match_parent"

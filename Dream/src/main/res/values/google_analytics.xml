@@ -8,6 +8,7 @@
     <string name="ga_event_category_user_register_activity">회원가입</string>
     <string name="ga_event_category_main_activity">메인화면</string>
     <string name="ga_event_category_bucket_group_view_activity">서브뷰화면</string>
+    <string name="ga_event_category_bucket_list_fragment">수정된 메인화면 중 버킷리스트</string>
     <string name="ga_event_category_timeline_activity">타임라인화면</string>
     <string name="ga_event_category_bucket_edit_activity">버킷추가/수정화면</string>
     <string name="ga_event_category_bucket_option_activity">버킷옵션화면</string>

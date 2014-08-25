@@ -41,6 +41,7 @@ import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.Code;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.drawable.RoundedAvatarDrawable;
+import com.vivavu.dream.fragment.main.BucketListFragment;
 import com.vivavu.dream.fragment.main.MainBucketListFragment;
 import com.vivavu.dream.fragment.main.TodayListFragment;
 
@@ -377,7 +378,7 @@ public class MainActivity extends BaseActionBarActivity  implements ActionBar.Ta
 				case 0:
 					return new TodayListFragment();
 				case 1:
-					return new MainBucketListFragment();
+					return new BucketListFragment();
 				case 2:
 					return new TodayListFragment();
 				default:

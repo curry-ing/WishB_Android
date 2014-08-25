@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/layout_sub_view_background"
+    android:background="@drawable/mainview_bg20"
+    android:paddingTop="@dimen/actionbar_height_with_tab"
+    >
+    <GridView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/grid_bucket_list"
+        android:gravity="center"
+        android:numColumns="2"
+        android:listSelector="@color/transparent"
+        />
+
+    <Button
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:id="@+id/btn_add_bucket"
+        android:shadowColor="#AA000000"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="2"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true" android:background="@drawable/btn_add"
+        android:layout_marginRight="14dp" android:layout_marginBottom="22dp"/>
+</RelativeLayout>
