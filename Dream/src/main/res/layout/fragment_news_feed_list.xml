@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/layout_news_feed_background"
+    android:background="@drawable/mainview_bg20"
+    android:paddingTop="@dimen/actionbar_height_with_tab"
+    >
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/swipe_refresh_layout">
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/news_feed_list"
+            android:gravity="center"
+            android:listSelector="@color/transparent"
+            />
+    </android.support.v4.widget.SwipeRefreshLayout>
+</RelativeLayout>

@@ -76,8 +76,8 @@
     <string name="title_activity_intro">IntroActivity</string>
 
     <string name="title_section1">소식</string>
-    <string name="title_section2">버킷리스트</string>
-    <string name="title_section3">Today</string>
+    <string name="title_section2">내 버킷</string>
+    <string name="title_section3">투데이</string>
 
     <string name="access_terms">이용약관 보기</string>
     <string name="privacy">개인정보 보호방침 보기</string>
@@ -154,5 +154,7 @@
     <string name="use_lastest_version">최신버전을 사용중입니다</string>
     <string name="title_activity_social_react_view">SocialReactViewActivity</string>
     <string name="title_activity_main_tab">MainTabActivity</string>
+    <string name="news_feed_like">응원</string>
+    <string name="news_feed_reply">댓글</string>
 
 </resources>

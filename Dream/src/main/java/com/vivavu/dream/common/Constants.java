@@ -47,5 +47,8 @@ public class Constants {
 
 	// notice
 	static public String apiNotice =baseUrl +"api/noticelist";
+
+	// newsfeed
+	static public String apiNewsFeed = baseUrl + "api/newsfeed?page={page}";
 	//static public String apiNotice ="http://masunghoon.iptime.org:5001/" +"api/noticelist";
 }

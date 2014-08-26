@@ -43,6 +43,7 @@ import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.drawable.RoundedAvatarDrawable;
 import com.vivavu.dream.fragment.main.BucketListFragment;
 import com.vivavu.dream.fragment.main.MainBucketListFragment;
+import com.vivavu.dream.fragment.main.NewsFeedFragment;
 import com.vivavu.dream.fragment.main.TodayListFragment;
 
 import java.util.Locale;
@@ -376,7 +377,7 @@ public class MainActivity extends BaseActionBarActivity  implements ActionBar.Ta
 		public Fragment getItem(int position) {
 			switch (position){
 				case 0:
-					return new TodayListFragment();
+					return new NewsFeedFragment();
 				case 1:
 					return new BucketListFragment();
 				case 2:
