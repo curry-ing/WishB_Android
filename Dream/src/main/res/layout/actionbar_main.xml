@@ -28,6 +28,8 @@
         android:text="@string/today"
         android:background="@null"
         android:layout_alignParentRight="true"
-        style="@style/TextActionbarRightButton" />
+        style="@style/TextActionbarRightButton"
+        android:visibility="gone"
+        />
 
 </RelativeLayout>

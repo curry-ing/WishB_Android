@@ -50,7 +50,8 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class MainActivity extends BaseActionBarActivity  implements ActionBar.TabListener{
-    private AlarmManagerBroadcastReceiver alarm;
+	public static final int OFFSCREEN_PAGE_LIMIT = 3;
+	private AlarmManagerBroadcastReceiver alarm;
 
     @InjectView(R.id.actionbar_main_title)
     ImageView mActionbarMainTitle;
@@ -106,7 +107,7 @@ public class MainActivity extends BaseActionBarActivity  implements ActionBar.Ta
 	    // Set up the ViewPager with the sections adapter.
 	    mViewPager = (ViewPager) findViewById(R.id.content_view_pager);
 	    mViewPager.setAdapter(sectionsPagerAdapter);
-	    mViewPager.setOffscreenPageLimit(3);
+	    mViewPager.setOffscreenPageLimit(OFFSCREEN_PAGE_LIMIT);
 
 	    // When swiping between different sections, select the corresponding
 	    // tab. We can also use ActionBar.Tab#select() to do this if we have
