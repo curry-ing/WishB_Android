@@ -21,6 +21,7 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.model.GraphObject;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.vivavu.dream.R;
@@ -31,6 +32,7 @@ import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.model.NewsFeed;
 import com.vivavu.dream.model.bucket.timeline.Post;
 import com.vivavu.dream.util.DateUtils;
+import com.vivavu.dream.view.ShadowImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -117,7 +119,19 @@ public class NewsFeedListAdapter extends CustomBaseAdapter<NewsFeed> {
 
 			viewHolder.mTxtNewsFeedTitle.setText(item.getTitle());
 			viewHolder.mTxtNewsFeedDeadline.setText(DateUtils.getDateString(item.getDeadline(), "yyyy-MM-dd"));
-			viewHolder.mTxtNewsFeedWriterName.setText(item.getUsername());
+
+			String infoMessage;
+			if(item.getType() == NewsFeed.Type.BUCKET) {
+				infoMessage = String.format("%s님이 %s 버킷을 %s하였습니다", item.getUsername(), item.getTitle(), item.getAction() == NewsFeed.Action.REGISTERED ? "등록" : "수정");
+			} else {
+				if(item.getAction() == NewsFeed.Action.REGISTERED) {
+					infoMessage = String.format("%s님이 %s 버킷에 일지를 입력하였습니다", item.getUsername(), item.getTitle());
+				} else {
+					infoMessage = String.format("%s님이 %s 버킷의 일지를 수정하였습니다", item.getUsername(), item.getTitle());
+				}
+			}
+			//viewHolder.mTxtNewsFeedWriterName.setText(item.getUsername());
+			viewHolder.mTxtNewsFeedWriterName.setText(infoMessage);
 			Long diffTime = DateUtils.getDiffTime(item.getLstModDt());
 			if( diffTime / 60 < 1L){
 				//1분 이하
@@ -145,6 +159,22 @@ public class NewsFeedListAdapter extends CustomBaseAdapter<NewsFeed> {
 					}
 				});
 			}
+
+			//ImageLoader.getInstance().displayImage(item.getContents().getImg(), viewHolder.mImgNewsFeedImg);
+			final ViewHolder finalViewHolder = viewHolder;
+			DisplayImageOptions options = new DisplayImageOptions.Builder()
+					.cacheInMemory(true)
+					.cacheOnDisc(true)
+					.considerExifParams(true)
+					.showImageForEmptyUri(R.drawable.ic_profile_empty)
+					.build();
+
+			ImageLoader.getInstance().loadImage(item.getUserProfileImg(), options, new SimpleImageLoadingListener() {
+				@Override
+				public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+					finalViewHolder.mImgNewsFeedWriterImg.setImageBitmap(loadedImage);
+				}
+			});
 
 			if(item.getFbFeedId() != null){
 				viewHolder.mLayoutNewsFeedSocial.setVisibility(View.VISIBLE);
@@ -236,6 +266,8 @@ public class NewsFeedListAdapter extends CustomBaseAdapter<NewsFeed> {
 		TextView mTxtNewsFeedTitle;
 		@InjectView(R.id.txt_news_feed_deadline)
 		TextView mTxtNewsFeedDeadline;
+		@InjectView(R.id.img_news_feed_writer_img)
+		ShadowImageView mImgNewsFeedWriterImg;
 		@InjectView(R.id.txt_news_feed_writer_name)
 		TextView mTxtNewsFeedWriterName;
 		@InjectView(R.id.txt_news_feed_update_time)

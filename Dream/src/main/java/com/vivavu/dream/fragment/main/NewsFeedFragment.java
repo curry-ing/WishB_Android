@@ -61,6 +61,7 @@ public class NewsFeedFragment extends CustomBaseFragment { //} implements PullTo
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 				case SEND_REFRESH_START:
+					mSwipeRefreshLayout.setRefreshing(true);
 					break;
 				case SEND_REFRESH_STOP:
 					updateContents((List<NewsFeed>) msg.obj);
