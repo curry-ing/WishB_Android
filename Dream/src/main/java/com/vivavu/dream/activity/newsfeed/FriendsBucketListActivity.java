@@ -111,7 +111,7 @@ public class FriendsBucketListActivity extends BaseActionBarActivity {
 				public void onItemClick(View view, int position, long id) {
 					Intent intent = new Intent();
 					intent.setClass(FriendsBucketListActivity.this, TimelineActivity.class);
-					intent.putExtra(TimelineActivity.extraKey, id);
+					intent.putExtra(TimelineActivity.extraKey, (int)id);
 					intent.putExtra(TimelineActivity.extraKeyIsMind, false);
 					startActivityForResult(intent, REQUEST_TIMELINE_VIEW);
 				}
@@ -141,6 +141,7 @@ public class FriendsBucketListActivity extends BaseActionBarActivity {
 			if (result != null && result.isSuccess()) {
 				Message message = handler.obtainMessage(SEND_BUKET_LIST_UPDATE, result.getData());
 				handler.sendMessage(message);
+				return;
 			}
 			handler.sendEmptyMessage(FETCH_FRIENDS_BUCKET_DATA_FAIL);
 		}

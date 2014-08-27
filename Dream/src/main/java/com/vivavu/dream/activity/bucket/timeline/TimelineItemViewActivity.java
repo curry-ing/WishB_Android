@@ -160,12 +160,14 @@ public class TimelineItemViewActivity extends BaseActionBarActivity {
 		likesCount = data.getIntExtra(TimelineListAdapter.EXTRA_KEY_LIKES_COUNT, 0);
 		commentsCount = data.getIntExtra(TimelineListAdapter.EXTRA_KEY_COMMENTS_COUNT, 0);
 
+		init();
+
 		if(isMind){
 			localPost();
 		} else {
 			networkPost();
 		}
-		init();
+
 		disableEditMode(isMind);
 	}
 

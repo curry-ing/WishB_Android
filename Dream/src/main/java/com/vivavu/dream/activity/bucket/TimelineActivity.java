@@ -495,7 +495,9 @@ public class TimelineActivity extends BaseActionBarActivity {
         Tracker tracker = DreamApp.getInstance().getTracker();
         HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_timeline_activity)).setAction(getString(R.string.ga_event_action_view_timeline_item));
         tracker.send(eventBuilder.build());
-
+	    if (!isMind) {
+		    post.setBucketTitle(bucket.getTitle());
+	    }
         Intent intent = new Intent(this, TimelineItemViewActivity.class);
 	    intent.putExtra(extraKeyIsMind, isMind);
 	    intent.putExtra(TimelineActivity.extraKeyBucket, bucket);
