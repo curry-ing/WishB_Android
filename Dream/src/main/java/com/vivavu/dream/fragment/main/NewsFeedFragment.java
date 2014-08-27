@@ -116,7 +116,7 @@ public class NewsFeedFragment extends CustomBaseFragment { //} implements PullTo
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
 				//OnScrollListener.SCROLL_STATE_IDLE은 스크롤이 이동하다가 멈추었을때 발생되는 스크롤 상태입니다.
 				//즉 스크롤이 바닦에 닿아 멈춘 상태에 처리를 하겠다는 뜻
-				if(scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && lastitemVisibleFlag) {
+				if(scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && lastitemVisibleFlag && !mSwipeRefreshLayout.isRefreshing()) {
 					//TODO 화면이 바닦에 닿을때 처리
 					// 맨 밑으로 내려가면 데이터를 더 들고오게 한다.
 					mSwipeRefreshLayout.setRefreshing(true);

@@ -10,17 +10,17 @@ import java.util.Date;
  */
 public class NewsFeed implements Serializable {
 	public enum Action {
-		@SerializedName("Registered")
+		@SerializedName("registered")
 		REGISTERED,
-		@SerializedName("Modified")
+		@SerializedName("modified")
 		MODIFIED;
 	}
 
 	public enum Type{
-		@SerializedName("Bucket")
+		@SerializedName("bucket")
 		BUCKET,
-		@SerializedName("Timeline")
-		TIMELINE;
+		@SerializedName("journal")
+		JOURNAL;
 	}
 
 	public class Contents {
