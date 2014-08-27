@@ -9,8 +9,8 @@
         <item name="android:popupMenuStyle">@style/PopupMenuStyle</item>
         <!--<item name="android:background">@drawable/background_gradient</item>-->
     </style>
-    <style name="ActionBarTabStyle" parent="android:style/Widget.Holo.ActionBar.TabView">
-        <item name="android:minHeight">@dimen/actionbar_height</item>
+    <style name="ActionBarTabStyle" parent="Widget.AppCompat.Light.ActionBar.TabView">
+        <!--<item name="android:minHeight">@dimen/actionbar_height</item>-->
         <item name="android:background">@color/action_bar</item>
     </style>
     <style name="ActionBarStyle" parent="Widget.AppCompat.ActionBar">
