@@ -156,6 +156,8 @@ public class MainActivity extends BaseActionBarActivity  implements ActionBar.Ta
         mProfile.setOnClickListener(new View.OnClickListener() {
 	        @Override
 	        public void onClick(View view) {
+		        ActionBar bar = getSupportActionBar();
+		        bar.setNavigationMode(android.app.ActionBar.NAVIGATION_MODE_STANDARD);
 		        mContainer.openDrawer(Gravity.LEFT);
 	        }
         });
@@ -174,12 +176,7 @@ public class MainActivity extends BaseActionBarActivity  implements ActionBar.Ta
 		    }
 	    });
 
-        mContainer.setDrawerListener(new DrawerLayout.DrawerListener() {
-	        @Override
-	        public void onDrawerSlide(View drawerView, float slideOffset) {
-
-	        }
-
+        mContainer.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
 	        @Override
 	        public void onDrawerOpened(View drawerView) {
 		        ActionBar bar = getSupportActionBar();
@@ -196,12 +193,9 @@ public class MainActivity extends BaseActionBarActivity  implements ActionBar.Ta
 		        Tracker tracker = DreamApp.getInstance().getTracker();
 		        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_profile_fragment)).setAction(getString(R.string.ga_event_action_close_profile));
 		        tracker.send(eventBuilder.build());
+		        bar.setNavigationMode(android.app.ActionBar.NAVIGATION_MODE_TABS);
 	        }
 
-	        @Override
-	        public void onDrawerStateChanged(int newState) {
-
-	        }
         });
 
 	    if(isNeedUpdate()){
