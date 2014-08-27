@@ -60,6 +60,8 @@ public class TimelineActivity extends BaseActionBarActivity {
     public static final String extraKeyPost = "extraKeyPost";
     public static final String extraKeyWriteDate = "extraKeyWriteDate";
     public static final String extraKey = "bucketId";
+	public static final String extraKeyIsMind = "extraKeyIsMind";
+
     private static final int OFF_SCREEN_PAGE_LIMIT = 1;
     public static final int REQUEST_CALENDAR = 1;
     public static final int REQUEST_ADD_POST = 2;
@@ -127,11 +129,15 @@ public class TimelineActivity extends BaseActionBarActivity {
     private static final int UPDATE_BUCKET_DATA_SUCCESS = 3;
     private static final int UPDATE_BUCKET_DATA_FAIL = 4;
 
+	private static final int FETCH_FRIENDS_BUCKET_DATA_SUCCESS = 5;
+	private static final int FETCH_FRIENDS_BUCKET_DATA_FAIL = 6;
+
     private Timeline timeline;
     protected TimelineThread timelineThread;
     boolean lastitemVisibleFlag = false;        //화면에 리스트의 마지막 아이템이 보여지는지 체크
     private Integer lastPageNum = 1;
     protected  List<Post> timelineList;
+	protected boolean isMind;
 
     protected final Handler handler = new Handler() {
         @Override
@@ -155,6 +161,14 @@ public class TimelineActivity extends BaseActionBarActivity {
                 case UPDATE_BUCKET_DATA_FAIL:
                     Toast.makeText(TimelineActivity.this, getString(R.string.txt_timeline_bucket_info_update_fail), Toast.LENGTH_SHORT ).show();
                     break;
+	            case FETCH_FRIENDS_BUCKET_DATA_SUCCESS:
+		            bucket = (Bucket) msg.obj;
+		            afterFetchBucket();
+		            break;
+	            case FETCH_FRIENDS_BUCKET_DATA_FAIL:
+		            Toast.makeText(TimelineActivity.this, getString(R.string.txt_timeline_bucket_info_update_fail), Toast.LENGTH_SHORT ).show();
+		            finish();
+		            break;
             }
         }
     };
@@ -167,12 +181,6 @@ public class TimelineActivity extends BaseActionBarActivity {
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
-/*
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setCustomView(R.layout.actionbar_timeline);
-*/
 
         ButterKnife.inject(this);
 
@@ -182,58 +190,63 @@ public class TimelineActivity extends BaseActionBarActivity {
         mTxtBucketDescription.setTypeface(getNanumBarunGothicFont());
 
         Intent data = getIntent();
-        Integer bucketId = data.getIntExtra(extraKey, -1);
-        bucket = DataRepository.getBucket(bucketId);
-        bindData(bucket);
-        timelineMetaInfo = new TimelineMetaInfo();
-        initEvent();
-        timelineThread = new TimelineThread();
+	    Integer bucketId = data.getIntExtra(extraKey, -1);
 
-        timelineList = new ArrayList<Post>();
+	    isMind = data.getBooleanExtra(extraKeyIsMind, true);
+	    if(isMind) {
+			localBucket(bucketId);
+		} else {
+			networkBucket(bucketId);
+		}
 
-        mSwipeRefreshLayout.setColorScheme(R.color.progress_10, R.color.progress_20, R.color.progress_30, R.color.progress_40);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                // 새로고침 이벤트가 발생할 경우 수행되는 코드.
-                timelineThread.setPage(1);
-                Thread thread = new Thread(timelineThread);
-                thread.start();
-            }
-        });
 
-        mListTimeline.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                //OnScrollListener.SCROLL_STATE_IDLE은 스크롤이 이동하다가 멈추었을때 발생되는 스크롤 상태입니다.
-                //즉 스크롤이 바닦에 닿아 멈춘 상태에 처리를 하겠다는 뜻
-                if(scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && lastitemVisibleFlag) {
-                    //TODO 화면이 바닦에 닿을때 처리
-                    // 맨 밑으로 내려가면 데이터를 더 들고오게 한다.
-                    mSwipeRefreshLayout.setRefreshing(true);
-                    timelineThread.setPage(lastPageNum + 1);
-                    Tracker tracker = DreamApp.getInstance().getTracker();
-                    HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_timeline_activity)).setAction(getString(R.string.ga_event_action_more_page));
-                    eventBuilder.setValue(timelineThread.getPage());
-                    tracker.send(eventBuilder.build());
-                    Thread thread = new Thread(timelineThread);
-                    thread.start();
-                }
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                //현재 화면에 보이는 첫번째 리스트 아이템의 번호(firstVisibleItem) + 현재 화면에 보이는 리스트 아이템의 갯수(visibleItemCount)가 리스트 전체의 갯수(totalItemCount) -1 보다 크거나 같을때
-                lastitemVisibleFlag = (totalItemCount > 0) && (firstVisibleItem + visibleItemCount >= totalItemCount);
-
-            }
-        });
-
-        Thread thread = new Thread(timelineThread);
-        thread.start();
     }
 
-    private void initTimelineContents(List<Post> dataList) {
+	private void localBucket(Integer bucketId){
+
+		bucket = DataRepository.getBucket(bucketId);
+		bindData(bucket);
+		initEvent();
+
+		timelineMetaInfo = new TimelineMetaInfo();
+		timelineThread = new TimelineThread(bucket);
+		timelineList = new ArrayList<Post>();
+
+		Thread thread = new Thread(timelineThread);
+		thread.start();
+	}
+
+	private void networkBucket(Integer bucketId){
+
+
+		Thread thread = new Thread(new BucketNetworkThread(bucketId));
+		thread.start();
+	}
+
+	private void afterFetchBucket(){
+
+		bindData(bucket);
+		initEvent();
+
+		disableEditMode(false);
+
+		timelineMetaInfo = new TimelineMetaInfo();
+		timelineThread = new TimelineThread(bucket);
+		timelineList = new ArrayList<Post>();
+
+		Thread thread = new Thread(timelineThread);
+		thread.start();
+	}
+
+	private void disableEditMode(boolean isMind) {
+		if (!isMind) {
+			mBtnEdit.setVisibility(View.GONE);
+			mBtnAddPost.setVisibility(View.INVISIBLE);
+			mBtnAchieve.setOnClickListener(null);
+		}
+	}
+
+	private void initTimelineContents(List<Post> dataList) {
         if(lastPageNum == 1){
             timelineList.clear();
         }
@@ -250,82 +263,84 @@ public class TimelineActivity extends BaseActionBarActivity {
     }
 
     private void bindData(Bucket bucket) {
-        mTxtBucketTitle.setText(bucket.getTitle());
-        Date start = bucket.getRegDate();
-        Date end = bucket.getDeadline();
-        mTxtBucketDeadline.setText(DateUtils.getDateString(end, "yyyy.MM.dd"));
-        Long remainDay = DateUtils.getRemainDay(end);
-        if(remainDay >= 0) {
-            mTxtBucketRemain.setText(String.format("D - %05d", remainDay));
-            mTxtBucketRemain.setTextColor(getResources().getColor(R.color.default_text_color));
-        }else{
-            mTxtBucketRemain.setText(String.format("D + %05d", Math.abs(remainDay)));
-            mTxtBucketRemain.setTextColor(getResources().getColor(R.color.text_color_dday_over));
-        }
+	    if(bucket != null && bucket.getId() != null && bucket.getId() > 0) {
+		    mTxtBucketTitle.setText(bucket.getTitle());
+		    Date start = bucket.getRegDate();
+		    Date end = bucket.getDeadline();
+		    mTxtBucketDeadline.setText(DateUtils.getDateString(end, "yyyy.MM.dd"));
+		    Long remainDay = DateUtils.getRemainDay(end);
+		    if (remainDay >= 0) {
+			    mTxtBucketRemain.setText(String.format("D - %05d", remainDay));
+			    mTxtBucketRemain.setTextColor(getResources().getColor(R.color.default_text_color));
+		    } else {
+			    mTxtBucketRemain.setText(String.format("D + %05d", Math.abs(remainDay)));
+			    mTxtBucketRemain.setTextColor(getResources().getColor(R.color.text_color_dday_over));
+		    }
 
-        if(bucket.getStatus() == 0) {
-            mBtnAchieve.setSelected(false);
-            if("10".equals(bucket.getRange())){
-                mImgBucket.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_10));
-            } else if("20".equals(bucket.getRange())){
-                mImgBucket.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_20));
-            } else if("30".equals(bucket.getRange())){
-                mImgBucket.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_30));
-            } else if("40".equals(bucket.getRange())){
-                mImgBucket.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_40));
-            } else if("50".equals(bucket.getRange())){
-                mImgBucket.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_50));
-            } else if("60".equals(bucket.getRange())){
-                mImgBucket.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_60));
-            } else {
-                mImgBucket.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_lt));
-            }
-        } else {
-            mBtnAchieve.setSelected(true);
-            mImgBucket.setProgressBarColor(getResources().getColor(R.color.progress_complete));
-        }
+		    if (bucket.getStatus() == 0) {
+			    mBtnAchieve.setSelected(false);
+			    if ("10".equals(bucket.getRange())) {
+				    mImgBucket.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_10));
+			    } else if ("20".equals(bucket.getRange())) {
+				    mImgBucket.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_20));
+			    } else if ("30".equals(bucket.getRange())) {
+				    mImgBucket.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_30));
+			    } else if ("40".equals(bucket.getRange())) {
+				    mImgBucket.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_40));
+			    } else if ("50".equals(bucket.getRange())) {
+				    mImgBucket.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_50));
+			    } else if ("60".equals(bucket.getRange())) {
+				    mImgBucket.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_60));
+			    } else {
+				    mImgBucket.setProgressBarColor(DreamApp.getInstance().getResources().getColor(R.color.progress_lt));
+			    }
+		    } else {
+			    mBtnAchieve.setSelected(true);
+			    mImgBucket.setProgressBarColor(getResources().getColor(R.color.progress_complete));
+		    }
 
-        int progress = DateUtils.getProgress(start, end);
-        ImageLoader.getInstance().displayImage(bucket.getCvrImgUrl(), mImgBucket);
-        mImgBucket.setPercent(progress);
+		    int progress = DateUtils.getProgress(start, end);
+		    ImageLoader.getInstance().displayImage(bucket.getCvrImgUrl(), mImgBucket);
+		    mImgBucket.setPercent(progress);
 
-        DisplayImageOptions options = new DisplayImageOptions.Builder()
-                .cacheInMemory(true)
-                .cacheOnDisc(true)
-                .considerExifParams(true)
-                .showImageForEmptyUri(R.drawable.ic_bucket_empty)
-                .build();
-        ImageLoader.getInstance().displayImage(bucket.getCvrImgUrl(), mImgBucket, options);
+		    DisplayImageOptions options = new DisplayImageOptions.Builder()
+				    .cacheInMemory(true)
+				    .cacheOnDisc(true)
+				    .considerExifParams(true)
+				    .showImageForEmptyUri(R.drawable.ic_bucket_empty)
+				    .build();
+		    ImageLoader.getInstance().displayImage(bucket.getCvrImgUrl(), mImgBucket, options);
 
-        mTxtBucketDescription.setText(bucket.getDescription());
-        OptionRepeat repeat = new OptionRepeat(RepeatType.fromCode(bucket.getRptType()), bucket.getRptCndt());
-        if(repeat.getRepeatType() == RepeatType.WKRP ){
-            mLayoutBucketDefaultInfoRepeatWeek.setVisibility(View.VISIBLE);
-            mLayoutBucketDefaultInfoRepeatMonth.setVisibility(View.GONE);
+		    mTxtBucketDescription.setText(bucket.getDescription());
+		    OptionRepeat repeat = new OptionRepeat(RepeatType.fromCode(bucket.getRptType()), bucket.getRptCndt());
+		    if (repeat.getRepeatType() == RepeatType.WKRP) {
+			    mLayoutBucketDefaultInfoRepeatWeek.setVisibility(View.VISIBLE);
+			    mLayoutBucketDefaultInfoRepeatMonth.setVisibility(View.GONE);
 
-            mBtnBucketOptionSun.setBackgroundResource(repeat.isSun() ? R.drawable.ic_week_sun_release : R.drawable.ic_week_sun_press);
-            mBtnBucketOptionMon.setBackgroundResource(repeat.isMon() ? R.drawable.ic_week_mon_release : R.drawable.ic_week_mon_press);
-            mBtnBucketOptionTue.setBackgroundResource(repeat.isTue() ? R.drawable.ic_week_tue_release : R.drawable.ic_week_tue_press);
-            mBtnBucketOptionWen.setBackgroundResource(repeat.isWen() ? R.drawable.ic_week_wen_release : R.drawable.ic_week_wen_press);
-            mBtnBucketOptionThu.setBackgroundResource(repeat.isThu() ? R.drawable.ic_week_thu_release : R.drawable.ic_week_thu_press);
-            mBtnBucketOptionFri.setBackgroundResource(repeat.isFri() ? R.drawable.ic_week_fri_release : R.drawable.ic_week_fri_press);
-            mBtnBucketOptionSat.setBackgroundResource(repeat.isSat() ? R.drawable.ic_week_sat_release : R.drawable.ic_week_sat_press);
+			    mBtnBucketOptionSun.setBackgroundResource(repeat.isSun() ? R.drawable.ic_week_sun_release : R.drawable.ic_week_sun_press);
+			    mBtnBucketOptionMon.setBackgroundResource(repeat.isMon() ? R.drawable.ic_week_mon_release : R.drawable.ic_week_mon_press);
+			    mBtnBucketOptionTue.setBackgroundResource(repeat.isTue() ? R.drawable.ic_week_tue_release : R.drawable.ic_week_tue_press);
+			    mBtnBucketOptionWen.setBackgroundResource(repeat.isWen() ? R.drawable.ic_week_wen_release : R.drawable.ic_week_wen_press);
+			    mBtnBucketOptionThu.setBackgroundResource(repeat.isThu() ? R.drawable.ic_week_thu_release : R.drawable.ic_week_thu_press);
+			    mBtnBucketOptionFri.setBackgroundResource(repeat.isFri() ? R.drawable.ic_week_fri_release : R.drawable.ic_week_fri_press);
+			    mBtnBucketOptionSat.setBackgroundResource(repeat.isSat() ? R.drawable.ic_week_sat_release : R.drawable.ic_week_sat_press);
 
-        } else if(repeat.getRepeatType() == RepeatType.WEEK ){
-            mLayoutBucketDefaultInfoRepeatWeek.setVisibility(View.GONE);
-            mLayoutBucketDefaultInfoRepeatMonth.setVisibility(View.VISIBLE);
+		    } else if (repeat.getRepeatType() == RepeatType.WEEK) {
+			    mLayoutBucketDefaultInfoRepeatWeek.setVisibility(View.GONE);
+			    mLayoutBucketDefaultInfoRepeatMonth.setVisibility(View.VISIBLE);
 
-            mBtnBucketOptionWeek.setBackgroundResource(R.drawable.ic_option_week_release);
-            mBtnBucketOptionMonth.setBackgroundResource(R.drawable.ic_option_month_press);
-            mTxtBucketOptionRepeatCnt.setText(String.valueOf(repeat.getRepeatCount()));
-        } else if(repeat.getRepeatType() == RepeatType.MNTH ){
-            mLayoutBucketDefaultInfoRepeatWeek.setVisibility(View.GONE);
-            mLayoutBucketDefaultInfoRepeatMonth.setVisibility(View.VISIBLE);
+			    mBtnBucketOptionWeek.setBackgroundResource(R.drawable.ic_option_week_release);
+			    mBtnBucketOptionMonth.setBackgroundResource(R.drawable.ic_option_month_press);
+			    mTxtBucketOptionRepeatCnt.setText(String.valueOf(repeat.getRepeatCount()));
+		    } else if (repeat.getRepeatType() == RepeatType.MNTH) {
+			    mLayoutBucketDefaultInfoRepeatWeek.setVisibility(View.GONE);
+			    mLayoutBucketDefaultInfoRepeatMonth.setVisibility(View.VISIBLE);
 
-            mBtnBucketOptionWeek.setBackgroundResource(R.drawable.ic_option_week_press);
-            mBtnBucketOptionMonth.setBackgroundResource(R.drawable.ic_option_month_release);
-            mTxtBucketOptionRepeatCnt.setText(String.valueOf(repeat.getRepeatCount()));
-        }
+			    mBtnBucketOptionWeek.setBackgroundResource(R.drawable.ic_option_week_press);
+			    mBtnBucketOptionMonth.setBackgroundResource(R.drawable.ic_option_month_release);
+			    mTxtBucketOptionRepeatCnt.setText(String.valueOf(repeat.getRepeatCount()));
+		    }
+	    }
     }
 
     private void initEvent() {
@@ -350,7 +365,7 @@ public class TimelineActivity extends BaseActionBarActivity {
                 tracker.send(eventBuilder.build());
 
                 Intent intent = new Intent(TimelineActivity.this, TimelineItemEditActivity.class);
-                intent.putExtra(extraKeyBucket, bucket);
+	            intent.putExtra(extraKeyBucket, bucket);
                 intent.putExtra(extraKeyPost, new Post(new Date()));
                 intent.putExtra(extraKeyWriteDate, new Date());
                 startActivityForResult(intent, REQUEST_ADD_POST);
@@ -393,6 +408,44 @@ public class TimelineActivity extends BaseActionBarActivity {
                 finish();
             }
         });
+
+	    mSwipeRefreshLayout.setColorScheme(R.color.progress_10, R.color.progress_20, R.color.progress_30, R.color.progress_40);
+	    mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+		    @Override
+		    public void onRefresh() {
+			    // 새로고침 이벤트가 발생할 경우 수행되는 코드.
+			    timelineThread.setPage(1);
+			    Thread thread = new Thread(timelineThread);
+			    thread.start();
+		    }
+	    });
+
+	    mListTimeline.setOnScrollListener(new AbsListView.OnScrollListener() {
+		    @Override
+		    public void onScrollStateChanged(AbsListView view, int scrollState) {
+			    //OnScrollListener.SCROLL_STATE_IDLE은 스크롤이 이동하다가 멈추었을때 발생되는 스크롤 상태입니다.
+			    //즉 스크롤이 바닦에 닿아 멈춘 상태에 처리를 하겠다는 뜻
+			    if(scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && lastitemVisibleFlag) {
+				    //TODO 화면이 바닦에 닿을때 처리
+				    // 맨 밑으로 내려가면 데이터를 더 들고오게 한다.
+				    mSwipeRefreshLayout.setRefreshing(true);
+				    timelineThread.setPage(lastPageNum + 1);
+				    Tracker tracker = DreamApp.getInstance().getTracker();
+				    HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_timeline_activity)).setAction(getString(R.string.ga_event_action_more_page));
+				    eventBuilder.setValue(timelineThread.getPage());
+				    tracker.send(eventBuilder.build());
+				    Thread thread = new Thread(timelineThread);
+				    thread.start();
+			    }
+		    }
+
+		    @Override
+		    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+			    //현재 화면에 보이는 첫번째 리스트 아이템의 번호(firstVisibleItem) + 현재 화면에 보이는 리스트 아이템의 갯수(visibleItemCount)가 리스트 전체의 갯수(totalItemCount) -1 보다 크거나 같을때
+			    lastitemVisibleFlag = (totalItemCount > 0) && (firstVisibleItem + visibleItemCount >= totalItemCount);
+
+		    }
+	    });
     }
 
     @Override
@@ -444,7 +497,8 @@ public class TimelineActivity extends BaseActionBarActivity {
         tracker.send(eventBuilder.build());
 
         Intent intent = new Intent(this, TimelineItemViewActivity.class);
-        intent.putExtra(TimelineActivity.extraKeyBucket, bucket);
+	    intent.putExtra(extraKeyIsMind, isMind);
+	    intent.putExtra(TimelineActivity.extraKeyBucket, bucket);
         intent.putExtra(TimelineActivity.extraKeyPost, post);
         startActivityForResult(intent, REQUEST_MOD_POST);
     }
@@ -470,22 +524,44 @@ public class TimelineActivity extends BaseActionBarActivity {
 
     private class TimelineThread implements Runnable{
         private Integer page = 1;
-        @Override
+	    private Bucket bucket;
+
+	    public TimelineThread(){
+		    bucket = null;
+		    page = 1;
+	    }
+
+	    public TimelineThread(Bucket bucket) {
+		    this();
+		    this.bucket = bucket;
+	    }
+
+	    public Bucket getBucket() {
+		    return bucket;
+	    }
+
+	    public void setBucket(Bucket bucket) {
+		    this.bucket = bucket;
+	    }
+
+	    @Override
         public void run() {
-            handler.sendEmptyMessage(FETCH_DATA_START);
+	        if(bucket != null) {
+		        handler.sendEmptyMessage(FETCH_DATA_START);
 
-            TimelineConnector timelineConnector = new TimelineConnector();
-            ResponseBodyWrapped<Timeline> result = timelineConnector.getTimelineWithPage(bucket.getId(), page);
+		        TimelineConnector timelineConnector = new TimelineConnector();
+		        ResponseBodyWrapped<Timeline> result = timelineConnector.getTimelineWithPage(bucket.getId(), page);
 
-            if(result.isSuccess()) {
-                lastPageNum = page;
-                Message message = handler.obtainMessage(FETCH_DATA_SUCCESS, result.getData());
-                handler.sendMessage(message);
-            }else if(result.getResponseStatus() == ResponseStatus.TIMEOUT) {
-	            defaultHandler.sendEmptyMessage(SERVER_TIMEOUT);
-            }else {
-                handler.sendEmptyMessage(FETCH_DATA_FAIL);
-            }
+		        if (result.isSuccess()) {
+			        lastPageNum = page;
+			        Message message = handler.obtainMessage(FETCH_DATA_SUCCESS, result.getData());
+			        handler.sendMessage(message);
+		        } else if (result.getResponseStatus() == ResponseStatus.TIMEOUT) {
+			        defaultHandler.sendEmptyMessage(SERVER_TIMEOUT);
+		        } else {
+			        handler.sendEmptyMessage(FETCH_DATA_FAIL);
+		        }
+	        }
         }
 
         public Integer getPage() {
@@ -515,4 +591,31 @@ public class TimelineActivity extends BaseActionBarActivity {
             }
         }
     }
+
+	private class BucketNetworkThread implements Runnable{
+		private Integer bucketId;
+
+		private BucketNetworkThread(Integer bucketId) {
+			this.bucketId = bucketId;
+		}
+
+		@Override
+		public void run() {
+			if(bucket == null) {
+				handler.sendEmptyMessage(FETCH_DATA_START);
+
+				BucketConnector bucketConnector = new BucketConnector();
+				ResponseBodyWrapped<Bucket> result = bucketConnector.getBucket(bucketId);
+
+				if (result.isSuccess()) {
+					Message message = handler.obtainMessage(FETCH_FRIENDS_BUCKET_DATA_SUCCESS, result.getData());
+					handler.sendMessage(message);
+				} else if (result.getResponseStatus() == ResponseStatus.TIMEOUT) {
+					defaultHandler.sendEmptyMessage(SERVER_TIMEOUT);
+				} else {
+					handler.sendEmptyMessage(FETCH_FRIENDS_BUCKET_DATA_FAIL);
+				}
+			}
+		}
+	}
 }

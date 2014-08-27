@@ -1,6 +1,7 @@
 package com.vivavu.dream.adapter.newsfeed;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,9 +24,12 @@ import com.facebook.model.GraphObject;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.vivavu.dream.R;
+import com.vivavu.dream.activity.bucket.TimelineActivity;
+import com.vivavu.dream.activity.bucket.timeline.TimelineItemViewActivity;
 import com.vivavu.dream.adapter.CustomBaseAdapter;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.model.NewsFeed;
+import com.vivavu.dream.model.bucket.timeline.Post;
 import com.vivavu.dream.util.DateUtils;
 
 import org.json.JSONArray;
@@ -75,6 +79,41 @@ public class NewsFeedListAdapter extends CustomBaseAdapter<NewsFeed> {
 			} else {
 				viewHolder = (ViewHolder) convertView.getTag();
 			}
+
+			View.OnClickListener contentsOnClickListener = null;
+
+			if(item.getType() == NewsFeed.Type.BUCKET){
+				contentsOnClickListener = new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						Intent i = new Intent();
+						i.setClass(mContext, TimelineActivity.class);
+						i.putExtra(TimelineActivity.extraKeyIsMind, false);
+						i.putExtra(TimelineActivity.extraKey, item.getId());
+						mContext.startActivity(i);
+					}
+				};
+			} else {
+				contentsOnClickListener = new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						Intent i = new Intent();
+						i.setClass(mContext, TimelineItemViewActivity.class);
+						i.putExtra(TimelineActivity.extraKeyIsMind, false);
+						Post post = new Post(item.getLstModDt());
+						post.setId(item.getId());
+						post.setBucketTitle(item.getTitle());
+						i.putExtra(TimelineActivity.extraKeyPost, post);
+						mContext.startActivity(i);
+					}
+				};
+			}
+
+			viewHolder.mTxtNewsFeedBody.setOnClickListener(contentsOnClickListener);
+			viewHolder.mImgNewsFeedImg.setOnClickListener(contentsOnClickListener);
+			viewHolder.mLayoutNewsFeedSocial.setOnClickListener(contentsOnClickListener);
+			viewHolder.mBtnNewsFeedReply.setOnClickListener(contentsOnClickListener);
+			viewHolder.mBtnNewsFeedLike.setOnClickListener(contentsOnClickListener);
 
 			viewHolder.mTxtNewsFeedTitle.setText(item.getTitle());
 			viewHolder.mTxtNewsFeedDeadline.setText(DateUtils.getDateString(item.getDeadline(), "yyyy-MM-dd"));

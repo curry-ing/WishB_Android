@@ -64,6 +64,10 @@ public class NewsFeed implements Serializable {
 	protected Date lstModDt;
 	@SerializedName("username")
 	protected String username;
+	@SerializedName("user_id")
+	protected Integer userId;
+	@SerializedName("user_profile_img")
+	protected String userProfileImg;
 
 	public int getId() {
 		return id;
@@ -135,5 +139,21 @@ public class NewsFeed implements Serializable {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
+	public String getUserProfileImg() {
+		return userProfileImg;
+	}
+
+	public void setUserProfileImg(String userProfileImg) {
+		this.userProfileImg = userProfileImg;
 	}
 }

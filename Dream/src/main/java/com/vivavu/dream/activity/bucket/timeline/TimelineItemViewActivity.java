@@ -90,10 +90,16 @@ public class TimelineItemViewActivity extends BaseActionBarActivity {
 
 	int likesCount = 0;
 	int commentsCount = 0;
+	protected boolean isMind;
 
 	private static final int SEND_DATA_START = 0;
 	private static final int SEND_DATA_DELETE_SUCCESS = 1;
 	private static final int SEND_DATA_DELETE_FAIL = 2;
+
+	private static final int FETCH_DATA_START = 4;
+	private static final int FETCH_FRIENDS_BUCKET_DATA_SUCCESS = 5;
+	private static final int FETCH_FRIENDS_BUCKET_DATA_FAIL = 6;
+
 
 	protected final Handler handler = new Handler() {
 		@Override
@@ -111,6 +117,16 @@ public class TimelineItemViewActivity extends BaseActionBarActivity {
 				case SEND_DATA_DELETE_FAIL:
 					progressDialog.dismiss();
 					Toast.makeText(TimelineItemViewActivity.this, getString(R.string.txt_timeline_view_delete_fail), LENGTH_LONG).show();
+					break;
+				case FETCH_DATA_START:
+					break;
+				case FETCH_FRIENDS_BUCKET_DATA_SUCCESS:
+					post = (Post) msg.obj;
+					afterFetchPost();
+					break;
+				case FETCH_FRIENDS_BUCKET_DATA_FAIL:
+					Toast.makeText(TimelineItemViewActivity.this, getString(R.string.txt_timeline_view_info_update_fail), Toast.LENGTH_SHORT ).show();
+					finish();
 					break;
 			}
 		}
@@ -138,18 +154,53 @@ public class TimelineItemViewActivity extends BaseActionBarActivity {
 		mTxtTitle.setTypeface(getNanumBarunGothicBoldFont());
 
 		Intent data = getIntent();
+
+		isMind = data.getBooleanExtra(TimelineActivity.extraKeyIsMind, true);
+
 		likesCount = data.getIntExtra(TimelineListAdapter.EXTRA_KEY_LIKES_COUNT, 0);
 		commentsCount = data.getIntExtra(TimelineListAdapter.EXTRA_KEY_COMMENTS_COUNT, 0);
 
+		if(isMind){
+			localPost();
+		} else {
+			networkPost();
+		}
+		init();
+		disableEditMode(isMind);
+	}
+
+	private void networkPost() {
+
+		Intent data = getIntent();
+		post = (Post) data.getSerializableExtra(TimelineActivity.extraKeyPost);
+		mTxtTitle.setText(post.getBucketTitle());
+
+		Thread thread = new Thread(new PostNetworkThread());
+		thread.start();
+	}
+
+	private void afterFetchPost(){
+		bindData(post);
+	}
+
+	private void localPost() {
+		Intent data = getIntent();
 		Bucket bucket = (Bucket) data.getSerializableExtra(TimelineActivity.extraKeyBucket);
 
 		post = (Post) data.getSerializableExtra(TimelineActivity.extraKeyPost);
 		post.setBucketId(bucket.getId());
+		post.setBucketTitle(bucket.getTitle());
+
 		likesCount = post.getLikesCount();
 		commentsCount = post.getCommentsCount();
 
-		mTxtTitle.setText(bucket.getTitle());
+		mTxtTitle.setText(post.getBucketTitle());
 
+		bindData(post);
+
+	}
+
+	private void init() {
 		mMenuPrevious.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -196,7 +247,6 @@ public class TimelineItemViewActivity extends BaseActionBarActivity {
 		headerViewHolder = new HeaderViewHolder(headerView);
 		mListItemView.addHeaderView(headerView);
 
-		bindData(post);
 		headerViewHolder.mBtnTimelineEdit.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -212,99 +262,107 @@ public class TimelineItemViewActivity extends BaseActionBarActivity {
 				startActivity(intent);
 			}
 		});
+	}
 
 
+	private void disableEditMode(boolean isMind) {
+		if(!isMind){
+			headerViewHolder.mBtnTimelineEdit.setVisibility(View.GONE);
+			mMenuMore.setVisibility(View.GONE);
+		}
 	}
 
 	private void bindData(Post post) {
-		headerViewHolder.mTxtPostText.setText(post.getText());
-		headerViewHolder.mTxtPostDate.setText(DateUtils.getDateString(post.getContentDt(), "yyyy.MM.dd"));
-		headerViewHolder.mTxtPostTime.setText(DateUtils.getDateString(post.getContentDt(), "HH:mm"));
-		ImageLoader.getInstance().displayImage(post.getImgUrl(), headerViewHolder.mIvTimelineImage, new SimpleImageLoadingListener() {
-			@Override
-			public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-				super.onLoadingComplete(imageUri, view, loadedImage);
-				// 이미지가 없을 경우에는 imageview 자체를 안보여줌
-				if (loadedImage != null) {
-					view.setVisibility(View.VISIBLE);
-				} else {
-					view.setVisibility(View.GONE);
-				}
-			}
-		});
-
-		final List<SocialReact> socialReactList = new ArrayList<SocialReact>();
-		initList(socialReactList);
-		likesCount = 0;
-		commentsCount = 0;
-		initCount(likesCount, commentsCount);
-		String facebookFeedId = post.getFbFeedId();
-		if (facebookFeedId != null) {
-			headerViewHolder.mLayoutSocialReact.setVisibility(View.VISIBLE);
-			final String s = facebookFeedId.split("_")[1];
-			List<String> readPermissions = new ArrayList<String>();
-			readPermissions.add("publish_actions");
-			AccessToken fromExistingAccessToken = AccessToken.createFromExistingAccessToken(DreamApp.getInstance().getFbToken(), null, null, AccessTokenSource.FACEBOOK_APPLICATION_NATIVE, readPermissions);
-			Session.openActiveSessionWithAccessToken(context, fromExistingAccessToken, new Session.StatusCallback() {
+		if(post != null) {
+			headerViewHolder.mTxtPostText.setText(post.getText());
+			headerViewHolder.mTxtPostDate.setText(DateUtils.getDateString(post.getContentDt(), "yyyy.MM.dd"));
+			headerViewHolder.mTxtPostTime.setText(DateUtils.getDateString(post.getContentDt(), "HH:mm"));
+			ImageLoader.getInstance().displayImage(post.getImgUrl(), headerViewHolder.mIvTimelineImage, new SimpleImageLoadingListener() {
 				@Override
-				public void call(Session session, SessionState state, Exception exception) {
-					if (state.isOpened()) {
-						Bundle bundle = new Bundle();
-						bundle.putString("fields", "comments{attachment,message,from,created_time},likes{name,pic}");
-						new Request(Session.getActiveSession(), String.format("/%s", s), bundle, HttpMethod.GET, new Request.Callback() {
-							@Override
-							public void onCompleted(Response response) {
-								if (response != null && response.getGraphObject() != null) {
-									GraphObject graphObject = response.getGraphObject();
-									JSONObject jsonObject = graphObject.getInnerJSONObject();
-									try {
-										if (!jsonObject.isNull("likes")) {
-											JSONObject likes = jsonObject.getJSONObject("likes");
-											if (!likes.isNull("data")) {
-												JSONArray likesData = likes.getJSONArray("data");
-												likesCount = likesData == null ? 0 : likesData.length();
-											}
-										}
-										if (!jsonObject.isNull("comments")) {
-											JSONObject comments = jsonObject.getJSONObject("comments");
-											if (!comments.isNull("data")) {
-												JSONArray commentsData = comments.getJSONArray("data");
-												commentsCount = commentsData == null ? 0 : commentsData.length();
-												for (int index = 0; index < commentsData.length(); index++) {
-													JSONObject item = (JSONObject) commentsData.get(index);
-													SocialReact socialReact = new SocialReact();
-													socialReact.setSocialType(SocialReact.SocialType.FACEBOOK);
-													socialReact.setMessage(item.getString("message"));
-													socialReact.setName(item.getJSONObject("from").getString("name"));
-													Date createdTime = DateUtils.getDateFromString(item.getString("created_time"), "yyyy-MM-dd'T'HH:mm:ssZ", new Date());
-													if(!item.isNull("attachment") && !item.getJSONObject("attachment").isNull("media")
-															&& !item.getJSONObject("attachment").getJSONObject("media").isNull("image")){
-														JSONObject imageObject = item.getJSONObject("attachment").getJSONObject("media").getJSONObject("image");
-														if(!imageObject.isNull("src")){
-															socialReact.setAttachmentUrl(imageObject.getString("src"));
-														}
-													}
-													//createdTime = DateUtils.add(createdTime, Calendar.HOUR_OF_DAY, 9);
-													socialReact.setCreatedTime(createdTime);
-													socialReactList.add(socialReact);
-												}
-												initList(socialReactList);
-											}
-										}
-
-										initCount(likesCount, commentsCount);
-
-									} catch (JSONException e) {
-										Log.e(SocialReactViewActivity.class.getName(), e.toString());
-									}
-								}
-							}
-						}).executeAsync();
+				public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+					super.onLoadingComplete(imageUri, view, loadedImage);
+					// 이미지가 없을 경우에는 imageview 자체를 안보여줌
+					if (loadedImage != null) {
+						view.setVisibility(View.VISIBLE);
+					} else {
+						view.setVisibility(View.GONE);
 					}
 				}
 			});
-		} else {
-			headerViewHolder.mLayoutSocialReact.setVisibility(View.GONE);
+
+			final List<SocialReact> socialReactList = new ArrayList<SocialReact>();
+			initList(socialReactList);
+			likesCount = 0;
+			commentsCount = 0;
+			initCount(likesCount, commentsCount);
+			String facebookFeedId = post.getFbFeedId();
+			if (facebookFeedId != null) {
+				headerViewHolder.mLayoutSocialReact.setVisibility(View.VISIBLE);
+				final String s = facebookFeedId.split("_")[1];
+				List<String> readPermissions = new ArrayList<String>();
+				readPermissions.add("publish_actions");
+				AccessToken fromExistingAccessToken = AccessToken.createFromExistingAccessToken(DreamApp.getInstance().getFbToken(), null, null, AccessTokenSource.FACEBOOK_APPLICATION_NATIVE, readPermissions);
+				Session.openActiveSessionWithAccessToken(context, fromExistingAccessToken, new Session.StatusCallback() {
+					@Override
+					public void call(Session session, SessionState state, Exception exception) {
+						if (state.isOpened()) {
+							Bundle bundle = new Bundle();
+							bundle.putString("fields", "comments{attachment,message,from,created_time},likes{name,pic}");
+							new Request(Session.getActiveSession(), String.format("/%s", s), bundle, HttpMethod.GET, new Request.Callback() {
+								@Override
+								public void onCompleted(Response response) {
+									if (response != null && response.getGraphObject() != null) {
+										GraphObject graphObject = response.getGraphObject();
+										JSONObject jsonObject = graphObject.getInnerJSONObject();
+										try {
+											if (!jsonObject.isNull("likes")) {
+												JSONObject likes = jsonObject.getJSONObject("likes");
+												if (!likes.isNull("data")) {
+													JSONArray likesData = likes.getJSONArray("data");
+													likesCount = likesData == null ? 0 : likesData.length();
+												}
+											}
+											if (!jsonObject.isNull("comments")) {
+												JSONObject comments = jsonObject.getJSONObject("comments");
+												if (!comments.isNull("data")) {
+													JSONArray commentsData = comments.getJSONArray("data");
+													commentsCount = commentsData == null ? 0 : commentsData.length();
+													for (int index = 0; index < commentsData.length(); index++) {
+														JSONObject item = (JSONObject) commentsData.get(index);
+														SocialReact socialReact = new SocialReact();
+														socialReact.setSocialType(SocialReact.SocialType.FACEBOOK);
+														socialReact.setMessage(item.getString("message"));
+														socialReact.setName(item.getJSONObject("from").getString("name"));
+														Date createdTime = DateUtils.getDateFromString(item.getString("created_time"), "yyyy-MM-dd'T'HH:mm:ssZ", new Date());
+														if (!item.isNull("attachment") && !item.getJSONObject("attachment").isNull("media")
+																&& !item.getJSONObject("attachment").getJSONObject("media").isNull("image")) {
+															JSONObject imageObject = item.getJSONObject("attachment").getJSONObject("media").getJSONObject("image");
+															if (!imageObject.isNull("src")) {
+																socialReact.setAttachmentUrl(imageObject.getString("src"));
+															}
+														}
+														//createdTime = DateUtils.add(createdTime, Calendar.HOUR_OF_DAY, 9);
+														socialReact.setCreatedTime(createdTime);
+														socialReactList.add(socialReact);
+													}
+													initList(socialReactList);
+												}
+											}
+
+											initCount(likesCount, commentsCount);
+
+										} catch (JSONException e) {
+											Log.e(SocialReactViewActivity.class.getName(), e.toString());
+										}
+									}
+								}
+							}).executeAsync();
+						}
+					}
+				});
+			} else {
+				headerViewHolder.mLayoutSocialReact.setVisibility(View.GONE);
+			}
 		}
 	}
 
@@ -463,6 +521,23 @@ public class TimelineItemViewActivity extends BaseActionBarActivity {
 
 		HeaderViewHolder(View view) {
 			ButterKnife.inject(this, view);
+		}
+	}
+
+	private class PostNetworkThread implements Runnable{
+		@Override
+		public void run() {
+			handler.sendEmptyMessage(FETCH_DATA_START);
+			TimelineConnector timelineConnector = new TimelineConnector();
+			ResponseBodyWrapped<Post> result = timelineConnector.get(post);
+			if (result.isSuccess()) {
+				Message message = handler.obtainMessage(FETCH_FRIENDS_BUCKET_DATA_SUCCESS, result.getData());
+				handler.sendMessage(message);
+			} else if (result.getResponseStatus() == ResponseStatus.TIMEOUT) {
+				defaultHandler.sendEmptyMessage(SERVER_TIMEOUT);
+			} else {
+				handler.sendEmptyMessage(FETCH_FRIENDS_BUCKET_DATA_FAIL);
+			}
 		}
 	}
 }

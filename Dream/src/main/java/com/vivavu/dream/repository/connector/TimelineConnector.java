@@ -234,7 +234,7 @@ public class TimelineConnector extends Connector<Post> {
         HttpEntity request = new HttpEntity<String>(requestHeaders);
         ResponseEntity<String> resultString = null;
         try {
-            resultString = restTemplate.exchange(Constants.apiTimelineInfo, HttpMethod.POST, request, String.class, data.getId());
+            resultString = restTemplate.exchange(Constants.apiTimelineInfo, HttpMethod.GET, request, String.class, data.getId());
         } catch (ResourceAccessException timeoutException){
 	        Log.e("dream", timeoutException.toString());
 	        if(timeoutException.getCause() instanceof ConnectTimeoutException){

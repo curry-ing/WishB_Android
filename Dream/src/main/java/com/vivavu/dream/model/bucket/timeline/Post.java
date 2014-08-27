@@ -47,6 +47,8 @@ public class Post implements Serializable, Comparable<Post> {
 	protected int likesCount = 0;
 	protected int commentsCount = 0;
 
+	protected String bucketTitle;
+
     public Post(Date date) {
         this.contentDt = date;
     }
@@ -185,6 +187,14 @@ public class Post implements Serializable, Comparable<Post> {
 
 	public void setCommentsCount(int commentsCount) {
 		this.commentsCount = commentsCount;
+	}
+
+	public String getBucketTitle() {
+		return bucketTitle;
+	}
+
+	public void setBucketTitle(String bucketTitle) {
+		this.bucketTitle = bucketTitle;
 	}
 
 	@Override
