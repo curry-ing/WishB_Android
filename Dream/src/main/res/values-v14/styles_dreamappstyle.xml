@@ -41,7 +41,8 @@
     </style>
 
     <style name="ActionBar.Transparent.Dreamappstyle" parent="@style/Widget.AppCompat.Light.ActionBar">
-        <item name="android:background">@drawable/ab_transparent_dreamappstyle</item>
+        <!--<item name="android:background">@drawable/ab_transparent_dreamappstyle</item>-->
+        <item name="android:background">@color/action_bar</item>
         <item name="android:progressBarStyle">@style/ProgressBar.Dreamappstyle</item>
     </style>
     
