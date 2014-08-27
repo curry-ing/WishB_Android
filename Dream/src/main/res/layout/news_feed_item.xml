@@ -3,6 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:paddingTop="11dp"
                 android:background="@drawable/bg_box2"
     >
     <LinearLayout
@@ -11,17 +12,24 @@
         android:layout_alignParentTop="true"
         android:id="@+id/layout_news_feed_title"
         android:orientation="horizontal"
+        android:paddingLeft="11dp"
+        android:paddingRight="11dp"
         >
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/txt_news_feed_title"
+            android:textStyle="bold"
+            android:textColor="@color/default_darkgray"
             />
         <TextView
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:id="@+id/txt_news_feed_deadline"
+            android:gravity="right"
+            android:textSize="11sp"
+            android:textColor="@color/gray"
             />
     </LinearLayout>
     <LinearLayout
@@ -30,17 +38,25 @@
         android:layout_below="@+id/layout_news_feed_title"
         android:id="@+id/layout_news_feed_name"
         android:orientation="horizontal"
+        android:layout_marginBottom="10dp"
+        android:paddingLeft="11dp"
+        android:paddingRight="11dp"
         >
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/txt_news_feed_writer_name"
+            android:textStyle="bold"
+            android:textColor="@color/default_darkgray"
             />
         <TextView
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:id="@+id/txt_news_feed_update_time"
+            android:gravity="right"
+            android:textSize="11sp"
+            android:textColor="@color/gray"
             />
     </LinearLayout>
     <LinearLayout
@@ -49,11 +65,17 @@
         android:layout_below="@+id/layout_news_feed_name"
         android:id="@+id/layout_news_feed_body"
         android:orientation="vertical"
+        android:paddingLeft="11dp"
+        android:paddingRight="11dp"
+        android:paddingBottom="9dp"
         >
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/txt_news_feed_body"
+            android:textSize="13.5sp"
+            android:textColor="@color/default_darkgray"
+            android:lineSpacingExtra="10dp"
             />
         <ImageView
             android:layout_width="match_parent"
@@ -66,7 +88,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/layout_news_feed_body"
-        android:visibility="gone"
+        android:id="@+id/layout_news_feed_social"
+        android:visibility="visible"
         >
         <Button
             android:layout_width="match_parent"
@@ -74,7 +97,11 @@
             android:layout_weight="1"
             android:id="@+id/btn_news_feed_like"
             android:text="@string/news_feed_like"
-            android:background="@drawable/bg_rounded_corner"
+            android:background="@drawable/bg_btn"
+            android:minHeight="2dp"
+            android:textSize="11sp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             />
         <Button
             android:layout_width="match_parent"
@@ -82,7 +109,11 @@
             android:layout_weight="1"
             android:text="@string/news_feed_reply"
             android:id="@+id/btn_news_feed_reply"
-            android:background="@drawable/bg_rounded_corner"
+            android:background="@drawable/bg_btn"
+            android:minHeight="2dp"
+            android:textSize="11sp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             />
         </LinearLayout>
 </RelativeLayout>

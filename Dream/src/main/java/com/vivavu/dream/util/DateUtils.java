@@ -15,6 +15,19 @@ import java.util.List;
  * Created by yuja on 14. 1. 9.
  */
 public class DateUtils {
+	public static Long getDiffTime(Date date){
+		Calendar nowCal = Calendar.getInstance();
+
+		Calendar endCal = Calendar.getInstance();
+		endCal.setTime(date);
+
+		Long now = nowCal.getTimeInMillis();
+		Long end = endCal.getTimeInMillis();
+		Long remain = (now - end)/1000;
+
+		return remain;
+	}
+
     public static Long getRemainDay(Date endDate){
         Calendar nowCal = Calendar.getInstance();
         nowCal.set(Calendar.HOUR_OF_DAY, 0);

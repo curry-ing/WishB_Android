@@ -42,4 +42,7 @@
     <color name="disable">#E0FFFFFF</color>
     <color name="textBorder1">#60000000</color>
     <color name="textDescriptionHint">#a8a8a8</color>
+
+    <color name="socialButtonBackgound">#20000000</color>
+    <color name="socialButtonLine">#70000000</color>
 </resources>

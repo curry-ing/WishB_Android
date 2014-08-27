@@ -2,20 +2,37 @@ package com.vivavu.dream.adapter.newsfeed;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenSource;
+import com.facebook.HttpMethod;
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.model.GraphObject;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.vivavu.dream.R;
 import com.vivavu.dream.adapter.CustomBaseAdapter;
+import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.model.NewsFeed;
 import com.vivavu.dream.util.DateUtils;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -62,7 +79,20 @@ public class NewsFeedListAdapter extends CustomBaseAdapter<NewsFeed> {
 			viewHolder.mTxtNewsFeedTitle.setText(item.getTitle());
 			viewHolder.mTxtNewsFeedDeadline.setText(DateUtils.getDateString(item.getDeadline(), "yyyy-MM-dd"));
 			viewHolder.mTxtNewsFeedWriterName.setText(item.getUsername());
-			viewHolder.mTxtNewsFeedUpdateTime.setText(DateUtils.getDateString(item.getLstModDt(), "yyyy-MM-dd"));
+			Long diffTime = DateUtils.getDiffTime(item.getLstModDt());
+			if( diffTime / 60 < 1L){
+				//1분 이하
+				viewHolder.mTxtNewsFeedUpdateTime.setText("방금전");
+			} else if(diffTime / 60 / 60 < 1L){
+				// 1시간 이하
+				viewHolder.mTxtNewsFeedUpdateTime.setText(String.format("%d분 전", diffTime / 60 ));
+			} else if(diffTime / 60 / 60 / 24 < 1L){
+				// 24시간
+				viewHolder.mTxtNewsFeedUpdateTime.setText(String.format("%d시간 전", diffTime / 60 / 60  ));
+			} else {
+				viewHolder.mTxtNewsFeedUpdateTime.setText(DateUtils.getDateString(item.getLstModDt(), "yyyy.MM.dd"));
+			}
+
 			viewHolder.mTxtNewsFeedBody.setText(item.getContents().getText());
 			viewHolder.mImgNewsFeedImg.setVisibility(View.GONE);
 			if(item.getContents().getImg() != null){
@@ -76,6 +106,68 @@ public class NewsFeedListAdapter extends CustomBaseAdapter<NewsFeed> {
 					}
 				});
 			}
+
+			if(item.getFbFeedId() != null){
+				viewHolder.mLayoutNewsFeedSocial.setVisibility(View.VISIBLE);
+				final ViewHolder finalViewHolder1 = viewHolder;
+				convertView.post(new Runnable() {
+					@Override
+					public void run() {
+						final String s = item.getFbFeedId().split("_")[1];
+						List<String> readPermissions = new ArrayList<String>();
+						readPermissions.add("publish_actions");
+						AccessToken fromExistingAccessToken = AccessToken.createFromExistingAccessToken(DreamApp.getInstance().getFbToken(), null, null, AccessTokenSource.FACEBOOK_APPLICATION_NATIVE, readPermissions);
+						Session.openActiveSessionWithAccessToken(mContext, fromExistingAccessToken, new Session.StatusCallback() {
+							@Override
+							public void call(Session session, SessionState state, Exception exception) {
+								if (state.isOpened()) {
+									Bundle bundle = new Bundle();
+									bundle.putString("fields", "comments{attachment,message,from,created_time},likes{name,pic}");
+									new Request(Session.getActiveSession(), String.format("/%s", s), bundle, HttpMethod.GET, new Request.Callback() {
+										@Override
+										public void onCompleted(Response response) {
+											int likesCount = 0;
+											int commentsCount = 0;
+											if (response != null && response.getGraphObject() != null) {
+												GraphObject graphObject = response.getGraphObject();
+												JSONObject jsonObject = graphObject.getInnerJSONObject();
+												try {
+													if (!jsonObject.isNull("likes")) {
+														JSONObject likes = jsonObject.getJSONObject("likes");
+														if (!likes.isNull("data")) {
+															JSONArray likesData = likes.getJSONArray("data");
+															likesCount = likesData.length();
+														}
+													}
+
+													if (!jsonObject.isNull("comments")) {
+														JSONObject comments = jsonObject.getJSONObject("comments");
+														if (!comments.isNull("data")) {
+															JSONArray commentsData = comments.getJSONArray("data");
+															commentsCount = commentsData.length();
+														}
+													}
+
+													finalViewHolder1.mBtnNewsFeedLike.setText(String.format("응원 %d개", likesCount));
+													finalViewHolder1.mBtnNewsFeedReply.setText(String.format("댓글 %d개", commentsCount));
+
+												} catch (JSONException e) {
+													Log.e(this.getClass().getName(), e.toString());
+													finalViewHolder1.mLayoutNewsFeedSocial.setVisibility(View.GONE);
+													//finalViewHolder.mFacebookLikesComments.setText(String.format("좋아요 0개 답글 0개"));
+												}
+											}
+										}
+									}).executeAsync();
+								}
+							}
+						});
+					}
+				});
+			} else {
+				viewHolder.mLayoutNewsFeedSocial.setVisibility(View.GONE);
+			}
+
 			return convertView;
 
 		}
@@ -117,6 +209,8 @@ public class NewsFeedListAdapter extends CustomBaseAdapter<NewsFeed> {
 		Button mBtnNewsFeedLike;
 		@InjectView(R.id.btn_news_feed_reply)
 		Button mBtnNewsFeedReply;
+		@InjectView(R.id.layout_news_feed_social)
+		LinearLayout mLayoutNewsFeedSocial;
 
 		ViewHolder(View view) {
 			ButterKnife.inject(this, view);
