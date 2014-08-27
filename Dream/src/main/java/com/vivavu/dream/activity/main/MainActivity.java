@@ -20,8 +20,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -54,8 +52,6 @@ import butterknife.InjectView;
 public class MainActivity extends BaseActionBarActivity  implements ActionBar.TabListener{
     private AlarmManagerBroadcastReceiver alarm;
 
-    @InjectView(R.id.btn_add_bucket)
-    Button mBtnAddBucket;
     @InjectView(R.id.actionbar_main_title)
     ImageView mActionbarMainTitle;
     @InjectView(R.id.actionbar_main_today)
@@ -72,8 +68,6 @@ public class MainActivity extends BaseActionBarActivity  implements ActionBar.Ta
     public static final String EXTRA_BUCKET_DEFAULT_RANGE="extraBucketDefaultRange";
     Boolean doubleBackToExitPressedOnce = false;
 
-    @InjectView(R.id.content_frame)
-    FrameLayout mContentFrame;
     @InjectView(R.id.container)
     DrawerLayout mContainer;
     @InjectView(R.id.profile)
@@ -112,6 +106,7 @@ public class MainActivity extends BaseActionBarActivity  implements ActionBar.Ta
 	    // Set up the ViewPager with the sections adapter.
 	    mViewPager = (ViewPager) findViewById(R.id.content_view_pager);
 	    mViewPager.setAdapter(sectionsPagerAdapter);
+	    mViewPager.setOffscreenPageLimit(3);
 
 	    // When swiping between different sections, select the corresponding
 	    // tab. We can also use ActionBar.Tab#select() to do this if we have
@@ -134,17 +129,6 @@ public class MainActivity extends BaseActionBarActivity  implements ActionBar.Ta
 						    .setText(sectionsPagerAdapter.getPageTitle(i))
 						    .setTabListener(this));
 	    }
-
-        if (savedInstanceState == null) {
-            mainBucketListFragment= new MainBucketListFragment();
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.content_frame, mainBucketListFragment, MainBucketListFragment.TAG)
-                    .addToBackStack(MainBucketListFragment.TAG)
-                    .commit();
-        }
-
-        mBtnAddBucket.setOnClickListener(this);
-
 
         mActionbarMainToday.setTypeface(getNanumBarunGothicBoldFont());
 
@@ -285,12 +269,7 @@ public class MainActivity extends BaseActionBarActivity  implements ActionBar.Ta
     public void onClick(View view) {
         super.onClick(view);
         switch (view.getId()) {
-            case R.id.btn_add_bucket:
-                goAddBucket();
-                Tracker tracker = DreamApp.getInstance().getTracker();
-                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_main_activity)).setAction(getString(R.string.ga_event_action_add_bucket));
-                tracker.send(eventBuilder.build());
-                break;
+
         }
     }
 
