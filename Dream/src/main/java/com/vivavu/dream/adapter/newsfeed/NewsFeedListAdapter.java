@@ -27,6 +27,7 @@ import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.bucket.TimelineActivity;
 import com.vivavu.dream.activity.bucket.timeline.TimelineItemViewActivity;
+import com.vivavu.dream.activity.newsfeed.FriendsBucketListActivity;
 import com.vivavu.dream.adapter.CustomBaseAdapter;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.model.NewsFeed;
@@ -116,7 +117,15 @@ public class NewsFeedListAdapter extends CustomBaseAdapter<NewsFeed> {
 			viewHolder.mLayoutNewsFeedSocial.setOnClickListener(contentsOnClickListener);
 			viewHolder.mBtnNewsFeedReply.setOnClickListener(contentsOnClickListener);
 			viewHolder.mBtnNewsFeedLike.setOnClickListener(contentsOnClickListener);
-
+			viewHolder.mTxtNewsFeedWriterName.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent i = new Intent();
+					i.setClass(mContext, FriendsBucketListActivity.class);
+					i.putExtra("userId", item.getUserId());
+					mContext.startActivity(i);
+				}
+			});
 			viewHolder.mTxtNewsFeedTitle.setText(item.getTitle());
 			viewHolder.mTxtNewsFeedDeadline.setText(DateUtils.getDateString(item.getDeadline(), "yyyy-MM-dd"));
 

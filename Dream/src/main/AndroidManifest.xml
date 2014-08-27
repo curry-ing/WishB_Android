@@ -145,6 +145,10 @@
             android:label="@string/title_activity_social_react_view"
             android:theme="@style/Transparent" >
         </activity>
+        <activity
+            android:name=".activity.newsfeed.FriendsBucketListActivity"
+            android:label="@string/title_activity_freinds_bucket_list" >
+        </activity>
     </application>
 
 </manifest>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_vertical"
+    android:background="@color/action_bar_white_with_alpha_80"
+    >
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_previous"
+        android:background="@null"
+        android:id="@+id/menu_previous"
+        style="@style/TextActionbarLeftButton"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/txt_title"
+        android:textAlignment="center"
+        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@+id/menu_previous"
+        android:layout_toLeftOf="@+id/menu_more"
+        android:text="@string/actionbar_title_friedns_bucket_list"
+        style="@style/TextBucketTitleStyle"
+        />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_more"
+        android:background="@null"
+        android:id="@+id/menu_more"
+        android:paddingLeft="5dp"
+        android:paddingRight="21dp"
+        style="@style/TextActionbarRightButton"
+        android:visibility="gone"
+        />
+</RelativeLayout>

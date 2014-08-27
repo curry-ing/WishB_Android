@@ -1,0 +1,23 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/mainview_bg20"
+    tools:context="com.vivavu.dream.activity.newsfeed.FriendsBucketListActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/actionbar_height"
+        >
+        <GridView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/grid_bucket_list"
+            android:gravity="center"
+            android:numColumns="2"
+            android:listSelector="@color/transparent"
+            />
+        </RelativeLayout>
+
+</RelativeLayout>
