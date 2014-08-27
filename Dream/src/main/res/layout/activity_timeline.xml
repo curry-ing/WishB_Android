@@ -13,8 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/layout_bucket_default_info"
-        android:paddingBottom="10dp"
-        android:layout_marginBottom="15dp"
+        android:paddingBottom="0dp"
+        android:layout_marginBottom="0dp"
         android:background="@color/action_bar_white_with_alpha_80"
         >
         <RelativeLayout
@@ -139,6 +139,7 @@
             android:gravity="center_horizontal"
             android:orientation="vertical"
             android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:clickable="false"
             >
             <LinearLayout
@@ -264,13 +265,47 @@
                     ></View>
                 </LinearLayout>
             </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout_timeline_social_react"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            >
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/btn_news_feed_like"
+                android:text="@string/news_feed_like"
+                android:background="@drawable/bg_btn"
+                android:minHeight="2dp"
+                android:textSize="11sp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/news_feed_reply"
+                android:id="@+id/btn_news_feed_reply"
+                android:background="@drawable/bg_btn"
+                android:minHeight="2dp"
+                android:textSize="11sp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                />
+            </LinearLayout>
         </LinearLayout>
+
     <RelativeLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/layout_bucket_default_info"
         android:id="@+id/layout_timeline_info"
+        android:paddingTop="15dp"
         android:paddingBottom="10dp"
         >
         <android.support.v4.widget.SwipeRefreshLayout
@@ -309,7 +344,7 @@
         android:shadowRadius="2"
         android:layout_alignParentRight="true"
         android:background="@drawable/btn_add"
-        android:layout_marginTop="160dp"
+        android:layout_alignTop="@id/layout_timeline_info"
         android:layout_marginRight="11dp"
         />
 </RelativeLayout>

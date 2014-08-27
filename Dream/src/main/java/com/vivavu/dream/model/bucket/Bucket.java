@@ -87,6 +87,9 @@ public class Bucket implements Serializable{
 
     private File file;
 
+	protected int likesCount = 0;
+	protected int commentsCount = 0;
+
     public Bucket(){
 
     }
@@ -233,7 +236,23 @@ public class Bucket implements Serializable{
         this.cvrImgUrl = cvrImgUrl;
     }
 
-    @Override
+	public int getLikesCount() {
+		return likesCount;
+	}
+
+	public void setLikesCount(int likesCount) {
+		this.likesCount = likesCount;
+	}
+
+	public int getCommentsCount() {
+		return commentsCount;
+	}
+
+	public void setCommentsCount(int commentsCount) {
+		this.commentsCount = commentsCount;
+	}
+
+	@Override
     public String toString() {
         return "Bucket{" +
                 "id=" + id +
