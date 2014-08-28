@@ -44,6 +44,8 @@ public class SocialReactViewActivity extends BaseActionBarActivity {
 
 	protected SocialReactListAdapter socialReactListAdapter;
 	ViewHolder headerViewHolder;
+	@InjectView(R.id.list_empty)
+	TextView mListEmpty;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,7 @@ public class SocialReactViewActivity extends BaseActionBarActivity {
 		headerViewHolder = new ViewHolder(view);
 		view.setTag(headerViewHolder);
 		mListSocialReply.addHeaderView(view);
+		mListSocialReply.setEmptyView(mListEmpty);
 
 		Intent data = getIntent();
 		final String facebookFeedId = data.getStringExtra(TimelineListAdapter.EXTRA_KEY_FACEBOOK_FEED_ID);

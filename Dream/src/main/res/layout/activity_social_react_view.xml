@@ -23,4 +23,13 @@
 
         </ListView>
     </android.support.v4.widget.SwipeRefreshLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/list_empty"
+        android:text="등록된 댓글이 없습니다"
+        android:gravity="center_horizontal"
+        android:textColor="@color/gray"
+        android:visibility="gone"
+        />
 </RelativeLayout>
