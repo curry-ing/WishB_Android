@@ -26,6 +26,14 @@
                 android:id="@+id/test"
                 android:layout_centerVertical="true" android:layout_alignLeft="@+id/imageView"
                 android:layout_alignStart="@+id/imageView"/>
+        <ProgressBar
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_below="@+id/imageView"
+            android:layout_marginTop="20dp"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/progress_bar"
+            />
     </RelativeLayout>
 
 </LinearLayout>

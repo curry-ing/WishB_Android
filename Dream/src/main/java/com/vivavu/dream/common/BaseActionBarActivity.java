@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -21,17 +20,12 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.StartActivity;
 import com.vivavu.dream.activity.intro.IntroActivity;
-import com.vivavu.dream.activity.main.MainActivity;
 import com.vivavu.dream.activity.main.TodayActivity;
-import com.vivavu.dream.common.enums.ResponseStatus;
 import com.vivavu.dream.model.AppVersionInfo;
 import com.vivavu.dream.model.BaseInfo;
-import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.user.User;
 import com.vivavu.dream.repository.DataRepository;
-import com.vivavu.dream.repository.connector.UserInfoConnector;
 import com.vivavu.dream.util.AndroidUtils;
-import com.vivavu.dream.util.FacebookUtils;
 import com.vivavu.dream.util.NetworkUtil;
 
 /**
@@ -150,12 +144,6 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
         startActivityForResult(intent, Code.ACT_INTRO);
     }
 
-    public void goMain(){
-        Intent intent = new Intent();
-        intent.setClass(this, MainActivity.class);
-        startActivityForResult(intent, Code.ACT_MAIN);
-    }
-
     public void goHome(){
         Intent intent = new Intent();
         intent.setAction("android.intent.action.MAIN");
@@ -185,62 +173,13 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
         intent.putExtra(EXTRA_KEY_FROM_ALARM, fromAlarm);
         startActivity(intent);
     }
-    public void checkAppExit() {
-        Intent intent = getIntent();
-        boolean isAppExit = intent.getBooleanExtra("isAppExit", false);
-
-        if(isAppExit){
-            finish();
-        }else{
-            branch();
-        }
-    }
-
-    public void branch(){
-        Intent intent = getIntent();
-        Boolean goToday = intent.getBooleanExtra("goToday", false);
-
-        if(checkLogin()){
-            if (goToday){
-                goToday(true);
-            } else {
-                goMain();
-            }
-        }else{
-            goIntro();
-        }
-    }
 
     public boolean checkLogin(){
         if(!checkNetwork()){
             return false;
         }
-        if(!context.isLogin() || FacebookUtils.isOpen()){
-            if(context.hasValidToken()){
-                UserInfoConnector userInfoConnector = new UserInfoConnector();
-                ResponseBodyWrapped<BaseInfo> response = userInfoConnector.getBaseInfo();
-                if(response.isSuccess()){
-                    BaseInfo baseInfo = response.getData();
-                    context.setUser(baseInfo);
-                    context.setUsername(baseInfo.getUsername());
-                    context.setLogin(true);
-	                context.setAppVersionInfo(baseInfo.getAppVersionInfo());
-	                context.setFbToken(baseInfo.getFbToken());
-                    DataRepository.deleteBucketsNotEqualUserId(baseInfo.getId());//로그인 사용자 이외의 데이터 삭제
-	                DataRepository.saveUser(baseInfo);
-                    return true;
-                }else if(response.getResponseStatus() == ResponseStatus.TIMEOUT) {
-	                logout();
-	                defaultHandler.sendEmptyMessage(SERVER_TIMEOUT);
-                }else{
-                    //로그인 에러시에 강제로 로그아웃 시켜서 무한루프에 안들어가도록 함
-                    logout();
-                }
-            }
-            context.setLogin(false);
-            return false;
-        }
-        return true;
+
+        return context.isLogin();
     }
 
     public void logout(){
@@ -256,7 +195,7 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
         Intent intent = new Intent();
         intent.setClass(this, StartActivity.class);
         // activity 외부에서 activity 실행시 FLAG_ACTIVITY_NEW_TASK 를 넣어주어야한다.
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
         intent.putExtra("isAppExit", false);
         startActivity(intent);
     }
@@ -369,15 +308,6 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
     public static void hideSoftKeyboard(){
         final InputMethodManager imm = (InputMethodManager) DreamApp.getInstance().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-    }
-
-    public class CheckLoginTask extends AsyncTask<Void, Void, Void>{
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            checkLogin();
-            return null;
-        }
     }
 
     public class NetworkChangeReceiver extends BroadcastReceiver {
