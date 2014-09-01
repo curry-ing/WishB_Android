@@ -138,7 +138,13 @@ public class NewsFeedListAdapter extends CustomBaseAdapter<NewsFeed> {
 
 			String infoMessage;
 			if(item.getType() == NewsFeed.Type.BUCKET) {
-				infoMessage = String.format("%s님이 %s 버킷을 %s하였습니다", item.getUsername(), item.getTitle(), item.getAction() == NewsFeed.Action.REGISTERED ? "등록" : "수정");
+				if(item.getAction() == NewsFeed.Action.REGISTERED) {
+					infoMessage = String.format("%s님이 %s 버킷을 등록하였습니다", item.getUsername(), item.getTitle());
+				} else if(item.getAction() == NewsFeed.Action.MODIFIED && item.getActionItems() != null &&item.getActionItems().getStatus() == NewsFeed.Status.COMPLETED){
+					infoMessage = String.format("%s님이 %s 버킷을 달성하셨습니다", item.getUsername(), item.getTitle());
+				} else {
+					infoMessage = String.format("%s님이 %s 버킷을 수정하셨습니다", item.getUsername(), item.getTitle());
+				}
 			} else {
 				if(item.getAction() == NewsFeed.Action.REGISTERED) {
 					infoMessage = String.format("%s님이 %s 버킷에 일지를 입력하였습니다", item.getUsername(), item.getTitle());
