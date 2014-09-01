@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.vivavu.dream.R;
 import com.vivavu.dream.common.Constants;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.common.RestTemplateFactory;
@@ -150,7 +151,7 @@ public class UserInfoConnector extends Connector<User> {
         HttpEntity request = new HttpEntity<String>(requestHeaders);
         ResponseEntity<String> result = null;
         try{
-            result = restTemplate.exchange(Constants.apiToken, HttpMethod.GET, request, String.class);
+            result = restTemplate.exchange(Constants.apiToken, HttpMethod.GET, request, String.class, DreamApp.getInstance().getAppVersionInfo().getVersion(), "android");
         } catch (ResourceAccessException timeoutException){
             Log.e("dream", timeoutException.toString());
             if(timeoutException.getCause() instanceof ConnectTimeoutException){
@@ -179,7 +180,7 @@ public class UserInfoConnector extends Connector<User> {
 
         ResponseEntity<String> result = null;
         try{
-            result = restTemplate.exchange(Constants.apiBaseInfo, HttpMethod.GET, request, String.class);
+            result = restTemplate.exchange(Constants.apiBaseInfo, HttpMethod.GET, request, String.class, DreamApp.getInstance().getString(R.string.wishb_app_version), "android");
         } catch (ResourceAccessException timeoutException){
             Log.e("dream", timeoutException.toString());
             if(timeoutException.getCause() instanceof ConnectTimeoutException){

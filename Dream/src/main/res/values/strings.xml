@@ -20,7 +20,7 @@
     <string name="wishb_server_port">80</string>
     <string name="facebook_app_id">268430496627035</string>
     <string name="app_name">Wish B</string>
-    <string name="wishb_app_version">0.5</string>
+    <string name="wishb_app_version">0.5.1</string>
     <string name="title_activity_main">Wish B</string>
     <string name="main_menu_add_bucket">추가</string>
     <string name="hello_world">Hello world!</string>

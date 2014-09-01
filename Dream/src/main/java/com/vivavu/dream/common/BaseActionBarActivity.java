@@ -20,6 +20,7 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.StartActivity;
 import com.vivavu.dream.activity.intro.IntroActivity;
+import com.vivavu.dream.model.AppVersion;
 import com.vivavu.dream.model.AppVersionInfo;
 import com.vivavu.dream.model.BaseInfo;
 import com.vivavu.dream.model.user.User;
@@ -197,11 +198,16 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
     }
 
 	public boolean isNeedUpdate(){
-		float version = Float.parseFloat(getString(R.string.wishb_app_version));
+		String appVersion = getString(R.string.wishb_app_version);
+		String[] split = appVersion.split("\\.");
+		AppVersion version = new AppVersion(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+
 		User user = DreamApp.getInstance().getUser();
 		if(user != null && user instanceof BaseInfo){
 			AppVersionInfo lastestVersion = ((BaseInfo) user).getAppVersionInfo();
-			if(lastestVersion!=null && lastestVersion.getVersion().floatValue() > version){
+			if(lastestVersion!=null && lastestVersion.getVersion().floatValue() > 0.5){
+				return true;
+			} else if(version.compareTo(lastestVersion.getVersionNew()) > 0) {
 				return true;
 			}
 		}

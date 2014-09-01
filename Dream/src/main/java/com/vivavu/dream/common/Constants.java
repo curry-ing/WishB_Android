@@ -33,8 +33,8 @@ public class Constants {
     static public String apiTodayListWithPage = baseUrl + "api/user/{userid}/today?page={page}";
     static public String apiPlanInfo = baseUrl + "api/plan/{plan_id}";
 
-    static public String apiToken = baseUrl+"api/token";
-    static public String apiBaseInfo = baseUrl+"api/resource";
+    static public String apiToken = baseUrl+"api/token?app_version={appVersion}&os={os}";
+    static public String apiBaseInfo = baseUrl+"api/resource?app_version={appVersion}&os={os}";
 
     static public String apiTimeline = baseUrl+"api/bucket/{bucketId}/timeline";
     static public String apiTimelineWithPage = baseUrl+"api/bucket/{bucketId}/timeline?page={page}";
