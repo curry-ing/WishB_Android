@@ -78,7 +78,7 @@ public class StartActivity extends BaseActionBarActivity {
 				checkAppExit();
 			case Code.ACT_INTRO:
 				if (resultCode == RESULT_OK) {
-					goMain();
+					goMain(false);
 				} else {
 					finish();
 				}
@@ -114,19 +114,16 @@ public class StartActivity extends BaseActionBarActivity {
 		Boolean goToday = intent.getBooleanExtra("goToday", false);
 
 		if (checkLogin()) {
-			if (goToday) {
-				goToday(true);
-			} else {
-				goMain();
-			}
+			goMain(goToday);
 		} else {
 			goIntro();
 		}
 	}
 
-	public void goMain() {
+	public void goMain(boolean fromAlarm) {
 		Intent intent = new Intent();
 		intent.setClass(this, MainActivity.class);
+		intent.putExtra(EXTRA_KEY_FROM_ALARM, fromAlarm);
 		startActivityForResult(intent, Code.ACT_MAIN);
 	}
 

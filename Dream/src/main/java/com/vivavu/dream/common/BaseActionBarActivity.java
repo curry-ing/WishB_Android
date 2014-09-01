@@ -20,7 +20,6 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.StartActivity;
 import com.vivavu.dream.activity.intro.IntroActivity;
-import com.vivavu.dream.activity.main.TodayActivity;
 import com.vivavu.dream.model.AppVersionInfo;
 import com.vivavu.dream.model.BaseInfo;
 import com.vivavu.dream.model.user.User;
@@ -160,17 +159,6 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
         Intent intent = new Intent();
         intent.setClass(this, StartActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-    }
-
-    public void goToday(){
-        goToday(false);
-    }
-
-    public void goToday(boolean fromAlarm){
-        Intent intent = new Intent();
-        intent.setClass(this, TodayActivity.class);
-        intent.putExtra(EXTRA_KEY_FROM_ALARM, fromAlarm);
         startActivity(intent);
     }
 

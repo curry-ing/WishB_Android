@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -32,11 +33,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.vivavu.dream.R;
-import com.vivavu.dream.activity.bucket.BucketEditActivity;
 import com.vivavu.dream.activity.bucket.BucketViewActivity;
 import com.vivavu.dream.broadcastReceiver.AlarmManagerBroadcastReceiver;
 import com.vivavu.dream.common.BaseActionBarActivity;
-import com.vivavu.dream.common.Code;
 import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.drawable.RoundedAvatarDrawable;
 import com.vivavu.dream.fragment.main.BucketListFragment;
@@ -49,282 +48,279 @@ import java.util.Locale;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class MainActivity extends BaseActionBarActivity  implements ActionBar.TabListener{
+public class MainActivity extends BaseActionBarActivity implements ActionBar.TabListener {
 	public static final int OFFSCREEN_PAGE_LIMIT = 3;
+	public static final int INDEX_NEWS_FEED_TAB = 0;
+	public static final int INDEX_BUCKET_LIST_TAB = 1;
+	public static final int INDEX_TODAY_LIST_TAB = 2;
+	@InjectView(R.id.content_view_pager)
+	ViewPager mContentViewPager;
 	private AlarmManagerBroadcastReceiver alarm;
 
-    @InjectView(R.id.actionbar_main_title)
-    ImageView mActionbarMainTitle;
-    @InjectView(R.id.actionbar_main_today)
-    TextView mActionbarMainToday;
+	@InjectView(R.id.actionbar_main_title)
+	ImageView mActionbarMainTitle;
+	@InjectView(R.id.actionbar_main_today)
+	TextView mActionbarMainToday;
 
-    View customActionBarView;
-    View customActionBarViewProfile;
+	View customActionBarView;
+	View customActionBarViewProfile;
 
 	SectionsPagerAdapter sectionsPagerAdapter;
-	ViewPager mViewPager;
 
-    MainBucketListFragment mainBucketListFragment;
+	MainBucketListFragment mainBucketListFragment;
 
-    public static final String EXTRA_BUCKET_DEFAULT_RANGE="extraBucketDefaultRange";
-    Boolean doubleBackToExitPressedOnce = false;
+	public static final String EXTRA_BUCKET_DEFAULT_RANGE = "extraBucketDefaultRange";
+	Boolean doubleBackToExitPressedOnce = false;
 
-    @InjectView(R.id.container)
-    DrawerLayout mContainer;
-    @InjectView(R.id.profile)
-    ImageView mProfile;
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);//api level 11 이상 부터 사용가능
-        setContentView(R.layout.activity_main);
-        final ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setDisplayUseLogoEnabled(false);
-        actionBar.setDisplayShowHomeEnabled(true);//로고 버튼 보이는 것 설정
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayShowCustomEnabled(true);
-
-	    LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-
-        customActionBarView = inflater.inflate(R.layout.actionbar_main, null);
-        customActionBarViewProfile = inflater.inflate(R.layout.actionbar_main_profile, null);
-        ActionBarProfileViewHolder actionBarProfileViewHolder = new ActionBarProfileViewHolder(customActionBarViewProfile);
-        customActionBarViewProfile.setTag(actionBarProfileViewHolder);
+	@InjectView(R.id.container)
+	DrawerLayout mContainer;
+	@InjectView(R.id.profile)
+	ImageView mProfile;
 
 
-        actionBar.setCustomView(customActionBarView);
-        RelativeLayout.LayoutParams actionbarLp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        customActionBarView.setLayoutParams(actionbarLp);
-        customActionBarViewProfile.setLayoutParams(actionbarLp);
-        ButterKnife.inject(this);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);//api level 11 이상 부터 사용가능
+		setContentView(R.layout.activity_main);
+		final ActionBar actionBar = getSupportActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(false);
+		actionBar.setDisplayUseLogoEnabled(false);
+		actionBar.setDisplayShowHomeEnabled(true);//로고 버튼 보이는 것 설정
+		actionBar.setDisplayShowTitleEnabled(false);
+		actionBar.setDisplayShowCustomEnabled(true);
 
-	    // 여기서부터 탭 설정
-	    actionBar.setNavigationMode(android.app.ActionBar.NAVIGATION_MODE_TABS);
-	    sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-	    // Set up the ViewPager with the sections adapter.
-	    mViewPager = (ViewPager) findViewById(R.id.content_view_pager);
-	    mViewPager.setAdapter(sectionsPagerAdapter);
-	    mViewPager.setOffscreenPageLimit(OFFSCREEN_PAGE_LIMIT);
+		LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
 
-	    // When swiping between different sections, select the corresponding
-	    // tab. We can also use ActionBar.Tab#select() to do this if we have
-	    // a reference to the Tab.
-	    mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-		    @Override
-		    public void onPageSelected(int position) {
-			    actionBar.setSelectedNavigationItem(position);
-		    }
-	    });
+		customActionBarView = inflater.inflate(R.layout.actionbar_main, null);
+		customActionBarViewProfile = inflater.inflate(R.layout.actionbar_main_profile, null);
+		ActionBarProfileViewHolder actionBarProfileViewHolder = new ActionBarProfileViewHolder(customActionBarViewProfile);
+		customActionBarViewProfile.setTag(actionBarProfileViewHolder);
 
-	    // For each of the sections in the app, add a tab to the action bar.
-	    for (int i = 0; i < sectionsPagerAdapter.getCount(); i++) {
-		    // Create a tab with text corresponding to the page title defined by
-		    // the adapter. Also specify this Activity object, which implements
-		    // the TabListener interface, as the callback (listener) for when
-		    // this tab is selected.
-		    actionBar.addTab(
-				    actionBar.newTab()
-						    .setText(sectionsPagerAdapter.getPageTitle(i))
-						    .setTabListener(this));
-	    }
 
-        mActionbarMainToday.setTypeface(getNanumBarunGothicBoldFont());
+		actionBar.setCustomView(customActionBarView);
+		RelativeLayout.LayoutParams actionbarLp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+		customActionBarView.setLayoutParams(actionbarLp);
+		customActionBarViewProfile.setLayoutParams(actionbarLp);
 
-        mActionbarMainToday.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-	            Tracker tracker = DreamApp.getInstance().getTracker();
-	            HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_main_activity)).setAction(getString(R.string.ga_event_action_move_today));
-	            tracker.send(eventBuilder.build());
+		ButterKnife.inject(this);
 
-                goToday();
-            }
-        });
+		// 여기서부터 탭 설정
+		actionBar.setNavigationMode(android.app.ActionBar.NAVIGATION_MODE_TABS);
+		sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+		// Set up the ViewPager with the sections adapter.
+		mContentViewPager.setAdapter(sectionsPagerAdapter);
+		mContentViewPager.setOffscreenPageLimit(OFFSCREEN_PAGE_LIMIT);
 
-        updateProfileImg();
+		// When swiping between different sections, select the corresponding
+		// tab. We can also use ActionBar.Tab#select() to do this if we have
+		// a reference to the Tab.
+		mContentViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+			@Override
+			public void onPageSelected(int position) {
+				actionBar.setSelectedNavigationItem(position);
+			}
+		});
 
-        actionBarProfileViewHolder.mTxtProfile.setTypeface(getNanumBarunGothicFont());
+		// For each of the sections in the app, add a tab to the action bar.
+		for (int i = 0; i < sectionsPagerAdapter.getCount(); i++) {
+			// Create a tab with text corresponding to the page title defined by
+			// the adapter. Also specify this Activity object, which implements
+			// the TabListener interface, as the callback (listener) for when
+			// this tab is selected.
+			actionBar.addTab(
+					actionBar.newTab()
+							.setText(sectionsPagerAdapter.getPageTitle(i))
+							.setTabListener(this));
+		}
 
-        // Drawer Menu(profile) Control
-        mContainer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        mContainer.setScrimColor(getResources().getColor(R.color.transparent));
-        mContainer.setFocusableInTouchMode(false); //for close drawer when press back button;
-        mContainer.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-        mProfile.setOnClickListener(new View.OnClickListener() {
-	        @Override
-	        public void onClick(View view) {
-		        ActionBar bar = getSupportActionBar();
-		        bar.setNavigationMode(android.app.ActionBar.NAVIGATION_MODE_STANDARD);
-		        mContainer.openDrawer(Gravity.LEFT);
-	        }
-        });
+		mActionbarMainToday.setTypeface(getNanumBarunGothicBoldFont());
 
-        actionBarProfileViewHolder.mProfile.setOnClickListener(new View.OnClickListener() {
-	        @Override
-	        public void onClick(View view) {
-		        mContainer.closeDrawer(Gravity.LEFT);
-	        }
-        });
+		mActionbarMainToday.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Tracker tracker = DreamApp.getInstance().getTracker();
+				HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_main_activity)).setAction(getString(R.string.ga_event_action_move_today));
+				tracker.send(eventBuilder.build());
 
-	    actionBarProfileViewHolder.mTxtProfile.setOnClickListener(new View.OnClickListener() {
-		    @Override
-		    public void onClick(View v) {
-			    mContainer.closeDrawer(Gravity.LEFT);
-		    }
-	    });
+			}
+		});
 
-        mContainer.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
-	        @Override
-	        public void onDrawerOpened(View drawerView) {
-		        ActionBar bar = getSupportActionBar();
-		        bar.setCustomView(customActionBarViewProfile);
-		        Tracker tracker = DreamApp.getInstance().getTracker();
-		        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_main_activity)).setAction(getString(R.string.ga_event_action_open_profile));
-		        tracker.send(eventBuilder.build());
-	        }
+		updateProfileImg();
 
-	        @Override
-	        public void onDrawerClosed(View drawerView) {
-		        ActionBar bar = getSupportActionBar();
-		        bar.setCustomView(customActionBarView);
-		        Tracker tracker = DreamApp.getInstance().getTracker();
-		        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_profile_fragment)).setAction(getString(R.string.ga_event_action_close_profile));
-		        tracker.send(eventBuilder.build());
-		        bar.setNavigationMode(android.app.ActionBar.NAVIGATION_MODE_TABS);
-	        }
+		actionBarProfileViewHolder.mTxtProfile.setTypeface(getNanumBarunGothicFont());
 
-        });
+		// Drawer Menu(profile) Control
+		mContainer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+		mContainer.setScrimColor(getResources().getColor(R.color.transparent));
+		mContainer.setFocusableInTouchMode(false); //for close drawer when press back button;
+		mContainer.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+		mProfile.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				ActionBar bar = getSupportActionBar();
+				bar.setNavigationMode(android.app.ActionBar.NAVIGATION_MODE_STANDARD);
+				mContainer.openDrawer(Gravity.LEFT);
+			}
+		});
 
-	    if(isNeedUpdate()){
-		    AlertDialog.Builder ab = new AlertDialog.Builder(this);
-		    ab.setMessage(R.string.need_update);
-		    ab.setNegativeButton(R.string.update_later, new DialogInterface.OnClickListener() {
-			    @Override
-			    public void onClick(DialogInterface dialog, int which) {
+		actionBarProfileViewHolder.mProfile.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				mContainer.closeDrawer(Gravity.LEFT);
+			}
+		});
 
-			    }
-		    });
-		    ab.setPositiveButton(R.string.update_now, new DialogInterface.OnClickListener() {
-			    @Override
-			    public void onClick(DialogInterface dialog, int which) {
-				    Intent i = new Intent(Intent.ACTION_VIEW);
-				    i.setData(Uri.parse(DreamApp.getInstance().getAppVersionInfo().getUrl()));
-				    startActivity(i);
-			    }
-		    });
-		    ab.show();
-	    }
+		actionBarProfileViewHolder.mTxtProfile.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mContainer.closeDrawer(Gravity.LEFT);
+			}
+		});
 
-	    View homeIcon = findViewById( android.R.id.home );
-	    ((View) homeIcon.getParent()).setVisibility(View.GONE);
-	    /*actionBar.setDisplayShowHomeEnabled(false);*/
-    }
+		mContainer.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+			@Override
+			public void onDrawerOpened(View drawerView) {
+				ActionBar bar = getSupportActionBar();
+				bar.setCustomView(customActionBarViewProfile);
+				Tracker tracker = DreamApp.getInstance().getTracker();
+				HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_main_activity)).setAction(getString(R.string.ga_event_action_open_profile));
+				tracker.send(eventBuilder.build());
+			}
 
-    public void updateProfileImg() {
-        final ActionBarProfileViewHolder actionBarProfileViewHolder = (ActionBarProfileViewHolder) customActionBarViewProfile.getTag();
-        String userProfileImgUrl = DreamApp.getInstance().getUser().getProfileImgUrl();
-        int pixelSize = getResources().getDimensionPixelSize(R.dimen.actionbar_profile_img_size);
-        DisplayImageOptions options = new DisplayImageOptions.Builder()
-                .cacheInMemory(true)
-                .cacheOnDisc(true)
-                .considerExifParams(true)
-                .showImageForEmptyUri(R.drawable.mainview_profile)
-                .build();
-        ImageLoader.getInstance().loadImage(userProfileImgUrl, new ImageSize(pixelSize, pixelSize), options, new SimpleImageLoadingListener(){
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                if(loadedImage != null) {
-                    Drawable avatar = new RoundedAvatarDrawable(loadedImage);
-                    mProfile.setImageDrawable(avatar);
-                    actionBarProfileViewHolder.mProfile.setImageDrawable(avatar);
-                } else {
-                    mProfile.setImageResource(R.drawable.mainview_profile);
-                    actionBarProfileViewHolder.mProfile.setImageResource(R.drawable.mainview_profile);
-                }
-            }
-        });
-    }
+			@Override
+			public void onDrawerClosed(View drawerView) {
+				ActionBar bar = getSupportActionBar();
+				bar.setCustomView(customActionBarView);
+				Tracker tracker = DreamApp.getInstance().getTracker();
+				HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_event_category_profile_fragment)).setAction(getString(R.string.ga_event_action_close_profile));
+				tracker.send(eventBuilder.build());
+				bar.setNavigationMode(android.app.ActionBar.NAVIGATION_MODE_TABS);
+			}
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        // Activity 와 Fragment 실행순서에 따라서 Fragment UI가 다 생성된 이후에 Activity에서
-        // Fragment의 UI에 접근 가능. Activity.onCreate -> Fragment.onCreate->Activity.onStart가 수행
-    }
+		});
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
+		if (isNeedUpdate()) {
+			AlertDialog.Builder ab = new AlertDialog.Builder(this);
+			ab.setMessage(R.string.need_update);
+			ab.setNegativeButton(R.string.update_later, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
 
-    @Override
-    public void onClick(View view) {
-        super.onClick(view);
-        switch (view.getId()) {
+				}
+			});
+			ab.setPositiveButton(R.string.update_now, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					Intent i = new Intent(Intent.ACTION_VIEW);
+					i.setData(Uri.parse(DreamApp.getInstance().getAppVersionInfo().getUrl()));
+					startActivity(i);
+				}
+			});
+			ab.show();
+		}
 
-        }
-    }
+		Intent intent = getIntent();
+		boolean fromAlarm = intent.getBooleanExtra(EXTRA_KEY_FROM_ALARM, false);
+		if(fromAlarm) {
+			mContentViewPager.setCurrentItem(INDEX_TODAY_LIST_TAB, false);
+		}
+		View homeIcon = findViewById(android.R.id.home);
+		((View) homeIcon.getParent()).setVisibility(View.GONE);
+		/*actionBar.setDisplayShowHomeEnabled(false);*/
+	}
 
-    private void goAddBucket() {
-        Intent intent;
-        intent = new Intent();
-        intent.setClass(this, BucketEditActivity.class);
-        if(mainBucketListFragment != null) {
-            intent.putExtra(EXTRA_BUCKET_DEFAULT_RANGE, mainBucketListFragment.getViewPagerPage() * 10);
-        }
+	public void updateProfileImg() {
+		final ActionBarProfileViewHolder actionBarProfileViewHolder = (ActionBarProfileViewHolder) customActionBarViewProfile.getTag();
+		String userProfileImgUrl = DreamApp.getInstance().getUser().getProfileImgUrl();
+		int pixelSize = getResources().getDimensionPixelSize(R.dimen.actionbar_profile_img_size);
+		DisplayImageOptions options = new DisplayImageOptions.Builder()
+				.cacheInMemory(true)
+				.cacheOnDisc(true)
+				.considerExifParams(true)
+				.showImageForEmptyUri(R.drawable.mainview_profile)
+				.build();
+		ImageLoader.getInstance().loadImage(userProfileImgUrl, new ImageSize(pixelSize, pixelSize), options, new SimpleImageLoadingListener() {
+			@Override
+			public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+				if (loadedImage != null) {
+					Drawable avatar = new RoundedAvatarDrawable(loadedImage);
+					mProfile.setImageDrawable(avatar);
+					actionBarProfileViewHolder.mProfile.setImageDrawable(avatar);
+				} else {
+					mProfile.setImageResource(R.drawable.mainview_profile);
+					actionBarProfileViewHolder.mProfile.setImageResource(R.drawable.mainview_profile);
+				}
+			}
+		});
+	}
 
-        mainBucketListFragment.startActivityForResult(intent, Code.ACT_ADD_BUCKET );
-    }
+	@Override
+	protected void onStart() {
+		super.onStart();
+		// Activity 와 Fragment 실행순서에 따라서 Fragment UI가 다 생성된 이후에 Activity에서
+		// Fragment의 UI에 접근 가능. Activity.onCreate -> Fragment.onCreate->Activity.onStart가 수행
+	}
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+	}
 
-    public void goBucketView(Integer bucketId) {
-        Intent intent = new Intent();
-        intent.setClass(this, BucketViewActivity.class);
-        intent.putExtra("bucketId", bucketId);
-        startActivity(intent);
-    }
+	@Override
+	public void onClick(View view) {
+		super.onClick(view);
+		switch (view.getId()) {
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+		}
+	}
 
-    }
+	@Override
+	protected void onStop() {
+		super.onStop();
+	}
 
-    @Override
-    public void onBackPressed() {
+	public void goBucketView(Integer bucketId) {
+		Intent intent = new Intent();
+		intent.setClass(this, BucketViewActivity.class);
+		intent.putExtra("bucketId", bucketId);
+		startActivity(intent);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+	}
+
+	@Override
+	public void onBackPressed() {
 //        Boolean doubleBackToExitPressedOnce = false;
-        if(mContainer.isDrawerOpen(Gravity.LEFT)){
-            mContainer.closeDrawer(Gravity.LEFT);
-        } else {
-            if(doubleBackToExitPressedOnce) {
-                exit();
-            }
+		if (mContainer.isDrawerOpen(Gravity.LEFT)) {
+			mContainer.closeDrawer(Gravity.LEFT);
+		} else {
+			if (doubleBackToExitPressedOnce) {
+				exit();
+			}
 
-            this.doubleBackToExitPressedOnce = true;
-            Toast.makeText(this, getString(R.string.press_again_to_exit), Toast.LENGTH_SHORT).show();
+			this.doubleBackToExitPressedOnce = true;
+			Toast.makeText(this, getString(R.string.press_again_to_exit), Toast.LENGTH_SHORT).show();
 
-            new Handler().postDelayed(new Runnable(){
-                @Override
-                public void run(){
-                    doubleBackToExitPressedOnce = false;
-                }
-            }, 2000);
+			new Handler().postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					doubleBackToExitPressedOnce = false;
+				}
+			}, 2000);
 //            exit();
-        }
-    }
+		}
+	}
 
 	@Override
 	public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
 		// When the given tab is selected, switch to the corresponding page in
 		// the ViewPager.
-		mViewPager.setCurrentItem(tab.getPosition());
+		mContentViewPager.setCurrentItem(tab.getPosition());
 	}
 
 	@Override
@@ -343,18 +339,18 @@ public class MainActivity extends BaseActionBarActivity  implements ActionBar.Ta
 	 */
 	public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
-		public SectionsPagerAdapter(android.support.v4.app.FragmentManager fm) {
+		public SectionsPagerAdapter(FragmentManager fm) {
 			super(fm);
 		}
 
 		@Override
 		public Fragment getItem(int position) {
-			switch (position){
-				case 0:
+			switch (position) {
+				case INDEX_NEWS_FEED_TAB:
 					return new NewsFeedFragment();
-				case 1:
+				case INDEX_BUCKET_LIST_TAB:
 					return new BucketListFragment();
-				case 2:
+				case INDEX_TODAY_LIST_TAB:
 					return new TodayListFragment();
 				default:
 					return new TodayListFragment();
@@ -383,20 +379,20 @@ public class MainActivity extends BaseActionBarActivity  implements ActionBar.Ta
 		}
 	}
 
-/**
- * This class contains all butterknife-injected Views & Layouts from layout file 'null'
- * for easy to all layout elements.
- *
- * @author Android Butter Zelezny, plugin for IntelliJ IDEA/Android Studio by Inmite (www.inmite.eu)
- */
-    static class ActionBarProfileViewHolder {
-        @InjectView(R.id.profile)
-        ImageView mProfile;
-        @InjectView(R.id.txt_profile)
-        TextView mTxtProfile;
+	/**
+	 * This class contains all butterknife-injected Views & Layouts from layout file 'null'
+	 * for easy to all layout elements.
+	 *
+	 * @author Android Butter Zelezny, plugin for IntelliJ IDEA/Android Studio by Inmite (www.inmite.eu)
+	 */
+	static class ActionBarProfileViewHolder {
+		@InjectView(R.id.profile)
+		ImageView mProfile;
+		@InjectView(R.id.txt_profile)
+		TextView mTxtProfile;
 
-    ActionBarProfileViewHolder(View view) {
-            ButterKnife.inject(this, view);
-        }
-    }
+		ActionBarProfileViewHolder(View view) {
+			ButterKnife.inject(this, view);
+		}
+	}
 }
