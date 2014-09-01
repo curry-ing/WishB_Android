@@ -17,6 +17,7 @@ import com.vivavu.dream.R;
 import com.vivavu.dream.activity.bucket.TimelineActivity;
 import com.vivavu.dream.adapter.newsfeed.FriendsBucketListAdapter;
 import com.vivavu.dream.common.BaseActionBarActivity;
+import com.vivavu.dream.common.DreamApp;
 import com.vivavu.dream.model.ResponseBodyWrapped;
 import com.vivavu.dream.model.bucket.Bucket;
 import com.vivavu.dream.repository.connector.FriendsBucketConnector;
@@ -112,7 +113,7 @@ public class FriendsBucketListActivity extends BaseActionBarActivity {
 					Intent intent = new Intent();
 					intent.setClass(FriendsBucketListActivity.this, TimelineActivity.class);
 					intent.putExtra(TimelineActivity.extraKey, (int)id);
-					intent.putExtra(TimelineActivity.extraKeyIsMind, false);
+					intent.putExtra(TimelineActivity.extraKeyIsMind, friendsUserId == DreamApp.getInstance().getUser().getId());
 					startActivityForResult(intent, REQUEST_TIMELINE_VIEW);
 				}
 			});

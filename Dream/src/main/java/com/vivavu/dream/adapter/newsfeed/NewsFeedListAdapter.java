@@ -27,6 +27,7 @@ import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.bucket.TimelineActivity;
 import com.vivavu.dream.activity.bucket.timeline.TimelineItemViewActivity;
+import com.vivavu.dream.activity.main.MainActivity;
 import com.vivavu.dream.activity.newsfeed.FriendsBucketListActivity;
 import com.vivavu.dream.adapter.CustomBaseAdapter;
 import com.vivavu.dream.common.DreamApp;
@@ -91,7 +92,7 @@ public class NewsFeedListAdapter extends CustomBaseAdapter<NewsFeed> {
 					public void onClick(View v) {
 						Intent i = new Intent();
 						i.setClass(mContext, TimelineActivity.class);
-						i.putExtra(TimelineActivity.extraKeyIsMind, false);
+						i.putExtra(TimelineActivity.extraKeyIsMind, item.getUserId() == DreamApp.getInstance().getUser().getId());
 						i.putExtra(TimelineActivity.extraKey, item.getId());
 						mContext.startActivity(i);
 					}
@@ -102,7 +103,7 @@ public class NewsFeedListAdapter extends CustomBaseAdapter<NewsFeed> {
 					public void onClick(View v) {
 						Intent i = new Intent();
 						i.setClass(mContext, TimelineItemViewActivity.class);
-						i.putExtra(TimelineActivity.extraKeyIsMind, false);
+						i.putExtra(TimelineActivity.extraKeyIsMind, item.getUserId() == DreamApp.getInstance().getUser().getId());
 						Post post = new Post(item.getLstModDt());
 						post.setId(item.getId());
 						post.setBucketTitle(item.getTitle());
@@ -120,10 +121,16 @@ public class NewsFeedListAdapter extends CustomBaseAdapter<NewsFeed> {
 			viewHolder.mTxtNewsFeedWriterName.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					Intent i = new Intent();
-					i.setClass(mContext, FriendsBucketListActivity.class);
-					i.putExtra("userId", item.getUserId());
-					mContext.startActivity(i);
+					if(item.getUserId() == DreamApp.getInstance().getUser().getId()){
+						if(mContext instanceof MainActivity){
+							((MainActivity) mContext).changeTab(MainActivity.INDEX_BUCKET_LIST_TAB);
+						}
+					} else {
+						Intent i = new Intent();
+						i.setClass(mContext, FriendsBucketListActivity.class);
+						i.putExtra("userId", item.getUserId());
+						mContext.startActivity(i);
+					}
 				}
 			});
 			viewHolder.mTxtNewsFeedTitle.setText(item.getTitle());

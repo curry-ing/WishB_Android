@@ -316,6 +316,13 @@ public class MainActivity extends BaseActionBarActivity implements ActionBar.Tab
 		}
 	}
 
+	public void changeTab(int index){
+		if( 0 <= index && index <= 2){
+			mContentViewPager.setCurrentItem(index, false);
+		}
+	}
+
+
 	@Override
 	public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
 		// When the given tab is selected, switch to the corresponding page in

@@ -23,6 +23,23 @@ public class NewsFeed implements Serializable {
 		JOURNAL;
 	}
 
+	public enum Status{
+		@SerializedName("completed")
+		COMPLETED;
+	}
+
+	public class ActionItems{
+		@SerializedName("status")
+		protected Status status;
+
+		public Status getStatus() {
+			return status;
+		}
+
+		public void setStatus(Status status) {
+			this.status = status;
+		}
+	}
 	public class Contents {
 		@SerializedName("img")
 		protected String img;
@@ -50,6 +67,8 @@ public class NewsFeed implements Serializable {
 	protected int id;
 	@SerializedName("action")
 	protected Action action;
+	@SerializedName("action_items")
+	protected ActionItems actionItems;
 	@SerializedName("type")
 	protected Type type;
 	@SerializedName("title")
@@ -155,5 +174,13 @@ public class NewsFeed implements Serializable {
 
 	public void setUserProfileImg(String userProfileImg) {
 		this.userProfileImg = userProfileImg;
+	}
+
+	public ActionItems getActionItems() {
+		return actionItems;
+	}
+
+	public void setActionItems(ActionItems actionItems) {
+		this.actionItems = actionItems;
 	}
 }
