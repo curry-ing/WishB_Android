@@ -117,6 +117,15 @@
                 <Button
                     android:layout_width="39dp"
                     android:layout_height="39dp"
+                    android:id="@+id/btn_bucket_option_public"
+                    android:background="@drawable/ic_lock"
+                    android:enabled="true"
+                    android:clickable="true"
+                    android:layout_marginRight="30dp"
+                    />
+                <Button
+                    android:layout_width="39dp"
+                    android:layout_height="39dp"
                     android:id="@+id/btn_bucket_option_del"
                     android:background="@drawable/btn_delete"
                     android:clickable="true"
@@ -145,24 +154,6 @@
                     >
 
                 </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="left"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="15dp" android:layout_marginRight="15dp">
-                <Button
-                    android:layout_width="39dp"
-                    android:layout_height="39dp"
-                    android:id="@+id/btn_bucket_option_public"
-                    android:background="@drawable/ic_lock"
-                    android:enabled="true"
-                    android:clickable="true"
-                    android:layout_marginRight="30dp"
-                    android:visibility="gone"
-                    />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

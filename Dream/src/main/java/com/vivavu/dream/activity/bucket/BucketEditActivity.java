@@ -196,8 +196,6 @@ public class BucketEditActivity extends BaseActionBarActivity {
 	    range = data.getIntExtra(MainActivity.EXTRA_BUCKET_DEFAULT_RANGE, -1);
 	    bucket = DataRepository.getBucket(bucketId);
 
-
-
         ButterKnife.inject(this);
 
         mBucketInputTitle.setTypeface(getNanumBarunGothicFont());
