@@ -207,7 +207,7 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
 			AppVersionInfo lastestVersion = ((BaseInfo) user).getAppVersionInfo();
 			if(lastestVersion!=null && lastestVersion.getVersion().floatValue() > 0.5){
 				return true;
-			} else if(version.compareTo(lastestVersion.getVersionNew()) > 0) {
+			} else if(version.compareTo(lastestVersion.getVersionNew()) < 0) {
 				return true;
 			}
 		}
