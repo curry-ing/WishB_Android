@@ -151,7 +151,7 @@ public class UserInfoConnector extends Connector<User> {
         HttpEntity request = new HttpEntity<String>(requestHeaders);
         ResponseEntity<String> result = null;
         try{
-            result = restTemplate.exchange(Constants.apiToken, HttpMethod.GET, request, String.class, DreamApp.getInstance().getAppVersionInfo().getVersion(), "android");
+            result = restTemplate.exchange(Constants.apiToken, HttpMethod.GET, request, String.class, DreamApp.getInstance().getString(R.string.wishb_app_version), "android");
         } catch (ResourceAccessException timeoutException){
             Log.e("dream", timeoutException.toString());
             if(timeoutException.getCause() instanceof ConnectTimeoutException){

@@ -70,6 +70,14 @@ public class DreamApp extends Application {
 	    Constants.url = getString(R.string.wishb_server_url);
 	    Constants.port = getString(R.string.wishb_server_port);
 
+	    /*Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler(){
+		    @Override
+		    public void uncaughtException(Thread thread, Throwable ex) {
+			    android.os.Process.killProcess(android.os.Process.myPid());
+			    System.exit(10);
+		    }
+	    });*/
+
 	    ACRA.init(this); // todo: 서버 파트의 에러 수집 api가 개발되면 주석을 해제하여 ACRA 가동
 	    ACRA.getErrorReporter().removeAllReportSenders();
 	    ACRA.getErrorReporter().addReportSender(new CustomHttpReportSender(ACRA.getConfig().httpMethod(), ACRA.getConfig().reportType(), Constants.apiReporting, null));

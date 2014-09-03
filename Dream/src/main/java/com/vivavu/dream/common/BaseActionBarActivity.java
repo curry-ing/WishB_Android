@@ -19,7 +19,6 @@ import com.facebook.Session;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.vivavu.dream.R;
 import com.vivavu.dream.activity.StartActivity;
-import com.vivavu.dream.activity.intro.IntroActivity;
 import com.vivavu.dream.model.AppVersion;
 import com.vivavu.dream.model.AppVersionInfo;
 import com.vivavu.dream.model.BaseInfo;
@@ -138,12 +137,6 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
         super.onStop();
     }
 
-    public void goIntro(){
-        Intent intent = new Intent();
-        intent.setClass(this, IntroActivity.class);
-        startActivityForResult(intent, Code.ACT_INTRO);
-    }
-
     public void goHome(){
         Intent intent = new Intent();
         intent.setAction("android.intent.action.MAIN");
@@ -182,19 +175,19 @@ public class BaseActionBarActivity extends ActionBarActivity implements View.OnC
         }
 
         Intent intent = new Intent();
-        intent.setClass(this, StartActivity.class);
-        // activity 외부에서 activity 실행시 FLAG_ACTIVITY_NEW_TASK 를 넣어주어야한다.
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+	    // activity 외부에서 activity 실행시 FLAG_ACTIVITY_NEW_TASK 를 넣어주어야한다.
+	    /*intent.setClass(this, StartActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);*/
         intent.putExtra("isAppExit", false);
-        startActivity(intent);
+	    setResult(RESULT_OK, intent);
+	    finish();
     }
 
     public void exit(){
         Intent intent = new Intent();
-        intent.setClass(this, StartActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("isAppExit", true);
-        startActivity(intent);
+        setResult(RESULT_OK, intent);
+	    finish();
     }
 
 	public boolean isNeedUpdate(){

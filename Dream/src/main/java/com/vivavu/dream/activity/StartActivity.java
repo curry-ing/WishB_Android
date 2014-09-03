@@ -10,6 +10,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.vivavu.dream.R;
+import com.vivavu.dream.activity.intro.IntroActivity;
 import com.vivavu.dream.activity.main.MainActivity;
 import com.vivavu.dream.common.BaseActionBarActivity;
 import com.vivavu.dream.common.Code;
@@ -68,6 +69,8 @@ public class StartActivity extends BaseActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start);
 		ButterKnife.inject(this);
+
+		checkAppExit(null);
 	}
 
 	@Override
@@ -75,7 +78,8 @@ public class StartActivity extends BaseActionBarActivity {
 
 		switch (requestCode) {
 			case Code.ACT_MAIN:
-				checkAppExit();
+				checkAppExit(data);
+				return;
 			case Code.ACT_INTRO:
 				if (resultCode == RESULT_OK) {
 					goMain(false);
@@ -89,12 +93,13 @@ public class StartActivity extends BaseActionBarActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		checkAppExit();
 	}
 
-	public void checkAppExit() {
-		Intent intent = getIntent();
-		boolean isAppExit = intent.getBooleanExtra("isAppExit", false);
+	public void checkAppExit(Intent data) {
+		if (data == null) {
+			data = getIntent();
+		}
+		boolean isAppExit = data.getBooleanExtra("isAppExit", false);
 
 		if (isAppExit) {
 			finish();
@@ -118,6 +123,12 @@ public class StartActivity extends BaseActionBarActivity {
 		} else {
 			goIntro();
 		}
+	}
+
+	public void goIntro(){
+		Intent intent = new Intent();
+		intent.setClass(this, IntroActivity.class);
+		startActivityForResult(intent, Code.ACT_INTRO);
 	}
 
 	public void goMain(boolean fromAlarm) {

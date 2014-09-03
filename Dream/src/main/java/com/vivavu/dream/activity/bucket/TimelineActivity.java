@@ -221,7 +221,7 @@ public class TimelineActivity extends BaseActionBarActivity {
 			networkBucket(bucketId);
 		}
 
-
+int a = 1/0;
 	}
 
 	private void localBucket(Integer bucketId) {
